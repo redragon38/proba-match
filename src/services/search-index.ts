@@ -15,9 +15,23 @@ export const normalizeSearch = (s: string) =>
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .trim();
-export function searchIndex(data: Dataset): SearchResult[] {
+type IndexedRow = { row: SearchResult; normalized: string };
+type IndexEntry = {
+  teams: Dataset['teams'];
+  players: Dataset['players'];
+  competitions: Dataset['competitions'];
+  rows: IndexedRow[];
+};
+const indexes = new WeakMap<Dataset['matches'], IndexEntry>();
+function searchEntries(data: Dataset): IndexedRow[] {
+  const cached = indexes.get(data.matches);
+  if (
+    data.source !== 'demo' && cached &&
+    cached.teams === data.teams && cached.players === data.players &&
+    cached.competitions === data.competitions
+  ) return cached.rows;
   const teams = new Map(data.teams.map((t) => [t.id, t]));
-  return [
+  const rows = [
     ...data.teams.map((t) => ({
       id: `team:${t.id}`,
       name: t.name,
@@ -49,7 +63,29 @@ export function searchIndex(data: Dataset): SearchResult[] {
         href: `/match/${m.slug}`,
         detail: m.kickoff.slice(0, 10),
       })),
-  ];
+  ].map((row) => ({ row, normalized: normalizeSearch(row.name) }));
+  if (data.source !== 'demo')
+    indexes.set(data.matches, {
+      teams: data.teams,
+      players: data.players,
+      competitions: data.competitions,
+      rows,
+    });
+  return rows;
+}
+export function searchIndex(data: Dataset): SearchResult[] {
+  return searchEntries(data).map(({ row }) => row);
+}
+/** Prefix matches first, retaining catalogue order and stopping at ten results. */
+export function searchAutocomplete(data: Dataset, query: string): SearchResult[] {
+  const prefix: SearchResult[] = [];
+  const others: SearchResult[] = [];
+  for (const { row, normalized } of searchEntries(data)) {
+    if (!normalized.includes(query)) continue;
+    if (normalized.startsWith(query)) prefix.push(row);
+    else if (others.length < 10) others.push(row);
+  }
+  return prefix.slice(0, 10).concat(others.slice(0, Math.max(0, 10 - prefix.length)));
 }
 
 /** Search the complete server catalogue; only serialize the requested result page. */
@@ -69,14 +105,14 @@ export function searchResults(
 ): SearchResults {
   const query = normalizeSearch(q.slice(0, 100));
   const selected = ids ? new Set(ids) : undefined;
-  const results = searchIndex(data).filter(
-    (row) =>
+  const results = searchEntries(data).filter(
+    ({ row, normalized }) =>
       (!selected || selected.has(row.id)) &&
       (category === 'all' || row.kind === category) &&
-      normalizeSearch(row.name).includes(query),
+      normalized.includes(query),
   );
   const start = Number.isSafeInteger(offset) && offset >= 0 ? offset : 0;
-  return { results: results.slice(start, start + 25), total: results.length };
+  return { results: results.slice(start, start + 25).map(({ row }) => row), total: results.length };
 }
 
 export function searchSource(data: Dataset): SearchSource {

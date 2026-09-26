@@ -71,7 +71,13 @@ export function Dashboard({
   const { values } = useFavorites();
   const zone = useTimeZone();
   const today = dateKey(new Date(), zone);
-  const activeDate = automaticDate ? today : initialDate;
+  const hasMatchesToday = automaticDate && data.matches.some((match) =>
+    (match.kickoffKnown === false && match.sourceDate
+      ? match.sourceDate
+      : dateKey(new Date(match.kickoff), zone)) === today &&
+    (status === 'all' || status === 'favorites' || match.status === status),
+  );
+  const activeDate = hasMatchesToday ? today : initialDate;
   const live = useLive(data.matches);
   const dayMatches = full
     ? live.matches
@@ -159,7 +165,9 @@ export function Dashboard({
           <h2>
             {full && !params.has('date')
               ? 'Le calendrier et les résultats'
-              : `Les matchs ${activeDate === today ? 'du jour' : 'à l’affiche'}`}
+              : automaticDate && activeDate !== today
+                ? activeDate < today ? 'Les derniers résultats' : 'Les prochains matchs'
+                : `Les matchs ${activeDate === today ? 'du jour' : 'à l’affiche'}`}
           </h2>
           <span>
             {pagination?.total ?? dayMatches.length} rencontres{' '}
@@ -221,6 +229,12 @@ export function Dashboard({
           </label>
         </div>
       </div>
+      {!full && automaticDate && activeDate !== today && (
+        <p className="data-note" role="status">
+          Aucune rencontre correspondant à ce filtre aujourd’hui dans les compétitions suivies.
+          Voici une journée disponible. <Link href="/matchs">Voir tout le calendrier</Link>
+        </p>
+      )}
 
       {!full && live.matches.some((m) => m.status === 'live') && (
         <section className="live-strip" aria-label="Rencontres en direct">
@@ -433,7 +447,7 @@ export function Dashboard({
               <span className="beta">V1</span>
             </div>
             <p>
-              La lecture statistique du jour,
+              La lecture statistique {activeDate === today ? 'du jour' : 'de cette journée'},
               <br />
               en toute transparence.
             </p>

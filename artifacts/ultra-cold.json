@@ -1,0 +1,213 @@
+{
+  "at": "2026-09-26T20:32:22.038Z",
+  "note": "Each route starts a fresh local Next production process. TCP readiness probe only. Cold includes runtime initialization, DB connection and first route render; warm samples are same process.",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 215460,
+      "coldProcessFirst": {
+        "totalMs": 1587.3,
+        "ttfbMs": 1574.83
+      },
+      "warm": [
+        {
+          "totalMs": 193.65,
+          "ttfbMs": 181.26
+        },
+        {
+          "totalMs": 149.29,
+          "ttfbMs": 140.23
+        },
+        {
+          "totalMs": 93.42,
+          "ttfbMs": 82.26
+        }
+      ]
+    },
+    {
+      "path": "/matchs",
+      "status": 200,
+      "bytes": 206882,
+      "coldProcessFirst": {
+        "totalMs": 1397.54,
+        "ttfbMs": 1378.35
+      },
+      "warm": [
+        {
+          "totalMs": 98.99,
+          "ttfbMs": 91.78
+        },
+        {
+          "totalMs": 93.85,
+          "ttfbMs": 85.83
+        },
+        {
+          "totalMs": 96.91,
+          "ttfbMs": 87.68
+        }
+      ]
+    },
+    {
+      "path": "/live",
+      "status": 200,
+      "bytes": 68398,
+      "coldProcessFirst": {
+        "totalMs": 1266.77,
+        "ttfbMs": 1262.49
+      },
+      "warm": [
+        {
+          "totalMs": 38.84,
+          "ttfbMs": 36.35
+        },
+        {
+          "totalMs": 24.32,
+          "ttfbMs": 21.85
+        },
+        {
+          "totalMs": 22.6,
+          "ttfbMs": 19.08
+        }
+      ]
+    },
+    {
+      "path": "/classements",
+      "status": 200,
+      "bytes": 408883,
+      "coldProcessFirst": {
+        "totalMs": 1463.19,
+        "ttfbMs": 1444.29
+      },
+      "warm": [
+        {
+          "totalMs": 60.18,
+          "ttfbMs": 48.27
+        },
+        {
+          "totalMs": 47.19,
+          "ttfbMs": 35.15
+        },
+        {
+          "totalMs": 47.41,
+          "ttfbMs": 36.52
+        }
+      ]
+    },
+    {
+      "path": "/recherche?q=paris",
+      "status": 200,
+      "bytes": 67664,
+      "coldProcessFirst": {
+        "totalMs": 1342.56,
+        "ttfbMs": 1330.36
+      },
+      "warm": [
+        {
+          "totalMs": 24.71,
+          "ttfbMs": 22.75
+        },
+        {
+          "totalMs": 23.06,
+          "ttfbMs": 20.69
+        },
+        {
+          "totalMs": 21.39,
+          "ttfbMs": 19.34
+        }
+      ]
+    },
+    {
+      "path": "/api/matches",
+      "status": 200,
+      "bytes": 13451,
+      "coldProcessFirst": {
+        "totalMs": 1385.12,
+        "ttfbMs": 1382.59
+      },
+      "warm": [
+        {
+          "totalMs": 29.08,
+          "ttfbMs": 28.58
+        },
+        {
+          "totalMs": 14.73,
+          "ttfbMs": 14.44
+        },
+        {
+          "totalMs": 14.01,
+          "ttfbMs": 13.42
+        }
+      ]
+    },
+    {
+      "path": "/api/search?q=paris",
+      "status": 200,
+      "bytes": 2062,
+      "coldProcessFirst": {
+        "totalMs": 1068.58,
+        "ttfbMs": 1067.27
+      },
+      "warm": [
+        {
+          "totalMs": 14.62,
+          "ttfbMs": 14.38
+        },
+        {
+          "totalMs": 15.15,
+          "ttfbMs": 14.87
+        },
+        {
+          "totalMs": 7.03,
+          "ttfbMs": 6.66
+        }
+      ]
+    },
+    {
+      "path": "/match/11411f32-113c-4e35-842a-f049289a9d93",
+      "status": 200,
+      "bytes": 280826,
+      "coldProcessFirst": {
+        "totalMs": 1547.07,
+        "ttfbMs": 1540.25
+      },
+      "warm": [
+        {
+          "totalMs": 41.64,
+          "ttfbMs": 35.97
+        },
+        {
+          "totalMs": 44.89,
+          "ttfbMs": 36.2
+        },
+        {
+          "totalMs": 53.3,
+          "ttfbMs": 46.66
+        }
+      ]
+    },
+    {
+      "path": "/equipe/ogc-nice-ae644484",
+      "status": 200,
+      "bytes": 214949,
+      "coldProcessFirst": {
+        "totalMs": 1306.47,
+        "ttfbMs": 1297.71
+      },
+      "warm": [
+        {
+          "totalMs": 54.48,
+          "ttfbMs": 50.22
+        },
+        {
+          "totalMs": 36.31,
+          "ttfbMs": 31.33
+        },
+        {
+          "totalMs": 34.6,
+          "ttfbMs": 30.25
+        }
+      ]
+    }
+  ]
+}

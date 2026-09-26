@@ -1,4 +1,39 @@
 import type { Dataset } from '@/types/football';
+/** The home leaderboard needs only each team's latest five results, not 129 full history scans. */
+export function homeFormLeaders(data: Dataset, cutoff = new Date().toISOString()) {
+  type Result = { kickoff: string; gf: number; ga: number };
+  const byTeam = new Map<string, Result[]>();
+  for (const match of data.matches) {
+    if (
+      match.status !== 'finished' ||
+      match.homeScore === null ||
+      match.awayScore === null ||
+      match.kickoff >= cutoff
+    ) continue;
+    for (const [teamId, gf, ga] of [
+      [match.homeId, match.homeScore, match.awayScore],
+      [match.awayId, match.awayScore, match.homeScore],
+    ] as const) {
+      const rows = byTeam.get(teamId) ?? [];
+      rows.push({ kickoff: match.kickoff, gf, ga });
+      byTeam.set(teamId, rows);
+    }
+  }
+  return data.teams
+    .flatMap((team) => {
+      const rows = byTeam.get(team.id);
+      if (!rows || rows.length < 5) return [];
+      const recent = rows.sort((a, b) => b.kickoff.localeCompare(a.kickoff)).slice(0, 5);
+      return [{
+        team,
+        form: recent.map((row) => row.gf > row.ga ? 'V' : row.gf === row.ga ? 'N' : 'D'),
+        points: recent.reduce((sum, row) => sum + (row.gf > row.ga ? 3 : row.gf === row.ga ? 1 : 0), 0),
+        goals: recent.reduce((sum, row) => sum + row.gf, 0),
+      }];
+    })
+    .sort((a, b) => b.points - a.points || b.goals - a.goals)
+    .slice(0, 6);
+}
 export function teamMetricAverage(data: Dataset, teamId: string, label: string): number | null {
   const values = data.matches
     .filter((m) => m.status === 'finished' && (m.homeId === teamId || m.awayId === teamId))

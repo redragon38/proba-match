@@ -1,5 +1,5 @@
 import { getDataset } from '@/services/football';
-import { searchIndex, normalizeSearch, searchResults } from '@/services/search-index';
+import { searchAutocomplete, normalizeSearch, searchResults } from '@/services/search-index';
 import { readJsonBody } from '@/lib/request-body';
 export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
@@ -17,14 +17,7 @@ export async function GET(request: Request) {
   }
   if (q.length < 2 || q.length > 100) return Response.json({ results: [] });
   const data = await getDataset();
-  const results = searchIndex(data)
-    .filter((r) => normalizeSearch(r.name).includes(q))
-    .sort(
-      (a, b) =>
-        Number(normalizeSearch(b.name).startsWith(q)) -
-        Number(normalizeSearch(a.name).startsWith(q)),
-    )
-    .slice(0, 10);
+  const results = searchAutocomplete(data, q);
   return Response.json({ results }, { headers: { 'Cache-Control': 'private, max-age=15' } });
 }
 

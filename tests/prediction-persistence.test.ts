@@ -5,11 +5,13 @@ const mocks = vi.hoisted(() => ({
   create: vi.fn(),
   version: vi.fn(),
   predict: vi.fn(),
+  findUnique: vi.fn(),
+  upsert: vi.fn(),
 }));
 vi.mock('server-only', () => ({}));
 vi.mock('@/database/client', () => ({
   db: {
-    prediction: { findMany: mocks.find },
+    prediction: { findMany: mocks.find, findUnique: mocks.findUnique, upsert: mocks.upsert },
     predictionResult: { create: mocks.create },
     predictionVersion: { upsert: mocks.version },
   },
@@ -58,4 +60,30 @@ it('evaluates pending predictions against their own final scores without histori
     awayScore: 2,
   });
   expect(mocks.predict).not.toHaveBeenCalled();
+});
+it('archives a real pre-match projection 15 days ahead during background sync', async () => {
+  vi.stubEnv('DATABASE_URL', 'test');
+  const now = new Date('2026-09-26T12:00:00Z');
+  const data = createDemoDataset(now);
+  data.source = 'openfootball';
+  data.matches = [{
+    ...data.matches[0], id: 'upcoming', status: 'scheduled',
+    kickoff: '2026-10-11T18:45:00Z', kickoffKnown: true, lineups: [],
+  }];
+  mocks.find.mockResolvedValue([]);
+  mocks.findUnique.mockResolvedValue(null);
+  mocks.predict.mockReturnValue({
+    id: 'projection', matchId: 'upcoming', cutoff: now.toISOString(),
+    home: .4, draw: .3, away: .3, confidence: 50, inputHash: 'hash', lineupConfirmed: false,
+  });
+  await persistPredictions(data, now);
+  expect(mocks.predict).toHaveBeenCalledOnce();
+  expect(mocks.upsert).toHaveBeenCalledOnce();
+  expect(mocks.upsert.mock.calls[0][0].create).toMatchObject({matchId: 'upcoming', kind: 'initial'});
+  mocks.predict.mockClear();
+  mocks.upsert.mockClear();
+  mocks.findUnique.mockResolvedValue({id: 'projection'});
+  await persistPredictions(data, now);
+  expect(mocks.predict).not.toHaveBeenCalled();
+  expect(mocks.upsert).not.toHaveBeenCalled();
 });

@@ -43,6 +43,8 @@ export function MatchDetail({
   const home = data.teams.find((t) => t.id === match.homeId)!,
     away = data.teams.find((t) => t.id === match.awayId)!,
     comp = data.competitions.find((c) => c.id === match.competitionId)!;
+  const homeSummary = teamSummary(data, home.id, match.kickoff);
+  const awaySummary = teamSummary(data, away.id, match.kickoff);
   const h2h = data.matches
     .filter(
       (m) =>
@@ -87,7 +89,7 @@ export function MatchDetail({
               {home.name} – {away.name}
             </h1>
             <h2>{home.name}</h2>
-            <Form values={teamSummary(data, home.id, match.kickoff).form} />
+            <Form values={homeSummary.form} />
           </Link>
           <div className="score-block">
             <span className={match.status === 'live' ? 'live-label' : 'muted'}>
@@ -115,7 +117,7 @@ export function MatchDetail({
           <Link href={`/equipe/${away.slug}`}>
             <TeamBadge team={away} size={75} />
             <h2>{away.name}</h2>
-            <Form values={teamSummary(data, away.id, match.kickoff).form} />
+            <Form values={awaySummary.form} />
           </Link>
         </div>
         <div className="venue-meta">
@@ -265,7 +267,13 @@ export function MatchDetail({
               </section>
             ) : (
               <div className="card">
-                <Empty text="Au moins cinq rencontres historiques par équipe sont nécessaires. Aucune projection pré-match archivée n’est disponible." />
+                <Empty text={
+                  homeSummary.played < 5 || awaySummary.played < 5
+                    ? 'Une projection exige au moins cinq résultats antérieurs pour chaque équipe.'
+                    : match.status === 'scheduled'
+                      ? 'Aucune projection pré-match archivée pour cette rencontre. Les calculs sont publiés automatiquement dans les 21 jours avant le match.'
+                      : 'Aucune projection enregistrée avant cette rencontre.'
+                } />
               </div>
             )}
             {tab === 'prediction' && prediction && (
@@ -285,30 +293,7 @@ export function MatchDetail({
                     value={percent(prediction.cleanAway)}
                   />
                 </div>
-                <div
-                  className="card data-table"
-                  tabIndex={0}
-                  role="region"
-                  aria-label="Tableau de statistiques"
-                >
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Indicateur projeté</th>
-                        <th>{home.short}</th>
-                        <th>{away.short}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {['Possession', 'Tirs', 'Tirs cadrés', 'Corners', 'Cartons'].map((label) => (
-                        <tr key={label}>
-                          <th>{label}</th>
-                          <td colSpan={2}>Données insuffisantes</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <p className="data-note">La v1 ne projette pas la possession, les tirs, les corners ni les cartons.</p>
                 <SectionTitle title="Les scores les plus plausibles" />
                 <div className="score-projections">
                   {prediction.scores.map((s) => (
@@ -326,10 +311,10 @@ export function MatchDetail({
           <aside>
             <SectionTitle title="Joueurs à suivre" />
             <section className="card padded">
-              <p className="data-note">
+              {watched.length > 0 && <p className="data-note">
                 Indice heuristique sur les statistiques disponibles et la part de titularisations.
                 Ce classement n’est pas une probabilité de devenir homme du match.
-              </p>
+              </p>}
               {watched.length ? (
                 watched.map(({ player: p, score }, i) => (
                   <Link href={`/joueur/${p.slug}`} className="player-ranking" key={p.id}>
@@ -345,7 +330,9 @@ export function MatchDetail({
                   </Link>
                 ))
               ) : (
-                <Empty />
+                <p className="data-note">{data.players.length
+                  ? 'Aucun joueur de ces équipes ne possède assez de statistiques pour cet indice.'
+                  : 'Aucune statistique individuelle disponible pour les joueurs de ces équipes. La source actuelle fournit les matchs et résultats, sans effectifs.'}</p>
               )}
             </section>
             <SectionTitle title="Absences signalées" />
@@ -409,9 +396,18 @@ export function MatchDetail({
               ))}
             </section>
           ) : (
-            <div className="card">
-              <Empty text="Les statistiques seront affichées lorsqu’elles seront fournies après le coup d’envoi." />
-            </div>
+            <>
+              <p className="data-note">Aucune statistique détaillée de cette rencontre n’a été transmise. Les chiffres ci-dessous proviennent uniquement des résultats antérieurs des deux équipes.</p>
+              <SectionTitle title="Historique avant cette rencontre" />
+              <div className="metrics three">
+                <Metric label={`Matchs · ${home.short}`} value={homeSummary.played} />
+                <Metric label={`Buts marqués · ${home.short}`} value={homeSummary.scored} />
+                <Metric label={`Buts encaissés · ${home.short}`} value={homeSummary.conceded} />
+                <Metric label={`Matchs · ${away.short}`} value={awaySummary.played} />
+                <Metric label={`Buts marqués · ${away.short}`} value={awaySummary.scored} />
+                <Metric label={`Buts encaissés · ${away.short}`} value={awaySummary.conceded} />
+              </div>
+            </>
           )}
         </>
       )}
@@ -473,7 +469,9 @@ export function MatchDetail({
             </div>
           ) : (
             <div className="card">
-              <Empty text="Les compositions n’ont pas encore été publiées par la source." />
+              <Empty text={match.status === 'scheduled'
+                ? 'Aucune composition publiée par la source pour le moment.'
+                : 'Aucune composition transmise par la source pour cette rencontre.'} />
             </div>
           )}
         </>

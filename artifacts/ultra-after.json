@@ -1,0 +1,744 @@
+{
+  "at": "2026-09-26T20:26:24.825Z",
+  "phase": "after",
+  "note": "Local loopback HTTP, sequential warm requests per route; first is first measured on a running server, not cold-process. TTFB includes local network and server time. Read-only local load.",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 215460,
+      "firstMs": 494.93,
+      "warmMedianMs": 58.62,
+      "warmP95Ms": 74.01,
+      "samples": [
+        {
+          "total": 494.93,
+          "ttfb": 487.59
+        },
+        {
+          "total": 74.01,
+          "ttfb": 67.39
+        },
+        {
+          "total": 58.7,
+          "ttfb": 53.55
+        },
+        {
+          "total": 52.56,
+          "ttfb": 47.26
+        },
+        {
+          "total": 58.62,
+          "ttfb": 52.93
+        },
+        {
+          "total": 51.31,
+          "ttfb": 45.53
+        }
+      ]
+    },
+    {
+      "path": "/matchs",
+      "status": 200,
+      "bytes": 206882,
+      "firstMs": 71.51,
+      "warmMedianMs": 55.77,
+      "warmP95Ms": 60.18,
+      "samples": [
+        {
+          "total": 71.51,
+          "ttfb": 67.42
+        },
+        {
+          "total": 60.18,
+          "ttfb": 55.74
+        },
+        {
+          "total": 56.4,
+          "ttfb": 51.35
+        },
+        {
+          "total": 52.66,
+          "ttfb": 48.59
+        },
+        {
+          "total": 55.77,
+          "ttfb": 51.8
+        },
+        {
+          "total": 54.97,
+          "ttfb": 50.49
+        }
+      ]
+    },
+    {
+      "path": "/matchs?statut=scheduled",
+      "status": 200,
+      "bytes": 160904,
+      "firstMs": 40.31,
+      "warmMedianMs": 42.13,
+      "warmP95Ms": 48.76,
+      "samples": [
+        {
+          "total": 40.31,
+          "ttfb": 37.38
+        },
+        {
+          "total": 41.28,
+          "ttfb": 37.69
+        },
+        {
+          "total": 42.13,
+          "ttfb": 37.06
+        },
+        {
+          "total": 42.2,
+          "ttfb": 38.64
+        },
+        {
+          "total": 38.54,
+          "ttfb": 35.42
+        },
+        {
+          "total": 48.76,
+          "ttfb": 43.54
+        }
+      ]
+    },
+    {
+      "path": "/matchs?statut=live",
+      "status": 200,
+      "bytes": 87676,
+      "firstMs": 25.78,
+      "warmMedianMs": 23.28,
+      "warmP95Ms": 25.44,
+      "samples": [
+        {
+          "total": 25.78,
+          "ttfb": 22.82
+        },
+        {
+          "total": 23.28,
+          "ttfb": 20.23
+        },
+        {
+          "total": 21.83,
+          "ttfb": 19.42
+        },
+        {
+          "total": 24.56,
+          "ttfb": 22.32
+        },
+        {
+          "total": 21.76,
+          "ttfb": 19.23
+        },
+        {
+          "total": 25.44,
+          "ttfb": 20.45
+        }
+      ]
+    },
+    {
+      "path": "/matchs?statut=finished",
+      "status": 200,
+      "bytes": 207004,
+      "firstMs": 45.94,
+      "warmMedianMs": 43.29,
+      "warmP95Ms": 50.79,
+      "samples": [
+        {
+          "total": 45.94,
+          "ttfb": 41.95
+        },
+        {
+          "total": 42.9,
+          "ttfb": 38.9
+        },
+        {
+          "total": 50.79,
+          "ttfb": 46.52
+        },
+        {
+          "total": 48.13,
+          "ttfb": 44.08
+        },
+        {
+          "total": 41.72,
+          "ttfb": 37.57
+        },
+        {
+          "total": 43.29,
+          "ttfb": 39.13
+        }
+      ]
+    },
+    {
+      "path": "/live",
+      "status": 200,
+      "bytes": 68398,
+      "firstMs": 21.95,
+      "warmMedianMs": 15.76,
+      "warmP95Ms": 17.11,
+      "samples": [
+        {
+          "total": 21.95,
+          "ttfb": 20.34
+        },
+        {
+          "total": 16.08,
+          "ttfb": 14.08
+        },
+        {
+          "total": 15.02,
+          "ttfb": 12.92
+        },
+        {
+          "total": 17.11,
+          "ttfb": 14.81
+        },
+        {
+          "total": 14.72,
+          "ttfb": 12.5
+        },
+        {
+          "total": 15.76,
+          "ttfb": 13.66
+        }
+      ]
+    },
+    {
+      "path": "/equipes",
+      "status": 200,
+      "bytes": 92551,
+      "firstMs": 19.76,
+      "warmMedianMs": 14.47,
+      "warmP95Ms": 17.11,
+      "samples": [
+        {
+          "total": 19.76,
+          "ttfb": 17.59
+        },
+        {
+          "total": 14.32,
+          "ttfb": 12.28
+        },
+        {
+          "total": 13.78,
+          "ttfb": 11.51
+        },
+        {
+          "total": 17.11,
+          "ttfb": 13.33
+        },
+        {
+          "total": 15.35,
+          "ttfb": 13.51
+        },
+        {
+          "total": 14.47,
+          "ttfb": 11.03
+        }
+      ]
+    },
+    {
+      "path": "/joueurs",
+      "status": 200,
+      "bytes": 67579,
+      "firstMs": 14.7,
+      "warmMedianMs": 12.41,
+      "warmP95Ms": 12.8,
+      "samples": [
+        {
+          "total": 14.7,
+          "ttfb": 13.01
+        },
+        {
+          "total": 10.86,
+          "ttfb": 9.05
+        },
+        {
+          "total": 12.57,
+          "ttfb": 10.52
+        },
+        {
+          "total": 11.86,
+          "ttfb": 9.63
+        },
+        {
+          "total": 12.41,
+          "ttfb": 10.13
+        },
+        {
+          "total": 12.8,
+          "ttfb": 10.86
+        }
+      ]
+    },
+    {
+      "path": "/competitions",
+      "status": 200,
+      "bytes": 71064,
+      "firstMs": 13.9,
+      "warmMedianMs": 12.56,
+      "warmP95Ms": 15.01,
+      "samples": [
+        {
+          "total": 13.9,
+          "ttfb": 12.07
+        },
+        {
+          "total": 12.56,
+          "ttfb": 10.14
+        },
+        {
+          "total": 11.86,
+          "ttfb": 9.81
+        },
+        {
+          "total": 15.01,
+          "ttfb": 12.94
+        },
+        {
+          "total": 14.72,
+          "ttfb": 12.55
+        },
+        {
+          "total": 11.75,
+          "ttfb": 9.8
+        }
+      ]
+    },
+    {
+      "path": "/classements",
+      "status": 200,
+      "bytes": 408883,
+      "firstMs": 66,
+      "warmMedianMs": 35.94,
+      "warmP95Ms": 37.32,
+      "samples": [
+        {
+          "total": 66,
+          "ttfb": 56.04
+        },
+        {
+          "total": 33.99,
+          "ttfb": 23.82
+        },
+        {
+          "total": 35.94,
+          "ttfb": 24.7
+        },
+        {
+          "total": 36.45,
+          "ttfb": 26.5
+        },
+        {
+          "total": 34.01,
+          "ttfb": 23.36
+        },
+        {
+          "total": 37.32,
+          "ttfb": 25.28
+        }
+      ]
+    },
+    {
+      "path": "/recherche?q=paris",
+      "status": 200,
+      "bytes": 67664,
+      "firstMs": 34.67,
+      "warmMedianMs": 13.92,
+      "warmP95Ms": 15.41,
+      "samples": [
+        {
+          "total": 34.67,
+          "ttfb": 32.65
+        },
+        {
+          "total": 14.05,
+          "ttfb": 12.11
+        },
+        {
+          "total": 12.7,
+          "ttfb": 11.29
+        },
+        {
+          "total": 13.92,
+          "ttfb": 11.83
+        },
+        {
+          "total": 13.79,
+          "ttfb": 11.84
+        },
+        {
+          "total": 15.41,
+          "ttfb": 13.48
+        }
+      ]
+    },
+    {
+      "path": "/api/live",
+      "status": 200,
+      "bytes": 379,
+      "firstMs": 11.84,
+      "warmMedianMs": 8.44,
+      "warmP95Ms": 9.55,
+      "samples": [
+        {
+          "total": 11.84,
+          "ttfb": 11.56
+        },
+        {
+          "total": 8.08,
+          "ttfb": 7.89
+        },
+        {
+          "total": 9.55,
+          "ttfb": 9.3
+        },
+        {
+          "total": 9.43,
+          "ttfb": 9.08
+        },
+        {
+          "total": 8.44,
+          "ttfb": 8.23
+        },
+        {
+          "total": 7.3,
+          "ttfb": 7.01
+        }
+      ]
+    },
+    {
+      "path": "/api/matches",
+      "status": 200,
+      "bytes": 13451,
+      "firstMs": 13.3,
+      "warmMedianMs": 8.9,
+      "warmP95Ms": 13.03,
+      "samples": [
+        {
+          "total": 13.3,
+          "ttfb": 13.01
+        },
+        {
+          "total": 13.03,
+          "ttfb": 12.82
+        },
+        {
+          "total": 8.67,
+          "ttfb": 8.43
+        },
+        {
+          "total": 9.41,
+          "ttfb": 9.16
+        },
+        {
+          "total": 8.9,
+          "ttfb": 8.72
+        },
+        {
+          "total": 8.39,
+          "ttfb": 8.14
+        }
+      ]
+    },
+    {
+      "path": "/api/matches?statut=scheduled",
+      "status": 200,
+      "bytes": 13624,
+      "firstMs": 6.15,
+      "warmMedianMs": 6.43,
+      "warmP95Ms": 6.9,
+      "samples": [
+        {
+          "total": 6.15,
+          "ttfb": 5.96
+        },
+        {
+          "total": 6.9,
+          "ttfb": 6.64
+        },
+        {
+          "total": 6.49,
+          "ttfb": 6.25
+        },
+        {
+          "total": 6.43,
+          "ttfb": 6.24
+        },
+        {
+          "total": 5.96,
+          "ttfb": 5.8
+        },
+        {
+          "total": 5.39,
+          "ttfb": 5.16
+        }
+      ]
+    },
+    {
+      "path": "/api/matches?statut=finished",
+      "status": 200,
+      "bytes": 13456,
+      "firstMs": 7.43,
+      "warmMedianMs": 6.98,
+      "warmP95Ms": 7.4,
+      "samples": [
+        {
+          "total": 7.43,
+          "ttfb": 7.14
+        },
+        {
+          "total": 6.94,
+          "ttfb": 6.72
+        },
+        {
+          "total": 6.98,
+          "ttfb": 6.65
+        },
+        {
+          "total": 7.21,
+          "ttfb": 6.89
+        },
+        {
+          "total": 6.78,
+          "ttfb": 6.51
+        },
+        {
+          "total": 7.4,
+          "ttfb": 7.01
+        }
+      ]
+    },
+    {
+      "path": "/api/matches?featured=true",
+      "status": 200,
+      "bytes": 2330,
+      "firstMs": 6.84,
+      "warmMedianMs": 6.32,
+      "warmP95Ms": 6.57,
+      "samples": [
+        {
+          "total": 6.84,
+          "ttfb": 6.67
+        },
+        {
+          "total": 6.57,
+          "ttfb": 6.39
+        },
+        {
+          "total": 6.36,
+          "ttfb": 6.17
+        },
+        {
+          "total": 5.86,
+          "ttfb": 5.68
+        },
+        {
+          "total": 6.32,
+          "ttfb": 6.14
+        },
+        {
+          "total": 6.25,
+          "ttfb": 6.04
+        }
+      ]
+    },
+    {
+      "path": "/api/search?q=paris",
+      "status": 200,
+      "bytes": 2062,
+      "firstMs": 5.41,
+      "warmMedianMs": 4.88,
+      "warmP95Ms": 5.16,
+      "samples": [
+        {
+          "total": 5.41,
+          "ttfb": 5.24
+        },
+        {
+          "total": 5.16,
+          "ttfb": 5
+        },
+        {
+          "total": 4.8,
+          "ttfb": 4.64
+        },
+        {
+          "total": 4.13,
+          "ttfb": 3.88
+        },
+        {
+          "total": 4.98,
+          "ttfb": 4.74
+        },
+        {
+          "total": 4.88,
+          "ttfb": 4.67
+        }
+      ]
+    },
+    {
+      "path": "/api/updates",
+      "status": 200,
+      "bytes": 39,
+      "firstMs": 5.62,
+      "warmMedianMs": 2.77,
+      "warmP95Ms": 3.22,
+      "samples": [
+        {
+          "total": 5.62,
+          "ttfb": 5.45
+        },
+        {
+          "total": 2.62,
+          "ttfb": 2.43
+        },
+        {
+          "total": 3.14,
+          "ttfb": 2.99
+        },
+        {
+          "total": 2.68,
+          "ttfb": 2.53
+        },
+        {
+          "total": 3.22,
+          "ttfb": 3.01
+        },
+        {
+          "total": 2.77,
+          "ttfb": 2.62
+        }
+      ]
+    },
+    {
+      "path": "/match/11411f32-113c-4e35-842a-f049289a9d93",
+      "status": 200,
+      "bytes": 280826,
+      "firstMs": 93.7,
+      "warmMedianMs": 28.58,
+      "warmP95Ms": 31,
+      "samples": [
+        {
+          "total": 93.7,
+          "ttfb": 88.58
+        },
+        {
+          "total": 31,
+          "ttfb": 26.08
+        },
+        {
+          "total": 30.62,
+          "ttfb": 25.44
+        },
+        {
+          "total": 28.58,
+          "ttfb": 23.05
+        },
+        {
+          "total": 27.35,
+          "ttfb": 21.53
+        },
+        {
+          "total": 27.58,
+          "ttfb": 22.22
+        }
+      ]
+    },
+    {
+      "path": "/equipe/ogc-nice-ae644484",
+      "status": 200,
+      "bytes": 214949,
+      "firstMs": 39.52,
+      "warmMedianMs": 27.93,
+      "warmP95Ms": 29.24,
+      "samples": [
+        {
+          "total": 39.52,
+          "ttfb": 33.68
+        },
+        {
+          "total": 27.05,
+          "ttfb": 23.04
+        },
+        {
+          "total": 29.24,
+          "ttfb": 24.62
+        },
+        {
+          "total": 28.15,
+          "ttfb": 24.13
+        },
+        {
+          "total": 27.38,
+          "ttfb": 23.09
+        },
+        {
+          "total": 27.93,
+          "ttfb": 23.49
+        }
+      ]
+    },
+    {
+      "path": "/competition/ligue-1",
+      "status": 200,
+      "bytes": 132216,
+      "firstMs": 36.23,
+      "warmMedianMs": 25.46,
+      "warmP95Ms": 37.97,
+      "samples": [
+        {
+          "total": 36.23,
+          "ttfb": 33.86
+        },
+        {
+          "total": 37.97,
+          "ttfb": 35.16
+        },
+        {
+          "total": 25.31,
+          "ttfb": 22.69
+        },
+        {
+          "total": 23.79,
+          "ttfb": 20.83
+        },
+        {
+          "total": 25.61,
+          "ttfb": 23.06
+        },
+        {
+          "total": 25.46,
+          "ttfb": 22.65
+        }
+      ]
+    }
+  ],
+  "load": [
+    {
+      "concurrency": 1,
+      "p50": 9.68,
+      "p95": 9.68,
+      "errors": 0,
+      "batchMs": 9.92
+    },
+    {
+      "concurrency": 10,
+      "p50": 33.61,
+      "p95": 52.31,
+      "errors": 0,
+      "batchMs": 57.85
+    },
+    {
+      "concurrency": 50,
+      "p50": 166.67,
+      "p95": 255.85,
+      "errors": 0,
+      "batchMs": 275.92
+    }
+  ]
+}

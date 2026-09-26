@@ -1,0 +1,744 @@
+{
+  "at": "2026-09-26T20:18:16.404Z",
+  "phase": "before",
+  "note": "Local loopback HTTP, sequential warm requests per route; first is first measured on a running server, not cold-process. TTFB includes local network and server time. Read-only local load.",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 215460,
+      "firstMs": 248.66,
+      "warmMedianMs": 111.44,
+      "warmP95Ms": 125.7,
+      "samples": [
+        {
+          "total": 248.66,
+          "ttfb": 242.04
+        },
+        {
+          "total": 111.44,
+          "ttfb": 106.72
+        },
+        {
+          "total": 125.7,
+          "ttfb": 119.83
+        },
+        {
+          "total": 112.65,
+          "ttfb": 107.91
+        },
+        {
+          "total": 105.72,
+          "ttfb": 99.12
+        },
+        {
+          "total": 108.8,
+          "ttfb": 103.98
+        }
+      ]
+    },
+    {
+      "path": "/matchs",
+      "status": 200,
+      "bytes": 206882,
+      "firstMs": 52.72,
+      "warmMedianMs": 48.32,
+      "warmP95Ms": 59.8,
+      "samples": [
+        {
+          "total": 52.72,
+          "ttfb": 47.21
+        },
+        {
+          "total": 55.22,
+          "ttfb": 51.28
+        },
+        {
+          "total": 59.8,
+          "ttfb": 55.63
+        },
+        {
+          "total": 48.32,
+          "ttfb": 44.18
+        },
+        {
+          "total": 45.89,
+          "ttfb": 41.26
+        },
+        {
+          "total": 46.35,
+          "ttfb": 41.79
+        }
+      ]
+    },
+    {
+      "path": "/matchs?statut=scheduled",
+      "status": 200,
+      "bytes": 160904,
+      "firstMs": 39.7,
+      "warmMedianMs": 40.64,
+      "warmP95Ms": 44.54,
+      "samples": [
+        {
+          "total": 39.7,
+          "ttfb": 36.78
+        },
+        {
+          "total": 40.64,
+          "ttfb": 36.05
+        },
+        {
+          "total": 42.14,
+          "ttfb": 38.37
+        },
+        {
+          "total": 40.46,
+          "ttfb": 36.49
+        },
+        {
+          "total": 44.54,
+          "ttfb": 41.46
+        },
+        {
+          "total": 38.66,
+          "ttfb": 35.47
+        }
+      ]
+    },
+    {
+      "path": "/matchs?statut=live",
+      "status": 200,
+      "bytes": 87676,
+      "firstMs": 21.96,
+      "warmMedianMs": 20.87,
+      "warmP95Ms": 21.58,
+      "samples": [
+        {
+          "total": 21.96,
+          "ttfb": 19.88
+        },
+        {
+          "total": 21.58,
+          "ttfb": 19.34
+        },
+        {
+          "total": 20.35,
+          "ttfb": 18.25
+        },
+        {
+          "total": 21.52,
+          "ttfb": 18.93
+        },
+        {
+          "total": 20.53,
+          "ttfb": 17.46
+        },
+        {
+          "total": 20.87,
+          "ttfb": 18.5
+        }
+      ]
+    },
+    {
+      "path": "/matchs?statut=finished",
+      "status": 200,
+      "bytes": 207004,
+      "firstMs": 42.84,
+      "warmMedianMs": 42.12,
+      "warmP95Ms": 46.19,
+      "samples": [
+        {
+          "total": 42.84,
+          "ttfb": 38.71
+        },
+        {
+          "total": 42.12,
+          "ttfb": 38.14
+        },
+        {
+          "total": 41.89,
+          "ttfb": 37.83
+        },
+        {
+          "total": 46.19,
+          "ttfb": 41.87
+        },
+        {
+          "total": 42.69,
+          "ttfb": 38.93
+        },
+        {
+          "total": 41.72,
+          "ttfb": 38.03
+        }
+      ]
+    },
+    {
+      "path": "/live",
+      "status": 200,
+      "bytes": 68398,
+      "firstMs": 16.31,
+      "warmMedianMs": 14.89,
+      "warmP95Ms": 16.35,
+      "samples": [
+        {
+          "total": 16.31,
+          "ttfb": 14.47
+        },
+        {
+          "total": 14.89,
+          "ttfb": 13
+        },
+        {
+          "total": 15.19,
+          "ttfb": 13.23
+        },
+        {
+          "total": 16.35,
+          "ttfb": 13.88
+        },
+        {
+          "total": 13.3,
+          "ttfb": 11.42
+        },
+        {
+          "total": 14.69,
+          "ttfb": 12.73
+        }
+      ]
+    },
+    {
+      "path": "/equipes",
+      "status": 200,
+      "bytes": 92551,
+      "firstMs": 12.81,
+      "warmMedianMs": 12.83,
+      "warmP95Ms": 15.23,
+      "samples": [
+        {
+          "total": 12.81,
+          "ttfb": 10.74
+        },
+        {
+          "total": 12.56,
+          "ttfb": 9.94
+        },
+        {
+          "total": 14.68,
+          "ttfb": 12.28
+        },
+        {
+          "total": 12.83,
+          "ttfb": 10.04
+        },
+        {
+          "total": 15.23,
+          "ttfb": 13.4
+        },
+        {
+          "total": 12.56,
+          "ttfb": 10.53
+        }
+      ]
+    },
+    {
+      "path": "/joueurs",
+      "status": 200,
+      "bytes": 67579,
+      "firstMs": 13.77,
+      "warmMedianMs": 10.55,
+      "warmP95Ms": 11.75,
+      "samples": [
+        {
+          "total": 13.77,
+          "ttfb": 11.96
+        },
+        {
+          "total": 11.09,
+          "ttfb": 9.03
+        },
+        {
+          "total": 10.33,
+          "ttfb": 8.51
+        },
+        {
+          "total": 11.75,
+          "ttfb": 8.53
+        },
+        {
+          "total": 10.43,
+          "ttfb": 8.71
+        },
+        {
+          "total": 10.55,
+          "ttfb": 8.3
+        }
+      ]
+    },
+    {
+      "path": "/competitions",
+      "status": 200,
+      "bytes": 71064,
+      "firstMs": 11.16,
+      "warmMedianMs": 10.83,
+      "warmP95Ms": 11.4,
+      "samples": [
+        {
+          "total": 11.16,
+          "ttfb": 9.31
+        },
+        {
+          "total": 11.4,
+          "ttfb": 9.62
+        },
+        {
+          "total": 11.04,
+          "ttfb": 9.2
+        },
+        {
+          "total": 10.5,
+          "ttfb": 8.15
+        },
+        {
+          "total": 10.83,
+          "ttfb": 8.8
+        },
+        {
+          "total": 10.47,
+          "ttfb": 8.52
+        }
+      ]
+    },
+    {
+      "path": "/classements",
+      "status": 200,
+      "bytes": 408883,
+      "firstMs": 58.19,
+      "warmMedianMs": 45.28,
+      "warmP95Ms": 58.35,
+      "samples": [
+        {
+          "total": 58.19,
+          "ttfb": 47.88
+        },
+        {
+          "total": 58.35,
+          "ttfb": 47.58
+        },
+        {
+          "total": 45.28,
+          "ttfb": 34.96
+        },
+        {
+          "total": 45,
+          "ttfb": 34.82
+        },
+        {
+          "total": 44.36,
+          "ttfb": 33.25
+        },
+        {
+          "total": 57.34,
+          "ttfb": 44.59
+        }
+      ]
+    },
+    {
+      "path": "/recherche?q=paris",
+      "status": 200,
+      "bytes": 67664,
+      "firstMs": 22.97,
+      "warmMedianMs": 19.28,
+      "warmP95Ms": 20.28,
+      "samples": [
+        {
+          "total": 22.97,
+          "ttfb": 21.02
+        },
+        {
+          "total": 20.28,
+          "ttfb": 18.3
+        },
+        {
+          "total": 20.02,
+          "ttfb": 18.91
+        },
+        {
+          "total": 19.28,
+          "ttfb": 17.73
+        },
+        {
+          "total": 18.88,
+          "ttfb": 17.1
+        },
+        {
+          "total": 19.01,
+          "ttfb": 17.39
+        }
+      ]
+    },
+    {
+      "path": "/api/live",
+      "status": 200,
+      "bytes": 379,
+      "firstMs": 8.19,
+      "warmMedianMs": 6.44,
+      "warmP95Ms": 7.12,
+      "samples": [
+        {
+          "total": 8.19,
+          "ttfb": 7.92
+        },
+        {
+          "total": 6.59,
+          "ttfb": 6.4
+        },
+        {
+          "total": 7.12,
+          "ttfb": 6.96
+        },
+        {
+          "total": 6.36,
+          "ttfb": 6.12
+        },
+        {
+          "total": 6.44,
+          "ttfb": 6.28
+        },
+        {
+          "total": 6.01,
+          "ttfb": 5.81
+        }
+      ]
+    },
+    {
+      "path": "/api/matches",
+      "status": 200,
+      "bytes": 13451,
+      "firstMs": 13.03,
+      "warmMedianMs": 12.8,
+      "warmP95Ms": 14.86,
+      "samples": [
+        {
+          "total": 13.03,
+          "ttfb": 12.75
+        },
+        {
+          "total": 12.8,
+          "ttfb": 12.53
+        },
+        {
+          "total": 12.16,
+          "ttfb": 11.89
+        },
+        {
+          "total": 14.86,
+          "ttfb": 14.6
+        },
+        {
+          "total": 12.23,
+          "ttfb": 11.98
+        },
+        {
+          "total": 13.54,
+          "ttfb": 13.29
+        }
+      ]
+    },
+    {
+      "path": "/api/matches?statut=scheduled",
+      "status": 200,
+      "bytes": 13624,
+      "firstMs": 8.37,
+      "warmMedianMs": 8.43,
+      "warmP95Ms": 9.48,
+      "samples": [
+        {
+          "total": 8.37,
+          "ttfb": 8.19
+        },
+        {
+          "total": 8.43,
+          "ttfb": 8.19
+        },
+        {
+          "total": 7.92,
+          "ttfb": 7.72
+        },
+        {
+          "total": 9.48,
+          "ttfb": 9.27
+        },
+        {
+          "total": 8.51,
+          "ttfb": 8.31
+        },
+        {
+          "total": 7.83,
+          "ttfb": 7.64
+        }
+      ]
+    },
+    {
+      "path": "/api/matches?statut=finished",
+      "status": 200,
+      "bytes": 13456,
+      "firstMs": 7.52,
+      "warmMedianMs": 7.94,
+      "warmP95Ms": 8.02,
+      "samples": [
+        {
+          "total": 7.52,
+          "ttfb": 7.26
+        },
+        {
+          "total": 7.94,
+          "ttfb": 7.72
+        },
+        {
+          "total": 8,
+          "ttfb": 7.71
+        },
+        {
+          "total": 7.68,
+          "ttfb": 7.41
+        },
+        {
+          "total": 7.52,
+          "ttfb": 7.31
+        },
+        {
+          "total": 8.02,
+          "ttfb": 7.77
+        }
+      ]
+    },
+    {
+      "path": "/api/matches?featured=true",
+      "status": 200,
+      "bytes": 2330,
+      "firstMs": 5.83,
+      "warmMedianMs": 5.55,
+      "warmP95Ms": 5.86,
+      "samples": [
+        {
+          "total": 5.83,
+          "ttfb": 5.67
+        },
+        {
+          "total": 5.63,
+          "ttfb": 5.47
+        },
+        {
+          "total": 5.55,
+          "ttfb": 5.39
+        },
+        {
+          "total": 5.29,
+          "ttfb": 5.13
+        },
+        {
+          "total": 5.29,
+          "ttfb": 5.13
+        },
+        {
+          "total": 5.86,
+          "ttfb": 5.68
+        }
+      ]
+    },
+    {
+      "path": "/api/search?q=paris",
+      "status": 200,
+      "bytes": 2062,
+      "firstMs": 13.17,
+      "warmMedianMs": 12.9,
+      "warmP95Ms": 13.69,
+      "samples": [
+        {
+          "total": 13.17,
+          "ttfb": 13
+        },
+        {
+          "total": 13.27,
+          "ttfb": 13.09
+        },
+        {
+          "total": 13.69,
+          "ttfb": 13.53
+        },
+        {
+          "total": 12.4,
+          "ttfb": 12.15
+        },
+        {
+          "total": 12.38,
+          "ttfb": 12.21
+        },
+        {
+          "total": 12.9,
+          "ttfb": 12.68
+        }
+      ]
+    },
+    {
+      "path": "/api/updates",
+      "status": 200,
+      "bytes": 39,
+      "firstMs": 3.03,
+      "warmMedianMs": 2.46,
+      "warmP95Ms": 2.91,
+      "samples": [
+        {
+          "total": 3.03,
+          "ttfb": 2.87
+        },
+        {
+          "total": 2.46,
+          "ttfb": 2.24
+        },
+        {
+          "total": 2.91,
+          "ttfb": 2.66
+        },
+        {
+          "total": 2.7,
+          "ttfb": 2.5
+        },
+        {
+          "total": 2.42,
+          "ttfb": 2.24
+        },
+        {
+          "total": 2.27,
+          "ttfb": 2.11
+        }
+      ]
+    },
+    {
+      "path": "/match/11411f32-113c-4e35-842a-f049289a9d93",
+      "status": 200,
+      "bytes": 280826,
+      "firstMs": 67.9,
+      "warmMedianMs": 70.21,
+      "warmP95Ms": 80.84,
+      "samples": [
+        {
+          "total": 67.9,
+          "ttfb": 62.96
+        },
+        {
+          "total": 70.21,
+          "ttfb": 65.12
+        },
+        {
+          "total": 80.84,
+          "ttfb": 75.52
+        },
+        {
+          "total": 67.41,
+          "ttfb": 60.4
+        },
+        {
+          "total": 71.77,
+          "ttfb": 66.66
+        },
+        {
+          "total": 64.97,
+          "ttfb": 59.79
+        }
+      ]
+    },
+    {
+      "path": "/equipe/ogc-nice-ae644484",
+      "status": 200,
+      "bytes": 214949,
+      "firstMs": 34.76,
+      "warmMedianMs": 24.57,
+      "warmP95Ms": 25.09,
+      "samples": [
+        {
+          "total": 34.76,
+          "ttfb": 30.29
+        },
+        {
+          "total": 23.8,
+          "ttfb": 19.53
+        },
+        {
+          "total": 24.57,
+          "ttfb": 20.37
+        },
+        {
+          "total": 24.65,
+          "ttfb": 20.51
+        },
+        {
+          "total": 25.09,
+          "ttfb": 20.66
+        },
+        {
+          "total": 23.76,
+          "ttfb": 19.29
+        }
+      ]
+    },
+    {
+      "path": "/competition/ligue-1",
+      "status": 200,
+      "bytes": 132216,
+      "firstMs": 30.58,
+      "warmMedianMs": 25.25,
+      "warmP95Ms": 31.82,
+      "samples": [
+        {
+          "total": 30.58,
+          "ttfb": 27.67
+        },
+        {
+          "total": 31.82,
+          "ttfb": 27.39
+        },
+        {
+          "total": 27.55,
+          "ttfb": 25.01
+        },
+        {
+          "total": 25.25,
+          "ttfb": 22.64
+        },
+        {
+          "total": 23.27,
+          "ttfb": 20.79
+        },
+        {
+          "total": 23.31,
+          "ttfb": 20.22
+        }
+      ]
+    }
+  ],
+  "load": [
+    {
+      "concurrency": 1,
+      "p50": 8.85,
+      "p95": 8.85,
+      "errors": 0,
+      "batchMs": 9.08
+    },
+    {
+      "concurrency": 10,
+      "p50": 43,
+      "p95": 66.54,
+      "errors": 0,
+      "batchMs": 74.55
+    },
+    {
+      "concurrency": 50,
+      "p50": 220.52,
+      "p95": 358.05,
+      "errors": 0,
+      "batchMs": 385.54
+    }
+  ]
+}

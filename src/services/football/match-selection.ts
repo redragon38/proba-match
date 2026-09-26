@@ -63,22 +63,23 @@ export function matchSelection(data: Dataset, query: MatchQuery = {}, now = Date
           query.pays === 'all' ||
           data.competitions.some((c) => c.id === m.competitionId && c.country === query.pays)),
     )
+    .map((match) => ({ match, kickoff: Date.parse(match.kickoff) }))
     .sort((a, b) => {
-      const x = Date.parse(a.kickoff),
-        y = Date.parse(b.kickoff);
+      const x = a.kickoff,
+        y = b.kickoff;
       return (
         (status === 'finished'
           ? y - x
           : status === 'all'
             ? Math.abs(x - now) - Math.abs(y - now)
-            : x - y) || a.id.localeCompare(b.id)
+            : x - y) || a.match.id.localeCompare(b.match.id)
       );
     });
   const total = rows.length;
   const pages = Math.max(1, Math.ceil(total / limit));
   const page = Math.min(requestedPage, pages);
   return {
-    matches: rows.slice((page - 1) * limit, page * limit).map(matchSummary),
+    matches: rows.slice((page - 1) * limit, page * limit).map(({ match }) => matchSummary(match)),
     total,
     page,
     pages,
@@ -94,6 +95,37 @@ export function isUpcoming(m: Match, now = Date.now(), today?: string) {
       ? m.sourceDate >= (today ?? dateKey(new Date(now)))
       : Date.parse(m.kickoff) >= now)
   );
+}
+/** Use a real matchday when today's calendar has no fixture for the selected tab. */
+export function closestMatchDate(
+  data: Pick<Dataset, 'matches'>,
+  status = 'all',
+  now = Date.now(),
+  zone = 'Europe/Paris',
+) {
+  const today = dateKey(new Date(now), zone);
+  let closest: Match | undefined;
+  let distance = Infinity;
+  for (const match of data.matches) {
+    if (status === 'scheduled' ? !isUpcoming(match, now, today) : !['all', 'favorites'].includes(status) && match.status !== status)
+      continue;
+    const kickoff = Date.parse(match.kickoff);
+    if (!Number.isFinite(kickoff)) continue;
+    // Only dates near today need a timezone conversion while scanning the full corpus.
+    if (Math.abs(kickoff - now) < 2 * 86400_000 && matchDate(match, zone) === today)
+      return today;
+    const gap = Math.abs(kickoff - now);
+    if (gap < distance) {
+      closest = match;
+      distance = gap;
+    }
+  }
+  return closest ? matchDate(closest, zone) : today;
+}
+function matchDate(match: Match, zone: string) {
+  return match.kickoffKnown === false && match.sourceDate
+    ? match.sourceDate
+    : dateKey(new Date(match.kickoff), zone);
 }
 export function matchSummary(m: Match): Match {
   return { ...m, performances: undefined, lineups: [], statistics: [], events: [] };

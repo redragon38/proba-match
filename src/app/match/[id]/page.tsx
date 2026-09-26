@@ -33,10 +33,10 @@ export default async function Page({
     permanentRedirect(
       `/match/${m.slug}${q.onglet ? `?onglet=${encodeURIComponent(q.onglet)}` : ''}`,
     );
-  const [predictions, history] = await Promise.all([
-    getPredictions(data),
-    getPredictionHistory(m.id, data.source),
-  ]);
+  const history = await getPredictionHistory(m.id, data.source);
+  const prediction = data.source === 'demo'
+    ? (await getPredictions(data))[m.id]
+    : history.at(-1);
   const allowed = [
     'apercu',
     'prediction',
@@ -78,7 +78,7 @@ export default async function Page({
         data={teamDataset(data, [m.homeId, m.awayId])}
         match={m}
         history={history}
-        prediction={predictions[m.id]}
+        prediction={prediction}
         tab={q.onglet && allowed.includes(q.onglet) ? q.onglet : 'apercu'}
       />
     </>

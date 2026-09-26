@@ -1,0 +1,86 @@
+{
+  "at": "2026-09-26T20:24:33.241Z",
+  "phase": "after2",
+  "rows": {
+    "matches": 7008,
+    "teams": 129,
+    "players": 0
+  },
+  "bytes": {
+    "matchDetailDataset": 214118,
+    "compactHistory": 214118
+  },
+  "note": "Read-only real local PostgreSQL dataset. Sequential in-process timings, no server/network. Median of 12 runs after one warmup.",
+  "results": {
+    "db-marker": {
+      "medianMs": 0.788,
+      "p95Ms": 0.949,
+      "minMs": 0.557
+    },
+    "db-dataset-read": {
+      "medianMs": 156.243,
+      "p95Ms": 173.993,
+      "minMs": 148.112
+    },
+    "db-predictions-all": {
+      "medianMs": 5.517,
+      "p95Ms": 7.404,
+      "minMs": 4.974
+    },
+    "search-index": {
+      "medianMs": 0.289,
+      "p95Ms": 0.599,
+      "minMs": 0.242
+    },
+    "search-results": {
+      "medianMs": 0.481,
+      "p95Ms": 0.696,
+      "minMs": 0.356
+    },
+    "search-autocomplete": {
+      "medianMs": 0.637,
+      "p95Ms": 0.807,
+      "minMs": 0.452
+    },
+    "match-selection-all": {
+      "medianMs": 4.629,
+      "p95Ms": 9.382,
+      "minMs": 4.016
+    },
+    "match-selection-scheduled": {
+      "medianMs": 1.605,
+      "p95Ms": 2.307,
+      "minMs": 1.474
+    },
+    "upcoming-selection": {
+      "medianMs": 2.302,
+      "p95Ms": 2.558,
+      "minMs": 2.016
+    },
+    "home-forms": {
+      "medianMs": 29.533,
+      "p95Ms": 47.321,
+      "minMs": 28.134
+    },
+    "home-form-leaders": {
+      "medianMs": 5.181,
+      "p95Ms": 20.216,
+      "minMs": 4.17
+    },
+    "standings-view": {
+      "medianMs": 0.001,
+      "p95Ms": 0.013,
+      "minMs": 0.001
+    },
+    "dashboard-dataset": {
+      "medianMs": 2.461,
+      "p95Ms": 3.214,
+      "minMs": 1.986
+    },
+    "l1-cache-hit": {
+      "medianMs": 0.001,
+      "p95Ms": 0.034,
+      "minMs": 0.001
+    }
+  }
+}

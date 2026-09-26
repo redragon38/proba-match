@@ -19,12 +19,17 @@ export async function getPredictions(data: Dataset): Promise<Record<string, Pred
     );
   if (!process.env.DATABASE_URL) return {};
   try {
+    const ids = new Set(data.matches.map((m) => m.id));
+    // For a full historical dataset, sending thousands of IDs to PostgreSQL costs
+    // more than reading the much smaller prediction table and filtering locally.
     const rows = await db.prediction.findMany({
-      where: { matchId: { in: data.matches.map((m) => m.id) } },
+      where: ids.size <= 1000 ? { matchId: { in: [...ids] } } : undefined,
       orderBy: { createdAt: 'asc' },
       select: { matchId: true, payload: true },
     });
-    return Object.fromEntries(rows.map((r) => [r.matchId, r.payload as unknown as Prediction]));
+    return Object.fromEntries(
+      rows.filter((r) => ids.has(r.matchId)).map((r) => [r.matchId, r.payload as unknown as Prediction]),
+    );
   } catch {
     return {};
   }
@@ -74,15 +79,18 @@ export async function persistPredictions(data: Dataset, now = new Date()) {
       match.status === 'scheduled' &&
       match.kickoffKnown !== false &&
       new Date(match.kickoff) > now &&
-      new Date(match.kickoff).getTime() < now.getTime() + 7 * 86400_000
+      new Date(match.kickoff).getTime() < now.getTime() + 21 * 86400_000
     ) {
-      const p = predictionEngine.predict(match, data.matches, now.toISOString());
-      if (!p) continue;
       const initial = await db.prediction.findUnique({
         where: {
           matchId_versionId_kind: { matchId: match.id, versionId: MODEL_VERSION, kind: 'initial' },
         },
       });
+      // Existing snapshots are immutable. Skip the costly model calculation unless
+      // newly confirmed lineups can produce a second snapshot.
+      if (initial && (match.lineups.length !== 2 || !match.lineups.every((lineup) => lineup.confirmed))) continue;
+      const p = predictionEngine.predict(match, data.matches, now.toISOString());
+      if (!p) continue;
       const kind = initial && p.lineupConfirmed ? 'lineup' : 'initial';
       if (initial && kind === 'initial') continue;
       // Immutable insert. ON CONFLICT performs no mutation. DB trigger also rejects late writes.

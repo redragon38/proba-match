@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createDemoDataset } from '@/services/football/providers/mock';
-import { matchSelection, upcomingSelection } from '@/services/football/match-selection';
+import { closestMatchDate, matchSelection, upcomingSelection } from '@/services/football/match-selection';
 const now = Date.parse('2026-09-26T12:00:00Z');
 const data = () => {
   const d = createDemoDataset(new Date(now));
@@ -57,5 +57,19 @@ describe('match catalogue selection', () => {
   it('features genuine future fixtures beyond today without requiring predictions', () => {
     expect(upcomingSelection(data(), now).map((m) => m.id)).toEqual(['next', 'later']);
     expect(upcomingSelection({ ...data(), matches: [] }, now)).toEqual([]);
+  });
+  it('selects an honest available matchday when the current day is empty', () => {
+    const d = data();
+    d.matches = [
+      { ...d.matches[0], id: 'result', status: 'finished', kickoff: '2026-09-20T20:00:00Z' },
+      { ...d.matches[0], id: 'fixture', status: 'scheduled', kickoff: '2026-10-09T20:00:00Z' },
+    ];
+    expect(closestMatchDate(d, 'all', now)).toBe('2026-09-20');
+    expect(closestMatchDate(d, 'favorites', now)).toBe('2026-09-20');
+    expect(closestMatchDate(d, 'finished', now)).toBe('2026-09-20');
+    expect(closestMatchDate(d, 'scheduled', now)).toBe('2026-10-09');
+    expect(closestMatchDate(d, 'live', now)).toBe('2026-09-26');
+    d.matches.push({ ...d.matches[0], id: 'today', kickoff: '2026-09-26T08:00:00Z' });
+    expect(closestMatchDate(d, 'all', now)).toBe('2026-09-26');
   });
 });

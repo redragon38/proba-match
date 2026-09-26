@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-09-26T19:56:07.386Z",
+  "generatedAt": "2026-09-26T21:24:35.668Z",
   "base": "http://localhost:3000",
   "pages": [
     {
       "path": "/",
       "status": 200,
-      "htmlBytes": 215428,
+      "htmlBytes": 267452,
       "title": "Scores, calendrier et statistiques de football",
       "description": "Retrouvez les matchs du jour, les résultats, les classements et les analyses football de Proba Match. Sources identifiées et projections expliquées.",
       "canonical": "https://probamatch.com/",
@@ -13,7 +13,7 @@
       "h1": [
         "Le football, aujourd’hui."
       ],
-      "visibleText": 2330,
+      "visibleText": 4792,
       "headings": [
         {
           "level": 1,
@@ -21,11 +21,7 @@
         },
         {
           "level": 2,
-          "text": "Les matchs du jour"
-        },
-        {
-          "level": 2,
-          "text": "Aucune rencontre pour cette sélection"
+          "text": "Les derniers résultats"
         },
         {
           "level": 2,
@@ -38,10 +34,6 @@
         {
           "level": 2,
           "text": "Le regard du modèle"
-        },
-        {
-          "level": 2,
-          "text": "Données insuffisantes"
         },
         {
           "level": 2,
@@ -121,6 +113,72 @@
         "/methodologie",
         "/parametres",
         "/methodologie",
+        "/matchs",
+        "/competition/ligue-1",
+        "/match/cb25158f-c3ef-4f53-a61f-ef367b76b1f7",
+        "/match/cb25158f-c3ef-4f53-a61f-ef367b76b1f7",
+        "/match/cb25158f-c3ef-4f53-a61f-ef367b76b1f7",
+        "/match/b6504863-27ac-4ce0-88cc-8c8897aa83f2",
+        "/match/b6504863-27ac-4ce0-88cc-8c8897aa83f2",
+        "/match/b6504863-27ac-4ce0-88cc-8c8897aa83f2",
+        "/match/172da1a5-fc2b-409b-804d-af93c1390c23",
+        "/match/172da1a5-fc2b-409b-804d-af93c1390c23",
+        "/match/172da1a5-fc2b-409b-804d-af93c1390c23",
+        "/competition/premier-league",
+        "/match/6847029b-61b3-4677-8407-d6305478fda6",
+        "/match/6847029b-61b3-4677-8407-d6305478fda6",
+        "/match/6847029b-61b3-4677-8407-d6305478fda6",
+        "/match/53d29fd7-de0f-403c-ac79-af9424ec8423",
+        "/match/53d29fd7-de0f-403c-ac79-af9424ec8423",
+        "/match/53d29fd7-de0f-403c-ac79-af9424ec8423",
+        "/match/5575a823-36ec-41f1-9d78-f5b96000e81b",
+        "/match/5575a823-36ec-41f1-9d78-f5b96000e81b",
+        "/match/5575a823-36ec-41f1-9d78-f5b96000e81b",
+        "/match/6fdc7f5b-5271-45b0-ac14-bfa5f6284a70",
+        "/match/6fdc7f5b-5271-45b0-ac14-bfa5f6284a70",
+        "/match/6fdc7f5b-5271-45b0-ac14-bfa5f6284a70",
+        "/competition/bundesliga",
+        "/match/44812504-2ae1-4549-81b4-ab0cd2bb92dc",
+        "/match/44812504-2ae1-4549-81b4-ab0cd2bb92dc",
+        "/match/44812504-2ae1-4549-81b4-ab0cd2bb92dc",
+        "/match/47887305-7d87-46ad-91b3-b8fefb15bb15",
+        "/match/47887305-7d87-46ad-91b3-b8fefb15bb15",
+        "/match/47887305-7d87-46ad-91b3-b8fefb15bb15",
+        "/match/93102d5d-db83-492f-8176-4444ee343993",
+        "/match/93102d5d-db83-492f-8176-4444ee343993",
+        "/match/93102d5d-db83-492f-8176-4444ee343993",
+        "/competition/la-liga",
+        "/match/4ee0513f-b012-4ed7-badb-c0b0ecc4d8a5",
+        "/match/4ee0513f-b012-4ed7-badb-c0b0ecc4d8a5",
+        "/match/4ee0513f-b012-4ed7-badb-c0b0ecc4d8a5",
+        "/match/366733d6-bd69-4f1a-a22a-eaecd2f3f37d",
+        "/match/366733d6-bd69-4f1a-a22a-eaecd2f3f37d",
+        "/match/366733d6-bd69-4f1a-a22a-eaecd2f3f37d",
+        "/match/3a45720c-d98b-4c0b-820f-c9928c1bc047",
+        "/match/3a45720c-d98b-4c0b-820f-c9928c1bc047",
+        "/match/3a45720c-d98b-4c0b-820f-c9928c1bc047",
+        "/match/d57867b1-8c09-4607-91a9-58edd16ad123",
+        "/match/d57867b1-8c09-4607-91a9-58edd16ad123",
+        "/match/d57867b1-8c09-4607-91a9-58edd16ad123",
+        "/match/f151b00d-dbf7-4933-8f8f-c1c0a4ce0955",
+        "/match/f151b00d-dbf7-4933-8f8f-c1c0a4ce0955",
+        "/match/f151b00d-dbf7-4933-8f8f-c1c0a4ce0955",
+        "/competition/serie-a",
+        "/match/caba0f1c-3a61-4ea6-b32c-b9b6b721b869",
+        "/match/caba0f1c-3a61-4ea6-b32c-b9b6b721b869",
+        "/match/caba0f1c-3a61-4ea6-b32c-b9b6b721b869",
+        "/match/74223981-1008-42d6-a819-022ab3962400",
+        "/match/74223981-1008-42d6-a819-022ab3962400",
+        "/match/74223981-1008-42d6-a819-022ab3962400",
+        "/match/2b12d5af-c438-47bb-8f44-968a664eee28",
+        "/match/2b12d5af-c438-47bb-8f44-968a664eee28",
+        "/match/2b12d5af-c438-47bb-8f44-968a664eee28",
+        "/match/fbfcdded-e590-45e4-a884-70a4b6d8368d",
+        "/match/fbfcdded-e590-45e4-a884-70a4b6d8368d",
+        "/match/fbfcdded-e590-45e4-a884-70a4b6d8368d",
+        "/match/d245b1e5-84f5-4057-8164-b1db5bde7d5f",
+        "/match/d245b1e5-84f5-4057-8164-b1db5bde7d5f",
+        "/match/d245b1e5-84f5-4057-8164-b1db5bde7d5f",
         "/methodologie",
         "/matchs?statut=scheduled",
         "/match/1d02ebf3-24a4-4424-a70e-678de67d130e",
@@ -134,6 +192,7 @@
         "/equipe/stade-de-reims-068f9f11",
         "/equipe/paris-saint-germain-fc-d912cdb3",
         "/equipe/fc-lorient-24a721b6",
+        "/match/4ee0513f-b012-4ed7-badb-c0b0ecc4d8a5?onglet=prediction",
         "/joueurs",
         "/equipes",
         "/equipe/fc-barcelona-ed41d5c0",
@@ -142,7 +201,9 @@
         "/equipe/fc-bayern-munchen-999136d6",
         "/equipe/sc-freiburg-673e1082",
         "/equipe/fc-internazionale-milano-3ea31c98",
-        "/match/b913bee5-bace-49fa-8073-b750f00f83c0",
+        "/match/1d02ebf3-24a4-4424-a70e-678de67d130e",
+        "/match/c4de0984-124a-4b24-b52c-d91b2d28259c",
+        "/match/73bf4dee-518e-4821-9e9d-6f247e2e4cd6",
         "/a-propos",
         "/methodologie",
         "/confidentialite",
@@ -172,6 +233,246 @@
           "width": "48",
           "height": "48",
           "src": "/brand/proba-match-icon-192.png"
+        },
+        {
+          "alt": "Logo de Olympique de Marseille",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/olympique-de-marseille.webp"
+        },
+        {
+          "alt": "Logo de Paris Saint-Germain FC",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/paris-saint-germain-fc.webp"
+        },
+        {
+          "alt": "Logo de OGC Nice",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/ogc-nice.webp"
+        },
+        {
+          "alt": "Logo de Lille OSC",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/lille-osc.webp"
+        },
+        {
+          "alt": "Logo de AJ Auxerre",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/aj-auxerre.webp"
+        },
+        {
+          "alt": "Logo de Stade Brestois 29",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/stade-brestois-29.webp"
+        },
+        {
+          "alt": "Logo de Fulham FC",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/fulham-fc.webp"
+        },
+        {
+          "alt": "Logo de Manchester United FC",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/manchester-united-fc.webp"
+        },
+        {
+          "alt": "Logo de Leeds United FC",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/leeds-united-fc.webp"
+        },
+        {
+          "alt": "Logo de Crystal Palace FC",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/crystal-palace-fc.webp"
+        },
+        {
+          "alt": "Logo de AFC Bournemouth",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/afc-bournemouth.webp"
+        },
+        {
+          "alt": "Logo de Liverpool FC",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/liverpool-fc.webp"
+        },
+        {
+          "alt": "Logo de Manchester City FC",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/manchester-city-fc.webp"
+        },
+        {
+          "alt": "Logo de Sunderland AFC",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/sunderland-afc.webp"
+        },
+        {
+          "alt": "Logo de SC Paderborn 07",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/sc-paderborn-07.webp"
+        },
+        {
+          "alt": "Logo de TSG 1899 Hoffenheim",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/tsg-1899-hoffenheim.webp"
+        },
+        {
+          "alt": "Logo de FC Schalke 04",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/fc-schalke-04.webp"
+        },
+        {
+          "alt": "Logo de SV 07 Elversberg",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/sv-07-elversberg.webp"
+        },
+        {
+          "alt": "Logo de Bayer 04 Leverkusen",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/bayer-04-leverkusen.webp"
+        },
+        {
+          "alt": "Logo de RB Leipzig",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/rb-leipzig.webp"
+        },
+        {
+          "alt": "Logo de Valencia CF",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/valencia-cf.webp"
+        },
+        {
+          "alt": "Logo de Real Sociedad de Fútbol",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/real-sociedad-de-futbol.webp"
+        },
+        {
+          "alt": "Logo de Villarreal CF",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/villarreal-cf.webp"
+        },
+        {
+          "alt": "Logo de Levante UD",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/levante-ud.webp"
+        },
+        {
+          "alt": "Logo de RC Deportivo La Coruña",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/rc-deportivo-la-coruna.webp"
+        },
+        {
+          "alt": "Logo de Real Betis Balompié",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/real-betis-balompie.webp"
+        },
+        {
+          "alt": "Logo de Club Atlético de Madrid",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/club-atletico-de-madrid.webp"
+        },
+        {
+          "alt": "Logo de Real Madrid CF",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/real-madrid-cf.webp"
+        },
+        {
+          "alt": "Logo de Getafe CF",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/getafe-cf.webp"
+        },
+        {
+          "alt": "Logo de Málaga CF",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/malaga-cf.webp"
+        },
+        {
+          "alt": "Logo de AC Milan",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/ac-milan.webp"
+        },
+        {
+          "alt": "Logo de US Lecce",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/us-lecce.webp"
+        },
+        {
+          "alt": "Logo de Juventus FC",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/juventus-fc.webp"
+        },
+        {
+          "alt": "Logo de Atalanta BC",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/atalanta-bc.webp"
+        },
+        {
+          "alt": "Logo de Frosinone Calcio",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/frosinone-calcio.webp"
+        },
+        {
+          "alt": "Logo de Como 1907",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/como-1907.webp"
+        },
+        {
+          "alt": "Logo de Parma Calcio 1913",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/parma-calcio-1913.webp"
+        },
+        {
+          "alt": "Logo de Genoa CFC",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/genoa-cfc.webp"
+        },
+        {
+          "alt": "Logo de ACF Fiorentina",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/acf-fiorentina.webp"
+        },
+        {
+          "alt": "Logo de SSC Napoli",
+          "width": "23",
+          "height": "23",
+          "src": "/team-logos/ssc-napoli.webp"
         },
         {
           "alt": "Logo de Borussia Dortmund",
@@ -258,6 +559,18 @@
           "src": "/team-logos/fc-lorient.webp"
         },
         {
+          "alt": "Logo de Valencia CF",
+          "width": "20",
+          "height": "20",
+          "src": "/team-logos/valencia-cf.webp"
+        },
+        {
+          "alt": "Logo de Real Sociedad de Fútbol",
+          "width": "20",
+          "height": "20",
+          "src": "/team-logos/real-sociedad-de-futbol.webp"
+        },
+        {
           "alt": "Logo de FC Barcelona",
           "width": "42",
           "height": "42",
@@ -294,16 +607,40 @@
           "src": "/team-logos/fc-internazionale-milano.webp"
         },
         {
-          "alt": "Logo de Levante UD",
+          "alt": "Logo de Borussia Dortmund",
           "width": "30",
           "height": "30",
-          "src": "/team-logos/levante-ud.webp"
+          "src": "/team-logos/borussia-dortmund.webp"
         },
         {
-          "alt": "Logo de Athletic Club",
+          "alt": "Logo de SV Werder Bremen",
           "width": "30",
           "height": "30",
-          "src": "/team-logos/athletic-club.webp"
+          "src": "/team-logos/sv-werder-bremen.webp"
+        },
+        {
+          "alt": "Logo de Arsenal FC",
+          "width": "30",
+          "height": "30",
+          "src": "/team-logos/arsenal-fc.webp"
+        },
+        {
+          "alt": "Logo de Leeds United FC",
+          "width": "30",
+          "height": "30",
+          "src": "/team-logos/leeds-united-fc.webp"
+        },
+        {
+          "alt": "Logo de RB Leipzig",
+          "width": "30",
+          "height": "30",
+          "src": "/team-logos/rb-leipzig.webp"
+        },
+        {
+          "alt": "Logo de Eintracht Frankfurt",
+          "width": "30",
+          "height": "30",
+          "src": "/team-logos/eintracht-frankfurt.webp"
         }
       ],
       "jsonLd": [
@@ -319,7 +656,7 @@
     {
       "path": "/matchs",
       "status": 200,
-      "htmlBytes": 206882,
+      "htmlBytes": 206898,
       "title": "Matchs de football — scores et calendrier | Proba Match",
       "description": "Consultez le calendrier et les résultats des compétitions suivies. Parcourez les dates, les équipes et les détails de chaque rencontre.",
       "canonical": "https://probamatch.com/matchs",
@@ -1378,7 +1715,7 @@
     {
       "path": "/joueurs",
       "status": 200,
-      "htmlBytes": 67579,
+      "htmlBytes": 67587,
       "title": "Joueurs — profils et performances individuelles | Proba Match",
       "description": "Consultez les profils, les statistiques et les performances des joueurs disponibles dans le catalogue synchronisé Proba Match.",
       "canonical": "https://probamatch.com/joueurs",
@@ -1386,7 +1723,7 @@
       "h1": [
         "Les acteurs du jeu."
       ],
-      "visibleText": 545,
+      "visibleText": 647,
       "headings": [
         {
           "level": 1,
@@ -1434,6 +1771,8 @@
         "/methodologie",
         "/parametres",
         "/methodologie",
+        "/equipes",
+        "/matchs",
         "/a-propos",
         "/methodologie",
         "/confidentialite",
@@ -59855,7 +60194,7 @@
     {
       "category": "performance",
       "status": "PASS",
-      "detail": "/: HTML 215428 bytes (local payload budget)"
+      "detail": "/: HTML 267452 bytes (local payload budget)"
     },
     {
       "category": "routes",
@@ -59920,7 +60259,7 @@
     {
       "category": "performance",
       "status": "PASS",
-      "detail": "/matchs: HTML 206882 bytes (local payload budget)"
+      "detail": "/matchs: HTML 206898 bytes (local payload budget)"
     },
     {
       "category": "routes",
@@ -60090,7 +60429,7 @@
     {
       "category": "performance",
       "status": "PASS",
-      "detail": "/joueurs: HTML 67579 bytes (local payload budget)"
+      "detail": "/joueurs: HTML 67587 bytes (local payload budget)"
     },
     {
       "category": "routes",
@@ -69978,29 +70317,29 @@
       "width": 390,
       "path": "/",
       "errors": [],
-      "lcp": 612,
+      "lcp": 424,
       "cls": 0,
       "overflow": false,
-      "resources": 45,
-      "jsBytes": 249563,
+      "resources": 52,
+      "jsBytes": 249698,
       "violations": []
     },
     {
       "width": 390,
       "path": "/equipes",
       "errors": [],
-      "lcp": 176,
-      "cls": 0,
+      "lcp": 148,
+      "cls": 0.006598176638176638,
       "overflow": false,
       "resources": 53,
-      "jsBytes": 153448,
+      "jsBytes": 153627,
       "violations": []
     },
     {
       "width": 390,
       "path": "/classements",
       "errors": [],
-      "lcp": 196,
+      "lcp": 180,
       "cls": 0,
       "overflow": false,
       "resources": 41,
@@ -70011,7 +70350,7 @@
       "width": 390,
       "path": "/parametres",
       "errors": [],
-      "lcp": 80,
+      "lcp": 88,
       "cls": 0,
       "overflow": false,
       "resources": 25,
@@ -70022,43 +70361,43 @@
       "width": 390,
       "path": "/equipe/ogc-nice-ae644484",
       "errors": [],
-      "lcp": 192,
+      "lcp": 140,
       "cls": 0,
       "overflow": false,
       "resources": 46,
-      "jsBytes": 157964,
+      "jsBytes": 157998,
       "violations": []
     },
     {
       "width": 1440,
       "path": "/",
       "errors": [],
-      "lcp": 560,
-      "cls": 0,
+      "lcp": 492,
+      "cls": 0.0003446263945151749,
       "overflow": false,
-      "resources": 69,
-      "jsBytes": 249563,
+      "resources": 75,
+      "jsBytes": 249698,
       "violations": []
     },
     {
       "width": 1440,
       "path": "/equipes",
       "errors": [],
-      "lcp": 156,
-      "cls": 0.001972526209115655,
+      "lcp": 188,
+      "cls": 0.014545441251527133,
       "overflow": false,
       "resources": 88,
-      "jsBytes": 153448,
+      "jsBytes": 153627,
       "violations": []
     },
     {
       "width": 1440,
       "path": "/classements",
       "errors": [],
-      "lcp": 148,
+      "lcp": 212,
       "cls": 0.0005353678385416666,
       "overflow": false,
-      "resources": 75,
+      "resources": 74,
       "jsBytes": 153582,
       "violations": []
     },
@@ -70066,7 +70405,7 @@
       "width": 1440,
       "path": "/parametres",
       "errors": [],
-      "lcp": 112,
+      "lcp": 92,
       "cls": 0,
       "overflow": false,
       "resources": 44,
@@ -70077,11 +70416,11 @@
       "width": 1440,
       "path": "/equipe/ogc-nice-ae644484",
       "errors": [],
-      "lcp": 152,
+      "lcp": 156,
       "cls": 0,
       "overflow": false,
       "resources": 65,
-      "jsBytes": 157964,
+      "jsBytes": 157998,
       "violations": []
     }
   ],

@@ -32,7 +32,7 @@ export function Catalog({
             ? 'Les clubs qui font le football.'
             : 'Toutes les compétitions.'}
       </h1>
-      <div className="catalog-search">
+      {(kind !== 'players' || data.players.length > 0) && <div className="catalog-search">
         <label htmlFor="catalog-search">
           Rechercher{' '}
           {kind === 'players' ? 'un joueur' : kind === 'teams' ? 'une équipe' : 'une compétition'}
@@ -47,7 +47,7 @@ export function Catalog({
             setPage(1);
           }}
         />
-      </div>
+      </div>}
       <div className="catalog-grid">
         {rows.slice((page - 1) * 24, page * 24).map((r) => {
           const player = 'teamId' in r ? r : null;
@@ -86,13 +86,20 @@ export function Catalog({
         })}
       </div>
       {!rows.length && (
-        <Empty
-          title={
-            kind === 'players' && !data.players.length
-              ? 'Les données des joueurs ne sont pas disponibles pour le moment.'
-              : 'Aucun résultat'
-          }
-        />
+        <>
+          <Empty
+            title={
+              kind === 'players' && !data.players.length
+                ? 'Les données des joueurs ne sont pas disponibles pour le moment.'
+                : 'Aucun résultat'
+            }
+            text={kind === 'players' && !data.players.length
+              ? 'La source actuelle fournit les matchs et résultats, mais pas les effectifs. Les joueurs apparaîtront après l’ajout d’une source complémentaire.'
+              : undefined}
+          />
+          {kind === 'players' && !data.players.length &&
+            <p className="data-note">Explorez les <Link href="/equipes">équipes</Link> et les <Link href="/matchs">matchs disponibles</Link>.</p>}
+        </>
       )}
       {rows.length > 24 && (
         <div className="pagination">

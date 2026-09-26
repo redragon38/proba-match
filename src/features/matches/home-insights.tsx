@@ -2,7 +2,7 @@ import { upcomingSelection } from '@/services/football/match-selection';
 import Link from 'next/link';
 import type { Dataset, Prediction } from '@/types/football';
 import { SectionTitle, TeamBadge, Form } from '@/components/ui';
-import { teamSummary } from '@/services/statistics';
+import { homeFormLeaders } from '@/services/statistics';
 import { MatchCard } from './match-card';
 export async function HomeInsights({
   data,
@@ -11,18 +11,7 @@ export async function HomeInsights({
   data: Dataset;
   predictions: Record<string, Prediction>;
 }) {
-  const forms = data.teams
-    .map((team) => ({ team, summary: teamSummary(data, team.id) }))
-    .filter((r) => r.summary.lastTen.length >= 5)
-    .map((r) => ({
-      ...r,
-      points: r.summary.lastTen
-        .slice(0, 5)
-        .reduce((s, m) => s + (m.gf > m.ga ? 3 : m.gf === m.ga ? 1 : 0), 0),
-      goals: r.summary.lastTen.slice(0, 5).reduce((s, m) => s + m.gf, 0),
-    }))
-    .sort((a, b) => b.points - a.points || b.goals - a.goals)
-    .slice(0, 6);
+  const forms = homeFormLeaders(data);
   const featured = upcomingSelection(data, undefined, data.matches.length)
     .filter((m) => predictions[m.id])
     .sort((a, b) => predictions[b.id].confidence - predictions[a.id].confidence)
@@ -35,7 +24,7 @@ export async function HomeInsights({
         href="/equipes"
       />
       <div className="insights-grid">
-        {forms.map(({ team, summary, points, goals }) => (
+        {forms.map(({ team, form, points, goals }) => (
           <Link key={team.id} href={`/equipe/${team.slug}`} className="card form-club">
             <TeamBadge team={team} size={42} />
             <div>
@@ -43,7 +32,7 @@ export async function HomeInsights({
               <p>
                 {goals} buts · {points} points / 15
               </p>
-              <Form values={summary.form} />
+              <Form values={form} />
             </div>
             <b>{points}</b>
           </Link>
