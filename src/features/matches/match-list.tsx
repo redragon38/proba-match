@@ -12,11 +12,13 @@ export function MatchList({
   teams,
   competitions,
   predictions,
+  showDate = false,
 }: {
   matches: Match[];
   teams: Team[];
   competitions: Competition[];
   predictions: Record<string, Prediction>;
+  showDate?: boolean;
 }) {
   const [collapsed, setCollapsed] = useState<string[]>([]);
   const { values } = useFavorites();
@@ -78,6 +80,16 @@ export function MatchList({
                     return (
                       <div className="match-row" key={m.id}>
                         <div className={`match-clock ${m.status === 'live' ? 'is-live' : ''}`}>
+                          {showDate && (
+                            <small>
+                              <LocalTime
+                                iso={m.kickoff}
+                                date
+                                known={m.kickoffKnown}
+                                sourceDate={m.sourceDate}
+                              />
+                            </small>
+                          )}
                           {m.status === 'live' ? (
                             <>
                               <span className="live-dot" />

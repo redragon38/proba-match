@@ -1,0 +1,38 @@
+{
+  "at": "2026-09-26T20:08:37.346Z",
+  "build": "PASS",
+  "typecheck": "PASS",
+  "lint": "PASS",
+  "unit": {
+    "passed": 138,
+    "files": 23
+  },
+  "browser": {
+    "fullSuitePassed": 28,
+    "skipped": 0,
+    "finalTargetedPassed": 2,
+    "dateOnlyTimezonesPassed": 2
+  },
+  "isolatedDatabaseUI": "PASS: imports, automatic score/minute/events/statistics/lineups/injuries/final standings, quota and outage fallback, cache invalidation and automatic UI refresh",
+  "seo": {
+    "pages": 158,
+    "checks": 2042,
+    "failures": 0
+  },
+  "accessibility": {
+    "views": 36,
+    "failures": 0
+  },
+  "responsive": {
+    "views": 196,
+    "interactions": 14,
+    "failures": 0
+  },
+  "security": {
+    "httpChecks": 14,
+    "failures": 0,
+    "adminPerformanceAuthenticatedAndAnonymous": "PASS"
+  },
+  "external": "NON VÉRIFIÉ EXTERNEMENT: Vercel deployment/env/cron execution, public TLS, Search Console, PageSpeed and field CWV",
+  "scopeNote": "Full audits cover the public route changes. Subsequent date-only formatting and shared selection optimization were rebuilt and checked with targeted unit/browser tests; no claim of measured field performance."
+}

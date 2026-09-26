@@ -29,7 +29,6 @@ try {
     '/classements',
     '/comparateur/equipes',
     '/comparateur/joueurs',
-    '/performance-modele',
     '/recherche',
     '/favoris',
     '/parametres',

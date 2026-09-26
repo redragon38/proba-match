@@ -12,10 +12,13 @@ if (!match) {
 const paths = [
   '/',
   '/api/live',
+  '/api/matches',
+  '/api/matches?statut=scheduled',
+  '/api/matches?featured=true',
   '/api/updates',
   '/api/matches/today',
   '/api/search?q=paris',
-  '/performance-modele',
+  '/joueurs',
 ];
 if (match)
   paths.push(

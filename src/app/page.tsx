@@ -5,6 +5,7 @@ import { getDataset } from '@/services/football';
 import { getPredictions } from '@/services/predictions';
 import { dateKey } from '@/lib/format';
 import { dashboardDataset } from '@/services/football/read-model';
+import { upcomingSelection } from '@/services/football/match-selection';
 import { HomeInsights } from '@/features/matches/home-insights';
 export const dynamic = 'force-dynamic';
 export default async function Home({
@@ -30,6 +31,7 @@ export default async function Home({
         initialDate={date}
         automaticDate={!query.date}
         initialStatus={query.statut}
+        upcomingMatches={upcomingSelection(data)}
       />
       <HomeInsights data={data} predictions={predictions} />
     </>

@@ -85,7 +85,15 @@ export function Catalog({
           );
         })}
       </div>
-      {!rows.length && <Empty title="Aucun résultat" />}
+      {!rows.length && (
+        <Empty
+          title={
+            kind === 'players' && !data.players.length
+              ? 'Les données des joueurs ne sont pas disponibles pour le moment.'
+              : 'Aucun résultat'
+          }
+        />
+      )}
       {rows.length > 24 && (
         <div className="pagination">
           {!search && page > 1 ? (

@@ -1,0 +1,164 @@
+{
+  "at": "2026-09-26T16:50:33.361Z",
+  "requests": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 209479,
+      "firstMs": 1044,
+      "medianMs": 158,
+      "p95Ms": 202
+    },
+    {
+      "path": "/api/live",
+      "status": 200,
+      "bytes": 379,
+      "firstMs": 10,
+      "medianMs": 9,
+      "p95Ms": 17
+    },
+    {
+      "path": "/api/updates",
+      "status": 200,
+      "bytes": 39,
+      "firstMs": 4,
+      "medianMs": 3,
+      "p95Ms": 4
+    },
+    {
+      "path": "/api/matches/today",
+      "status": 200,
+      "bytes": 363,
+      "firstMs": 6,
+      "medianMs": 6,
+      "p95Ms": 7
+    },
+    {
+      "path": "/api/search?q=paris",
+      "status": 200,
+      "bytes": 2062,
+      "firstMs": 24,
+      "medianMs": 20,
+      "p95Ms": 54
+    },
+    {
+      "path": "/joueurs",
+      "status": 200,
+      "bytes": 67910,
+      "firstMs": 14,
+      "medianMs": 14,
+      "p95Ms": 15
+    },
+    {
+      "path": "/api/matches/11411f32-113c-4e35-842a-f049289a9d93",
+      "status": 200,
+      "bytes": 561,
+      "firstMs": 5,
+      "medianMs": 4,
+      "p95Ms": 6
+    },
+    {
+      "path": "/api/teams/586facb9-53b2-4101-80b5-4668b6fa93ad",
+      "status": 200,
+      "bytes": 250,
+      "firstMs": 4,
+      "medianMs": 4,
+      "p95Ms": 6
+    },
+    {
+      "path": "/api/competitions/ffeca48c-526a-496d-a350-61678e11e082",
+      "status": 200,
+      "bytes": 139,
+      "firstMs": 4,
+      "medianMs": 4,
+      "p95Ms": 6
+    },
+    {
+      "path": "/match/11411f32-113c-4e35-842a-f049289a9d93",
+      "status": 200,
+      "bytes": 281521,
+      "firstMs": 89,
+      "medianMs": 91,
+      "p95Ms": 120
+    }
+  ],
+  "concurrency": [
+    {
+      "ms": 16,
+      "status": 200
+    },
+    {
+      "ms": 22,
+      "status": 200
+    },
+    {
+      "ms": 53,
+      "status": 200
+    },
+    {
+      "ms": 28,
+      "status": 200
+    },
+    {
+      "ms": 58,
+      "status": 200
+    }
+  ],
+  "frontend": [
+    {
+      "width": 390,
+      "path": "/",
+      "lcp": 1656,
+      "cls": 0,
+      "ttfb": 397.2999999523163,
+      "domReady": 1599,
+      "jsBytes": 249420
+    },
+    {
+      "width": 390,
+      "path": "/matchs",
+      "lcp": 480,
+      "cls": 0,
+      "ttfb": 368.89999997615814,
+      "domReady": 452.69999998807907,
+      "jsBytes": 249420
+    },
+    {
+      "width": 390,
+      "path": "/recherche",
+      "lcp": 180,
+      "cls": 0,
+      "ttfb": 41.60000002384186,
+      "domReady": 94.10000002384186,
+      "jsBytes": 154921
+    },
+    {
+      "width": 1440,
+      "path": "/",
+      "lcp": 640,
+      "cls": 0,
+      "ttfb": 217.10000002384186,
+      "domReady": 527,
+      "jsBytes": 249420
+    },
+    {
+      "width": 1440,
+      "path": "/matchs",
+      "lcp": 272,
+      "cls": 0,
+      "ttfb": 139.4000000357628,
+      "domReady": 226.4000000357628,
+      "jsBytes": 249420
+    },
+    {
+      "width": 1440,
+      "path": "/recherche",
+      "lcp": 152,
+      "cls": 0,
+      "ttfb": 28.899999976158142,
+      "domReady": 95.09999996423721,
+      "jsBytes": 154921
+    }
+  ],
+  "note": "Local production build, no CPU/network throttling; not field Core Web Vitals. Eight sequential requests per route, five concurrent live reads."
+}

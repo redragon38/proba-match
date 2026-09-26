@@ -1,6 +1,5 @@
 import { publicMetadata } from '@/lib/seo';
 export const metadata = publicMetadata('/methodologie');
-import Link from 'next/link';
 export default function Page() {
   return (
     <article className="page prose">
@@ -123,9 +122,6 @@ export default function Page() {
           exclues. Ce délai conservateur ne remplace pas un journal historique de disponibilité
           exacte des données ; les imports doivent être audités.
         </p>
-        <Link href="/performance-modele" className="text-link">
-          Voir la précision, le Brier Score, la Log Loss et la calibration →
-        </Link>
       </section>
       <section>
         <h2>08 — Limites à garder en tête</h2>

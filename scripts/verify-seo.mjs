@@ -85,7 +85,6 @@ try {
       '/classements',
       '/a-propos',
       '/methodologie',
-      '/performance-modele',
       '/contact',
       '/confidentialite',
       '/cookies',

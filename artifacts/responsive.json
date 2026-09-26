@@ -102,17 +102,6 @@
     {
       "width": 320,
       "theme": "dark",
-      "route": "/performance-modele",
-      "status": 200,
-      "expected": 200,
-      "overflow": false,
-      "errors": [],
-      "failedAssets": [],
-      "brokenImages": []
-    },
-    {
-      "width": 320,
-      "theme": "dark",
       "route": "/parametres",
       "status": 200,
       "expected": 200,
@@ -257,17 +246,6 @@
       "width": 360,
       "theme": "dark",
       "route": "/favoris",
-      "status": 200,
-      "expected": 200,
-      "overflow": false,
-      "errors": [],
-      "failedAssets": [],
-      "brokenImages": []
-    },
-    {
-      "width": 360,
-      "theme": "dark",
-      "route": "/performance-modele",
       "status": 200,
       "expected": 200,
       "overflow": false,
@@ -432,17 +410,6 @@
     {
       "width": 375,
       "theme": "dark",
-      "route": "/performance-modele",
-      "status": 200,
-      "expected": 200,
-      "overflow": false,
-      "errors": [],
-      "failedAssets": [],
-      "brokenImages": []
-    },
-    {
-      "width": 375,
-      "theme": "dark",
       "route": "/parametres",
       "status": 200,
       "expected": 200,
@@ -587,17 +554,6 @@
       "width": 390,
       "theme": "dark",
       "route": "/favoris",
-      "status": 200,
-      "expected": 200,
-      "overflow": false,
-      "errors": [],
-      "failedAssets": [],
-      "brokenImages": []
-    },
-    {
-      "width": 390,
-      "theme": "dark",
-      "route": "/performance-modele",
       "status": 200,
       "expected": 200,
       "overflow": false,
@@ -762,17 +718,6 @@
     {
       "width": 430,
       "theme": "dark",
-      "route": "/performance-modele",
-      "status": 200,
-      "expected": 200,
-      "overflow": false,
-      "errors": [],
-      "failedAssets": [],
-      "brokenImages": []
-    },
-    {
-      "width": 430,
-      "theme": "dark",
       "route": "/parametres",
       "status": 200,
       "expected": 200,
@@ -917,17 +862,6 @@
       "width": 768,
       "theme": "dark",
       "route": "/favoris",
-      "status": 200,
-      "expected": 200,
-      "overflow": false,
-      "errors": [],
-      "failedAssets": [],
-      "brokenImages": []
-    },
-    {
-      "width": 768,
-      "theme": "dark",
-      "route": "/performance-modele",
       "status": 200,
       "expected": 200,
       "overflow": false,
@@ -1092,17 +1026,6 @@
     {
       "width": 1440,
       "theme": "dark",
-      "route": "/performance-modele",
-      "status": 200,
-      "expected": 200,
-      "overflow": false,
-      "errors": [],
-      "failedAssets": [],
-      "brokenImages": []
-    },
-    {
-      "width": 1440,
-      "theme": "dark",
       "route": "/parametres",
       "status": 200,
       "expected": 200,
@@ -1257,17 +1180,6 @@
     {
       "width": 320,
       "theme": "light",
-      "route": "/performance-modele",
-      "status": 200,
-      "expected": 200,
-      "overflow": false,
-      "errors": [],
-      "failedAssets": [],
-      "brokenImages": []
-    },
-    {
-      "width": 320,
-      "theme": "light",
       "route": "/parametres",
       "status": 200,
       "expected": 200,
@@ -1422,17 +1334,6 @@
     {
       "width": 360,
       "theme": "light",
-      "route": "/performance-modele",
-      "status": 200,
-      "expected": 200,
-      "overflow": false,
-      "errors": [],
-      "failedAssets": [],
-      "brokenImages": []
-    },
-    {
-      "width": 360,
-      "theme": "light",
       "route": "/parametres",
       "status": 200,
       "expected": 200,
@@ -1577,17 +1478,6 @@
       "width": 375,
       "theme": "light",
       "route": "/favoris",
-      "status": 200,
-      "expected": 200,
-      "overflow": false,
-      "errors": [],
-      "failedAssets": [],
-      "brokenImages": []
-    },
-    {
-      "width": 375,
-      "theme": "light",
-      "route": "/performance-modele",
       "status": 200,
       "expected": 200,
       "overflow": false,
@@ -1752,17 +1642,6 @@
     {
       "width": 390,
       "theme": "light",
-      "route": "/performance-modele",
-      "status": 200,
-      "expected": 200,
-      "overflow": false,
-      "errors": [],
-      "failedAssets": [],
-      "brokenImages": []
-    },
-    {
-      "width": 390,
-      "theme": "light",
       "route": "/parametres",
       "status": 200,
       "expected": 200,
@@ -1907,17 +1786,6 @@
       "width": 430,
       "theme": "light",
       "route": "/favoris",
-      "status": 200,
-      "expected": 200,
-      "overflow": false,
-      "errors": [],
-      "failedAssets": [],
-      "brokenImages": []
-    },
-    {
-      "width": 430,
-      "theme": "light",
-      "route": "/performance-modele",
       "status": 200,
       "expected": 200,
       "overflow": false,
@@ -2082,17 +1950,6 @@
     {
       "width": 768,
       "theme": "light",
-      "route": "/performance-modele",
-      "status": 200,
-      "expected": 200,
-      "overflow": false,
-      "errors": [],
-      "failedAssets": [],
-      "brokenImages": []
-    },
-    {
-      "width": 768,
-      "theme": "light",
       "route": "/parametres",
       "status": 200,
       "expected": 200,
@@ -2237,17 +2094,6 @@
       "width": 1440,
       "theme": "light",
       "route": "/favoris",
-      "status": 200,
-      "expected": 200,
-      "overflow": false,
-      "errors": [],
-      "failedAssets": [],
-      "brokenImages": []
-    },
-    {
-      "width": 1440,
-      "theme": "light",
-      "route": "/performance-modele",
       "status": 200,
       "expected": 200,
       "overflow": false,

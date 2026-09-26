@@ -18,9 +18,9 @@ test('recherche clavier et catalogue', async ({ page }) => {
   ).toBeFocused();
 });
 test('compétitions repliables', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/matchs');
   const group = page.locator('.match-group').first();
-  test.skip(!(await group.count()), 'Aucune rencontre aujourd’hui.');
+  test.skip(!(await group.count()), 'Aucune rencontre dans le catalogue.');
   const count = await group.locator('.match-row').count();
   await group.getByRole('button', { name: /Replier/ }).click();
   await expect(group.locator('.match-row')).toHaveCount(0);

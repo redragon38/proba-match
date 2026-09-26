@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { verifyAdminSession } from '@/lib/auth';
 import { db } from '@/database/client';
@@ -91,6 +92,7 @@ export default async function Page() {
     <div className="page">
       <span className="eyebrow">OBSERVABILITÉ</span>
       <h1>Les coulisses de Proba Match.</h1>
+      <Link href="/admin/performance-modele">Performance du modèle</Link>
       <p className="data-note">
         Fournisseur : OpenFootball +{' '}
         {process.env.FOOTBALL_API_KEY ? 'API-Football configuré' : 'aucune API secondaire'} ·

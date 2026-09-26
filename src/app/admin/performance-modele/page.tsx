@@ -1,5 +1,10 @@
-import { publicMetadata } from '@/lib/seo';
-export const metadata = publicMetadata('/performance-modele');
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { verifyAdminSession } from '@/lib/auth';
+export const metadata = {
+  title: 'Performance du modèle — Administration',
+  robots: { index: false, follow: false },
+};
 import { getDataset } from '@/services/football';
 import { getEvaluations } from '@/services/predictions';
 import { walkForwardBacktest } from '@/prediction-engine/backtest';
@@ -7,6 +12,7 @@ import { Performance } from '@/features/performance/performance';
 import { cache } from '@/services/cache';
 import { MODEL_VERSION } from '@/prediction-engine';
 export default async function Page() {
+  if (!verifyAdminSession((await cookies()).get('ms-admin')?.value)) redirect('/admin');
   const data = await getDataset();
   const demo = data.source === 'demo';
   const rows = demo

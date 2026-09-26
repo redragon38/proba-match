@@ -19,7 +19,7 @@ test('accueil, filtres et navigation calendrier', async ({ page }) => {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 test('onglets match et liens vers les équipes du catalogue réel', async ({ page, request }) => {
-  const { matches } = (await (await request.get('/api/matches/today')).json()) as {
+  const { matches } = (await (await request.get('/api/matches')).json()) as {
     matches: Match[];
   };
   test.skip(

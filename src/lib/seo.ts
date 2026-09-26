@@ -105,10 +105,6 @@ export const publicPages: Record<string, [string, string]> = {
     'Méthodologie — sources et modèle Elo–Poisson',
     'Comprenez les sources OpenFootball et API-Football, le modèle Elo–Poisson, les probabilités et les limites des analyses Proba Match.',
   ],
-  '/performance-modele': [
-    'Performance publique du modèle Proba Match',
-    'Examinez les résultats mesurés des projections publiées : précision, calibration, score de Brier et comparaison aux résultats des matchs.',
-  ],
 };
 export function publicMetadata(path: string, index?: boolean) {
   const [title, description] = publicPages[path];

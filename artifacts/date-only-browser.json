@@ -1,0 +1,14 @@
+[
+  {
+    "timezoneId": "Pacific/Kiritimati",
+    "sourceDate": "2027-02-28",
+    "rendered": "28 février 2027",
+    "status": "PASS"
+  },
+  {
+    "timezoneId": "America/Los_Angeles",
+    "sourceDate": "2027-02-28",
+    "rendered": "28 février 2027",
+    "status": "PASS"
+  }
+]

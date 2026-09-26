@@ -1,14 +1,9 @@
+import { upcomingSelection } from '@/services/football/match-selection';
 import Link from 'next/link';
 import type { Dataset, Prediction } from '@/types/football';
-import { SectionTitle, TeamBadge, Form, Metric } from '@/components/ui';
+import { SectionTitle, TeamBadge, Form } from '@/components/ui';
 import { teamSummary } from '@/services/statistics';
-import { getEvaluations } from '@/services/predictions';
-import { metrics } from '@/prediction-engine/evaluation';
-import { walkForwardBacktest } from '@/prediction-engine/backtest';
-import { cache } from '@/services/cache';
 import { MatchCard } from './match-card';
-import { percent, number } from '@/lib/format';
-import { MODEL_VERSION } from '@/prediction-engine';
 export async function HomeInsights({
   data,
   predictions,
@@ -28,19 +23,10 @@ export async function HomeInsights({
     }))
     .sort((a, b) => b.points - a.points || b.goals - a.goals)
     .slice(0, 6);
-  const featured = data.matches
-    .filter((m) => m.status === 'scheduled' && predictions[m.id])
+  const featured = upcomingSelection(data, undefined, data.matches.length)
+    .filter((m) => predictions[m.id])
     .sort((a, b) => predictions[b.id].confidence - predictions[a.id].confidence)
     .slice(0, 3);
-  const evaluations =
-    data.source === 'demo'
-      ? await cache.get(
-          `backtest:${MODEL_VERSION}:${data.updatedAt.slice(0, 10)}`,
-          async () => walkForwardBacktest(data.matches),
-          3600000,
-        )
-      : await getEvaluations();
-  const stats = metrics(evaluations);
   return (
     <div className="page home-insights">
       <SectionTitle
@@ -83,32 +69,6 @@ export async function HomeInsights({
           />
         ))}
       </div>
-      <SectionTitle
-        title="Le modèle rend des comptes"
-        href="/performance-modele"
-        action="Voir les résultats"
-      />
-      {data.source === 'demo' && (
-        <p className="data-note">
-          Simulation sur données fictives, sans valeur de performance réelle.
-        </p>
-      )}
-      {stats ? (
-        <div className="metrics">
-          <Metric label="Prédictions évaluées" value={stats.sample} />
-          <Metric label="Exactitude 1 · N · 2" value={percent(stats.accuracy)} />
-          <Metric
-            label="Brier Score"
-            value={number(stats.brier, 3)}
-            note="Plus faible = meilleur"
-          />
-          <Metric label="Log Loss" value={number(stats.logLoss, 3)} />
-        </div>
-      ) : (
-        <p className="data-note">
-          Aucune prédiction publiée n’a encore été évaluée après résultat.
-        </p>
-      )}
     </div>
   );
 }

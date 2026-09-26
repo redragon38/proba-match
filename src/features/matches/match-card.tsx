@@ -54,7 +54,7 @@ export function MatchCard({
             )
           ) : (
             <span>
-              <LocalTime iso={m.kickoff} date /> ·{' '}
+              <LocalTime iso={m.kickoff} date known={m.kickoffKnown} sourceDate={m.sourceDate} /> ·{' '}
               <LocalTime iso={m.kickoff} known={m.kickoffKnown} />
             </span>
           )}

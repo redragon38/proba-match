@@ -36,7 +36,6 @@ try {
       '/classements',
       '/comparateur/equipes',
       '/comparateur/joueurs',
-      '/performance-modele',
       '/recherche',
       `/match/${match.slug}`,
       `/match/${match.slug}?onglet=statistiques`,

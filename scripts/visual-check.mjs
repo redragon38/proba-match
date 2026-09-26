@@ -19,7 +19,7 @@ for (const width of [1440, 390]) {
     ['home', '/'],
     ['match', '/match/demo-0-0'],
     ['lineups', '/match/demo-0-0?onglet=compositions'],
-    ['performance', '/performance-modele'],
+    ['players', '/joueurs'],
     ['comparator', '/comparateur/equipes'],
     ['live', '/live'],
     ['teams', '/equipes'],

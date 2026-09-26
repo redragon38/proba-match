@@ -7,7 +7,6 @@ import {
   Activity,
   ArrowLeftRight,
   ArrowUpRight,
-  BarChart3,
   ChevronRight,
   CircleHelp,
   CircleDot,
@@ -119,7 +118,7 @@ export function Shell({
         <nav className="top-nav" aria-label="Navigation principale">
           <Link href="/matchs">Matchs</Link>
           <Link href="/competitions">Compétitions</Link>
-          <Link href="/performance-modele">Analyses & prédictions</Link>
+          <Link href="/methodologie">Analyses & prédictions</Link>
         </nav>
         <div className="header-actions">
           <QuickSearch />
@@ -189,10 +188,6 @@ export function Shell({
             ))}
           </nav>
           <div className="sidebar-label">LE LABORATOIRE</div>
-          <Link className="side-link" href="/performance-modele" onClick={() => setMenu(false)}>
-            <BarChart3 size={18} />
-            Performance du modèle
-          </Link>
           <Link className="side-link" href="/methodologie" onClick={() => setMenu(false)}>
             <CircleHelp size={18} />
             Notre méthodologie

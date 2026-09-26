@@ -1,0 +1,273 @@
+{
+  "at": "2026-09-26T19:57:22.534Z",
+  "counts": {
+    "matches": 7008,
+    "teams": 129,
+    "players": 0,
+    "competitions": 5,
+    "seasons": 20,
+    "statuses": [
+      {
+        "_count": 5485,
+        "status": "finished"
+      },
+      {
+        "_count": 1523,
+        "status": "scheduled"
+      }
+    ],
+    "upcoming": 1502
+  },
+  "sources": [
+    {
+      "id": "openfootball:fr.1:2023",
+      "lastSyncedAt": "2026-09-13T08:13:55.664Z"
+    },
+    {
+      "id": "openfootball:en.1:2023",
+      "lastSyncedAt": "2026-09-13T08:13:59.179Z"
+    },
+    {
+      "id": "openfootball:de.1:2023",
+      "lastSyncedAt": "2026-09-13T08:14:02.664Z"
+    },
+    {
+      "id": "openfootball:es.1:2023",
+      "lastSyncedAt": "2026-09-13T08:14:08.247Z"
+    },
+    {
+      "id": "openfootball:it.1:2023",
+      "lastSyncedAt": "2026-09-13T08:14:14.335Z"
+    },
+    {
+      "id": "openfootball:fr.1:2024",
+      "lastSyncedAt": "2026-09-13T08:14:19.687Z"
+    },
+    {
+      "id": "openfootball:en.1:2024",
+      "lastSyncedAt": "2026-09-13T08:14:25.212Z"
+    },
+    {
+      "id": "openfootball:de.1:2024",
+      "lastSyncedAt": "2026-09-13T08:14:30.316Z"
+    },
+    {
+      "id": "openfootball:es.1:2024",
+      "lastSyncedAt": "2026-09-13T08:14:35.876Z"
+    },
+    {
+      "id": "openfootball:it.1:2024",
+      "lastSyncedAt": "2026-09-13T08:14:40.538Z"
+    },
+    {
+      "id": "openfootball:fr.1:2025",
+      "lastSyncedAt": "2026-09-13T08:14:44.765Z"
+    },
+    {
+      "id": "openfootball:en.1:2025",
+      "lastSyncedAt": "2026-09-13T08:14:49.484Z"
+    },
+    {
+      "id": "openfootball:de.1:2025",
+      "lastSyncedAt": "2026-09-13T08:14:54.521Z"
+    },
+    {
+      "id": "openfootball:es.1:2025",
+      "lastSyncedAt": "2026-09-13T08:14:59.695Z"
+    },
+    {
+      "id": "openfootball:it.1:2025",
+      "lastSyncedAt": "2026-09-13T08:15:04.972Z"
+    },
+    {
+      "id": "openfootball:en.1:2026",
+      "lastSyncedAt": "2026-09-26T17:15:35.237Z"
+    },
+    {
+      "id": "openfootball:de.1:2026",
+      "lastSyncedAt": "2026-09-26T17:15:35.854Z"
+    },
+    {
+      "id": "openfootball:es.1:2026",
+      "lastSyncedAt": "2026-09-26T17:15:47.761Z"
+    },
+    {
+      "id": "openfootball:it.1:2026",
+      "lastSyncedAt": "2026-09-26T17:17:36.100Z"
+    },
+    {
+      "id": "openfootball:fr.1:2026",
+      "lastSyncedAt": "2026-09-26T17:15:34.204Z"
+    }
+  ],
+  "jobs": [
+    {
+      "status": "success",
+      "startedAt": "2026-09-26T17:17:33.040Z",
+      "finishedAt": "2026-09-26T17:17:58.301Z",
+      "matches": 0,
+      "errorCode": null
+    },
+    {
+      "status": "success",
+      "startedAt": "2026-09-26T17:15:46.028Z",
+      "finishedAt": "2026-09-26T17:15:51.308Z",
+      "matches": 0,
+      "errorCode": null
+    },
+    {
+      "status": "success",
+      "startedAt": "2026-09-26T17:15:33.000Z",
+      "finishedAt": "2026-09-26T17:15:39.853Z",
+      "matches": 0,
+      "errorCode": null
+    },
+    {
+      "status": "success",
+      "startedAt": "2026-09-26T11:14:46.841Z",
+      "finishedAt": "2026-09-26T11:16:48.652Z",
+      "matches": 1752,
+      "errorCode": null
+    },
+    {
+      "status": "success",
+      "startedAt": "2026-09-21T06:58:49.427Z",
+      "finishedAt": "2026-09-21T06:59:04.256Z",
+      "matches": 0,
+      "errorCode": null
+    }
+  ],
+  "providerKeyConfigured": false,
+  "requests": [
+    {
+      "path": "/api/matches",
+      "status": 200,
+      "ms": 147,
+      "bytes": 13451,
+      "total": 7008,
+      "displayed": 24,
+      "ids": [
+        "4ee0513f-b012-4ed7-badb-c0b0ecc4d8a5",
+        "caba0f1c-3a61-4ea6-b32c-b9b6b721b869",
+        "cb25158f-c3ef-4f53-a61f-ef367b76b1f7",
+        "44812504-2ae1-4549-81b4-ab0cd2bb92dc"
+      ],
+      "page": 1,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/api/matches?statut=scheduled",
+      "status": 200,
+      "ms": 29,
+      "bytes": 13624,
+      "total": 1502,
+      "displayed": 24,
+      "ids": [
+        "1d02ebf3-24a4-4424-a70e-678de67d130e",
+        "35c4bbce-2303-4669-b331-55ff16438a91",
+        "1e9b4924-a9da-4ee1-89cb-6c110f23e4b0",
+        "c4de0984-124a-4b24-b52c-d91b2d28259c"
+      ],
+      "page": 1,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/api/matches?statut=live",
+      "status": 200,
+      "ms": 37,
+      "bytes": 153,
+      "total": 0,
+      "displayed": 0,
+      "ids": [],
+      "page": 1,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/api/matches?statut=finished",
+      "status": 200,
+      "ms": 37,
+      "bytes": 13456,
+      "total": 5485,
+      "displayed": 24,
+      "ids": [
+        "4ee0513f-b012-4ed7-badb-c0b0ecc4d8a5",
+        "caba0f1c-3a61-4ea6-b32c-b9b6b721b869",
+        "cb25158f-c3ef-4f53-a61f-ef367b76b1f7",
+        "44812504-2ae1-4549-81b4-ab0cd2bb92dc"
+      ],
+      "page": 1,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/api/matches?statut=finished&page=2",
+      "status": 200,
+      "ms": 206,
+      "bytes": 13456,
+      "total": 5485,
+      "displayed": 24,
+      "ids": [
+        "7c5e8588-957c-4637-8b2f-88207b5be217",
+        "f91a513c-9fe3-46f3-9d86-94ea2485895e",
+        "6bc06cfc-0bee-4f19-b0ca-8c4bb15c8cb9",
+        "9bf36d63-2ca4-4d22-92e9-c18b55637405"
+      ],
+      "page": 2,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/api/matches?featured=true",
+      "status": 200,
+      "ms": 21,
+      "bytes": 2330,
+      "total": 4,
+      "displayed": 4,
+      "ids": [
+        "1d02ebf3-24a4-4424-a70e-678de67d130e",
+        "35c4bbce-2303-4669-b331-55ff16438a91",
+        "1e9b4924-a9da-4ee1-89cb-6c110f23e4b0",
+        "c4de0984-124a-4b24-b52c-d91b2d28259c"
+      ],
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/api/matches/today",
+      "status": 200,
+      "ms": 19,
+      "bytes": 363,
+      "displayed": 0,
+      "ids": [],
+      "cacheControl": "public, s-maxage=15, stale-while-revalidate=60"
+    },
+    {
+      "path": "/api/live",
+      "status": 200,
+      "ms": 19,
+      "bytes": 379,
+      "displayed": 0,
+      "ids": [],
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/api/search?scope=catalogue&category=Joueur",
+      "status": 200,
+      "ms": 32,
+      "bytes": 24,
+      "total": 0,
+      "cacheControl": "private, no-store"
+    },
+    {
+      "path": "/api/matches?date=2026-02-30",
+      "status": 400,
+      "ms": 31,
+      "bytes": 25,
+      "cacheControl": null
+    },
+    {
+      "path": "/api/matches?limit=101",
+      "status": 400,
+      "ms": 58,
+      "bytes": 31,
+      "cacheControl": null
+    }
+  ]
+}

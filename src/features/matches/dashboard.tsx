@@ -1,11 +1,10 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   ArrowRight,
   CalendarDays,
-  ChartNoAxesCombined,
   ChevronLeft,
   ChevronRight,
   SlidersHorizontal,
@@ -13,7 +12,7 @@ import {
   TrendingUp,
   Zap,
 } from 'lucide-react';
-import type { Dataset, Prediction } from '@/types/football';
+import type { Dataset, Match, Prediction } from '@/types/football';
 import { dateKey } from '@/lib/format';
 import { AdSlot, Empty, ProbabilityBar, SectionTitle, TeamBadge } from '@/components/ui';
 import { SourceBanner } from '@/components/source-banner';
@@ -31,6 +30,8 @@ export function Dashboard({
   initialStatus = 'all',
   full = false,
   automaticDate = false,
+  pagination,
+  upcomingMatches,
 }: {
   data: Dataset;
   predictions: Record<string, Prediction>;
@@ -38,21 +39,32 @@ export function Dashboard({
   initialStatus?: string;
   full?: boolean;
   automaticDate?: boolean;
+  pagination?: { total: number; page: number; pages: number };
+  upcomingMatches?: Match[];
 }) {
   const router = useRouter();
+  const [pending, startTransition] = useTransition();
   const params = useSearchParams();
   const status = params.get('statut') ?? initialStatus;
   const country = params.get('pays') ?? 'all';
   const competition = params.get('competition') ?? 'all';
   function changeFilters(changes: Record<string, string>) {
     const next = new URLSearchParams(params.toString());
+    next.delete('page');
+    next.set('timezone', zone);
     for (const [key, value] of Object.entries(changes)) {
       if (value === 'all') next.delete(key);
       else next.set(key, value);
     }
-    router.replace(`${full ? '/matchs' : '/'}?${next}`, { scroll: false });
+    startTransition(() => router.replace(`${full ? '/matchs' : '/'}?${next}`, { scroll: false }));
   }
-  const setStatus = (value: string) => changeFilters({ statut: value });
+  const setStatus = (value: string) => {
+    if (full && value === 'favorites') {
+      router.push('/favoris');
+      return;
+    }
+    changeFilters({ statut: value });
+  };
   const setCountry = (value: string) => changeFilters({ pays: value });
   const setCompetition = (value: string) => changeFilters({ competition: value });
   const [filters, setFilters] = useState(false);
@@ -61,7 +73,14 @@ export function Dashboard({
   const today = dateKey(new Date(), zone);
   const activeDate = automaticDate ? today : initialDate;
   const live = useLive(data.matches);
-  const dayMatches = live.matches.filter((m) => dateKey(new Date(m.kickoff), zone) === activeDate);
+  const dayMatches = full
+    ? live.matches
+    : live.matches.filter(
+        (m) =>
+          (m.kickoffKnown === false && m.sourceDate
+            ? m.sourceDate
+            : dateKey(new Date(m.kickoff), zone)) === activeDate,
+      );
   const selected = dayMatches.filter(
     (m) =>
       (status === 'all' ||
@@ -80,8 +99,10 @@ export function Dashboard({
   function setDate(value: string) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return;
     const next = new URLSearchParams(params.toString());
+    next.delete('page');
+    next.set('timezone', zone);
     next.set('date', value);
-    router.push(`${full ? '/matchs' : '/'}?${next}`, { scroll: false });
+    startTransition(() => router.push(`${full ? '/matchs' : '/'}?${next}`, { scroll: false }));
   }
   function moveDate(delta: number) {
     const d = new Date(`${activeDate}T12:00:00Z`);
@@ -98,12 +119,15 @@ export function Dashboard({
     .filter((p) => p.score !== null)
     .sort((a, b) => b.score! - a.score!)
     .slice(0, 4);
-  const upcoming = data.matches
-    .filter(
-      (m) => m.status === 'scheduled' && new Date(m.kickoff) >= new Date(`${activeDate}T00:00:00Z`),
-    )
-    .sort((a, b) => a.kickoff.localeCompare(b.kickoff))
-    .slice(0, 4);
+  const upcoming =
+    upcomingMatches ??
+    data.matches
+      .filter(
+        (m) =>
+          m.status === 'scheduled' && new Date(m.kickoff) >= new Date(`${activeDate}T00:00:00Z`),
+      )
+      .sort((a, b) => a.kickoff.localeCompare(b.kickoff))
+      .slice(0, 4);
   const tabs = [
     { id: 'all', label: 'Tous les matchs' },
     { id: 'live', label: 'En direct' },
@@ -132,9 +156,14 @@ export function Dashboard({
       </div>
       <div className="match-section-heading">
         <div>
-          <h2>Les matchs {activeDate === today ? 'du jour' : 'à l’affiche'}</h2>
+          <h2>
+            {full && !params.has('date')
+              ? 'Le calendrier et les résultats'
+              : `Les matchs ${activeDate === today ? 'du jour' : 'à l’affiche'}`}
+          </h2>
           <span>
-            {dayMatches.length} rencontres <span className="divider-dot">·</span>{' '}
+            {pagination?.total ?? dayMatches.length} rencontres{' '}
+            <span className="divider-dot">·</span>{' '}
             {
               data.competitions.filter((c) => dayMatches.some((m) => m.competitionId === c.id))
                 .length
@@ -143,6 +172,14 @@ export function Dashboard({
           </span>
         </div>
         <div className="date-controls">
+          {full && (
+            <button
+              aria-pressed={!params.has('date')}
+              onClick={() => changeFilters({ date: 'all' })}
+            >
+              Toutes les dates
+            </button>
+          )}
           <button aria-label="Jour précédent" onClick={() => moveDate(-1)}>
             <ChevronLeft size={17} />
           </button>
@@ -155,7 +192,10 @@ export function Dashboard({
           >
             Hier
           </button>
-          <button aria-pressed={activeDate === today} onClick={() => setDate(today)}>
+          <button
+            aria-pressed={(!full || params.has('date')) && activeDate === today}
+            onClick={() => setDate(today)}
+          >
             Aujourd’hui
           </button>
           <button
@@ -218,7 +258,8 @@ export function Dashboard({
         </section>
       )}
       <div className="dashboard-grid">
-        <div className="dashboard-main">
+        <div className="dashboard-main" aria-busy={pending}>
+          {pending && <p role="status">Chargement des matchs…</p>}
           <div className="match-filters" role="group" aria-label="Filtrer les matchs">
             {tabs.map((t) => (
               <button
@@ -304,6 +345,7 @@ export function Dashboard({
               teams={data.teams}
               competitions={data.competitions}
               predictions={predictions}
+              showDate={full}
             />
           ) : (
             <div className="card">
@@ -321,6 +363,27 @@ export function Dashboard({
               />
             </div>
           )}
+          {pagination && pagination.pages > 1 && (
+            <nav className="pagination" aria-label="Pagination des matchs">
+              {pagination.page > 1 && (
+                <Link
+                  href={`?${new URLSearchParams({ ...Object.fromEntries(params), page: String(pagination.page - 1) })}`}
+                >
+                  Précédent
+                </Link>
+              )}
+              <span>
+                Page {pagination.page} sur {pagination.pages}
+              </span>
+              {pagination.page < pagination.pages && (
+                <Link
+                  href={`?${new URLSearchParams({ ...Object.fromEntries(params), page: String(pagination.page + 1) })}`}
+                >
+                  Suivant
+                </Link>
+              )}
+            </nav>
+          )}
           <p className="list-note">
             <span aria-hidden="true">↻</span>{' '}
             {data.source === 'demo'
@@ -333,6 +396,7 @@ export function Dashboard({
             eyebrow="PROCHAINEMENT"
             href="/matchs?statut=scheduled"
           />
+          {!upcoming.length && <Empty text="Aucun prochain match disponible pour le moment." />}
           <div className="upcoming-grid">
             {upcoming.map((m) => (
               <MatchCard
@@ -413,6 +477,9 @@ export function Dashboard({
               <h2>Joueurs à suivre</h2>
             </div>
             <p>Les profils qui ressortent des données.</p>
+            {!starPlayers.length && (
+              <Empty text="Les données des joueurs ne sont pas disponibles pour le moment." />
+            )}
             {starPlayers.map((p, i) => {
               const t = data.teams.find((t) => t.id === p.teamId)!;
               return (
@@ -444,21 +511,6 @@ export function Dashboard({
             <Link className="text-link player-see-all" href="/joueurs">
               Explorer les joueurs <ArrowRight size={13} />
             </Link>
-          </section>
-          <section className="model-promo">
-            <span className="eyebrow">LA TRANSPARENCE AVANT TOUT</span>
-            <h3>
-              Notre modèle aussi
-              <br />a un tableau de scores.
-            </h3>
-            <p>
-              Précision, calibration, erreurs :<br />
-              tous les résultats sont publics.
-            </p>
-            <Link href="/performance-modele">
-              Voir ses performances <ArrowRight size={14} />
-            </Link>
-            <ChartNoAxesCombined className="promo-chart" size={65} />
           </section>
           <AdSlot />
         </aside>

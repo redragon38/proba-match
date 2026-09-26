@@ -124,8 +124,9 @@ export function LivePage({ data }: { data: Dataset }) {
             .slice(0, 1)
             .map((m) => (
               <p className="data-note" key={m.id}>
-                Prochain match disponible : <LocalTime iso={m.kickoff} date /> à{' '}
-                <LocalTime iso={m.kickoff} known={m.kickoffKnown} />.
+                Prochain match disponible :{' '}
+                <LocalTime iso={m.kickoff} date known={m.kickoffKnown} sourceDate={m.sourceDate} />{' '}
+                à <LocalTime iso={m.kickoff} known={m.kickoffKnown} />.
               </p>
             ))}
         </div>

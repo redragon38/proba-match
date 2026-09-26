@@ -39,7 +39,6 @@ const routes = [
   '/comparateur/equipes',
   '/recherche',
   '/favoris',
-  '/performance-modele',
   '/parametres',
   ...(match ? [`/match/${match.slug}`] : []),
   ...(team ? [`/equipe/${team.slug}`] : []),

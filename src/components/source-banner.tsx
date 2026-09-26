@@ -1,10 +1,17 @@
 import { FlaskConical, CircleCheck } from 'lucide-react';
+import { lateResultsWarning } from '@/services/football/freshness';
 import type { Dataset } from '@/types/football';
 export function SourceBanner({
   data,
 }: {
   data: Pick<Dataset, 'source' | 'warning' | 'updatedAt'>;
 }) {
+  const warning = data.warning
+    ?.replace('Source OpenFootball. Statistiques avancées indisponibles sans enrichissement.', '')
+    .replace('Classements calculés sur les résultats disponibles.', '')
+    .replace('Les classements sont calculés à partir des résultats disponibles.', '')
+    .replace(lateResultsWarning, 'Certains résultats sont encore en attente de confirmation.')
+    .trim();
   return (
     <>
       <div className={`source-banner ${data.source === 'demo' ? 'demo' : ''}`}>
@@ -17,10 +24,7 @@ export function SourceBanner({
         ) : (
           <>
             <CircleCheck size={14} />
-            <strong>
-              Source :{' '}
-              {data.source === 'openfootball' ? 'OpenFootball · base Proba Match' : 'API-Football'}
-            </strong>
+            <strong>Données football</strong>
             <span>
               {data.updatedAt
                 ? `Synchronisé le ${new Date(data.updatedAt).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}`
@@ -29,9 +33,9 @@ export function SourceBanner({
           </>
         )}
       </div>
-      {data.warning && (
+      {warning && (
         <p className="warning" role="status">
-          {data.warning}
+          {warning}
         </p>
       )}
     </>
