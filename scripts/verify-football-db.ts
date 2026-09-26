@@ -1,0 +1,438 @@
+/** Integration check against an isolated disposable PostgreSQL database, never the app corpus. */
+import assert from 'node:assert/strict';
+import { spawn, spawnSync, type ChildProcess } from 'node:child_process';
+import { chromium, expect, type Browser, type Page } from '@playwright/test';
+import { PrismaClient } from '@prisma/client';
+const originalUrl = process.env.DATABASE_URL;
+if (!originalUrl) throw new Error('DATABASE_NOT_CONFIGURED');
+const admin = new PrismaClient();
+const name = `matchscore_test_${Date.now()}`;
+const testUrl = new URL(originalUrl);
+testUrl.pathname = `/${name}`;
+const originalFetch = globalThis.fetch;
+let client: PrismaClient | undefined;
+let server: ChildProcess | undefined, browser: Browser | undefined, page: Page | undefined;
+try {
+  await admin.$executeRawUnsafe(`CREATE DATABASE "${name}"`);
+  process.env.DATABASE_URL = testUrl.toString();
+  process.env.FOOTBALL_API_KEY = '';
+  const migration = spawnSync(
+    process.execPath,
+    ['node_modules/prisma/build/index.js', 'migrate', 'deploy'],
+    { env: process.env, encoding: 'utf8' },
+  );
+  assert.equal(migration.status, 0, 'Test database migrations');
+  const { db } = await import('../src/database/client');
+  client = db;
+  const { syncOpenFootball, currentSeason } =
+    await import('../src/services/football/openfootball-sync');
+  const { syncSecondary } = await import('../src/services/football/secondary');
+  const { readLocalDataset } = await import('../src/services/football/local-store');
+  const { bindIdentity } = await import('../src/services/football/identities');
+  const { persistDataset } = await import('../src/services/football/persistence');
+  const { footballJob } = await import('../src/services/football/jobs');
+  const { runWorkerLoop } = await import('../src/services/football/worker-loop');
+  await footballJob('lock-verification', async () => {
+    const lock = await db.syncLock.findUniqueOrThrow({ where: { key: 'football' } });
+    const remaining = lock.expiresAt.getTime() - Date.now();
+    assert.ok(
+      remaining > 29 * 60000 && remaining <= 30 * 60000,
+      'Lease expiry uses UTC regardless of PostgreSQL timezone',
+    );
+    await db.syncLock.update({
+      where: { key: 'football' },
+      data: { expiresAt: new Date(Date.now() + 30 * 60000) },
+    });
+    await assert.rejects(
+      footballJob('overlap', async () => ({})),
+      /SYNC_ALREADY_RUNNING/,
+    );
+    return { status: 'success' };
+  });
+  await assert.rejects(
+    footballJob('controlled-failure', async () => {
+      throw new Error('controlled');
+    }),
+    /SYNC_FAILED/,
+  );
+  assert.equal(await db.syncLock.count(), 0, 'Failed job releases its database lease');
+  await footballJob('recovery', async () => ({ status: 'success' }));
+  const scope = { league: 'fr.1' as const, season: currentSeason() };
+  const sourceRow = {
+    team1: 'Integration Home',
+    team2: 'Integration Away',
+    date: `${scope.season}-08-01`,
+    time: '20:00',
+    score: { ft: [1, 0] as number[] | undefined },
+  };
+  let document = { name: 'Test Ligue', matches: [sourceRow] };
+  globalThis.fetch = async () => Response.json(document);
+  const run = () => syncOpenFootball({ scopes: [scope], force: true });
+  assert.equal((await run()).status, 'success');
+  const first = await readLocalDataset(),
+    id = first.matches[0].id;
+  assert.match(id, /^[a-f0-9-]{36}$/);
+  assert.equal(await db.team.count(), 2);
+  document = {
+    name: 'Test Ligue',
+    matches: [{ ...sourceRow, date: `${scope.season}-08-08`, score: { ft: [2, 0] } }],
+  };
+  let schedulerTime = Date.now(),
+    automaticCycles = 0;
+  const automaticResults: Awaited<ReturnType<typeof run>>[] = [];
+  await runWorkerLoop({
+    now: () => schedulerTime,
+    stopped: () => automaticCycles === 2,
+    wait: async (ms) => {
+      schedulerTime += ms;
+    },
+    nextOpen: async () => schedulerTime,
+    open: async () => {
+      const result = await run();
+      automaticResults.push(result);
+      return result;
+    },
+    secondaryEnabled: () => false,
+    secondary: async () => ({ status: 'success' }),
+    heartbeat: async () => {
+      automaticCycles++;
+    },
+    log: () => {},
+  });
+  assert.equal(
+    automaticResults.length,
+    2,
+    'Scheduler executes two autonomous imports (accelerated clock)',
+  );
+  assert.equal(automaticResults[0].changed, 1);
+  assert.equal(automaticResults[0].resultsChanged, 1);
+  assert.equal(
+    automaticResults[1].changed,
+    0,
+    'Unchanged source is distinguishable from modified matches',
+  );
+  assert.equal(await db.match.count(), 1);
+  assert.equal(await db.team.count(), 2);
+  let data = await readLocalDataset();
+  assert.equal(data.matches[0].id, id);
+  assert.equal(data.matches[0].homeScore, 2);
+  assert.equal(data.matches[0].sourceDate, `${scope.season}-08-08`);
+  assert.equal((await syncSecondary()).requests, 0);
+  const match = data.matches[0];
+  match.status = 'scheduled';
+  match.kickoff = new Date(Date.now() - 1800000).toISOString();
+  match.homeScore = 0;
+  match.awayScore = 0;
+  await persistDataset(data, new Set([id]));
+  await bindIdentity('api-football', 'team', '1', match.homeId);
+  await bindIdentity('api-football', 'team', '2', match.awayId);
+  await bindIdentity('api-football', 'match', '123', id);
+  if (process.env.FOOTBALL_VERIFY_UI === 'true') {
+    server = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'start', '-p', '3001'], {
+      env: { ...process.env, FOOTBALL_API_KEY: '' },
+      stdio: 'ignore',
+    });
+    let ready = false;
+    for (let attempt = 0; attempt < 60; attempt++) {
+      try {
+        ready = (await originalFetch('http://localhost:3001/api/updates')).ok;
+      } catch {
+        /* startup */
+      }
+      if (ready) break;
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
+    assert.ok(ready, 'Isolated production server ready');
+    browser = await chromium.launch({
+      channel: process.platform === 'win32' ? 'chrome' : 'chromium',
+    });
+    page = await browser.newPage();
+    await page.clock.install();
+    await page.goto(`http://localhost:3001/match/${id}?onglet=evenements`);
+    await expect(page.locator('.score-block > strong')).toHaveText('0 : 0');
+    await page.evaluate(() => {
+      window.document.documentElement.dataset.testDocument = 'unchanged';
+    });
+    assert.equal((await originalFetch('http://localhost:3001/api/cron/live')).status, 401);
+    assert.equal(
+      (
+        await originalFetch('http://localhost:3001/api/cron/live', {
+          headers: { Authorization: `Bearer ${process.env.CRON_SECRET}` },
+        })
+      ).status,
+      200,
+    );
+  }
+  process.env.FOOTBALL_API_KEY = 'controlled-test-key';
+  process.env.FOOTBALL_API_PROVIDER = 'api-football';
+  process.env.FOOTBALL_DAILY_BUDGET = '10';
+  let calls = 0;
+  let final = false;
+  globalThis.fetch = async () => {
+    calls++;
+    return Response.json({
+      errors: [],
+      response: [
+        {
+          fixture: {
+            id: 123,
+            date: match.kickoff,
+            referee: null,
+            venue: { name: null },
+            status: { short: final ? 'FT' : '1H', elapsed: final ? 90 : 30 },
+          },
+          league: { id: 61, name: 'Ligue 1', country: 'France', season: scope.season, round: '1' },
+          teams: {
+            home: { id: 1, name: 'Integration Home' },
+            away: { id: 2, name: 'Integration Away' },
+          },
+          goals: { home: final ? 2 : 1, away: 0 },
+          events: [
+            {
+              time: { elapsed: 25 },
+              team: { id: 1 },
+              player: { name: 'Integration Scorer' },
+              type: 'Goal',
+              detail: 'Normal Goal',
+            },
+            {
+              time: { elapsed: 27 },
+              team: { id: 2 },
+              player: { name: 'Integration Card' },
+              type: 'Card',
+              detail: 'Yellow Card',
+            },
+            {
+              time: { elapsed: 29 },
+              team: { id: 1 },
+              player: { name: 'Integration Sub' },
+              assist: { name: 'Integration Out' },
+              type: 'subst',
+            },
+          ],
+          statistics: [
+            { team: { id: 1 }, statistics: [{ type: 'Ball Possession', value: '60%' }] },
+            { team: { id: 2 }, statistics: [{ type: 'Ball Possession', value: '40%' }] },
+          ],
+          lineups: [1, 2].map((team) => ({
+            team: { id: team },
+            formation: '4-4-2',
+            startXI: [
+              { player: { id: team * 10, name: `Integration Player ${team}`, number: 10 } },
+            ],
+            substitutes: [],
+          })),
+        },
+      ],
+    });
+  };
+  assert.equal((await syncSecondary()).status, 'success');
+  assert.equal(calls, 1);
+  data = await readLocalDataset();
+  assert.equal(data.matches[0].id, id);
+  assert.equal(data.matches[0].homeId, match.homeId);
+  assert.equal(data.matches[0].source, 'api-football');
+  assert.equal(data.matches[0].homeScore, 1);
+  assert.equal((await db.match.findUniqueOrThrow({ where: { id } })).homeScore, 1);
+  assert.equal(data.matches[0].minute, 30);
+  assert.deepEqual(
+    data.matches[0].events.map((e) => e.type),
+    ['goal', 'yellow', 'substitution'],
+  );
+  assert.equal(data.matches[0].statistics.find((s) => s.label === 'Possession')?.home, 60);
+  assert.equal(data.matches[0].lineups.length, 2);
+  if (page) {
+    const live = await (await originalFetch('http://localhost:3001/api/live')).json();
+    assert.equal(
+      live.matches.find((m: { id: string }) => m.id === id)?.homeScore,
+      1,
+      'Internal live API receives updated score',
+    );
+    await page.clock.fastForward(31000);
+    await expect(page.locator('.score-block > strong')).toHaveText('1 : 0');
+    await expect(page.getByText('Integration Scorer', { exact: true })).toBeVisible();
+    assert.equal(
+      await page.evaluate(() => window.document.documentElement.dataset.testDocument),
+      'unchanged',
+    );
+  }
+  await syncSecondary();
+  assert.equal(calls, 1, 'fresh data performs no external request');
+  final = true;
+  data.matches[0].detailsUpdatedAt = new Date(Date.now() - 120000).toISOString();
+  await persistDataset(data, new Set([id]));
+  await syncSecondary();
+  data = await readLocalDataset();
+  assert.equal(data.matches[0].status, 'finished');
+  assert.equal(data.matches[0].homeScore, 2);
+  assert.equal(
+    data.standings[match.competitionId].find((s) => s.teamId === match.homeId)?.points,
+    3,
+  );
+  assert.equal((await db.standing.findFirstOrThrow({ where: { teamId: match.homeId } })).points, 3);
+  if (page) {
+    await page.clock.fastForward(31000);
+    await expect(page.locator('.score-block > strong')).toHaveText('2 : 0');
+  }
+  const day = new Date().toISOString().slice(0, 10);
+  await db.apiQuota.update({ where: { day }, data: { count: 10 } });
+  data.matches[0].detailsUpdatedAt = new Date(Date.now() - 7200000).toISOString();
+  await persistDataset(data, new Set([id]));
+  assert.equal((await syncSecondary()).status, 'partial');
+  assert.equal(calls, 2, 'quota exhausted performs no external request');
+  assert.equal((await readLocalDataset()).matches[0].homeScore, 2);
+  globalThis.fetch = async () => {
+    throw new Error('offline');
+  };
+  assert.equal((await run()).status, 'partial');
+  assert.equal(
+    (await readLocalDataset()).matches[0].homeScore,
+    2,
+    'OpenFootball outage preserves local data',
+  );
+  if (page) await page.goto(`http://localhost:3001/matchs?date=${day}`);
+  document.matches.push({
+    ...sourceRow,
+    team2: 'Integration New Opponent',
+    date: day,
+    score: { ft: undefined },
+  });
+  globalThis.fetch = async () => Response.json(document);
+  await run();
+  assert.equal(await db.match.count(), 2);
+  if (page) {
+    await page.clock.fastForward(31000);
+    await expect(
+      page.locator('.match-row').filter({ hasText: 'Integration New Opponent' }),
+    ).toBeVisible();
+    await page.screenshot({ path: 'artifacts/automatic-sync.png' });
+  }
+  const added = (await readLocalDataset()).matches.find((m) => m.id !== id)!;
+  assert.equal(added.competitionId, match.competitionId);
+  assert.equal(added.sourceDate, day);
+  if (page) await page.goto(`http://localhost:3001/match/${added.id}`);
+  document.matches[1].time = '21:00';
+  await run();
+  const rescheduled = (await readLocalDataset()).matches.find((m) => m.id === added.id)!;
+  assert.equal(Date.parse(rescheduled.kickoff) - Date.parse(added.kickoff), 3600000);
+  assert.equal(await db.match.count(), 2);
+  if (page) {
+    await page.clock.fastForward(31000);
+    await expect(page.locator('.score-block time')).toHaveAttribute(
+      'datetime',
+      rescheduled.kickoff,
+    );
+  }
+  await db.apiQuota.update({ where: { day }, data: { count: 0 } });
+  data = await readLocalDataset();
+  data.matches.find((m) => m.id === id)!.detailsUpdatedAt = new Date().toISOString();
+  await persistDataset(data, new Set([id]));
+  let injured = true;
+  globalThis.fetch = async (input) => {
+    const url = new URL(String(input));
+    const rows = url.pathname.endsWith('/players')
+      ? [
+          {
+            player: {
+              id: Number(url.searchParams.get('team')) * 10,
+              name: 'Integration Player',
+              birth: {},
+            },
+            statistics: [],
+          },
+        ]
+      : url.pathname.endsWith('/injuries') && injured
+        ? [
+            {
+              player: { id: 10, reason: 'Integration Injury', type: 'Missing Fixture' },
+              team: { id: 1 },
+              fixture: { id: 123 },
+            },
+          ]
+        : [];
+    return Response.json({ errors: [], response: rows });
+  };
+  assert.equal((await syncSecondary({ enrich: true })).status, 'success');
+  assert.equal(await db.injury.count(), 1);
+  assert.equal((await readLocalDataset()).injuries[0].reason, 'Integration Injury');
+  assert.notEqual(
+    (await readLocalDataset()).warning,
+    'Certaines statistiques live peuvent être temporairement indisponibles. Les dernières données locales restent disponibles.',
+    'Successful provider recovery clears its previous warning',
+  );
+  injured = false;
+  await db.cacheEntry.updateMany({
+    where: { key: { startsWith: 'secondary:injuries:' } },
+    data: { expiresAt: new Date(0) },
+  });
+  await syncSecondary({ enrich: true });
+  assert.equal(
+    await db.injury.count(),
+    0,
+    'Recovered injuries removed after successful provider refresh',
+  );
+  assert.equal((await readLocalDataset()).injuries.length, 0);
+  if (page) {
+    const profile = (await readLocalDataset()).players[0];
+    assert.ok(profile, 'Controlled provider fixture creates a player profile');
+    for (const width of [320, 390, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      const response = await page.goto(`http://localhost:3001/joueur/${profile.slug}`);
+      assert.equal(response?.status(), 200);
+      await expect(page.getByRole('heading', { name: profile.name, exact: true })).toBeVisible();
+      assert.equal(
+        await page.evaluate(() => window.document.documentElement.scrollWidth > innerWidth),
+        false,
+        `Player profile fits ${width}px`,
+      );
+    }
+  }
+  if (page && process.env.ADMIN_SECRET) {
+    const heartbeat = {
+      checkedAt: new Date(Date.now() - 180000).toISOString(),
+      nextOpen: new Date(Date.now() + 3600000).toISOString(),
+      secondaryStatus: 'disabled',
+    };
+    await db.cacheEntry.create({
+      data: {
+        key: 'football:worker',
+        payload: heartbeat,
+        expiresAt: new Date(),
+        staleUntil: new Date(),
+      },
+    });
+    const login = await page.request.post('http://localhost:3001/api/admin/session', {
+      headers: { Origin: 'http://localhost:3001' },
+      data: { secret: process.env.ADMIN_SECRET },
+    });
+    assert.equal(login.status(), 200);
+    await page.goto('http://localhost:3001/admin');
+    const status = page
+      .locator('.metric')
+      .filter({ has: page.getByText('Worker', { exact: true }) });
+    await expect(status).toContainText('En retard');
+    await db.cacheEntry.update({
+      where: { key: 'football:worker' },
+      data: { payload: { ...heartbeat, checkedAt: new Date().toISOString() } },
+    });
+    await page.clock.fastForward(31000);
+    await expect(status).toContainText('Actif');
+    await page.screenshot({ path: 'artifacts/worker-health.png', fullPage: true });
+  }
+  console.log(
+    'PostgreSQL integration PASS: failed lease recovery, two automatic scheduler imports (accelerated clock), imports, idempotence, reschedule, new fixtures, no key, live score/minute/events/statistics/lineups, injuries/recovery, final score/standings, quota fallback, source outage' +
+      (page ? ', production cache and automatic UI refresh, cron authentication.' : '.'),
+  );
+} finally {
+  await browser?.close();
+  if (server) {
+    server.kill();
+    await new Promise((resolve) => server!.once('exit', resolve));
+  }
+  globalThis.fetch = originalFetch;
+  await client?.$disconnect();
+  process.env.DATABASE_URL = originalUrl;
+  // Only this script-created database is removed; no app rows or historical predictions touched.
+  await admin.$executeRawUnsafe(`DROP DATABASE IF EXISTS "${name}" WITH (FORCE)`);
+  await admin.$disconnect();
+}

@@ -1,0 +1,140 @@
+@media (max-width: 1150px) {
+  .detail-columns {
+    grid-template-columns: minmax(0, 1fr) 270px;
+    gap: 18px;
+  }
+  .catalog-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .prediction-detail {
+    padding: 20px;
+  }
+  .metrics.three .metric {
+    padding: 14px;
+  }
+  .metrics.three .metric strong {
+    font-size: 23px;
+  }
+  .detail-tabs > a {
+    padding: 16px;
+  }
+}
+@media (max-width: 900px) {
+  .detail-columns {
+    grid-template-columns: 1fr;
+  }
+  .detail-columns > aside {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .match-headline {
+    grid-template-columns: 1fr 120px 1fr;
+    padding: 15px;
+    gap: 10px;
+  }
+  .match-headline h1,
+  .match-headline h2 {
+    font-size: 16px;
+  }
+  .lineup-grid {
+    grid-template-columns: 1fr;
+  }
+  .data-table th,
+  .data-table td {
+    padding: 12px;
+  }
+  .score-block > strong {
+    font-size: 40px;
+  }
+}
+@media (max-width: 500px) {
+  .profile-header {
+    padding: 20px;
+    gap: 14px;
+  }
+  .profile-header h1 {
+    font-size: 23px;
+  }
+  .profile-header .team-badge {
+    width: 58px !important;
+    height: 65px !important;
+  }
+  .profile-header p {
+    font-size: 10px;
+  }
+  .catalog-grid {
+    grid-template-columns: 1fr;
+  }
+  .match-headline {
+    grid-template-columns: 1fr 80px 1fr;
+  }
+  .match-headline h1,
+  .match-headline h2 {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .match-headline .team-badge {
+    width: 53px !important;
+    height: 60px !important;
+  }
+  .score-block > strong {
+    font-size: 30px;
+  }
+  .score-block > span {
+    font-size: 8px;
+  }
+  .venue-meta {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .match-meta {
+    font-size: 9px;
+    padding: 18px 10px;
+  }
+  .detail-tabs {
+    padding: 0 8px;
+  }
+  .detail-tabs > a {
+    font-size: 10px;
+    padding: 14px 12px;
+  }
+  .prediction-detail {
+    padding: 17px;
+  }
+  .prediction-title {
+    flex-wrap: wrap;
+  }
+  .version-badge {
+    margin-left: 0;
+  }
+  .metrics.three {
+    gap: 7px;
+  }
+  .metrics.three .metric {
+    padding: 10px;
+  }
+  .metrics.three .metric > span {
+    font-size: 9px;
+  }
+  .metrics.three .metric > strong {
+    font-size: 20px;
+  }
+  .metric {
+    padding: 16px;
+  }
+  .metric strong {
+    font-size: 25px;
+  }
+  .score-projections {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .profile-avatar {
+    width: 65px;
+    height: 65px;
+    font-size: 23px;
+  }
+  .comparison-selectors {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "checkedAt": "2026-09-20T19:56:37.799Z",
+  "readOnly": true,
+  "samples": [
+    {
+      "year": 2026,
+      "home": "Lille OSC",
+      "away": "ES Troyes AC",
+      "sourceDate": "2026-09-13",
+      "sourceTime": "15:00",
+      "kickoffUTC": "2026-09-13T13:00:00.000Z",
+      "kickoffKnown": true,
+      "status": "finished",
+      "score": [
+        2,
+        0
+      ],
+      "result": "PASS"
+    },
+    {
+      "year": 2026,
+      "home": "Le Mans FC",
+      "away": "Racing Club de Lens",
+      "sourceDate": "2026-09-13",
+      "sourceTime": "17:15",
+      "kickoffUTC": "2026-09-13T15:15:00.000Z",
+      "kickoffKnown": true,
+      "status": "finished",
+      "score": [
+        2,
+        2
+      ],
+      "result": "PASS"
+    },
+    {
+      "year": 2026,
+      "home": "Stade Brestois 29",
+      "away": "Paris Saint-Germain FC",
+      "sourceDate": "2026-09-13",
+      "sourceTime": "20:45",
+      "kickoffUTC": "2026-09-13T18:45:00.000Z",
+      "kickoffKnown": true,
+      "status": "finished",
+      "score": [
+        0,
+        1
+      ],
+      "result": "PASS"
+    },
+    {
+      "year": 2026,
+      "home": "AS Monaco FC",
+      "away": "Racing Club de Lens",
+      "sourceDate": "2026-09-18",
+      "sourceTime": "20:45",
+      "kickoffUTC": "2026-09-18T18:45:00.000Z",
+      "kickoffKnown": true,
+      "status": "scheduled",
+      "score": null,
+      "result": "PASS"
+    },
+    {
+      "year": 2026,
+      "home": "Paris FC",
+      "away": "RC Strasbourg Alsace",
+      "sourceDate": "2026-09-19",
+      "sourceTime": "17:15",
+      "kickoffUTC": "2026-09-19T15:15:00.000Z",
+      "kickoffKnown": true,
+      "status": "scheduled",
+      "score": null,
+      "result": "PASS"
+    }
+  ],
+  "seasons": [
+    {
+      "year": 2026,
+      "url": "https://raw.githubusercontent.com/openfootball/football.json/master/2026-27/fr.1.json",
+      "httpStatus": 200,
+      "sha256": "3f835c3c0cf9c2dbdeba7fca946a417545404f8c3ba0d97141ce18448769ad6f",
+      "sourceFixtures": 306,
+      "localFixtures": 306,
+      "finished": 36,
+      "issues": [],
+      "standingRows": 18,
+      "expectedStandingRows": 18,
+      "standingIssues": [],
+      "pointsTotal": 95,
+      "standingsPreview": [
+        {
+          "team": "RC Strasbourg Alsace",
+          "points": 7,
+          "played": 4
+        },
+        {
+          "team": "Stade Brestois 29",
+          "points": 5,
+          "played": 4
+        },
+        {
+          "team": "Paris FC",
+          "points": 8,
+          "played": 4
+        }
+      ]
+    }
+  ],
+  "freshness": {
+    "overdueScheduledMoreThanSixHours": 7,
+    "futureScheduled": 261,
+    "latestFinishedKickoff": "2026-09-13T18:45:00.000Z",
+    "warning": "La base reflète exactement OpenFootball, dont des matchs passés restent sans résultat; la fraîcheur réseau ne garantit pas la complétude sportive."
+  }
+}

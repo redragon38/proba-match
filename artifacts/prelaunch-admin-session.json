@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-21T07:02:57.824Z",
+  "login": 200,
+  "flags": {
+    "httpOnly": true,
+    "secure": true,
+    "sameSiteStrict": true
+  },
+  "authenticatedView": true,
+  "logout": 200,
+  "cookieCleared": true,
+  "anonymousLoginForm": true
+}

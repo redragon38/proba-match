@@ -1,0 +1,149 @@
+:root {
+  --muted: #5e6d77;
+  --green: #11745c;
+}
+main {
+  min-width: 0;
+}
+.metric {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.filter-panel label {
+  min-width: 0;
+  max-width: 100%;
+}
+.filter-panel select {
+  max-width: 100%;
+}
+.radar-chart figcaption span:first-child {
+  color: var(--green);
+}
+.sidebar-label,
+.sidebar-promo p,
+.sidebar-bottom,
+.rank-index,
+.confidence-caption,
+.match-column-labels,
+.match-clock > small,
+.ad-slot,
+.model-promo .eyebrow,
+.model-promo p {
+  color: var(--muted);
+}
+.source-banner > span {
+  opacity: 1;
+}
+.source-banner.demo {
+  color: #776132;
+}
+.hero-footnote,
+.hero-comp,
+.hero-projection > span,
+.hero-projection .prob-labels,
+.hero-teams > span {
+  color: #c0d4c5;
+}
+.is-live {
+  color: var(--green) !important;
+}
+.form-N {
+  color: #5c6871;
+}
+.form-D {
+  color: #aa3e3e;
+}
+.icon-tile.amber {
+  color: #8a6b20;
+}
+.player-avatar {
+  color: var(--text);
+}
+.model-promo .eyebrow {
+  color: #52664a;
+}
+.model-promo p {
+  color: #596b50;
+}
+.confidence-caption,
+.match-column-labels,
+.hero-footnote,
+.list-note,
+.sidebar-bottom {
+  font-size: 9px;
+}
+.sidebar-label,
+.hero-kicker {
+  font-size: 10px;
+}
+.match-filters button {
+  font-size: 11px;
+}
+.match-column-labels {
+  letter-spacing: 0.5px;
+}
+.favorite-button.selected {
+  color: #926b15;
+}
+.button {
+  background: var(--green);
+}
+.button.secondary {
+  background: var(--surface);
+}
+[data-theme='dark'] {
+  --muted: #b0bdc5;
+  --green: #65d4b4;
+}
+[data-theme='dark'] .button:not(.secondary) {
+  background: #11745c;
+  color: white;
+}
+[data-theme='dark'] .model-promo .eyebrow,
+[data-theme='dark'] .model-promo p {
+  color: #b8cdb0;
+}
+[data-theme='dark'] .source-banner.demo {
+  color: #e5d3a2;
+}
+[data-theme='dark'] .match-clock {
+  color: var(--muted);
+}
+.data-table:focus-visible {
+  outline: 3px solid var(--green);
+  outline-offset: 3px;
+}
+@media (max-width: 500px) {
+  .match-filters button {
+    font-size: 9px;
+    padding: 9px 6px;
+  }
+  .confidence-caption {
+    font-size: 7px;
+  }
+  .match-column-labels {
+    font-size: 7px;
+  }
+  .list-note {
+    font-size: 9px;
+  }
+  .hero-footnote {
+    display: none;
+  }
+  .topbar {
+    gap: 8px;
+    padding: 0 12px;
+  }
+  .brand {
+    flex-shrink: 0;
+  }
+  .header-actions {
+    gap: 1px;
+  }
+  .header-actions .icon-button {
+    width: 30px;
+  }
+  .search-trigger {
+    padding: 8px;
+  }
+}

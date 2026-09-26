@@ -1,0 +1,382 @@
+{
+  "views": [
+    {
+      "path": "/",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/matchs",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/live",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/classements",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/equipes",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/joueurs",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/comparateur/equipes",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/recherche",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/match/11411f32-113c-4e35-842a-f049289a9d93",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/",
+      "width": 1440,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/matchs",
+      "width": 1440,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/live",
+      "width": 1440,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/classements",
+      "width": 1440,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/equipes",
+      "width": 1440,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/joueurs",
+      "width": 1440,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/comparateur/equipes",
+      "width": 1440,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/recherche",
+      "width": 1440,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/match/11411f32-113c-4e35-842a-f049289a9d93",
+      "width": 1440,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/matchs",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/live",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/classements",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/equipes",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/joueurs",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/comparateur/equipes",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/recherche",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/match/11411f32-113c-4e35-842a-f049289a9d93",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/",
+      "width": 1440,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/matchs",
+      "width": 1440,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/live",
+      "width": 1440,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/classements",
+      "width": 1440,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/equipes",
+      "width": 1440,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/joueurs",
+      "width": 1440,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/comparateur/equipes",
+      "width": 1440,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/recherche",
+      "width": 1440,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    },
+    {
+      "path": "/match/11411f32-113c-4e35-842a-f049289a9d93",
+      "width": 1440,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": []
+    }
+  ],
+  "interactions": [
+    {
+      "width": 390,
+      "theme": "dark",
+      "searchKeyboard": "PASS",
+      "menuEscape": "PASS"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "searchKeyboard": "PASS",
+      "menuEscape": "not applicable"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "searchKeyboard": "PASS",
+      "menuEscape": "PASS"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "searchKeyboard": "PASS",
+      "menuEscape": "not applicable"
+    },
+    {
+      "width": 320,
+      "headerOverflow": false
+    },
+    {
+      "width": 768,
+      "headerOverflow": false
+    }
+  ],
+  "assets": [
+    {
+      "rel": "icon",
+      "path": "/icon.png?icon.1yksofl2c96aj.png",
+      "status": 200
+    },
+    {
+      "rel": "apple-touch-icon",
+      "path": "/apple-icon.png?apple-icon.2n197_tpt-l36.png",
+      "status": 200
+    },
+    {
+      "path": "/brand/proba-match-icon-192.png",
+      "status": 200
+    },
+    {
+      "path": "/brand/proba-match-icon-512.png",
+      "status": 200
+    }
+  ]
+}

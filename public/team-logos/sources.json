@@ -1,0 +1,781 @@
+{
+  "repository": "https://github.com/luukhopman/football-logos",
+  "commit": "2a3978f0b4730645c205d855a4bda54c161183e9",
+  "notice": "Club trademarks and logo rights remain with their respective holders. Repository availability is not a license grant.",
+  "teams": [
+    {
+      "country": "France",
+      "name": "OGC Nice",
+      "file": "ogc-nice.webp",
+      "sourcePath": "logos/France - Ligue 1/OGC Nice.png"
+    },
+    {
+      "country": "France",
+      "name": "Lille OSC",
+      "file": "lille-osc.webp",
+      "sourcePath": "logos/France - Ligue 1/LOSC Lille.png"
+    },
+    {
+      "country": "France",
+      "name": "Olympique de Marseille",
+      "file": "olympique-de-marseille.webp",
+      "sourcePath": "logos/France - Ligue 1/Olympique Marseille.png"
+    },
+    {
+      "country": "France",
+      "name": "Stade de Reims",
+      "file": "stade-de-reims.webp",
+      "sourcePath": "history/2024-25/France - Ligue 1/Stade Reims.png"
+    },
+    {
+      "country": "France",
+      "name": "Paris Saint-Germain FC",
+      "file": "paris-saint-germain-fc.webp",
+      "sourcePath": "logos/France - Ligue 1/Paris Saint-Germain.png"
+    },
+    {
+      "country": "France",
+      "name": "FC Lorient",
+      "file": "fc-lorient.webp",
+      "sourcePath": "logos/France - Ligue 1/FC Lorient.png"
+    },
+    {
+      "country": "France",
+      "name": "Stade Brestois 29",
+      "file": "stade-brestois-29.webp",
+      "sourcePath": "logos/France - Ligue 1/Stade Brestois 29.png"
+    },
+    {
+      "country": "France",
+      "name": "Racing Club de Lens",
+      "file": "racing-club-de-lens.webp",
+      "sourcePath": "logos/France - Ligue 1/RC Lens.png"
+    },
+    {
+      "country": "France",
+      "name": "Clermont Foot 63",
+      "file": "clermont-foot-63.webp",
+      "sourcePath": "history/2023-24/France - Ligue 1/Clermont Foot 63.png"
+    },
+    {
+      "country": "France",
+      "name": "AS Monaco FC",
+      "file": "as-monaco-fc.webp",
+      "sourcePath": "logos/France - Ligue 1/AS Monaco.png"
+    },
+    {
+      "country": "France",
+      "name": "FC Nantes",
+      "file": "fc-nantes.webp",
+      "sourcePath": "history/2025-26/France - Ligue 1/FC Nantes.png"
+    },
+    {
+      "country": "France",
+      "name": "Toulouse FC",
+      "file": "toulouse-fc.webp",
+      "sourcePath": "logos/France - Ligue 1/FC Toulouse.png"
+    },
+    {
+      "country": "France",
+      "name": "Montpellier HSC",
+      "file": "montpellier-hsc.webp",
+      "sourcePath": "history/2024-25/France - Ligue 1/Montpellier HSC.png"
+    },
+    {
+      "country": "France",
+      "name": "Le Havre AC",
+      "file": "le-havre-ac.webp",
+      "sourcePath": "logos/France - Ligue 1/Le Havre AC.png"
+    },
+    {
+      "country": "France",
+      "name": "Stade Rennais FC 1901",
+      "file": "stade-rennais-fc-1901.webp",
+      "sourcePath": "logos/France - Ligue 1/Stade Rennais FC.png"
+    },
+    {
+      "country": "France",
+      "name": "FC Metz",
+      "file": "fc-metz.webp",
+      "sourcePath": "history/2025-26/France - Ligue 1/FC Metz.png"
+    },
+    {
+      "country": "France",
+      "name": "RC Strasbourg Alsace",
+      "file": "rc-strasbourg-alsace.webp",
+      "sourcePath": "logos/France - Ligue 1/RC Strasbourg Alsace.png"
+    },
+    {
+      "country": "France",
+      "name": "Olympique Lyonnais",
+      "file": "olympique-lyonnais.webp",
+      "sourcePath": "logos/France - Ligue 1/Olympique Lyon.png"
+    },
+    {
+      "country": "England",
+      "name": "Burnley FC",
+      "file": "burnley-fc.webp",
+      "sourcePath": "history/2025-26/England - Premier League/Burnley FC.png"
+    },
+    {
+      "country": "England",
+      "name": "Manchester City FC",
+      "file": "manchester-city-fc.webp",
+      "sourcePath": "logos/England - Premier League/Manchester City.png"
+    },
+    {
+      "country": "England",
+      "name": "Arsenal FC",
+      "file": "arsenal-fc.webp",
+      "sourcePath": "logos/England - Premier League/Arsenal FC.png"
+    },
+    {
+      "country": "England",
+      "name": "Nottingham Forest FC",
+      "file": "nottingham-forest-fc.webp",
+      "sourcePath": "logos/England - Premier League/Nottingham Forest.png"
+    },
+    {
+      "country": "England",
+      "name": "AFC Bournemouth",
+      "file": "afc-bournemouth.webp",
+      "sourcePath": "logos/England - Premier League/AFC Bournemouth.png"
+    },
+    {
+      "country": "England",
+      "name": "West Ham United FC",
+      "file": "west-ham-united-fc.webp",
+      "sourcePath": "history/2025-26/England - Premier League/West Ham United.png"
+    },
+    {
+      "country": "England",
+      "name": "Brighton & Hove Albion FC",
+      "file": "brighton-hove-albion-fc.webp",
+      "sourcePath": "logos/England - Premier League/Brighton & Hove Albion.png"
+    },
+    {
+      "country": "England",
+      "name": "Luton Town FC",
+      "file": "luton-town-fc.webp",
+      "sourcePath": "history/2023-24/England - Premier League/Luton Town.png"
+    },
+    {
+      "country": "England",
+      "name": "Everton FC",
+      "file": "everton-fc.webp",
+      "sourcePath": "logos/England - Premier League/Everton FC.png"
+    },
+    {
+      "country": "England",
+      "name": "Fulham FC",
+      "file": "fulham-fc.webp",
+      "sourcePath": "logos/England - Premier League/Fulham FC.png"
+    },
+    {
+      "country": "England",
+      "name": "Sheffield United FC",
+      "file": "sheffield-united-fc.webp",
+      "sourcePath": "history/2023-24/England - Premier League/Sheffield United.png"
+    },
+    {
+      "country": "England",
+      "name": "Crystal Palace FC",
+      "file": "crystal-palace-fc.webp",
+      "sourcePath": "logos/England - Premier League/Crystal Palace.png"
+    },
+    {
+      "country": "England",
+      "name": "Newcastle United FC",
+      "file": "newcastle-united-fc.webp",
+      "sourcePath": "logos/England - Premier League/Newcastle United.png"
+    },
+    {
+      "country": "England",
+      "name": "Aston Villa FC",
+      "file": "aston-villa-fc.webp",
+      "sourcePath": "logos/England - Premier League/Aston Villa.png"
+    },
+    {
+      "country": "England",
+      "name": "Brentford FC",
+      "file": "brentford-fc.webp",
+      "sourcePath": "logos/England - Premier League/Brentford FC.png"
+    },
+    {
+      "country": "England",
+      "name": "Tottenham Hotspur FC",
+      "file": "tottenham-hotspur-fc.webp",
+      "sourcePath": "logos/England - Premier League/Tottenham Hotspur.png"
+    },
+    {
+      "country": "England",
+      "name": "Chelsea FC",
+      "file": "chelsea-fc.webp",
+      "sourcePath": "logos/England - Premier League/Chelsea FC.png"
+    },
+    {
+      "country": "England",
+      "name": "Liverpool FC",
+      "file": "liverpool-fc.webp",
+      "sourcePath": "logos/England - Premier League/Liverpool FC.png"
+    },
+    {
+      "country": "England",
+      "name": "Manchester United FC",
+      "file": "manchester-united-fc.webp",
+      "sourcePath": "logos/England - Premier League/Manchester United.png"
+    },
+    {
+      "country": "England",
+      "name": "Wolverhampton Wanderers FC",
+      "file": "wolverhampton-wanderers-fc.webp",
+      "sourcePath": "history/2025-26/England - Premier League/Wolverhampton Wanderers.png"
+    },
+    {
+      "country": "Germany",
+      "name": "SV Werder Bremen",
+      "file": "sv-werder-bremen.webp",
+      "sourcePath": "logos/Germany - Bundesliga/SV Werder Bremen.png"
+    },
+    {
+      "country": "Germany",
+      "name": "FC Bayern München",
+      "file": "fc-bayern-munchen.webp",
+      "sourcePath": "logos/Germany - Bundesliga/Bayern Munich.png"
+    },
+    {
+      "country": "Germany",
+      "name": "Bayer 04 Leverkusen",
+      "file": "bayer-04-leverkusen.webp",
+      "sourcePath": "logos/Germany - Bundesliga/Bayer 04 Leverkusen.png"
+    },
+    {
+      "country": "Germany",
+      "name": "RB Leipzig",
+      "file": "rb-leipzig.webp",
+      "sourcePath": "logos/Germany - Bundesliga/RB Leipzig.png"
+    },
+    {
+      "country": "Germany",
+      "name": "VfL Wolfsburg",
+      "file": "vfl-wolfsburg.webp",
+      "sourcePath": "history/2025-26/Germany - Bundesliga/VfL Wolfsburg.png"
+    },
+    {
+      "country": "Germany",
+      "name": "1. FC Heidenheim 1846",
+      "file": "1-fc-heidenheim-1846.webp",
+      "sourcePath": "history/2025-26/Germany - Bundesliga/1.FC Heidenheim 1846.png"
+    },
+    {
+      "country": "Germany",
+      "name": "TSG 1899 Hoffenheim",
+      "file": "tsg-1899-hoffenheim.webp",
+      "sourcePath": "logos/Germany - Bundesliga/TSG 1899 Hoffenheim.png"
+    },
+    {
+      "country": "Germany",
+      "name": "SC Freiburg",
+      "file": "sc-freiburg.webp",
+      "sourcePath": "logos/Germany - Bundesliga/SC Freiburg.png"
+    },
+    {
+      "country": "Germany",
+      "name": "FC Augsburg",
+      "file": "fc-augsburg.webp",
+      "sourcePath": "logos/Germany - Bundesliga/FC Augsburg.png"
+    },
+    {
+      "country": "Germany",
+      "name": "Borussia Mönchengladbach",
+      "file": "borussia-monchengladbach.webp",
+      "sourcePath": "logos/Germany - Bundesliga/Borussia Mönchengladbach.png"
+    },
+    {
+      "country": "Germany",
+      "name": "VfB Stuttgart",
+      "file": "vfb-stuttgart.webp",
+      "sourcePath": "logos/Germany - Bundesliga/VfB Stuttgart.png"
+    },
+    {
+      "country": "Germany",
+      "name": "VfL Bochum 1848",
+      "file": "vfl-bochum-1848.webp",
+      "sourcePath": "history/2024-25/Germany - Bundesliga/VfL Bochum.png"
+    },
+    {
+      "country": "Germany",
+      "name": "Borussia Dortmund",
+      "file": "borussia-dortmund.webp",
+      "sourcePath": "logos/Germany - Bundesliga/Borussia Dortmund.png"
+    },
+    {
+      "country": "Germany",
+      "name": "1. FC Köln",
+      "file": "1-fc-koln.webp",
+      "sourcePath": "logos/Germany - Bundesliga/1.FC Köln.png"
+    },
+    {
+      "country": "Germany",
+      "name": "1. FC Union Berlin",
+      "file": "1-fc-union-berlin.webp",
+      "sourcePath": "logos/Germany - Bundesliga/1.FC Union Berlin.png"
+    },
+    {
+      "country": "Germany",
+      "name": "1. FSV Mainz 05",
+      "file": "1-fsv-mainz-05.webp",
+      "sourcePath": "logos/Germany - Bundesliga/1.FSV Mainz 05.png"
+    },
+    {
+      "country": "Germany",
+      "name": "Eintracht Frankfurt",
+      "file": "eintracht-frankfurt.webp",
+      "sourcePath": "logos/Germany - Bundesliga/Eintracht Frankfurt.png"
+    },
+    {
+      "country": "Germany",
+      "name": "SV Darmstadt 98",
+      "file": "sv-darmstadt-98.webp",
+      "sourcePath": "history/2023-24/Germany - Bundesliga/SV Darmstadt 98.png"
+    },
+    {
+      "country": "Spain",
+      "name": "UD Almería",
+      "file": "ud-almeria.webp",
+      "sourcePath": "history/2023-24/Spain - LaLiga/UD Almería.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Rayo Vallecano de Madrid",
+      "file": "rayo-vallecano-de-madrid.webp",
+      "sourcePath": "logos/Spain - LaLiga/Rayo Vallecano.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Sevilla FC",
+      "file": "sevilla-fc.webp",
+      "sourcePath": "logos/Spain - LaLiga/Sevilla FC.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Valencia CF",
+      "file": "valencia-cf.webp",
+      "sourcePath": "logos/Spain - LaLiga/Valencia CF.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Real Sociedad de Fútbol",
+      "file": "real-sociedad-de-futbol.webp",
+      "sourcePath": "logos/Spain - LaLiga/Real Sociedad.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Girona FC",
+      "file": "girona-fc.webp",
+      "sourcePath": "history/2025-26/Spain - LaLiga/Girona FC.png"
+    },
+    {
+      "country": "Spain",
+      "name": "UD Las Palmas",
+      "file": "ud-las-palmas.webp",
+      "sourcePath": "history/2024-25/Spain - LaLiga/UD Las Palmas.png"
+    },
+    {
+      "country": "Spain",
+      "name": "RCD Mallorca",
+      "file": "rcd-mallorca.webp",
+      "sourcePath": "history/2025-26/Spain - LaLiga/RCD Mallorca.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Athletic Club",
+      "file": "athletic-club.webp",
+      "sourcePath": "logos/Spain - LaLiga/Athletic Bilbao.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Real Madrid CF",
+      "file": "real-madrid-cf.webp",
+      "sourcePath": "logos/Spain - LaLiga/Real Madrid.png"
+    },
+    {
+      "country": "Spain",
+      "name": "RC Celta de Vigo",
+      "file": "rc-celta-de-vigo.webp",
+      "sourcePath": "logos/Spain - LaLiga/Celta de Vigo.png"
+    },
+    {
+      "country": "Spain",
+      "name": "CA Osasuna",
+      "file": "ca-osasuna.webp",
+      "sourcePath": "logos/Spain - LaLiga/CA Osasuna.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Villarreal CF",
+      "file": "villarreal-cf.webp",
+      "sourcePath": "logos/Spain - LaLiga/Villarreal CF.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Real Betis Balompié",
+      "file": "real-betis-balompie.webp",
+      "sourcePath": "logos/Spain - LaLiga/Real Betis Balompié.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Getafe CF",
+      "file": "getafe-cf.webp",
+      "sourcePath": "logos/Spain - LaLiga/Getafe CF.png"
+    },
+    {
+      "country": "Spain",
+      "name": "FC Barcelona",
+      "file": "fc-barcelona.webp",
+      "sourcePath": "logos/Spain - LaLiga/FC Barcelona.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Cádiz CF",
+      "file": "cadiz-cf.webp",
+      "sourcePath": "history/2023-24/Spain - LaLiga/Cádiz CF.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Deportivo Alavés",
+      "file": "deportivo-alaves.webp",
+      "sourcePath": "logos/Spain - LaLiga/Deportivo Alavés.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Club Atlético de Madrid",
+      "file": "club-atletico-de-madrid.webp",
+      "sourcePath": "logos/Spain - LaLiga/Atlético de Madrid.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Granada CF",
+      "file": "granada-cf.webp",
+      "sourcePath": "history/2023-24/Spain - LaLiga/Granada CF.png"
+    },
+    {
+      "country": "Italy",
+      "name": "Empoli FC",
+      "file": "empoli-fc.webp",
+      "sourcePath": "history/2024-25/Italy - Serie A/FC Empoli.png"
+    },
+    {
+      "country": "Italy",
+      "name": "Hellas Verona FC",
+      "file": "hellas-verona-fc.webp",
+      "sourcePath": "history/2025-26/Italy - Serie A/Hellas Verona.png"
+    },
+    {
+      "country": "Italy",
+      "name": "Frosinone Calcio",
+      "file": "frosinone-calcio.webp",
+      "sourcePath": "logos/Italy - Serie A/Frosinone Calcio.png"
+    },
+    {
+      "country": "Italy",
+      "name": "SSC Napoli",
+      "file": "ssc-napoli.webp",
+      "sourcePath": "logos/Italy - Serie A/SSC Napoli.png"
+    },
+    {
+      "country": "Italy",
+      "name": "Genoa CFC",
+      "file": "genoa-cfc.webp",
+      "sourcePath": "logos/Italy - Serie A/Genoa CFC.png"
+    },
+    {
+      "country": "Italy",
+      "name": "ACF Fiorentina",
+      "file": "acf-fiorentina.webp",
+      "sourcePath": "logos/Italy - Serie A/ACF Fiorentina.png"
+    },
+    {
+      "country": "Italy",
+      "name": "FC Internazionale Milano",
+      "file": "fc-internazionale-milano.webp",
+      "sourcePath": "logos/Italy - Serie A/Inter Milan.png"
+    },
+    {
+      "country": "Italy",
+      "name": "AC Monza",
+      "file": "ac-monza.webp",
+      "sourcePath": "logos/Italy - Serie A/AC Monza.png"
+    },
+    {
+      "country": "Italy",
+      "name": "AS Roma",
+      "file": "as-roma.webp",
+      "sourcePath": "logos/Italy - Serie A/AS Roma.png"
+    },
+    {
+      "country": "Italy",
+      "name": "US Salernitana 1919",
+      "file": "us-salernitana-1919.webp",
+      "sourcePath": "history/2023-24/Italy - Serie A/US Salernitana 1919.png"
+    },
+    {
+      "country": "Italy",
+      "name": "US Sassuolo Calcio",
+      "file": "us-sassuolo-calcio.webp",
+      "sourcePath": "logos/Italy - Serie A/US Sassuolo.png"
+    },
+    {
+      "country": "Italy",
+      "name": "Atalanta BC",
+      "file": "atalanta-bc.webp",
+      "sourcePath": "logos/Italy - Serie A/Atalanta BC.png"
+    },
+    {
+      "country": "Italy",
+      "name": "US Lecce",
+      "file": "us-lecce.webp",
+      "sourcePath": "logos/Italy - Serie A/US Lecce.png"
+    },
+    {
+      "country": "Italy",
+      "name": "SS Lazio",
+      "file": "ss-lazio.webp",
+      "sourcePath": "logos/Italy - Serie A/SS Lazio.png"
+    },
+    {
+      "country": "Italy",
+      "name": "Udinese Calcio",
+      "file": "udinese-calcio.webp",
+      "sourcePath": "logos/Italy - Serie A/Udinese Calcio.png"
+    },
+    {
+      "country": "Italy",
+      "name": "Juventus FC",
+      "file": "juventus-fc.webp",
+      "sourcePath": "logos/Italy - Serie A/Juventus FC.png"
+    },
+    {
+      "country": "Italy",
+      "name": "Torino FC",
+      "file": "torino-fc.webp",
+      "sourcePath": "logos/Italy - Serie A/Torino FC.png"
+    },
+    {
+      "country": "Italy",
+      "name": "Cagliari Calcio",
+      "file": "cagliari-calcio.webp",
+      "sourcePath": "logos/Italy - Serie A/Cagliari Calcio.png"
+    },
+    {
+      "country": "Italy",
+      "name": "Bologna FC 1909",
+      "file": "bologna-fc-1909.webp",
+      "sourcePath": "logos/Italy - Serie A/Bologna FC 1909.png"
+    },
+    {
+      "country": "Italy",
+      "name": "AC Milan",
+      "file": "ac-milan.webp",
+      "sourcePath": "logos/Italy - Serie A/AC Milan.png"
+    },
+    {
+      "country": "France",
+      "name": "AS Saint-Étienne",
+      "file": "as-saint-etienne.webp",
+      "sourcePath": "history/2024-25/France - Ligue 1/AS Saint-Étienne.png"
+    },
+    {
+      "country": "France",
+      "name": "AJ Auxerre",
+      "file": "aj-auxerre.webp",
+      "sourcePath": "logos/France - Ligue 1/AJ Auxerre.png"
+    },
+    {
+      "country": "France",
+      "name": "Angers SCO",
+      "file": "angers-sco.webp",
+      "sourcePath": "logos/France - Ligue 1/Angers SCO.png"
+    },
+    {
+      "country": "England",
+      "name": "Ipswich Town FC",
+      "file": "ipswich-town-fc.webp",
+      "sourcePath": "logos/England - Premier League/Ipswich Town.png"
+    },
+    {
+      "country": "England",
+      "name": "Southampton FC",
+      "file": "southampton-fc.webp",
+      "sourcePath": "history/2024-25/England - Premier League/Southampton FC.png"
+    },
+    {
+      "country": "England",
+      "name": "Leicester City FC",
+      "file": "leicester-city-fc.webp",
+      "sourcePath": "history/2024-25/England - Premier League/Leicester City.png"
+    },
+    {
+      "country": "Germany",
+      "name": "Holstein Kiel",
+      "file": "holstein-kiel.webp",
+      "sourcePath": "history/2024-25/Germany - Bundesliga/Holstein Kiel.png"
+    },
+    {
+      "country": "Germany",
+      "name": "FC St. Pauli 1910",
+      "file": "fc-st-pauli-1910.webp",
+      "sourcePath": "history/2025-26/Germany - Bundesliga/FC St. Pauli.png"
+    },
+    {
+      "country": "Spain",
+      "name": "CD Leganés",
+      "file": "cd-leganes.webp",
+      "sourcePath": "history/2024-25/Spain - LaLiga/CD Leganés.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Real Valladolid CF",
+      "file": "real-valladolid-cf.webp",
+      "sourcePath": "history/2024-25/Spain - LaLiga/Real Valladolid CF.png"
+    },
+    {
+      "country": "Spain",
+      "name": "RCD Espanyol de Barcelona",
+      "file": "rcd-espanyol-de-barcelona.webp",
+      "sourcePath": "logos/Spain - LaLiga/RCD Espanyol Barcelona.png"
+    },
+    {
+      "country": "Italy",
+      "name": "Parma Calcio 1913",
+      "file": "parma-calcio-1913.webp",
+      "sourcePath": "logos/Italy - Serie A/Parma Calcio 1913.png"
+    },
+    {
+      "country": "Italy",
+      "name": "Venezia FC",
+      "file": "venezia-fc.webp",
+      "sourcePath": "logos/Italy - Serie A/Venezia FC.png"
+    },
+    {
+      "country": "Italy",
+      "name": "Como 1907",
+      "file": "como-1907.webp",
+      "sourcePath": "logos/Italy - Serie A/Como 1907.png"
+    },
+    {
+      "country": "France",
+      "name": "Paris FC",
+      "file": "paris-fc.webp",
+      "sourcePath": "logos/France - Ligue 1/Paris FC.png"
+    },
+    {
+      "country": "England",
+      "name": "Sunderland AFC",
+      "file": "sunderland-afc.webp",
+      "sourcePath": "logos/England - Premier League/Sunderland AFC.png"
+    },
+    {
+      "country": "England",
+      "name": "Leeds United FC",
+      "file": "leeds-united-fc.webp",
+      "sourcePath": "logos/England - Premier League/Leeds United.png"
+    },
+    {
+      "country": "Germany",
+      "name": "Hamburger SV",
+      "file": "hamburger-sv.webp",
+      "sourcePath": "logos/Germany - Bundesliga/Hamburger SV.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Real Oviedo",
+      "file": "real-oviedo.webp",
+      "sourcePath": "history/2025-26/Spain - LaLiga/Real Oviedo.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Levante UD",
+      "file": "levante-ud.webp",
+      "sourcePath": "logos/Spain - LaLiga/Levante UD.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Elche CF",
+      "file": "elche-cf.webp",
+      "sourcePath": "logos/Spain - LaLiga/Elche CF.png"
+    },
+    {
+      "country": "Italy",
+      "name": "US Cremonese",
+      "file": "us-cremonese.webp",
+      "sourcePath": "history/2025-26/Italy - Serie A/US Cremonese.png"
+    },
+    {
+      "country": "Italy",
+      "name": "AC Pisa 1909",
+      "file": "ac-pisa-1909.webp",
+      "sourcePath": "history/2025-26/Italy - Serie A/Pisa Sporting Club.png"
+    },
+    {
+      "country": "France",
+      "name": "Le Mans FC",
+      "file": "le-mans-fc.webp",
+      "sourcePath": "logos/France - Ligue 1/Le Mans FC.png"
+    },
+    {
+      "country": "France",
+      "name": "ES Troyes AC",
+      "file": "es-troyes-ac.webp",
+      "sourcePath": "logos/France - Ligue 1/ESTAC Troyes.png"
+    },
+    {
+      "country": "England",
+      "name": "Coventry City FC",
+      "file": "coventry-city-fc.webp",
+      "sourcePath": "logos/England - Premier League/Coventry City.png"
+    },
+    {
+      "country": "England",
+      "name": "Hull City AFC",
+      "file": "hull-city-afc.webp",
+      "sourcePath": "logos/England - Premier League/Hull City.png"
+    },
+    {
+      "country": "Germany",
+      "name": "SC Paderborn 07",
+      "file": "sc-paderborn-07.webp",
+      "sourcePath": "logos/Germany - Bundesliga/SC Paderborn 07.png"
+    },
+    {
+      "country": "Germany",
+      "name": "SV 07 Elversberg",
+      "file": "sv-07-elversberg.webp",
+      "sourcePath": "logos/Germany - Bundesliga/SV 07 Elversberg.png"
+    },
+    {
+      "country": "Germany",
+      "name": "FC Schalke 04",
+      "file": "fc-schalke-04.webp",
+      "sourcePath": "logos/Germany - Bundesliga/FC Schalke 04.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Real Racing Club de Santander",
+      "file": "real-racing-club-de-santander.webp",
+      "sourcePath": "logos/Spain - LaLiga/Racing Santander.png"
+    },
+    {
+      "country": "Spain",
+      "name": "RC Deportivo La Coruña",
+      "file": "rc-deportivo-la-coruna.webp",
+      "sourcePath": "logos/Spain - LaLiga/Deportivo A Coruña.png"
+    },
+    {
+      "country": "Spain",
+      "name": "Málaga CF",
+      "file": "malaga-cf.webp",
+      "sourcePath": "logos/Spain - LaLiga/Málaga CF.png"
+    }
+  ]
+}

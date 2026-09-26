@@ -1,0 +1,46 @@
+{
+  "measuredAt": "2026-09-20T19:57:31.842Z",
+  "scope": "Serialized component props, not network timing or Core Web Vitals",
+  "catalogue": {
+    "teams": 129,
+    "matches": 7008,
+    "competitions": 5
+  },
+  "rows": [
+    {
+      "path": "/recherche",
+      "beforePropsBytes": 3948737,
+      "afterPropsBytes": 7268
+    },
+    {
+      "path": "/favoris",
+      "beforePropsBytes": 3948737,
+      "afterPropsBytes": 251
+    },
+    {
+      "path": "/competition/ligue-1",
+      "beforePropsBytes": 717506,
+      "afterPropsBytes": 17507
+    },
+    {
+      "path": "/competition/premier-league",
+      "beforePropsBytes": 882383,
+      "afterPropsBytes": 18444
+    },
+    {
+      "path": "/competition/bundesliga",
+      "beforePropsBytes": 717503,
+      "afterPropsBytes": 17533
+    },
+    {
+      "path": "/competition/la-liga",
+      "beforePropsBytes": 882689,
+      "afterPropsBytes": 18529
+    },
+    {
+      "path": "/competition/serie-a",
+      "beforePropsBytes": 882700,
+      "afterPropsBytes": 18206
+    }
+  ]
+}

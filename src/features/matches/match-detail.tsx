@@ -1,0 +1,562 @@
+'use client';
+import Link from 'next/link';
+import { ArrowLeft, MapPin, ShieldCheck, Sparkles, UserRound } from 'lucide-react';
+import type { Dataset, Match, Prediction } from '@/types/football';
+import { Empty, Form, Metric, ProbabilityBar, SectionTitle, TeamBadge } from '@/components/ui';
+import { SourceBanner } from '@/components/source-banner';
+import { FavoriteButton } from '@/features/favorites';
+import { dayLabel, number, percent, time } from '@/lib/format';
+import { playerWatch } from '@/prediction-engine/player';
+import { MatchList } from './match-list';
+import { PlayerPerformances } from './player-performances';
+import { teamSummary } from '@/services/statistics';
+import { useLive } from './use-live';
+import { LocalTime } from '@/components/local-time';
+import { ShareButton } from '@/components/share-button';
+import { probabilityPercentages } from '@/lib/probability-format';
+import { Breadcrumbs } from '@/components/breadcrumbs';
+import { MatchOverview } from './match-overview';
+const tabs = [
+  ['apercu', 'Aperçu'],
+  ['prediction', 'Prédiction'],
+  ['statistiques', 'Statistiques'],
+  ['compositions', 'Compositions'],
+  ['evenements', 'Événements'],
+  ['h2h', 'Face-à-face'],
+  ['joueurs', 'Joueurs'],
+];
+export function MatchDetail({
+  data,
+  match: initialMatch,
+  prediction,
+  tab,
+  history = [],
+}: {
+  data: Dataset;
+  match: Match;
+  prediction?: Prediction;
+  tab: string;
+  history?: Prediction[];
+}) {
+  const live = useLive([initialMatch], true);
+  const match = live.matches[0];
+  const home = data.teams.find((t) => t.id === match.homeId)!,
+    away = data.teams.find((t) => t.id === match.awayId)!,
+    comp = data.competitions.find((c) => c.id === match.competitionId)!;
+  const h2h = data.matches
+    .filter(
+      (m) =>
+        m.id !== match.id &&
+        m.status === 'finished' &&
+        new Date(m.kickoff) < new Date(match.kickoff) &&
+        ((m.homeId === home.id && m.awayId === away.id) ||
+          (m.homeId === away.id && m.awayId === home.id)),
+    )
+    .sort((a, b) => b.kickoff.localeCompare(a.kickoff))
+    .slice(0, 10);
+  const watched = data.players
+    .filter((p) => [home.id, away.id].includes(p.teamId))
+    .map((p) => ({ player: p, score: playerWatch(p) }))
+    .filter((p) => p.score !== null)
+    .sort((a, b) => b.score! - a.score!)
+    .slice(0, 5);
+  return (
+    <div className="page">
+      <SourceBanner data={data} />
+      <Breadcrumbs
+        items={[
+          { name: 'Matchs', href: '/matchs' },
+          { name: `${home.short} – ${away.short}`, href: `/match/${match.slug}` },
+        ]}
+        real={data.source !== 'demo'}
+      />
+      <Link href="/matchs" className="text-link">
+        <ArrowLeft size={14} /> Tous les matchs
+      </Link>
+      <section className="card match-hero">
+        <div className="match-meta">
+          <Link href={`/competition/${comp.slug}`}>
+            {comp.flag} {comp.name}
+          </Link>{' '}
+          · {match.round} · {dayLabel(match.kickoff)}
+        </div>
+        <div className="match-headline">
+          <Link href={`/equipe/${home.slug}`}>
+            <TeamBadge team={home} size={75} />
+            <h1 className="sr-only">
+              {home.name} – {away.name}
+            </h1>
+            <h2>{home.name}</h2>
+            <Form values={teamSummary(data, home.id, match.kickoff).form} />
+          </Link>
+          <div className="score-block">
+            <span className={match.status === 'live' ? 'live-label' : 'muted'}>
+              {match.status === 'live' ? (
+                `${match.phase === 'halftime' ? 'Mi-temps' : `${match.minute ?? ''}′`} · ${data.source === 'demo' ? 'Direct simulé' : 'En direct'}`
+              ) : match.status === 'finished' ? (
+                'Terminé'
+              ) : match.status === 'postponed' ? (
+                'Reporté'
+              ) : match.status === 'cancelled' || match.status === 'abandoned' ? (
+                match.status === 'abandoned' ? (
+                  'Abandonné'
+                ) : (
+                  'Annulé'
+                )
+              ) : (
+                <LocalTime iso={match.kickoff} known={match.kickoffKnown} />
+              )}
+            </span>
+            <strong>
+              {match.homeScore ?? '–'} <span>:</span> {match.awayScore ?? '–'}
+            </strong>
+            <FavoriteButton id={`match:${match.id}`} label={`${home.short} – ${away.short}`} />
+          </div>
+          <Link href={`/equipe/${away.slug}`}>
+            <TeamBadge team={away} size={75} />
+            <h2>{away.name}</h2>
+            <Form values={teamSummary(data, away.id, match.kickoff).form} />
+          </Link>
+        </div>
+        <div className="venue-meta">
+          <span>
+            <MapPin size={13} />
+            {match.venue ?? 'Stade non disponible'}
+          </span>
+          <span>
+            <UserRound size={13} />
+            {match.referee ?? 'Arbitre non disponible'}
+          </span>
+        </div>
+        <nav className="detail-tabs" aria-label="Rubriques du match">
+          {tabs.map(([id, label]) => (
+            <Link
+              key={id}
+              href={`/match/${match.slug}?onglet=${id}`}
+              className={tab === id ? 'active' : ''}
+              aria-current={tab === id ? 'page' : undefined}
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
+      </section>
+      <ShareButton path={`/match/${match.slug}`} title={`${home.name} – ${away.name}`} />
+      {match.source !== 'demo' && (
+        <p className="data-note">
+          Calendrier / résultats :{' '}
+          {match.provenance?.schedule === 'openfootball' || match.source === 'openfootball'
+            ? 'OpenFootball'
+            : 'API-Football'}
+          .{' '}
+          {match.provenance?.details
+            ? 'Enrichissement : API-Football.'
+            : 'Statistiques avancées indisponibles sans enrichissement.'}
+        </p>
+      )}
+      {live.error && (
+        <p className="warning" role="status">
+          Actualisation indisponible : les dernières données reçues sont conservées.
+        </p>
+      )}
+      {tab === 'apercu' && <MatchOverview data={data} match={match} />}
+      {tab === 'prediction' && (
+        <details className="card advanced-panel prediction-history">
+          <summary>Historique des probabilités</summary>
+          {history.length ? (
+            <ol>
+              {history.map((p) => (
+                <li key={p.id}>
+                  <span>
+                    {dayLabel(p.createdAt)} · {time(p.createdAt)} ·{' '}
+                    {p.lineupConfirmed ? 'Compositions disponibles' : 'Avant-match'} · {p.version}
+                  </span>
+                  <ProbabilityBar {...p} />
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="data-note">
+              Aucun historique de prédictions publiées disponible. Une courbe ne sera affichée qu’à
+              partir de véritables instantanés enregistrés avant le match.
+            </p>
+          )}
+        </details>
+      )}
+      {(tab === 'prediction' || tab === 'apercu') && (
+        <div className="detail-columns">
+          <div>
+            <SectionTitle title="La lecture du modèle" eyebrow="PROJECTIONS STATISTIQUES" />
+            {prediction ? (
+              <section className="card prediction-detail">
+                <div className="prediction-title">
+                  <Sparkles size={18} />
+                  <h3>Probabilités de résultat</h3>
+                  <span className="version-badge">{prediction.version}</span>
+                </div>
+                <div className="prob-big-labels">
+                  <span>
+                    {home.short}
+                    <b>
+                      {probabilityPercentages(prediction.home, prediction.draw, prediction.away)[0]}{' '}
+                      %
+                    </b>
+                  </span>
+                  <span>
+                    Match nul
+                    <b>
+                      {probabilityPercentages(prediction.home, prediction.draw, prediction.away)[1]}{' '}
+                      %
+                    </b>
+                  </span>
+                  <span>
+                    {away.short}
+                    <b>
+                      {probabilityPercentages(prediction.home, prediction.draw, prediction.away)[2]}{' '}
+                      %
+                    </b>
+                  </span>
+                </div>
+                <ProbabilityBar {...prediction} labels={false} />
+                <div className="metrics three">
+                  <Metric
+                    label="Buts attendus · domicile"
+                    value={number(prediction.expectedHome, 2)}
+                  />
+                  <Metric
+                    label="Score le plus plausible"
+                    value={prediction.likelyScore}
+                    note={`${percent(prediction.scores[0].probability)} de probabilité`}
+                  />
+                  <Metric
+                    label="Buts attendus · extérieur"
+                    value={number(prediction.expectedAway, 2)}
+                  />
+                </div>
+                <div className="quality-info">
+                  <ShieldCheck size={20} />
+                  <div>
+                    <strong>Qualité des informations : {prediction.confidence}/100</strong>
+                    <p>
+                      Échantillon minimal : {prediction.sample} matchs par équipe. Ce score ne
+                      mesure pas la probabilité du résultat.
+                    </p>
+                  </div>
+                </div>
+                <details className="advanced-panel">
+                  <summary>Pourquoi cette prédiction ?</summary>
+                  {prediction.factors.map((f) => (
+                    <div className="factor" key={f.label}>
+                      <strong>{f.label}</strong>
+                      <p>{f.detail}</p>
+                    </div>
+                  ))}
+                </details>
+                <p className="data-note">
+                  {data.source === 'demo'
+                    ? 'Calcul illustratif sur données fictives ; les rencontres déjà commencées sont des reconstitutions, pas des prédictions archivées avant match.'
+                    : `Prédiction enregistrée le ${new Date(prediction.createdAt).toLocaleString('fr-FR')}.`}
+                  {prediction.lineupConfirmed &&
+                    ' Compositions officielles disponibles lors du calcul ; elles affectent la qualité des informations, sans ajustement de force dans la v1.'}
+                </p>
+                <Link href="/methodologie" className="text-link">
+                  Lire la méthodologie et les limites →
+                </Link>
+              </section>
+            ) : (
+              <div className="card">
+                <Empty text="Au moins cinq rencontres historiques par équipe sont nécessaires. Aucune projection pré-match archivée n’est disponible." />
+              </div>
+            )}
+            {tab === 'prediction' && prediction && (
+              <>
+                <SectionTitle title="Projections complémentaires" />
+                <div className="metrics three">
+                  <Metric
+                    label="Total de buts attendu"
+                    value={number(prediction.expectedHome + prediction.expectedAway, 2)}
+                  />
+                  <Metric
+                    label={`Clean sheet · ${home.short}`}
+                    value={percent(prediction.cleanHome)}
+                  />
+                  <Metric
+                    label={`Clean sheet · ${away.short}`}
+                    value={percent(prediction.cleanAway)}
+                  />
+                </div>
+                <div
+                  className="card data-table"
+                  tabIndex={0}
+                  role="region"
+                  aria-label="Tableau de statistiques"
+                >
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Indicateur projeté</th>
+                        <th>{home.short}</th>
+                        <th>{away.short}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {['Possession', 'Tirs', 'Tirs cadrés', 'Corners', 'Cartons'].map((label) => (
+                        <tr key={label}>
+                          <th>{label}</th>
+                          <td colSpan={2}>Données insuffisantes</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <SectionTitle title="Les scores les plus plausibles" />
+                <div className="score-projections">
+                  {prediction.scores.map((s) => (
+                    <div className="card" key={`${s.home}-${s.away}`}>
+                      <strong>
+                        {s.home}–{s.away}
+                      </strong>
+                      <span>{percent(s.probability)}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+          <aside>
+            <SectionTitle title="Joueurs à suivre" />
+            <section className="card padded">
+              <p className="data-note">
+                Indice heuristique sur les statistiques disponibles et la part de titularisations.
+                Ce classement n’est pas une probabilité de devenir homme du match.
+              </p>
+              {watched.length ? (
+                watched.map(({ player: p, score }, i) => (
+                  <Link href={`/joueur/${p.slug}`} className="player-ranking" key={p.id}>
+                    <span className="rank-index">{i + 1}</span>
+                    <span>
+                      <strong>{p.name}</strong>
+                      <small>{p.position}</small>
+                    </span>
+                    <b>
+                      {score}
+                      <small>/100</small>
+                    </b>
+                  </Link>
+                ))
+              ) : (
+                <Empty />
+              )}
+            </section>
+            <SectionTitle title="Absences signalées" />
+            <section className="card padded">
+              {data.injuries.filter((i) => [home.id, away.id].includes(i.teamId)).length ? (
+                data.injuries
+                  .filter((i) => [home.id, away.id].includes(i.teamId))
+                  .map((i) => (
+                    <div className="factor" key={i.id}>
+                      <strong>
+                        {data.players.find((p) => p.id === i.playerId)?.name ??
+                          'Joueur non disponible'}
+                      </strong>
+                      <p>
+                        {i.reason} · {i.status}
+                      </p>
+                    </div>
+                  ))
+              ) : (
+                <p className="data-note">
+                  Non disponible. L’absence de signalement ne signifie pas l’absence de blessure.
+                </p>
+              )}
+            </section>
+          </aside>
+        </div>
+      )}
+      {tab === 'statistiques' && (
+        <>
+          <SectionTitle title="Le match en chiffres" />
+          {match.statistics.some((s) => s.home !== null || s.away !== null) ? (
+            <section className="card stat-comparison">
+              {match.statistics.map((s) => (
+                <div className="stat-compare-row" key={s.label}>
+                  <div>
+                    <b>
+                      {number(s.home, 2)}
+                      {s.home !== null ? s.unit : ''}
+                    </b>
+                    <span>{s.label}</span>
+                    <b>
+                      {number(s.away, 2)}
+                      {s.away !== null ? s.unit : ''}
+                    </b>
+                  </div>
+                  {s.home !== null && s.away !== null && (
+                    <div className="compare-bar">
+                      <span
+                        style={{
+                          width: `${(s.home + s.away ? s.home / (s.home + s.away) : 0.5) * 100}%`,
+                        }}
+                      />
+                      <span
+                        style={{
+                          width: `${(s.home + s.away ? s.away / (s.home + s.away) : 0.5) * 100}%`,
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </section>
+          ) : (
+            <div className="card">
+              <Empty text="Les statistiques seront affichées lorsqu’elles seront fournies après le coup d’envoi." />
+            </div>
+          )}
+        </>
+      )}
+      {tab === 'compositions' && (
+        <>
+          <SectionTitle title="Les forces en présence" />
+          {match.lineups.length ? (
+            <div className="lineup-grid">
+              {match.lineups.map((l) => (
+                <section key={l.teamId} className="card lineup-card">
+                  <div className="section-title">
+                    <h2>{data.teams.find((t) => t.id === l.teamId)?.name}</h2>
+                    <span className="tag">
+                      {l.formation} · {l.confirmed ? 'Officielle' : 'Probable'}
+                    </span>
+                  </div>
+                  <p className="data-note">
+                    {data.source === 'demo' ? 'Composition fictive · ' : ''}Coach :{' '}
+                    {l.coach ?? 'Non disponible'}
+                  </p>
+                  <div className="pitch">
+                    <div className="pitch-circle" />
+                    {[...new Set(l.starters.map((p) => p.row))]
+                      .sort((a, b) => b - a)
+                      .map((row) => (
+                        <div className="pitch-row" key={row}>
+                          {l.starters
+                            .filter((p) => p.row === row)
+                            .sort((a, b) => a.column - b.column)
+                            .map((p) => (
+                              <div key={p.id}>
+                                {data.players.find((player) => player.id === p.id) ? (
+                                  <Link
+                                    href={`/joueur/${data.players.find((player) => player.id === p.id)!.slug}`}
+                                  >
+                                    <span>{p.number ?? '–'}</span>
+                                    <small>{p.name}</small>
+                                  </Link>
+                                ) : (
+                                  <>
+                                    <span>{p.number ?? '–'}</span>
+                                    <small>{p.name}</small>
+                                  </>
+                                )}
+                              </div>
+                            ))}
+                        </div>
+                      ))}
+                  </div>
+                  <h3>Remplaçants</h3>
+                  {l.substitutes.map((p) => (
+                    <div className="bench-player" key={p.id}>
+                      <span>{p.number ?? '–'}</span>
+                      {p.name}
+                    </div>
+                  ))}
+                </section>
+              ))}
+            </div>
+          ) : (
+            <div className="card">
+              <Empty text="Les compositions n’ont pas encore été publiées par la source." />
+            </div>
+          )}
+        </>
+      )}
+      {tab === 'evenements' && (
+        <>
+          <SectionTitle title="Le fil de la rencontre" />
+          {match.events.length ? (
+            <section className="card timeline">
+              {[...match.events].reverse().map((e, i) => (
+                <div key={i} className="timeline-event">
+                  <strong>
+                    {e.minute}
+                    {e.extra ? `+${e.extra}` : ''}′
+                  </strong>
+                  <span className={`event-symbol event-${e.type}`}>
+                    {e.type === 'goal'
+                      ? '⚽'
+                      : e.type === 'yellow'
+                        ? '🟨'
+                        : e.type === 'red'
+                          ? '🟥'
+                          : e.type === 'substitution'
+                            ? '↔'
+                            : 'VAR'}
+                  </span>
+                  <div>
+                    <b>{e.player}</b>
+                    <small>
+                      {data.teams.find((t) => t.id === e.teamId)?.name}
+                      {e.assist
+                        ? ` · ${e.type === 'substitution' ? 'Remplacé par' : 'Passe'} : ${e.assist}`
+                        : ''}
+                    </small>
+                    {e.detail && <small>{e.detail}</small>}
+                  </div>
+                </div>
+              ))}
+            </section>
+          ) : (
+            <div className="card">
+              <Empty text="Aucun événement disponible pour cette rencontre." />
+            </div>
+          )}
+        </>
+      )}
+      {tab === 'joueurs' && <PlayerPerformances match={match} data={data} />}{' '}
+      {tab === 'h2h' && (
+        <>
+          <SectionTitle title="Confrontations directes" eyebrow="LES 10 DERNIÈRES DISPONIBLES" />
+          <p className="data-note">
+            Uniquement les rencontres antérieures à ce match. La v1 n’ajoute pas de poids spécifique
+            aux confrontations directes.
+          </p>
+          {h2h.length ? (
+            <>
+              <div className="metrics three">
+                <Metric label="Confrontations" value={h2h.length} />
+                <Metric
+                  label="Total de buts"
+                  value={h2h.reduce((s, m) => s + (m.homeScore ?? 0) + (m.awayScore ?? 0), 0)}
+                />
+                <Metric
+                  label="Buts par rencontre"
+                  value={number(
+                    h2h.reduce((s, m) => s + (m.homeScore ?? 0) + (m.awayScore ?? 0), 0) /
+                      h2h.length,
+                    2,
+                  )}
+                />
+              </div>
+              <MatchList
+                matches={h2h}
+                teams={data.teams}
+                competitions={data.competitions}
+                predictions={{}}
+              />
+            </>
+          ) : (
+            <Empty />
+          )}
+        </>
+      )}
+    </div>
+  );
+}

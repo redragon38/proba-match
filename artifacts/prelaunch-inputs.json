@@ -1,0 +1,80 @@
+{
+  "at": "2026-09-21T07:00:06.450Z",
+  "checks": [
+    {
+      "path": "/equipes?page=2",
+      "expected": 308,
+      "status": 308,
+      "pass": true
+    },
+    {
+      "check": "www canonical redirect retains path/query",
+      "location": "https://probamatch.com/equipes?page=2",
+      "pass": true
+    },
+    {
+      "path": "/api/search?q=",
+      "expected": 200,
+      "status": 200,
+      "pass": true,
+      "contentType": "application/json"
+    },
+    {
+      "path": "/api/search?q=Paris",
+      "expected": 200,
+      "status": 200,
+      "pass": true,
+      "contentType": "application/json"
+    },
+    {
+      "path": "/api/search?q=%C3%89quipe%20introuvable",
+      "expected": 200,
+      "status": 200,
+      "pass": true,
+      "contentType": "application/json"
+    },
+    {
+      "path": "/api/search?q='%20OR%201%3D1--",
+      "expected": 200,
+      "status": 200,
+      "pass": true,
+      "contentType": "application/json"
+    },
+    {
+      "path": "/api/search?q=%3Csvg%2Fonload%3Dalert(1)%3E",
+      "expected": 200,
+      "status": 200,
+      "pass": true,
+      "contentType": "application/json"
+    },
+    {
+      "path": "/api/search",
+      "expected": 400,
+      "status": 400,
+      "pass": true,
+      "contentType": "application/json"
+    },
+    {
+      "path": "/api/search",
+      "expected": 400,
+      "status": 400,
+      "pass": true,
+      "contentType": "application/json"
+    },
+    {
+      "path": "/api/search",
+      "expected": 415,
+      "status": 415,
+      "pass": true,
+      "contentType": "application/json"
+    },
+    {
+      "path": "/api/search",
+      "expected": 413,
+      "status": 413,
+      "pass": true,
+      "contentType": "application/json"
+    }
+  ],
+  "redirectMethod": "Native node:http with explicit Host; initial fetch attempt did not apply the Host override and was not a valid redirect probe."
+}

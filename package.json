@@ -1,0 +1,61 @@
+{
+  "name": "match-score",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:dev": "prisma migrate dev",
+    "backtest": "tsx scripts/backtest.ts",
+    "sync": "tsx scripts/sync.ts",
+    "backfill": "tsx scripts/backfill.ts",
+    "check": "npm run typecheck && npm run lint && npm test && npm run build",
+    "test:visual": "node scripts/visual-check.mjs",
+    "test:seo": "node scripts/verify-seo.mjs",
+    "test:product": "node scripts/verify-product-ui.mjs",
+    "football:import": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts import",
+    "football:sync": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts sync",
+    "football:rebuild-elo": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts elo",
+    "football:validate": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts validate",
+    "football:worker": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football-worker.ts",
+    "test:football-db": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/verify-football-db.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.0",
+    "lucide-react": "^0.577.0",
+    "next": "^16.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "server-only": "^0.0.1",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@electric-sql/pglite": "^0.5.8",
+    "@playwright/test": "^1.58.0",
+    "@tailwindcss/postcss": "^4.2.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "eslint": "^9.39.0",
+    "eslint-config-next": "^16.2.0",
+    "prettier": "^3.7.0",
+    "prisma": "^6.19.0",
+    "tailwindcss": "^4.2.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.0",
+    "vitest": "^4.0.0"
+  },
+  "overrides": {
+    "deepmerge-ts": "^8.0.0"
+  },
+  "type": "module"
+}

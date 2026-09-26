@@ -1,0 +1,480 @@
+{
+  "before": {
+    "checkedAt": "2026-09-26T11:11:45.756Z",
+    "sources": [
+      {
+        "id": "openfootball:en.1:2026",
+        "lastSyncedAt": "2026-09-21T06:58:50.914Z",
+        "contentHash": "ce34ad5440bca6b19679aa23b4feeb6c8150db1eb0774a4dc0e22624cd85cbc6",
+        "payload": {
+          "teams": 20,
+          "season": 2026,
+          "matches": 380,
+          "competitionId": "ffeca48c-526a-496d-a350-61678e11e082"
+        }
+      },
+      {
+        "id": "openfootball:de.1:2026",
+        "lastSyncedAt": "2026-09-21T06:58:51.123Z",
+        "contentHash": "37d07e608a968c1f9102aa2f99da1b92ad31eaff5293fcf22728de7ebd45f66d",
+        "payload": {
+          "teams": 18,
+          "season": 2026,
+          "matches": 306,
+          "competitionId": "1702cfa1-8244-474d-9492-60caf92f5855"
+        }
+      },
+      {
+        "id": "openfootball:es.1:2026",
+        "lastSyncedAt": "2026-09-21T06:58:51.300Z",
+        "contentHash": "79f9586d4708a8db42eb5bbcf566bc1d3d32eb90e75de3e7d05ed817c85c9ed1",
+        "payload": {
+          "teams": 20,
+          "season": 2026,
+          "matches": 380,
+          "competitionId": "b30d527a-3240-4ab8-8d30-81789e93789e"
+        }
+      },
+      {
+        "id": "openfootball:it.1:2026",
+        "lastSyncedAt": "2026-09-21T06:58:51.498Z",
+        "contentHash": "8cce46f221c0daa0962635bc4faf0a410e794d8bdfa9f4acb0e0e076b2373347",
+        "payload": {
+          "teams": 20,
+          "season": 2026,
+          "matches": 380,
+          "competitionId": "41f3e6f2-8b77-45d7-9f09-704a649a2654"
+        }
+      },
+      {
+        "id": "openfootball:fr.1:2026",
+        "lastSyncedAt": "2026-09-21T06:58:50.709Z",
+        "contentHash": "3f835c3c0cf9c2dbdeba7fca946a417545404f8c3ba0d97141ce18448769ad6f",
+        "payload": {
+          "teams": 18,
+          "season": 2026,
+          "matches": 306,
+          "competitionId": "e8572851-255c-40bc-8ba8-a7fa5fc910c8"
+        }
+      }
+    ],
+    "revision": "2026-09-21T06:58:53.032Z",
+    "updatedAt": "2026-09-21T06:58:51.499Z",
+    "locks": 0,
+    "attempt": {
+      "id": "cmuaw9fbn0000u50s35om7ikl",
+      "startedAt": "2026-09-21T06:58:49.427Z",
+      "finishedAt": "2026-09-21T06:59:04.256Z",
+      "status": "success",
+      "requests": 5,
+      "matches": 0,
+      "errorCode": null,
+      "provider": "openfootball"
+    },
+    "success": {
+      "id": "cmuaw9fbn0000u50s35om7ikl",
+      "startedAt": "2026-09-21T06:58:49.427Z",
+      "finishedAt": "2026-09-21T06:59:04.256Z",
+      "status": "success",
+      "requests": 5,
+      "matches": 0,
+      "errorCode": null,
+      "provider": "openfootball"
+    },
+    "failure": {
+      "id": "cmu8j0hx00001u5gw0kago27c",
+      "startedAt": "2026-09-19T15:12:25.525Z",
+      "finishedAt": "2026-09-19T15:13:01.877Z",
+      "status": "failed",
+      "requests": 0,
+      "matches": 0,
+      "errorCode": "SYNC_FAILED",
+      "provider": "openfootball"
+    },
+    "worker": {
+      "pid": 2620,
+      "nextOpen": "2026-09-21T12:59:04.263Z",
+      "checkedAt": "2026-09-21T07:32:49.461Z",
+      "intervalSeconds": 60,
+      "secondaryStatus": "disabled"
+    },
+    "matchCount": 7008
+  },
+  "after": {
+    "checkedAt": "2026-09-26T11:17:54.641Z",
+    "sources": [
+      {
+        "id": "openfootball:en.1:2026",
+        "lastSyncedAt": "2026-09-26T11:15:05.216Z",
+        "contentHash": "bb91f0ab3e8359df163bb9ec98549bfed85e200dd4c32f3bd606b5890d932dd2",
+        "payload": {
+          "teams": 20,
+          "season": 2026,
+          "matches": 380,
+          "competitionId": "ffeca48c-526a-496d-a350-61678e11e082"
+        }
+      },
+      {
+        "id": "openfootball:de.1:2026",
+        "lastSyncedAt": "2026-09-26T11:15:25.013Z",
+        "contentHash": "07fab65d4a1de8ce4c8472da9ccf4d1d2b145ecd5abdc5b6d4250a5c119d7681",
+        "payload": {
+          "teams": 18,
+          "season": 2026,
+          "matches": 306,
+          "competitionId": "1702cfa1-8244-474d-9492-60caf92f5855"
+        }
+      },
+      {
+        "id": "openfootball:es.1:2026",
+        "lastSyncedAt": "2026-09-26T11:15:37.067Z",
+        "contentHash": "4b1a9906e3f2b279a1f25497a38f2f58e21ec19ea726b882fa646da7c07bc0e0",
+        "payload": {
+          "teams": 20,
+          "season": 2026,
+          "matches": 380,
+          "competitionId": "b30d527a-3240-4ab8-8d30-81789e93789e"
+        }
+      },
+      {
+        "id": "openfootball:it.1:2026",
+        "lastSyncedAt": "2026-09-26T11:15:49.551Z",
+        "contentHash": "721a6c220fecb8208287e41401fa2fce652cd23765ce58a39bf98cdaa3d528ad",
+        "payload": {
+          "teams": 20,
+          "season": 2026,
+          "matches": 380,
+          "competitionId": "41f3e6f2-8b77-45d7-9f09-704a649a2654"
+        }
+      },
+      {
+        "id": "openfootball:fr.1:2026",
+        "lastSyncedAt": "2026-09-26T11:14:55.267Z",
+        "contentHash": "f875275f835e378fc8c4e7d48c7a2f327e7d426237bd057fe652fd47f30b5a4f",
+        "payload": {
+          "teams": 18,
+          "season": 2026,
+          "matches": 306,
+          "competitionId": "e8572851-255c-40bc-8ba8-a7fa5fc910c8"
+        }
+      }
+    ],
+    "revision": "2026-09-26T11:15:52.209Z",
+    "updatedAt": "2026-09-26T11:15:49.565Z",
+    "locks": 0,
+    "attempt": {
+      "id": "cmuialuih0000u5hw5law3nrd",
+      "startedAt": "2026-09-26T11:14:46.841Z",
+      "finishedAt": "2026-09-26T11:16:48.652Z",
+      "status": "success",
+      "requests": 5,
+      "matches": 1752,
+      "errorCode": null,
+      "provider": "openfootball"
+    },
+    "success": {
+      "id": "cmuialuih0000u5hw5law3nrd",
+      "startedAt": "2026-09-26T11:14:46.841Z",
+      "finishedAt": "2026-09-26T11:16:48.652Z",
+      "status": "success",
+      "requests": 5,
+      "matches": 1752,
+      "errorCode": null,
+      "provider": "openfootball"
+    },
+    "failure": {
+      "id": "cmu8j0hx00001u5gw0kago27c",
+      "startedAt": "2026-09-19T15:12:25.525Z",
+      "finishedAt": "2026-09-19T15:13:01.877Z",
+      "status": "failed",
+      "requests": 0,
+      "matches": 0,
+      "errorCode": "SYNC_FAILED",
+      "provider": "openfootball"
+    },
+    "worker": {
+      "pid": 23972,
+      "cycle": 3,
+      "nextOpen": "2026-09-26T17:14:55.267Z",
+      "checkedAt": "2026-09-26T11:17:49.163Z",
+      "openStatus": "success",
+      "intervalSeconds": 60,
+      "secondaryStatus": "disabled"
+    },
+    "matchCount": 7008
+  },
+  "automaticCycles": [
+    {
+      "pid": 23972,
+      "cycle": 1,
+      "nextOpen": "2026-09-26T17:14:55.267Z",
+      "checkedAt": "2026-09-26T11:16:48.969Z",
+      "openStatus": "success",
+      "intervalSeconds": 60,
+      "secondaryStatus": "disabled"
+    },
+    {
+      "pid": 23972,
+      "cycle": 2,
+      "nextOpen": "2026-09-26T17:14:55.267Z",
+      "checkedAt": "2026-09-26T11:16:49.148Z",
+      "openStatus": "success",
+      "intervalSeconds": 60,
+      "secondaryStatus": "disabled"
+    },
+    {
+      "pid": 23972,
+      "cycle": 3,
+      "nextOpen": "2026-09-26T17:14:55.267Z",
+      "checkedAt": "2026-09-26T11:17:49.163Z",
+      "openStatus": "success",
+      "intervalSeconds": 60,
+      "secondaryStatus": "disabled"
+    }
+  ],
+  "frontendPolls": [
+    {
+      "at": 1790421379073,
+      "status": 200,
+      "revision": "2026-09-26T11:15:52.209Z"
+    },
+    {
+      "at": 1790421409606,
+      "status": 200,
+      "revision": "2026-09-26T11:15:52.209Z"
+    },
+    {
+      "at": 1790421439625,
+      "status": 200,
+      "revision": "2026-09-26T11:15:52.209Z"
+    },
+    {
+      "at": 1790421469640,
+      "status": 200,
+      "revision": "2026-09-26T11:15:52.209Z"
+    }
+  ],
+  "providerRequests": [
+    {
+      "url": "https://raw.githubusercontent.com/openfootball/football.json/master/2026-27/fr.1.json",
+      "status": 200
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openfootball/football.json/master/2026-27/en.1.json",
+      "status": 200
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openfootball/football.json/master/2026-27/de.1.json",
+      "status": 200
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openfootball/football.json/master/2026-27/es.1.json",
+      "status": 200
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openfootball/football.json/master/2026-27/it.1.json",
+      "status": 200
+    }
+  ],
+  "providerChecks": [
+    {
+      "league": "fr.1",
+      "matches": 306,
+      "finished": 45,
+      "hashMatchesDB": true
+    },
+    {
+      "league": "en.1",
+      "matches": 380,
+      "finished": 50,
+      "hashMatchesDB": true
+    },
+    {
+      "league": "de.1",
+      "matches": 306,
+      "finished": 36,
+      "hashMatchesDB": true
+    },
+    {
+      "league": "es.1",
+      "matches": 380,
+      "finished": 69,
+      "hashMatchesDB": true
+    },
+    {
+      "league": "it.1",
+      "matches": 380,
+      "finished": 50,
+      "hashMatchesDB": true
+    }
+  ],
+  "added": 0,
+  "changed": 49,
+  "consoleErrors": [],
+  "result": "PASS",
+  "restart": {
+    "result": "PASS",
+    "cycles": [
+      {
+        "pid": 24652,
+        "cycle": 1,
+        "nextOpen": "2026-09-26T17:14:55.267Z",
+        "checkedAt": "2026-09-26T11:22:30.159Z",
+        "openStatus": "waiting",
+        "intervalSeconds": 60,
+        "secondaryStatus": "disabled"
+      },
+      {
+        "pid": 24652,
+        "cycle": 2,
+        "nextOpen": "2026-09-26T17:14:55.267Z",
+        "checkedAt": "2026-09-26T11:24:30.174Z",
+        "openStatus": "waiting",
+        "intervalSeconds": 60,
+        "secondaryStatus": "disabled"
+      },
+      {
+        "pid": 24652,
+        "cycle": 3,
+        "nextOpen": "2026-09-26T17:14:55.267Z",
+        "checkedAt": "2026-09-26T11:25:30.185Z",
+        "openStatus": "waiting",
+        "intervalSeconds": 60,
+        "secondaryStatus": "disabled"
+      }
+    ],
+    "statuses": [
+      {
+        "route": "/",
+        "status": 200
+      },
+      {
+        "route": "/admin",
+        "status": 200
+      },
+      {
+        "route": "/api/health",
+        "status": 401
+      },
+      {
+        "route": "/api/cron/live",
+        "status": 401
+      },
+      {
+        "route": "/robots.txt",
+        "status": 200
+      },
+      {
+        "route": "/sitemap.xml",
+        "status": 200
+      }
+    ],
+    "health": {
+      "status": "warning",
+      "issues": [],
+      "warnings": [
+        "OPENFOOTBALL_RESULTS_LATE",
+        "SECONDARY_NOT_CONFIGURED"
+      ],
+      "database": "available",
+      "datasetUpdatedAt": "2026-09-26T11:15:52.209Z",
+      "worker": {
+        "checkedAt": "2026-09-26T11:25:30.185Z",
+        "nextOpen": "2026-09-26T17:14:55.267Z",
+        "secondaryStatus": "disabled",
+        "openStatus": "waiting",
+        "cycle": 3,
+        "state": "active",
+        "status": "RUNNING"
+      },
+      "sources": [
+        {
+          "id": "openfootball:en.1:2026",
+          "lastSyncedAt": "2026-09-26T11:15:05.216Z"
+        },
+        {
+          "id": "openfootball:de.1:2026",
+          "lastSyncedAt": "2026-09-26T11:15:25.013Z"
+        },
+        {
+          "id": "openfootball:es.1:2026",
+          "lastSyncedAt": "2026-09-26T11:15:37.067Z"
+        },
+        {
+          "id": "openfootball:it.1:2026",
+          "lastSyncedAt": "2026-09-26T11:15:49.551Z"
+        },
+        {
+          "id": "openfootball:fr.1:2026",
+          "lastSyncedAt": "2026-09-26T11:14:55.267Z"
+        }
+      ],
+      "recentRuns": [
+        {
+          "provider": "openfootball",
+          "status": "success",
+          "startedAt": "2026-09-26T11:14:46.841Z",
+          "finishedAt": "2026-09-26T11:16:48.652Z"
+        },
+        {
+          "provider": "openfootball",
+          "status": "success",
+          "startedAt": "2026-09-21T06:58:49.427Z",
+          "finishedAt": "2026-09-21T06:59:04.256Z"
+        },
+        {
+          "provider": "openfootball",
+          "status": "success",
+          "startedAt": "2026-09-20T19:58:54.158Z",
+          "finishedAt": "2026-09-20T19:59:04.678Z"
+        },
+        {
+          "provider": "openfootball",
+          "status": "success",
+          "startedAt": "2026-09-20T14:54:06.401Z",
+          "finishedAt": "2026-09-20T14:54:06.930Z"
+        },
+        {
+          "provider": "openfootball",
+          "status": "success",
+          "startedAt": "2026-09-20T10:12:31.806Z",
+          "finishedAt": "2026-09-20T10:12:32.639Z"
+        },
+        {
+          "provider": "openfootball",
+          "status": "success",
+          "startedAt": "2026-09-20T09:47:08.874Z",
+          "finishedAt": "2026-09-20T09:47:42.396Z"
+        },
+        {
+          "provider": "openfootball",
+          "status": "success",
+          "startedAt": "2026-09-19T16:13:26.039Z",
+          "finishedAt": "2026-09-19T16:13:26.454Z"
+        },
+        {
+          "provider": "openfootball",
+          "status": "failed",
+          "startedAt": "2026-09-19T15:12:25.525Z",
+          "finishedAt": "2026-09-19T15:13:01.877Z"
+        },
+        {
+          "provider": "openfootball",
+          "status": "success",
+          "startedAt": "2026-09-19T09:12:22.705Z",
+          "finishedAt": "2026-09-19T09:12:23.645Z"
+        },
+        {
+          "provider": "openfootball",
+          "status": "success",
+          "startedAt": "2026-09-19T08:55:24.278Z",
+          "finishedAt": "2026-09-19T08:55:24.792Z"
+        }
+      ],
+      "secondary": {
+        "configured": false,
+        "remaining": 90
+      }
+    }
+  }
+}

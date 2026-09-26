@@ -1,0 +1,861 @@
+{
+  "views": [
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/matchs",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/live",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/equipes",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/joueurs",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/competitions",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/classements",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/comparateur/equipes",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/comparateur/joueurs",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/performance-modele",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/recherche",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/favoris",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/parametres",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298?onglet=statistiques",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/equipe/sevilla-fc-94cf7e58",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "route": "/competition/la-liga",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/matchs",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/live",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/equipes",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/joueurs",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/competitions",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/classements",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/comparateur/equipes",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/comparateur/joueurs",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/performance-modele",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/recherche",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/favoris",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/parametres",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298?onglet=statistiques",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/equipe/sevilla-fc-94cf7e58",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "route": "/competition/la-liga",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/matchs",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/live",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/equipes",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/joueurs",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/competitions",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/classements",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/comparateur/equipes",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/comparateur/joueurs",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/performance-modele",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/recherche",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/favoris",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/parametres",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298?onglet=statistiques",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/equipe/sevilla-fc-94cf7e58",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "route": "/competition/la-liga",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/matchs",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/live",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/equipes",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/joueurs",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/competitions",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/classements",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/comparateur/equipes",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/comparateur/joueurs",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/performance-modele",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/recherche",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/favoris",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/parametres",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298?onglet=statistiques",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/equipe/sevilla-fc-94cf7e58",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "route": "/competition/la-liga",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 320,
+      "route": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 320,
+      "route": "/classements",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 320,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 360,
+      "route": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 360,
+      "route": "/classements",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 360,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 375,
+      "route": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 375,
+      "route": "/classements",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 375,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 430,
+      "route": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 430,
+      "route": "/classements",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 430,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 768,
+      "route": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 768,
+      "route": "/classements",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 768,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "route": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "route": "/classements",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "route": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "route": "/classements",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "route": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "route": "/classements",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "route": "/match/4b1bd294-4098-4722-98a0-cc60c6798298",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "external": []
+    }
+  ],
+  "accessibility": [
+    {
+      "theme": "light",
+      "route": "/",
+      "violations": []
+    },
+    {
+      "theme": "light",
+      "route": "/parametres",
+      "violations": []
+    },
+    {
+      "theme": "dark",
+      "route": "/",
+      "violations": []
+    },
+    {
+      "theme": "dark",
+      "route": "/parametres",
+      "violations": []
+    }
+  ],
+  "interactions": [
+    "Theme, density and favorites persist after reload",
+    "Mobile drawer opens and Escape closes it",
+    "Calendar navigation preserves URL filters",
+    "Keyboard search navigates to selected result",
+    "Historical season opens results; mobile standings expand"
+  ]
+}

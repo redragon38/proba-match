@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-09-18T17:39:13.392Z",
+  "scope": "local-production",
+  "heartbeat": {
+    "pid": 19852,
+    "nextOpen": "2026-09-18T23:23:57.665Z",
+    "checkedAt": "2026-09-18T17:38:51.437Z",
+    "intervalSeconds": 60,
+    "secondaryStatus": "disabled"
+  },
+  "heartbeatFresh": true,
+  "matchCount": 7008,
+  "cronSecretConfigured": true,
+  "secondaryKeyConfigured": false,
+  "dailyBudget": 90,
+  "cronUnauthorizedStatuses": [
+    401,
+    401,
+    401,
+    401,
+    401
+  ],
+  "authorizedSecondaryStatus": "disabled",
+  "isolatedPostgresBrowserTest": "passed",
+  "remoteMatchScoreDeploymentFound": false
+}

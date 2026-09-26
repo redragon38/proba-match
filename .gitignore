@@ -1,0 +1,13 @@
+node_modules/
+.next/
+.env*
+!.env.example
+.local/
+.env.*.local
+*.tsbuildinfo
+coverage/
+playwright-report/
+test-results/
+*.log
+backtest-results.json
+artifacts/*debug*

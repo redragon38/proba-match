@@ -1,0 +1,32 @@
+// Node's --env-file-if-exists loads credentials before the Prisma singleton is imported.
+import { syncOpenFootball, openScopes } from '../src/services/football/openfootball-sync';
+import { rebuildElo } from '../src/services/football/rebuild-elo';
+import { footballJob } from '../src/services/football/jobs';
+import { db } from '../src/database/client';
+import { OpenFootballProvider } from '../src/services/football/providers/openfootball';
+const command = process.argv[2];
+try {
+  if (command === 'validate') {
+    const scope = openScopes()[0];
+    const response = await new OpenFootballProvider().season(scope.league, scope.season);
+    if (!response.unchanged)
+      console.log({ source: response.url, matches: response.data.matches.length });
+  } else if (command === 'elo') console.log(await footballJob('elo', () => rebuildElo()));
+  else if (command === 'import' || command === 'sync') {
+    console.log(
+      await syncOpenFootball({
+        history: command === 'import',
+        force: process.argv.includes('--force'),
+      }),
+    );
+  } else throw new Error('Use import, sync, elo or validate');
+} catch (error) {
+  console.error(
+    error instanceof Error && /^[A-Z_0-9 ]+$/.test(error.message)
+      ? error.message
+      : 'FOOTBALL_COMMAND_FAILED',
+  );
+  process.exitCode = 1;
+} finally {
+  await db.$disconnect();
+}

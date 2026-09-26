@@ -1,0 +1,224 @@
+{
+  "at": "2026-09-26T11:56:26.823Z",
+  "readOnly": true,
+  "scenario": "Unscored predictions for 200 finished matches; same rows checked, no model calculation or writes.",
+  "before": {
+    "queries": 200,
+    "ms": 237.2609
+  },
+  "after": {
+    "queries": 1,
+    "ms": 4.150499999999965
+  },
+  "pendingRows": 0,
+  "plans": [
+    {
+      "QUERY PLAN": [
+        {
+          "Plan": {
+            "Node Type": "Limit",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 0.29,
+            "Total Cost": 13.71,
+            "Plan Rows": 4,
+            "Plan Width": 45,
+            "Actual Startup Time": 0.058,
+            "Actual Total Time": 0.058,
+            "Actual Rows": 0,
+            "Actual Loops": 1,
+            "Shared Hit Blocks": 5,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0,
+            "Plans": [
+              {
+                "Node Type": "Index Scan",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Scan Direction": "Forward",
+                "Index Name": "Match_status_kickoff_idx",
+                "Relation Name": "Match",
+                "Alias": "Match",
+                "Startup Cost": 0.29,
+                "Total Cost": 13.71,
+                "Plan Rows": 4,
+                "Plan Width": 45,
+                "Actual Startup Time": 0.057,
+                "Actual Total Time": 0.057,
+                "Actual Rows": 0,
+                "Actual Loops": 1,
+                "Index Cond": "((status = 'scheduled'::text) AND (kickoff >= CURRENT_DATE) AND (kickoff < (CURRENT_DATE + '7 days'::interval)))",
+                "Rows Removed by Index Recheck": 0,
+                "Shared Hit Blocks": 5,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              }
+            ]
+          },
+          "Planning": {
+            "Shared Hit Blocks": 137,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 2.843,
+          "Triggers": [],
+          "Execution Time": 0.075
+        }
+      ]
+    }
+  ],
+  "cachePlan": [
+    {
+      "QUERY PLAN": [
+        {
+          "Plan": {
+            "Node Type": "Seq Scan",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Relation Name": "CacheEntry",
+            "Alias": "CacheEntry",
+            "Startup Cost": 0,
+            "Total Cost": 1.04,
+            "Plan Rows": 1,
+            "Plan Width": 8,
+            "Actual Startup Time": 0.048,
+            "Actual Total Time": 0.049,
+            "Actual Rows": 1,
+            "Actual Loops": 1,
+            "Filter": "(key = 'football:dataset'::text)",
+            "Rows Removed by Filter": 2,
+            "Shared Hit Blocks": 1,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning": {
+            "Shared Hit Blocks": 22,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.416,
+          "Triggers": [],
+          "Execution Time": 0.058
+        }
+      ]
+    }
+  ],
+  "indexes": [
+    {
+      "tablename": "CacheEntry",
+      "indexname": "CacheEntry_pkey",
+      "indexdef": "CREATE UNIQUE INDEX \"CacheEntry_pkey\" ON public.\"CacheEntry\" USING btree (key)"
+    },
+    {
+      "tablename": "Team",
+      "indexname": "Team_pkey",
+      "indexdef": "CREATE UNIQUE INDEX \"Team_pkey\" ON public.\"Team\" USING btree (id)"
+    },
+    {
+      "tablename": "Team",
+      "indexname": "Team_slug_key",
+      "indexdef": "CREATE UNIQUE INDEX \"Team_slug_key\" ON public.\"Team\" USING btree (slug)"
+    },
+    {
+      "tablename": "Player",
+      "indexname": "Player_pkey",
+      "indexdef": "CREATE UNIQUE INDEX \"Player_pkey\" ON public.\"Player\" USING btree (id)"
+    },
+    {
+      "tablename": "Player",
+      "indexname": "Player_slug_key",
+      "indexdef": "CREATE UNIQUE INDEX \"Player_slug_key\" ON public.\"Player\" USING btree (slug)"
+    },
+    {
+      "tablename": "Player",
+      "indexname": "Player_teamId_idx",
+      "indexdef": "CREATE INDEX \"Player_teamId_idx\" ON public.\"Player\" USING btree (\"teamId\")"
+    },
+    {
+      "tablename": "Match",
+      "indexname": "Match_pkey",
+      "indexdef": "CREATE UNIQUE INDEX \"Match_pkey\" ON public.\"Match\" USING btree (id)"
+    },
+    {
+      "tablename": "Match",
+      "indexname": "Match_slug_key",
+      "indexdef": "CREATE UNIQUE INDEX \"Match_slug_key\" ON public.\"Match\" USING btree (slug)"
+    },
+    {
+      "tablename": "Match",
+      "indexname": "Match_kickoff_status_idx",
+      "indexdef": "CREATE INDEX \"Match_kickoff_status_idx\" ON public.\"Match\" USING btree (kickoff, status)"
+    },
+    {
+      "tablename": "Match",
+      "indexname": "Match_homeId_kickoff_idx",
+      "indexdef": "CREATE INDEX \"Match_homeId_kickoff_idx\" ON public.\"Match\" USING btree (\"homeId\", kickoff)"
+    },
+    {
+      "tablename": "Match",
+      "indexname": "Match_awayId_kickoff_idx",
+      "indexdef": "CREATE INDEX \"Match_awayId_kickoff_idx\" ON public.\"Match\" USING btree (\"awayId\", kickoff)"
+    },
+    {
+      "tablename": "Match",
+      "indexname": "Match_seasonId_kickoff_idx",
+      "indexdef": "CREATE INDEX \"Match_seasonId_kickoff_idx\" ON public.\"Match\" USING btree (\"seasonId\", kickoff)"
+    },
+    {
+      "tablename": "Match",
+      "indexname": "Match_status_kickoff_idx",
+      "indexdef": "CREATE INDEX \"Match_status_kickoff_idx\" ON public.\"Match\" USING btree (status, kickoff)"
+    },
+    {
+      "tablename": "Prediction",
+      "indexname": "Prediction_pkey",
+      "indexdef": "CREATE UNIQUE INDEX \"Prediction_pkey\" ON public.\"Prediction\" USING btree (id)"
+    },
+    {
+      "tablename": "Prediction",
+      "indexname": "Prediction_createdAt_versionId_idx",
+      "indexdef": "CREATE INDEX \"Prediction_createdAt_versionId_idx\" ON public.\"Prediction\" USING btree (\"createdAt\", \"versionId\")"
+    },
+    {
+      "tablename": "Prediction",
+      "indexname": "Prediction_matchId_versionId_kind_key",
+      "indexdef": "CREATE UNIQUE INDEX \"Prediction_matchId_versionId_kind_key\" ON public.\"Prediction\" USING btree (\"matchId\", \"versionId\", kind)"
+    }
+  ]
+}

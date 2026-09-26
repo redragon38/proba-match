@@ -1,0 +1,462 @@
+[
+  {
+    "name": "home",
+    "width": 1440,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  },
+  {
+    "name": "match",
+    "width": 1440,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  },
+  {
+    "name": "lineups",
+    "width": 1440,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  },
+  {
+    "name": "performance",
+    "width": 1440,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [
+      {
+        "tag": "TABLE",
+        "class": "",
+        "right": 1610
+      },
+      {
+        "tag": "THEAD",
+        "class": "",
+        "right": 1610
+      },
+      {
+        "tag": "TR",
+        "class": "",
+        "right": 1610
+      },
+      {
+        "tag": "TH",
+        "class": "",
+        "right": 1483.75
+      },
+      {
+        "tag": "TH",
+        "class": "",
+        "right": 1610
+      },
+      {
+        "tag": "TBODY",
+        "class": "",
+        "right": 1610
+      },
+      {
+        "tag": "TR",
+        "class": "",
+        "right": 1610
+      },
+      {
+        "tag": "TD",
+        "class": "",
+        "right": 1483.75
+      }
+    ],
+    "violations": []
+  },
+  {
+    "name": "comparator",
+    "width": 1440,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  },
+  {
+    "name": "live",
+    "width": 1440,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  },
+  {
+    "name": "teams",
+    "width": 1440,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  },
+  {
+    "name": "team",
+    "width": 1440,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  },
+  {
+    "name": "player",
+    "width": 1440,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  },
+  {
+    "name": "competition",
+    "width": 1440,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  },
+  {
+    "name": "standings",
+    "width": 1440,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  },
+  {
+    "name": "search",
+    "width": 1440,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  },
+  {
+    "name": "home",
+    "width": 390,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  },
+  {
+    "name": "match",
+    "width": 390,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [
+      {
+        "tag": "A",
+        "class": "",
+        "right": 461.765625
+      },
+      {
+        "tag": "A",
+        "class": "",
+        "right": 519.46875
+      }
+    ],
+    "violations": []
+  },
+  {
+    "name": "lineups",
+    "width": 390,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [
+      {
+        "tag": "A",
+        "class": "",
+        "right": 463.390625
+      },
+      {
+        "tag": "A",
+        "class": "",
+        "right": 521.09375
+      }
+    ],
+    "violations": []
+  },
+  {
+    "name": "performance",
+    "width": 390,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [
+      {
+        "tag": "TABLE",
+        "class": "",
+        "right": 589
+      },
+      {
+        "tag": "THEAD",
+        "class": "",
+        "right": 589
+      },
+      {
+        "tag": "TR",
+        "class": "",
+        "right": 589
+      },
+      {
+        "tag": "TH",
+        "class": "",
+        "right": 413.734375
+      },
+      {
+        "tag": "TH",
+        "class": "",
+        "right": 589
+      },
+      {
+        "tag": "TBODY",
+        "class": "",
+        "right": 589
+      },
+      {
+        "tag": "TR",
+        "class": "",
+        "right": 589
+      },
+      {
+        "tag": "TD",
+        "class": "",
+        "right": 413.734375
+      }
+    ],
+    "violations": []
+  },
+  {
+    "name": "comparator",
+    "width": 390,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [
+      {
+        "tag": "TABLE",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "THEAD",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TR",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TH",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TBODY",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TR",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TD",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TR",
+        "class": "",
+        "right": 567
+      }
+    ],
+    "violations": []
+  },
+  {
+    "name": "live",
+    "width": 390,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  },
+  {
+    "name": "teams",
+    "width": 390,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  },
+  {
+    "name": "team",
+    "width": 390,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  },
+  {
+    "name": "player",
+    "width": 390,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [
+      {
+        "tag": "TABLE",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "THEAD",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TR",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TH",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TBODY",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TR",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TD",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TR",
+        "class": "",
+        "right": 567
+      }
+    ],
+    "violations": []
+  },
+  {
+    "name": "competition",
+    "width": 390,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [
+      {
+        "tag": "TABLE",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "THEAD",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TR",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TH",
+        "class": "",
+        "right": 414.578125
+      },
+      {
+        "tag": "TH",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TBODY",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TR",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TD",
+        "class": "",
+        "right": 414.578125
+      }
+    ],
+    "violations": []
+  },
+  {
+    "name": "standings",
+    "width": 390,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [
+      {
+        "tag": "TABLE",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "THEAD",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TR",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TH",
+        "class": "",
+        "right": 414.578125
+      },
+      {
+        "tag": "TH",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TBODY",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TR",
+        "class": "",
+        "right": 567
+      },
+      {
+        "tag": "TD",
+        "class": "",
+        "right": 414.578125
+      }
+    ],
+    "violations": []
+  },
+  {
+    "name": "search",
+    "width": 390,
+    "errors": [],
+    "overflow": false,
+    "overflowNodes": [],
+    "violations": []
+  }
+]

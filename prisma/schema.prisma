@@ -1,0 +1,340 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model Country {
+  id String @id
+  name String
+  code String? @unique
+  competitions Competition[]
+  teams Team[]
+}
+model Competition {
+  id String @id
+  slug String @unique
+  name String
+  countryId String
+  country Country @relation(fields: [countryId], references: [id])
+  seasons Season[]
+  logo String?
+}
+model Season {
+  id String @id
+  year Int
+  competitionId String
+  competition Competition @relation(fields: [competitionId], references: [id])
+  matches Match[]
+  standings Standing[]
+  teamStatistics TeamStatistics[]
+  playerStatistics PlayerStatistics[]
+  homeAdvantage Float @default(60)
+  @@unique([competitionId, year])
+}
+model Team {
+  id String @id
+  slug String @unique
+  name String
+  countryId String
+  country Country @relation(fields: [countryId], references: [id])
+  venueId String?
+  venue Venue? @relation(fields: [venueId], references: [id])
+  coachId String?
+  coach Coach? @relation(fields: [coachId], references: [id])
+  logo String?
+  players Player[]
+  homeMatches Match[] @relation("Home")
+  awayMatches Match[] @relation("Away")
+  statistics TeamStatistics[]
+  standings Standing[]
+  injuries Injury[]
+  eloHistory EloHistory[]
+  lineups MatchLineup[]
+  events MatchEvent[]
+}
+model Player {
+  id String @id
+  slug String @unique
+  name String
+  teamId String
+  team Team @relation(fields: [teamId], references: [id])
+  position String
+  number Int?
+  birthDate DateTime?
+  nationality String?
+  photo String?
+  statistics PlayerStatistics[]
+  matches MatchPlayer[]
+  injuries Injury[]
+  @@index([teamId])
+}
+model Coach {
+  id String @id
+  name String
+  teams Team[]
+}
+model Venue {
+  id String @id
+  name String
+  city String?
+  capacity Int?
+  teams Team[]
+  matches Match[]
+}
+model Match {
+  id String @id
+  slug String @unique
+  seasonId String
+  season Season @relation(fields: [seasonId], references: [id])
+  homeId String
+  home Team @relation("Home", fields: [homeId], references: [id])
+  awayId String
+  away Team @relation("Away", fields: [awayId], references: [id])
+  kickoff DateTime
+  status String
+  homeScore Int?
+  awayScore Int?
+  minute Int?
+  venueId String?
+  venue Venue? @relation(fields: [venueId], references: [id])
+  referee String?
+  source String
+  payload Json
+  updatedAt DateTime @updatedAt
+  events MatchEvent[]
+  lineups MatchLineup[]
+  players MatchPlayer[]
+  predictions Prediction[]
+  eloHistory EloHistory[]
+  @@index([kickoff, status])
+  @@index([status, kickoff])
+  @@index([homeId, kickoff])
+  @@index([awayId, kickoff])
+  @@index([seasonId, kickoff])
+}
+model MatchEvent {
+  id String @id
+  matchId String
+  match Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  teamId String
+  team Team @relation(fields: [teamId], references: [id])
+  minute Int
+  extra Int?
+  type String
+  payload Json
+  @@index([matchId, minute])
+}
+model MatchLineup {
+  id String @id
+  matchId String
+  match Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  teamId String
+  team Team @relation(fields: [teamId], references: [id])
+  formation String
+  confirmed Boolean
+  publishedAt DateTime
+  payload Json
+  @@unique([matchId, teamId])
+}
+model MatchPlayer {
+  id String @id
+  matchId String
+  match Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  playerId String
+  player Player @relation(fields: [playerId], references: [id])
+  minutes Int?
+  score Float?
+  statistics Json
+  @@unique([matchId, playerId])
+}
+model TeamStatistics {
+  id String @id
+  teamId String
+  team Team @relation(fields: [teamId], references: [id])
+  seasonId String
+  season Season @relation(fields: [seasonId], references: [id])
+  asOf DateTime
+  venue String
+  payload Json
+  @@unique([teamId, seasonId, asOf, venue])
+}
+model PlayerStatistics {
+  id String @id
+  playerId String
+  player Player @relation(fields: [playerId], references: [id])
+  seasonId String
+  season Season @relation(fields: [seasonId], references: [id])
+  asOf DateTime
+  payload Json
+  @@unique([playerId, seasonId, asOf])
+}
+model Standing {
+  id String @id
+  teamId String
+  team Team @relation(fields: [teamId], references: [id])
+  seasonId String
+  season Season @relation(fields: [seasonId], references: [id])
+  group String @default("general")
+  position Int
+  points Int
+  payload Json
+  @@unique([teamId, seasonId, group])
+  @@index([seasonId, position])
+}
+model Injury {
+  id String @id
+  playerId String
+  player Player @relation(fields: [playerId], references: [id])
+  teamId String
+  team Team @relation(fields: [teamId], references: [id])
+  reason String
+  asOf DateTime
+  status String
+}
+model PredictionVersion {
+  id String @id
+  description String
+  parameters Json
+  createdAt DateTime @default(now())
+  predictions Prediction[]
+  performances ModelPerformance[]
+}
+model Prediction {
+  id String @id
+  matchId String
+  match Match @relation(fields: [matchId], references: [id])
+  versionId String
+  version PredictionVersion @relation(fields: [versionId], references: [id])
+  createdAt DateTime
+  cutoff DateTime
+  kind String @default("initial")
+  home Float
+  draw Float
+  away Float
+  confidence Int
+  inputHash String
+  payload Json
+  result PredictionResult?
+  @@unique([matchId, versionId, kind])
+  @@index([createdAt, versionId])
+}
+model PredictionResult {
+  id String @id
+  predictionId String @unique
+  prediction Prediction @relation(fields: [predictionId], references: [id])
+  homeScore Int
+  awayScore Int
+  brier Float
+  logLoss Float
+  evaluatedAt DateTime @default(now())
+}
+model ModelPerformance {
+  id String @id
+  versionId String
+  version PredictionVersion @relation(fields: [versionId], references: [id])
+  period String
+  sample Int
+  accuracy Float
+  brier Float
+  logLoss Float
+  calibration Json
+  @@unique([versionId, period])
+}
+model EloHistory {
+  id String @id
+  teamId String
+  team Team @relation(fields: [teamId], references: [id])
+  matchId String
+  match Match @relation(fields: [matchId], references: [id])
+  before Float
+  after Float
+  at DateTime
+  @@unique([teamId, matchId])
+  @@index([teamId, at])
+}
+model Favorite {
+  id String @id @default(cuid())
+  ownerId String
+  entityType String
+  entityId String
+  createdAt DateTime @default(now())
+  @@unique([ownerId, entityType, entityId])
+}
+model NotificationSubscription {
+  id String @id @default(cuid())
+  ownerId String
+  endpoint String @unique
+  encryptedKeys String
+  consentedAt DateTime
+  expiresAt DateTime?
+}
+model SearchIndex {
+  id String @id
+  entityType String
+  entityId String
+  title String
+  normalized String
+  href String
+  @@index([normalized])
+}
+model CacheEntry {
+  key String @id
+  payload Json
+  expiresAt DateTime
+  staleUntil DateTime
+  updatedAt DateTime @updatedAt
+}
+model SyncRun {
+  id String @id @default(cuid())
+  startedAt DateTime @default(now())
+  finishedAt DateTime?
+  status String
+  requests Int @default(0)
+  matches Int @default(0)
+  errorCode String?
+  provider String @default("api-football")
+}
+
+// External identifiers never become primary keys for newly imported entities.
+// entityId is validated against the model named by kind by the mapping service.
+model FootballIdentity {
+  id String @id @default(cuid())
+  provider String
+  kind String
+  externalId String
+  externalName String?
+  entityId String
+  updatedAt DateTime @updatedAt
+  @@unique([provider, kind, externalId])
+  @@index([kind, entityId])
+}
+model MappingIssue {
+  id String @id
+  provider String
+  kind String
+  externalId String
+  externalName String
+  candidates Json
+  resolvedAt DateTime?
+  updatedAt DateTime @updatedAt
+}
+model DataSource {
+  id String @id
+  url String
+  license String
+  lastSyncedAt DateTime?
+  etag String?
+  contentHash String?
+  payload Json?
+}
+model ApiQuota {
+  day String @id
+  count Int @default(0)
+}
+model SyncLock {
+  key String @id
+  token String
+  expiresAt DateTime
+}
