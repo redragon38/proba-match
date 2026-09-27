@@ -17,6 +17,9 @@ const playerSchema = z.object({
   strNumber: z.string().nullish(),
   strNationality: z.string().nullish(),
   dateBorn: z.string().nullish(),
+  strHeight: z.string().nullish(),
+  strSide: z.string().nullish(),
+  idWikidata: z.string().nullish(),
 });
 
 export type SportsDbTeam = z.infer<typeof teamSchema>;

@@ -7,6 +7,7 @@ import { bindIdentity, resolveIdentity } from './identities';
 import { footballJob } from './jobs';
 import { readLocalDataset } from './local-store';
 import { SportsDbProvider, sportsDbPosition, sportsDbTeamMatches } from './providers/thesportsdb';
+import { wikimediaPhotos } from './providers/wikimedia-photo';
 
 const cacheKey = (id: string) => `thesportsdb:team:${id}`;
 const emptyStats: Player['stats'] = {
@@ -23,6 +24,16 @@ function validBirthDate(value: string | null | undefined) {
   return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value
     ? value
     : undefined;
+}
+function validHeight(value: string | null | undefined) {
+  const metric = value?.match(/\b(?:1\.\d{2}|2\.\d{2})\s*m\b|\b\d{3}\s*cm\b/i)?.[0];
+  return metric?.replace(/\s+/g, ' ');
+}
+function preferredFoot(value: string | null | undefined) {
+  if (/^right$/i.test(value ?? '')) return 'Droit';
+  if (/^left$/i.test(value ?? '')) return 'Gauche';
+  if (/^(both|either)$/i.test(value ?? '')) return 'Les deux';
+  return undefined;
 }
 
 function interleaveTeams(teams: Team[]) {
@@ -53,16 +64,24 @@ export async function syncSportsDbPlayers(limit = 30) {
     const active = data.teams.filter((team) => activeIds.has(team.id));
     const cached = await db.cacheEntry.findMany({
       where: { key: { in: active.map((team) => cacheKey(team.id)) } },
-      select: { key: true, expiresAt: true },
+      select: { key: true, expiresAt: true, payload: true },
     });
-    const cacheByKey = new Map(cached.map((entry) => [entry.key, entry.expiresAt.getTime()]));
-    const eligible = active.filter(
-      (team) =>
-        (cacheByKey.get(cacheKey(team.id)) ?? 0) <= now &&
-        !data.players.some(
-          (player) => player.teamId === team.id && player.source !== 'thesportsdb',
-        ),
-    );
+    const cacheByKey = new Map(cached.map((entry) => [entry.key, entry]));
+    const eligible = active
+      .filter((team) => {
+        const cachedTeam = cacheByKey.get(cacheKey(team.id));
+        const payload = cachedTeam?.payload as { status?: string; version?: number } | undefined;
+        return (
+          (cachedTeam?.expiresAt.getTime() ?? 0) <= now ||
+          (payload?.status === 'partial' && payload.version !== 2)
+        );
+      })
+      .filter(
+        (team) =>
+          !data.players.some(
+            (player) => player.teamId === team.id && player.source !== 'thesportsdb',
+          ),
+      );
     // Cover each supported league early, and fill never-seen clubs before refreshing old ones.
     const selected = [
       ...interleaveTeams(eligible.filter((team) => !cacheByKey.has(cacheKey(team.id)))),
@@ -103,6 +122,9 @@ export async function syncSportsDbPlayers(limit = 30) {
         const valid = rows.filter(
           (row) => row.idTeam === external.idTeam && sportsDbPosition(row.strPosition),
         );
+        const photos = await wikimediaPhotos(valid.flatMap((row) => row.idWikidata ?? [])).catch(
+          () => new Map(),
+        );
         if (!valid.length) {
           await db.cacheEntry.upsert({
             where: { key: cacheKey(team.id) },
@@ -130,6 +152,7 @@ export async function syncSportsDbPlayers(limit = 30) {
             [],
           );
           const old = data.players.find((player) => player.id === id);
+          const licensedPhoto = row.idWikidata ? photos.get(row.idWikidata) : undefined;
           const player: Player = {
             id,
             slug: old?.slug ?? `${slugify(row.strPlayer)}-${id.slice(0, 8)}`,
@@ -139,6 +162,13 @@ export async function syncSportsDbPlayers(limit = 30) {
             number: /^\d{1,2}$/.test(row.strNumber ?? '') ? Number(row.strNumber) : null,
             nationality: row.strNationality ?? undefined,
             birthDate: validBirthDate(row.dateBorn),
+            height: validHeight(row.strHeight),
+            foot: preferredFoot(row.strSide),
+            photo: licensedPhoto?.photo ?? old?.photo,
+            photoCredit: licensedPhoto?.photoCredit ?? old?.photoCredit,
+            photoSource: licensedPhoto?.photoSource ?? old?.photoSource,
+            photoLicense: licensedPhoto?.photoLicense ?? old?.photoLicense,
+            photoLicenseUrl: licensedPhoto?.photoLicenseUrl ?? old?.photoLicenseUrl,
             updatedAt: new Date().toISOString(),
             source: 'thesportsdb',
             stats: emptyStats,
@@ -154,6 +184,7 @@ export async function syncSportsDbPlayers(limit = 30) {
               position: player.position,
               number: player.number,
               nationality: player.nationality,
+              photo: player.photo,
               birthDate: player.birthDate ? new Date(player.birthDate) : null,
             },
             update: {
@@ -162,6 +193,7 @@ export async function syncSportsDbPlayers(limit = 30) {
               position: player.position,
               number: player.number,
               nationality: player.nationality,
+              photo: player.photo,
               birthDate: player.birthDate ? new Date(player.birthDate) : null,
             },
           });
@@ -225,12 +257,12 @@ export async function syncSportsDbPlayers(limit = 30) {
           where: { key: cacheKey(team.id) },
           create: {
             key: cacheKey(team.id),
-            payload: { status: 'partial', count: team.count },
+            payload: { status: 'partial', count: team.count, version: 2 },
             expiresAt: new Date(now + 4 * 86400_000),
             staleUntil: new Date(now + 8 * 86400_000),
           },
           update: {
-            payload: { status: 'partial', count: team.count },
+            payload: { status: 'partial', count: team.count, version: 2 },
             expiresAt: new Date(now + 4 * 86400_000),
             staleUntil: new Date(now + 8 * 86400_000),
           },

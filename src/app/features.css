@@ -407,6 +407,27 @@
   font-size: 30px;
   font-weight: 700;
 }
+.player-header .team-logo {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.player-photo-credit {
+  margin: 7px 0 20px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.player-photo-credit a {
+  text-decoration: underline;
+}
+.player-known-facts {
+  margin-top: 18px;
+  max-width: 780px;
+}
+.player-known-facts h2 {
+  margin-top: 0;
+}
 .data-table {
   overflow-x: auto;
   max-width: 100%;

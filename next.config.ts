@@ -7,14 +7,12 @@ const config: NextConfig = {
     formats: ['image/avif', 'image/webp'],
   },
   async redirects() {
-    return [
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.probamatch.com' }],
-        destination: 'https://probamatch.com/:path*',
-        permanent: true,
-      },
-    ];
+    return ['probamatch.com', 'www.probamatch.com'].map((host) => ({
+      source: '/:path*',
+      has: [{ type: 'host' as const, value: host }],
+      destination: 'https://proba-match.vercel.app/:path*',
+      permanent: true,
+    }));
   },
   async headers() {
     return [

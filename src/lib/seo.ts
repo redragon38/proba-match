@@ -4,10 +4,14 @@ import { isPreviewDeployment } from './deployment';
 
 /** One origin for metadata, JSON-LD, robots and sitemap; never trust a request Host. */
 export function siteOrigin(value = process.env.NEXT_PUBLIC_SITE_URL): string {
+  // Existing Vercel projects may still carry the former public-origin variable.
+  const configured = ['https://probamatch.com', 'https://www.probamatch.com'].includes(value ?? '')
+    ? 'https://proba-match.vercel.app'
+    : value;
   const url = new URL(
-    value ||
+    configured ||
       (process.env.VERCEL_ENV === 'production'
-        ? 'https://probamatch.com'
+        ? 'https://proba-match.vercel.app'
         : 'http://localhost:3000'),
   );
   const local = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
@@ -18,7 +22,9 @@ export function siteOrigin(value = process.env.NEXT_PUBLIC_SITE_URL): string {
     url.search ||
     url.hash ||
     (url.protocol !== 'https:' && !(local && url.protocol === 'http:')) ||
-    (process.env.VERCEL_ENV === 'production' && (local || url.hostname.endsWith('.vercel.app')))
+    (process.env.VERCEL_ENV === 'production' &&
+      (local ||
+        (url.hostname.endsWith('.vercel.app') && url.hostname !== 'proba-match.vercel.app')))
   ) {
     throw new Error(
       'NEXT_PUBLIC_SITE_URL must be an HTTPS origin (HTTP is allowed only on localhost).',

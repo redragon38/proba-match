@@ -38,7 +38,7 @@ ni les informations légales sans données réelles. Le rapport de référence e
 
 ## Baseline pré-lancement et production
 
-Le domaine canonique choisi est `https://probamatch.com`, hébergement cible Vercel ; la marque
+Le domaine canonique choisi est `https://proba-match.vercel.app`, hébergement cible Vercel ; la marque
 du produit est Proba Match (logo officiel fourni le 26 septembre 2026). Conserver les identifiants
 techniques internes existants. Les previews/staging doivent rester noindex et hors sitemap.
 Après une modification importante des API, de l’authentification, de la DB ou des performances,

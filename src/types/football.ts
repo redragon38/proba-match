@@ -52,6 +52,10 @@ export interface Player {
   nationality?: string;
   birthDate?: string;
   photo?: string;
+  photoCredit?: string;
+  photoSource?: string;
+  photoLicense?: string;
+  photoLicenseUrl?: string;
   height?: string;
   foot?: string;
   stats: PlayerStats;

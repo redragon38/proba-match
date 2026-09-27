@@ -63,6 +63,10 @@
   .profile-header p {
     font-size: 10px;
   }
+  .player-header .team-logo {
+    width: 65px;
+    height: 65px;
+  }
   .catalog-grid {
     grid-template-columns: 1fr;
   }

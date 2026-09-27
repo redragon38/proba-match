@@ -25,9 +25,16 @@ export function comparisonView(data: Dataset) {
 export function standingsView(data: Dataset) {
   const cached = standingsCache.get(data.matches);
   if (
-    data.source !== 'demo' && cached && cached.competitions === data.competitions &&
+    data.source !== 'demo' &&
+    cached &&
+    cached.competitions === data.competitions &&
     cached.standings === data.standings
-  ) return { data: { ...catalogDataset(data), players: [] }, seasons: cached.seasons, tables: cached.tables };
+  )
+    return {
+      data: { ...catalogDataset(data), players: [] },
+      seasons: cached.seasons,
+      tables: cached.tables,
+    };
   const seasons: Record<string, number[]> = {};
   const tables: Record<string, Standing[]> = {};
   for (const competition of data.competitions) {
@@ -45,20 +52,50 @@ export function standingsView(data: Dataset) {
       }
     }
   }
-  if (data.source !== 'demo') standingsCache.set(data.matches, {
-    competitions: data.competitions, standings: data.standings, seasons, tables,
-  });
+  if (data.source !== 'demo')
+    standingsCache.set(data.matches, {
+      competitions: data.competitions,
+      standings: data.standings,
+      seasons,
+      tables,
+    });
   return { data: { ...catalogDataset(data), players: [] }, seasons, tables };
 }
-const standingsCache = new WeakMap<Dataset['matches'], {
-  competitions: Dataset['competitions'];
-  standings: Dataset['standings'];
-  seasons: Record<string, number[]>;
-  tables: Record<string, Standing[]>;
-}>();
+const standingsCache = new WeakMap<
+  Dataset['matches'],
+  {
+    competitions: Dataset['competitions'];
+    standings: Dataset['standings'];
+    seasons: Record<string, number[]>;
+    tables: Record<string, Standing[]>;
+  }
+>();
 /** Catalogues never use fixtures, injuries or standings. */
 export function catalogDataset(data: Dataset): Dataset {
-  return { ...data, matches: [], injuries: [], standings: {} };
+  return {
+    ...data,
+    matches: [],
+    injuries: [],
+    standings: {},
+    // Catalogue cards and client search need identities, never full profiles or image licences.
+    players: data.players.map(({ id, slug, name, teamId, position, source }) => ({
+      id,
+      slug,
+      name,
+      teamId,
+      position,
+      source,
+      number: null,
+      stats: {
+        appearances: null,
+        starts: null,
+        minutes: null,
+        goals: null,
+        assists: null,
+        rating: null,
+      },
+    })),
+  };
 }
 /** Preserve the full relevant history without shipping other teams' matches. */
 export function teamDataset(data: Dataset, ids: string[]): Dataset {

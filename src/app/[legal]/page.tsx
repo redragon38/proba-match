@@ -47,7 +47,7 @@ const content: Record<string, { title: string; sections: { title: string; text: 
       },
       {
         title: 'Hébergement',
-        text: 'Vercel est le prestataire retenu pour le futur hébergement de probamatch.com. Les coordonnées légales de l’hébergeur et les informations de publication doivent être complétées et vérifiées lors du déploiement.',
+        text: 'Le site est accessible sur proba-match.vercel.app, hébergé par Vercel. Les coordonnées légales de l’hébergeur et les informations de publication doivent être complétées et vérifiées avant ouverture publique.',
       },
       {
         title: 'Sources et droits',

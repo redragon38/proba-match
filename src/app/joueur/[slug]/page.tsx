@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const data = await getDataset();
   const p = data.players.find((p) => p.slug === slug);
   if (!p) notFound();
-  const history = await playerHistory(p.id);
+  const history = p.source === 'thesportsdb' ? [] : await playerHistory(p.id);
   const t = data.teams.find((t) => t.id === p.teamId)!;
   const score = playerPerformance(p.stats, p.position);
   const mainMetric =
@@ -126,9 +126,16 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         ]}
         real={data.source !== 'demo'}
       />
-      <div className="card profile-header">
+      <div className="card profile-header player-header">
         {p.photo ? (
-          <ProviderImage key={p.photo} src={p.photo} alt={p.name} size={90} fallback={avatar} />
+          <ProviderImage
+            key={p.photo}
+            src={p.photo}
+            alt={`Portrait de ${p.name}`}
+            size={90}
+            fallback={avatar}
+            eager
+          />
         ) : (
           <span className="profile-avatar">
             {p.name
@@ -154,133 +161,183 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </div>
         <FavoriteButton id={`player:${p.id}`} label={p.name} />
       </div>
-      <div className="metrics">
-        <Metric label="Minutes jouées" value={number(p.stats.minutes)} />
-        <Metric label={mainMetric[0]} value={number(mainMetric[1])} />
-        <Metric label={secondaryMetric[0]} value={number(secondaryMetric[1])} />
-        <Metric
-          label="Indice de performance calculé"
-          value={score === null ? 'Données insuffisantes' : `${score}/100`}
-          note="Heuristique adaptée au poste"
-        />
-      </div>
-      <div className="detail-columns">
-        <div>
-          <SectionTitle title="La forme match après match" />
-          <section className="card padded">
-            {recent.some((r) => r.stats.rating !== null) ? (
-              <TrendChart
-                label="Notes du fournisseur · rencontres disponibles"
-                values={recent
-                  .filter((r) => r.stats.rating !== null)
-                  .map((r) => ({ label: r.match.kickoff.slice(5, 10), value: r.stats.rating! }))}
-              />
-            ) : (
-              <p className="data-note">Aucune série de notes individuelles disponible.</p>
-            )}
-            {recent.map((r) => (
-              <Link
-                className="squad-row"
-                href={`/match/${r.match.slug}?onglet=joueurs`}
-                key={r.match.id}
-              >
-                <span>{r.match.kickoff.slice(0, 10)}</span>
-                <span>{r.stats.minutes ?? '–'} min</span>
-                <strong>{number(r.stats.rating, 1)}</strong>
-              </Link>
-            ))}
-          </section>
-          <SectionTitle title="Statistiques disponibles" />
-          <div
-            className="card data-table"
-            tabIndex={0}
-            role="region"
-            aria-label="Tableau de statistiques"
-          >
-            <table>
-              <thead>
-                <tr>
-                  <th>Indicateur</th>
-                  <th>Valeur</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map(([label, v]) => (
-                  <tr key={label}>
-                    <th>{label}</th>
-                    <td>{number(v, 2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      {p.photoSource && p.photoLicenseUrl && (
+        <p className="player-photo-credit">
+          Photo :{' '}
+          <a href={p.photoSource} target="_blank" rel="noopener noreferrer">
+            {p.photoCredit}
+          </a>
+          {' · '}
+          <a href={p.photoLicenseUrl} target="_blank" rel="noopener noreferrer">
+            {p.photoLicense}
+          </a>
+          {' · '}Wikimedia Commons
+        </p>
+      )}
+      {p.source === 'thesportsdb' ? (
+        <>
+          <div className="metrics">
+            <Metric label="Poste" value={p.position} />
+            {p.number !== null && <Metric label="Numéro" value={p.number} />}
+            {p.height && <Metric label="Taille" value={p.height} />}
+            {p.foot && <Metric label="Pied préféré" value={p.foot} />}
           </div>
-          <SectionTitle title="Historique saison par saison" />
-          {history.length > 0 && (
-            <div
-              className="card data-table"
-              tabIndex={0}
-              role="region"
-              aria-label="Historique saisonnier"
-            >
-              <table>
-                <thead>
-                  <tr>
-                    <th>Saison</th>
-                    <th>Compétition</th>
-                    <th>Matchs</th>
-                    <th>Minutes</th>
-                    <th>Buts</th>
-                    <th>Passes D.</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {history.map((h) => (
-                    <tr key={`${h.competition}-${h.season}`}>
-                      <th>
-                        {h.season}/{h.season + 1}
-                      </th>
-                      <td>{h.competition}</td>
-                      <td>{number(h.stats.appearances)}</td>
-                      <td>{number(h.stats.minutes)}</td>
-                      <td>{number(h.stats.goals)}</td>
-                      <td>{number(h.stats.assists)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-          <p className="card padded data-note">
-            {history.length
-              ? 'Dernier relevé disponible pour chaque saison et compétition synchronisée.'
-              : 'Historique non disponible. Les statistiques affichées décrivent uniquement le dernier relevé du fournisseur ou le scénario de démonstration.'}
-          </p>
-        </div>
-        <aside>
-          <SectionTitle title="Profil" />
-          <section className="card padded">
-            <div className="factor">
-              <strong>Taille</strong>
-              <p>{p.height ?? 'Non disponible'}</p>
-            </div>
-            <div className="factor">
-              <strong>Pied préféré</strong>
-              <p>{p.foot ?? 'Non disponible'}</p>
-            </div>
-            <div className="factor">
-              <strong>Note moyenne de la source</strong>
-              <p>{number(p.stats.rating, 2)}</p>
-            </div>
-            <p className="data-note">
-              L’indice de performance est un calcul Proba Match, distinct de la note du fournisseur.
-              Il décrit les observations disponibles ; il ne prédit pas une performance future.
+          <section className="card padded player-known-facts">
+            <h2>Profil du joueur</h2>
+            {p.birthDate && (
+              <p>
+                Né le{' '}
+                {new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long', timeZone: 'UTC' }).format(
+                  new Date(p.birthDate),
+                )}
+                .
+              </p>
+            )}
+            <p>
+              Le club, le poste et les informations ci-dessus proviennent du catalogue
+              communautaire. Les statistiques individuelles de la saison ne sont pas disponibles
+              dans cette source ; elles ne sont donc pas remplacées par des estimations.
             </p>
-            <Link href={`/comparateur/joueurs?a=${p.id}`} className="button full-width">
+            <Link href={`/comparateur/joueurs?a=${p.id}`} className="button">
               Comparer ce joueur
             </Link>
           </section>
-        </aside>
-      </div>
+        </>
+      ) : (
+        <>
+          <div className="metrics">
+            <Metric label="Minutes jouées" value={number(p.stats.minutes)} />
+            <Metric label={mainMetric[0]} value={number(mainMetric[1])} />
+            <Metric label={secondaryMetric[0]} value={number(secondaryMetric[1])} />
+            <Metric
+              label="Indice de performance calculé"
+              value={score === null ? 'Données insuffisantes' : `${score}/100`}
+              note="Heuristique adaptée au poste"
+            />
+          </div>
+          <div className="detail-columns">
+            <div>
+              <SectionTitle title="La forme match après match" />
+              <section className="card padded">
+                {recent.some((r) => r.stats.rating !== null) ? (
+                  <TrendChart
+                    label="Notes du fournisseur · rencontres disponibles"
+                    values={recent
+                      .filter((r) => r.stats.rating !== null)
+                      .map((r) => ({
+                        label: r.match.kickoff.slice(5, 10),
+                        value: r.stats.rating!,
+                      }))}
+                  />
+                ) : (
+                  <p className="data-note">Aucune série de notes individuelles disponible.</p>
+                )}
+                {recent.map((r) => (
+                  <Link
+                    className="squad-row"
+                    href={`/match/${r.match.slug}?onglet=joueurs`}
+                    key={r.match.id}
+                  >
+                    <span>{r.match.kickoff.slice(0, 10)}</span>
+                    <span>{r.stats.minutes ?? '–'} min</span>
+                    <strong>{number(r.stats.rating, 1)}</strong>
+                  </Link>
+                ))}
+              </section>
+              <SectionTitle title="Statistiques disponibles" />
+              <div
+                className="card data-table"
+                tabIndex={0}
+                role="region"
+                aria-label="Tableau de statistiques"
+              >
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Indicateur</th>
+                      <th>Valeur</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map(([label, v]) => (
+                      <tr key={label}>
+                        <th>{label}</th>
+                        <td>{number(v, 2)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <SectionTitle title="Historique saison par saison" />
+              {history.length > 0 && (
+                <div
+                  className="card data-table"
+                  tabIndex={0}
+                  role="region"
+                  aria-label="Historique saisonnier"
+                >
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Saison</th>
+                        <th>Compétition</th>
+                        <th>Matchs</th>
+                        <th>Minutes</th>
+                        <th>Buts</th>
+                        <th>Passes D.</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {history.map((h) => (
+                        <tr key={`${h.competition}-${h.season}`}>
+                          <th>
+                            {h.season}/{h.season + 1}
+                          </th>
+                          <td>{h.competition}</td>
+                          <td>{number(h.stats.appearances)}</td>
+                          <td>{number(h.stats.minutes)}</td>
+                          <td>{number(h.stats.goals)}</td>
+                          <td>{number(h.stats.assists)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+              <p className="card padded data-note">
+                {history.length
+                  ? 'Dernier relevé disponible pour chaque saison et compétition synchronisée.'
+                  : 'Historique non disponible. Les statistiques affichées décrivent uniquement le dernier relevé du fournisseur ou le scénario de démonstration.'}
+              </p>
+            </div>
+            <aside>
+              <SectionTitle title="Profil" />
+              <section className="card padded">
+                <div className="factor">
+                  <strong>Taille</strong>
+                  <p>{p.height ?? 'Non disponible'}</p>
+                </div>
+                <div className="factor">
+                  <strong>Pied préféré</strong>
+                  <p>{p.foot ?? 'Non disponible'}</p>
+                </div>
+                <div className="factor">
+                  <strong>Note moyenne de la source</strong>
+                  <p>{number(p.stats.rating, 2)}</p>
+                </div>
+                <p className="data-note">
+                  L’indice de performance est un calcul Proba Match, distinct de la note du
+                  fournisseur. Il décrit les observations disponibles ; il ne prédit pas une
+                  performance future.
+                </p>
+                <Link href={`/comparateur/joueurs?a=${p.id}`} className="button full-width">
+                  Comparer ce joueur
+                </Link>
+              </section>
+            </aside>
+          </div>
+        </>
+      )}
     </div>
   );
 }

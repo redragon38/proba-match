@@ -32,7 +32,8 @@ describe('SEO contract', () => {
     expect(robots().sitemap).toContain('/sitemap.xml');
     expect(() => siteOrigin('http://localhost:3000')).toThrow();
     expect(() => siteOrigin('https://preview.vercel.app')).toThrow();
-    expect(siteOrigin('https://probamatch.com')).toBe('https://probamatch.com');
+    expect(siteOrigin('https://proba-match.vercel.app')).toBe('https://proba-match.vercel.app');
+    expect(siteOrigin('https://probamatch.com')).toBe('https://proba-match.vercel.app');
     vi.stubEnv('APP_ENV', 'staging');
     expect(isPreviewDeployment()).toBe(true);
   });
@@ -94,7 +95,24 @@ describe('Scoped client payloads', () => {
     const small = catalogDataset(data);
     expect(small.matches).toEqual([]);
     expect(small.teams).toEqual(data.teams);
-    expect(small.players).toEqual(data.players);
+    expect(
+      small.players.map(({ id, slug, name, teamId, position }) => ({
+        id,
+        slug,
+        name,
+        teamId,
+        position,
+      })),
+    ).toEqual(
+      data.players.map(({ id, slug, name, teamId, position }) => ({
+        id,
+        slug,
+        name,
+        teamId,
+        position,
+      })),
+    );
+    expect(small.players.every((player) => !player.photo && !player.photoCredit)).toBe(true);
     expect(JSON.stringify(small).length).toBeLessThan(JSON.stringify(data).length / 2);
   });
   it('preserves complete team calculations and both sides of match history', () => {

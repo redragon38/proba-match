@@ -3,7 +3,7 @@ import config from '../next.config';
 
 beforeEach(() => {
   vi.stubEnv('NODE_ENV', 'production');
-  vi.stubEnv('NEXT_PUBLIC_SITE_URL', 'https://probamatch.com');
+  vi.stubEnv('NEXT_PUBLIC_SITE_URL', 'https://proba-match.vercel.app');
   vi.stubEnv('VERCEL_ENV', 'production');
   vi.stubEnv('APP_ENV', 'production');
 });
@@ -43,7 +43,7 @@ describe('Security and canonical host configuration', () => {
     expect(await config.redirects!()).toContainEqual({
       source: '/:path*',
       has: [{ type: 'host', value: 'www.probamatch.com' }],
-      destination: 'https://probamatch.com/:path*',
+      destination: 'https://proba-match.vercel.app/:path*',
       permanent: true,
     });
   });

@@ -76,6 +76,36 @@ try {
   assert.equal(await db.team.count(), 2);
   globalThis.fetch = async (input) => {
     const url = new URL(String(input));
+    if (url.hostname === 'www.wikidata.org')
+      return Response.json({
+        entities: {
+          Q59306386: {
+            claims: { P18: [{ mainsnak: { datavalue: { value: 'Integration Striker.jpg' } } }] },
+          },
+        },
+      });
+    if (url.hostname === 'commons.wikimedia.org')
+      return Response.json({
+        query: {
+          pages: {
+            '1': {
+              title: 'File:Integration Striker.jpg',
+              imageinfo: [
+                {
+                  thumburl:
+                    'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Integration_Striker.jpg/180px-Integration_Striker.jpg',
+                  descriptionurl: 'https://commons.wikimedia.org/wiki/File:Integration_Striker.jpg',
+                  extmetadata: {
+                    Artist: { value: 'Integration Photographer' },
+                    LicenseShortName: { value: 'CC BY 4.0' },
+                    LicenseUrl: { value: 'https://creativecommons.org/licenses/by/4.0/' },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      });
     if (url.pathname.endsWith('/searchteams.php')) {
       const name = url.searchParams.get('t')!;
       return Response.json({
@@ -101,6 +131,9 @@ try {
             strNumber: '9',
             strNationality: 'France',
             dateBorn: '2000-01-01',
+            strHeight: '1.82 m',
+            strSide: 'Right',
+            idWikidata: team === '101' ? 'Q59306386' : null,
           },
         ],
       });
@@ -109,6 +142,12 @@ try {
   };
   assert.equal((await syncSportsDbPlayers(2)).players, 2);
   assert.equal((await readLocalDataset()).players.length, 2, 'Player snapshot is refreshed');
+  const enriched = (await readLocalDataset()).players.find(
+    (player) => player.name === 'Integration Striker',
+  )!;
+  assert.equal(enriched.height, '1.82 m');
+  assert.equal(enriched.foot, 'Droit');
+  assert.equal(enriched.photoCredit, 'Integration Photographer');
   assert.equal(await db.player.count(), 2, 'Players are persisted in PostgreSQL');
   globalThis.fetch = async () => Response.json(document);
   document = {
