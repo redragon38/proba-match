@@ -3,7 +3,9 @@ import { syncSecondary } from '../src/services/football/secondary';
 import { db } from '../src/database/client';
 import { nextOpenDeadline, runWorkerLoop } from '../src/services/football/worker-loop';
 import { log } from '../src/lib/logger';
+import { syncSportsDbPlayers } from '../src/services/football/sportsdb-sync';
 let stopping = false;
+let nextPlayers = 0;
 let wake: (() => void) | undefined;
 const stop = () => {
   stopping = true;
@@ -41,11 +43,16 @@ try {
       return result;
     },
     secondary: async () => {
-      const result = await syncSecondary({ enrich: true });
-      console.log(result);
-      return result;
+      const secondary = process.env.FOOTBALL_API_KEY ? await syncSecondary({ enrich: true }) : null;
+      if (secondary) console.log(secondary);
+      if (Date.now() < nextPlayers) return secondary ?? { status: 'waiting' };
+      const players = await syncSportsDbPlayers(15);
+      nextPlayers =
+        Date.now() + (players.status === 'awaiting_openfootball' ? 3600_000 : 6 * 3600_000);
+      console.log(players);
+      return secondary ?? players;
     },
-    secondaryEnabled: () => !!process.env.FOOTBALL_API_KEY,
+    secondaryEnabled: () => !!process.env.FOOTBALL_API_KEY || Date.now() >= nextPlayers,
     log: (event, count) => log(event, { count }),
     heartbeat: async (heartbeat) => {
       const value = {

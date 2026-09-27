@@ -4,6 +4,7 @@ import { rebuildElo } from '../src/services/football/rebuild-elo';
 import { footballJob } from '../src/services/football/jobs';
 import { db } from '../src/database/client';
 import { OpenFootballProvider } from '../src/services/football/providers/openfootball';
+import { syncSportsDbPlayers } from '../src/services/football/sportsdb-sync';
 const command = process.argv[2];
 try {
   if (command === 'validate') {
@@ -12,14 +13,18 @@ try {
     if (!response.unchanged)
       console.log({ source: response.url, matches: response.data.matches.length });
   } else if (command === 'elo') console.log(await footballJob('elo', () => rebuildElo()));
-  else if (command === 'import' || command === 'sync') {
+  else if (command === 'players') {
+    const limitArg = process.argv.find((arg) => arg.startsWith('--limit='));
+    const limit = limitArg ? Number(limitArg.slice('--limit='.length)) : 30;
+    console.log(await syncSportsDbPlayers(limit));
+  } else if (command === 'import' || command === 'sync') {
     console.log(
       await syncOpenFootball({
         history: command === 'import',
         force: process.argv.includes('--force'),
       }),
     );
-  } else throw new Error('Use import, sync, elo or validate');
+  } else throw new Error('Use import, sync, players, elo or validate');
 } catch (error) {
   console.error(
     error instanceof Error && /^[A-Z_0-9 ]+$/.test(error.message)

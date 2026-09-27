@@ -32,22 +32,34 @@ export function Catalog({
             ? 'Les clubs qui font le football.'
             : 'Toutes les compétitions.'}
       </h1>
-      {(kind !== 'players' || data.players.length > 0) && <div className="catalog-search">
-        <label htmlFor="catalog-search">
-          Rechercher{' '}
-          {kind === 'players' ? 'un joueur' : kind === 'teams' ? 'une équipe' : 'une compétition'}
-        </label>
-        <input
-          id="catalog-search"
-          type="search"
-          placeholder="Saisissez un nom…"
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setPage(1);
-          }}
-        />
-      </div>}
+      {kind === 'players' && data.players.some((player) => player.source === 'thesportsdb') && (
+        <p className="data-note">
+          Catalogue partiel fourni par{' '}
+          <a href="https://www.thesportsdb.com/" target="_blank" rel="noopener noreferrer">
+            TheSportsDB
+          </a>{' '}
+          : l’API gratuite ne renvoie qu’une sélection de joueurs par club. Effectifs et
+          statistiques non vérifiés en temps réel.
+        </p>
+      )}
+      {(kind !== 'players' || data.players.length > 0) && (
+        <div className="catalog-search">
+          <label htmlFor="catalog-search">
+            Rechercher{' '}
+            {kind === 'players' ? 'un joueur' : kind === 'teams' ? 'une équipe' : 'une compétition'}
+          </label>
+          <input
+            id="catalog-search"
+            type="search"
+            placeholder="Saisissez un nom…"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+          />
+        </div>
+      )}
       <div className="catalog-grid">
         {rows.slice((page - 1) * 24, page * 24).map((r) => {
           const player = 'teamId' in r ? r : null;
@@ -93,12 +105,18 @@ export function Catalog({
                 ? 'Les données des joueurs ne sont pas disponibles pour le moment.'
                 : 'Aucun résultat'
             }
-            text={kind === 'players' && !data.players.length
-              ? 'La source actuelle fournit les matchs et résultats, mais pas les effectifs. Les joueurs apparaîtront après l’ajout d’une source complémentaire.'
-              : undefined}
+            text={
+              kind === 'players' && !data.players.length
+                ? 'La source actuelle fournit les matchs et résultats, mais pas les effectifs. Les joueurs apparaîtront après l’ajout d’une source complémentaire.'
+                : undefined
+            }
           />
-          {kind === 'players' && !data.players.length &&
-            <p className="data-note">Explorez les <Link href="/equipes">équipes</Link> et les <Link href="/matchs">matchs disponibles</Link>.</p>}
+          {kind === 'players' && !data.players.length && (
+            <p className="data-note">
+              Explorez les <Link href="/equipes">équipes</Link> et les{' '}
+              <Link href="/matchs">matchs disponibles</Link>.
+            </p>
+          )}
         </>
       )}
       {rows.length > 24 && (

@@ -42,6 +42,7 @@ export interface Team {
 }
 export interface Player {
   updatedAt?: string;
+  source?: 'api-football' | 'thesportsdb';
   id: string;
   slug: string;
   name: string;

@@ -1,6 +1,7 @@
 {
   "crons": [
     { "path": "/api/cron/openfootball", "schedule": "15 5 * * *" },
-    { "path": "/api/cron/live", "schedule": "15 7 * * *" }
+    { "path": "/api/cron/live", "schedule": "15 7 * * *" },
+    { "path": "/api/cron/players", "schedule": "15 10 * * *" }
   ]
 }

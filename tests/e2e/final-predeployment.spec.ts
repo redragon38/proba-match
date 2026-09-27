@@ -54,10 +54,15 @@ test('real match tabs, pagination, upcoming cards and public cleanup', async ({
   await expect(page.locator('#admin-secret')).toBeVisible();
   expect(await (await request.get('/sitemap.xml')).text()).not.toContain('performance-modele');
   await page.goto('/joueurs');
-  await expect(
-    page.getByText('Les données des joueurs ne sont pas disponibles pour le moment.', {
-      exact: true,
-    }),
-  ).toBeVisible();
+  if (await page.locator('.catalog-item').count()) {
+    await expect(page.locator('main a[href^="/joueur/"]').first()).toBeVisible();
+    await expect(page.getByText('Catalogue partiel fourni par')).toBeVisible();
+  } else {
+    await expect(
+      page.getByText('Les données des joueurs ne sont pas disponibles pour le moment.', {
+        exact: true,
+      }),
+    ).toBeVisible();
+  }
   expect(errors).toEqual([]);
 });

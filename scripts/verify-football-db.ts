@@ -27,6 +27,7 @@ try {
   const { syncOpenFootball, currentSeason } =
     await import('../src/services/football/openfootball-sync');
   const { syncSecondary } = await import('../src/services/football/secondary');
+  const { syncSportsDbPlayers } = await import('../src/services/football/sportsdb-sync');
   const { readLocalDataset } = await import('../src/services/football/local-store');
   const { bindIdentity } = await import('../src/services/football/identities');
   const { persistDataset } = await import('../src/services/football/persistence');
@@ -73,6 +74,43 @@ try {
     id = first.matches[0].id;
   assert.match(id, /^[a-f0-9-]{36}$/);
   assert.equal(await db.team.count(), 2);
+  globalThis.fetch = async (input) => {
+    const url = new URL(String(input));
+    if (url.pathname.endsWith('/searchteams.php')) {
+      const name = url.searchParams.get('t')!;
+      return Response.json({
+        teams: [
+          {
+            idTeam: name === 'Integration Home' ? '101' : '102',
+            strTeam: name,
+            strSport: 'Soccer',
+            strCountry: 'France',
+          },
+        ],
+      });
+    }
+    if (url.pathname.endsWith('/lookup_all_players.php')) {
+      const team = url.searchParams.get('id')!;
+      return Response.json({
+        player: [
+          {
+            idPlayer: team === '101' ? '501' : '502',
+            idTeam: team,
+            strPlayer: team === '101' ? 'Integration Striker' : 'Integration Keeper',
+            strPosition: team === '101' ? 'Striker' : 'Goalkeeper',
+            strNumber: '9',
+            strNationality: 'France',
+            dateBorn: '2000-01-01',
+          },
+        ],
+      });
+    }
+    throw new Error('Unexpected provider URL');
+  };
+  assert.equal((await syncSportsDbPlayers(2)).players, 2);
+  assert.equal((await readLocalDataset()).players.length, 2, 'Player snapshot is refreshed');
+  assert.equal(await db.player.count(), 2, 'Players are persisted in PostgreSQL');
+  globalThis.fetch = async () => Response.json(document);
   document = {
     name: 'Test Ligue',
     matches: [{ ...sourceRow, date: `${scope.season}-08-08`, score: { ft: [2, 0] } }],
@@ -150,6 +188,9 @@ try {
     await page.clock.install();
     await page.goto(`http://localhost:3001/match/${id}?onglet=evenements`);
     await expect(page.locator('.score-block > strong')).toHaveText('0 : 0');
+    await page.goto('http://localhost:3001/joueurs');
+    await expect(page.getByText('Integration Striker', { exact: true })).toBeVisible();
+    await page.goto(`http://localhost:3001/match/${id}?onglet=evenements`);
     await page.evaluate(() => {
       window.document.documentElement.dataset.testDocument = 'unchanged';
     });

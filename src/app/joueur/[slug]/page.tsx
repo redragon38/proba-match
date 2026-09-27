@@ -19,8 +19,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!p) notFound();
   return seoMetadata(
     `/joueur/${slug}`,
-    `${p.name} — profil et statistiques`,
-    `Profil de ${p.name} : poste, équipe, temps de jeu et performances disponibles. Explorez son historique et ses statistiques sur Proba Match.`,
+    p.source === 'thesportsdb' ? `${p.name} — profil joueur` : `${p.name} — profil et statistiques`,
+    p.source === 'thesportsdb'
+      ? `Profil communautaire de ${p.name} : club et poste indiqués par TheSportsDB. Effectif partiel, sans statistiques individuelles vérifiées.`
+      : `Profil de ${p.name} : poste, équipe, temps de jeu et performances disponibles. Explorez son historique et ses statistiques sur Proba Match.`,
     d.source !== 'demo' && (p.stats.appearances ?? 0) >= 5,
   );
 }
@@ -92,7 +94,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     rows.unshift(['Arrêts', p.stats.saves], ['Buts encaissés', p.stats.conceded]);
   return (
     <div className="page">
-      {data.source !== 'demo' && (
+      {data.source !== 'demo' && p.source !== 'thesportsdb' && (
         <JsonLd
           value={{
             '@context': 'https://schema.org',
@@ -106,6 +108,17 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         />
       )}
       <SourceBanner data={data} />
+      {p.source === 'thesportsdb' && (
+        <p className="data-note">
+          Profil issu du catalogue communautaire TheSportsDB, synchronisé le{' '}
+          {new Intl.DateTimeFormat('fr-FR', {
+            dateStyle: 'short',
+            timeZone: 'Europe/Paris',
+          }).format(new Date(p.updatedAt ?? data.updatedAt))}
+          . L’effectif affiché est partiel et les statistiques individuelles ne sont pas fournies
+          par cette source.
+        </p>
+      )}
       <Breadcrumbs
         items={[
           { name: 'Joueurs', href: '/joueurs' },

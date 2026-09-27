@@ -252,6 +252,18 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean }
             competition.season,
             compAlias.externalId,
           );
+          if (rows.length) {
+            const fallback = data.players.filter(
+              (player) => player.teamId === t.id && player.source === 'thesportsdb',
+            );
+            data.players = data.players.filter(
+              (player) => player.teamId !== t.id || player.source !== 'thesportsdb',
+            );
+            if (fallback.length)
+              await db.searchIndex.deleteMany({
+                where: { id: { in: fallback.map((player) => `player:${player.id}`) } },
+              });
+          }
           for (const p of rows) {
             const id = await resolveIdentity('api-football', 'player', p.id, p.name, []);
             const old = data.players.find((p) => p.id === id);
@@ -260,6 +272,7 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean }
               id,
               slug: old?.slug ?? `${p.slug}-${id.slice(0, 8)}`,
               teamId: t.id,
+              source: 'api-football' as const,
             };
             data.players = [...data.players.filter((p) => p.id !== id), value];
           }
