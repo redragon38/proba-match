@@ -11,3 +11,4 @@ test-results/
 *.log
 backtest-results.json
 artifacts/*debug*
+.vercel/

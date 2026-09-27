@@ -3,6 +3,12 @@ import type { Dataset } from '@/types/football';
 import { slugify } from '@/lib/format';
 import { playerPerformance } from '@/prediction-engine/player';
 const json = (value: unknown) => JSON.parse(JSON.stringify(value));
+async function inBatches<T>(rows: T[], write: (row: T) => Promise<unknown>) {
+  // Bound concurrent writes so remote PostgreSQL latency does not turn an import
+  // into hours of serial round trips or exhaust the connection pool.
+  for (let offset = 0; offset < rows.length; offset += 12)
+    await Promise.all(rows.slice(offset, offset + 12).map(write));
+}
 export async function persistDataset(
   data: Dataset,
   changedIds: Set<string>,
@@ -26,7 +32,7 @@ export async function persistDataset(
       update: {},
     });
   }
-  for (const t of data.teams) {
+  await inBatches(data.teams, async (t) => {
     const countryId = slugify(t.country) || 'international';
     await db.country.upsert({
       where: { id: countryId },
@@ -58,7 +64,7 @@ export async function persistDataset(
       },
       update: { name: t.name, logo: t.logo },
     });
-  }
+  });
   for (const p of options.profiles === false ? [] : data.players) {
     await db.player.upsert({
       where: { id: p.id },
@@ -97,9 +103,54 @@ export async function persistDataset(
         update: { payload: json(p.stats) },
       });
   }
-  for (const m of data.matches.filter((m) => changedIds.has(m.id))) {
+  const changedMatches = data.matches.filter((m) => changedIds.has(m.id));
+  if (options.profiles === false) {
+    // OpenFootball changes schedules and results only. Existing detail rows stay intact;
+    // one PostgreSQL upsert per chunk avoids a transaction round trip per fixture.
+    const competitions = new Map(data.competitions.map((competition) => [competition.id, competition]));
+    for (let offset = 0; offset < changedMatches.length; offset += 500) {
+      const rows = changedMatches.slice(offset, offset + 500).flatMap((match) => {
+        const competition = competitions.get(match.competitionId);
+        return competition ? [{
+          id: match.id,
+          slug: match.slug,
+          seasonId: `${competition.id}-${match.season ?? competition.season}`,
+          homeId: match.homeId,
+          awayId: match.awayId,
+          kickoff: match.kickoff,
+          status: match.status,
+          homeScore: match.homeScore,
+          awayScore: match.awayScore,
+          minute: match.minute ?? null,
+          referee: match.referee ?? null,
+          source: match.source,
+          payload: json(match),
+        }] : [];
+      });
+      if (!rows.length) continue;
+      await db.$executeRaw`
+        INSERT INTO "Match" ("id", "slug", "seasonId", "homeId", "awayId", "kickoff",
+          "status", "homeScore", "awayScore", "minute", "referee", "source", "payload", "updatedAt")
+        SELECT row."id", row."slug", row."seasonId", row."homeId", row."awayId", row."kickoff",
+          row."status", row."homeScore", row."awayScore", row."minute", row."referee",
+          row."source", row."payload", NOW() AT TIME ZONE 'UTC'
+        FROM jsonb_to_recordset(${JSON.stringify(rows)}::jsonb) AS row(
+          "id" text, "slug" text, "seasonId" text, "homeId" text, "awayId" text,
+          "kickoff" timestamp(3), "status" text, "homeScore" integer, "awayScore" integer,
+          "minute" integer, "referee" text, "source" text, "payload" jsonb)
+        ON CONFLICT ("id") DO UPDATE SET
+          "slug" = EXCLUDED."slug", "seasonId" = EXCLUDED."seasonId",
+          "homeId" = EXCLUDED."homeId", "awayId" = EXCLUDED."awayId",
+          "kickoff" = EXCLUDED."kickoff", "status" = EXCLUDED."status",
+          "homeScore" = EXCLUDED."homeScore", "awayScore" = EXCLUDED."awayScore",
+          "minute" = EXCLUDED."minute", "referee" = EXCLUDED."referee",
+          "source" = EXCLUDED."source", "payload" = EXCLUDED."payload",
+          "updatedAt" = EXCLUDED."updatedAt"
+      `;
+    }
+  } else await inBatches(changedMatches, async (m) => {
     const comp = data.competitions.find((c) => c.id === m.competitionId);
-    if (!comp) continue;
+    if (!comp) return;
     const fields = {
       slug: m.slug,
       seasonId: `${comp.id}-${m.season ?? comp.season}`,
@@ -175,12 +226,12 @@ export async function persistDataset(
         });
       }
     });
-  }
+  });
   for (const [compId, rows] of Object.entries(data.standings)) {
     const comp = data.competitions.find((c) => c.id === compId);
     if (!comp) continue;
-    for (const r of rows) {
-      if (!data.teams.some((t) => t.id === r.teamId)) continue;
+    await inBatches(rows, async (r) => {
+      if (!data.teams.some((t) => t.id === r.teamId)) return;
       await db.standing.upsert({
         where: { id: `${compId}-${comp.season}-${r.teamId}` },
         create: {
@@ -193,7 +244,7 @@ export async function persistDataset(
         },
         update: { position: r.position, points: r.points, payload: json(r) },
       });
-    }
+    });
   }
   if (options.injuryTeamIds?.length)
     await db.injury.deleteMany({
@@ -236,8 +287,9 @@ export async function persistDataset(
       href: `/competition/${c.slug}`,
     })),
   ];
-  for (const row of searchRows)
-    await db.searchIndex.upsert({ where: { id: row.id }, create: row, update: row });
+  await inBatches(searchRows, (row) =>
+    db.searchIndex.upsert({ where: { id: row.id }, create: row, update: row }),
+  );
   await db.cacheEntry.upsert({
     where: { key: 'football:dataset' },
     create: {

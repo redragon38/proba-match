@@ -1,4 +1,5 @@
 import { db } from '@/database/client';
+import { randomUUID } from 'node:crypto';
 import { log } from '@/lib/logger';
 import { slugify } from '@/lib/format';
 import type { Dataset, Match, Team } from '@/types/football';
@@ -168,6 +169,25 @@ export async function syncOpenFootball(
           );
         }
         const matches: Match[] = [];
+        const knownMatchIds = new Map(
+          (
+            await db.footballIdentity.findMany({
+              where: {
+                provider: 'openfootball',
+                kind: 'match',
+                externalId: { in: batch.matches.map((row) => row.externalId) },
+              },
+              select: { externalId: true, entityId: true },
+            })
+          ).map((row) => [row.externalId, row.entityId]),
+        );
+        const newMatchIdentities: {
+          provider: string;
+          kind: string;
+          externalId: string;
+          externalName: string;
+          entityId: string;
+        }[] = [];
         for (const row of batch.matches) {
           const homeId = teamIds.get(row.homeKey)!,
             awayId = teamIds.get(row.awayKey)!;
@@ -178,13 +198,25 @@ export async function syncOpenFootball(
               m.homeId === homeId &&
               m.awayId === awayId,
           );
-          const id = await resolveIdentity(
-            'openfootball',
-            'match',
-            row.externalId,
-            `${row.homeName} / ${row.awayName}`,
-            candidates.map((m) => m.id),
-          );
+          const existingId = knownMatchIds.get(row.externalId);
+          const id = existingId ??
+            (candidates.length > 1
+              ? await resolveIdentity(
+                  'openfootball',
+                  'match',
+                  row.externalId,
+                  `${row.homeName} / ${row.awayName}`,
+                  candidates.map((m) => m.id),
+                )
+              : candidates[0]?.id ?? randomUUID());
+          if (!existingId && candidates.length <= 1)
+            newMatchIdentities.push({
+              provider: 'openfootball',
+              kind: 'match',
+              externalId: row.externalId,
+              externalName: `${row.homeName} / ${row.awayName}`,
+              entityId: id,
+            });
           const previous = data.matches.find((m) => m.id === id);
           const merged = mergeOpenMatch(previous, {
             id,
@@ -228,6 +260,8 @@ export async function syncOpenFootball(
           }
           matches.push(merged);
         }
+        if (newMatchIdentities.length)
+          await db.footballIdentity.createMany({ data: newMatchIdentities, skipDuplicates: true });
         const upsert = <T extends { id: string }>(old: T[], fresh: T[]) => [
           ...new Map([...old, ...fresh].map((x) => [x.id, x])).values(),
         ];

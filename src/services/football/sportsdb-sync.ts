@@ -1,9 +1,10 @@
 import { db } from '@/database/client';
+import { randomUUID } from 'node:crypto';
 import { slugify } from '@/lib/format';
 import { log } from '@/lib/logger';
 import type { Player, Team } from '@/types/football';
 import { currentSeason } from './openfootball-sync';
-import { bindIdentity, resolveIdentity } from './identities';
+import { bindIdentity } from './identities';
 import { footballJob } from './jobs';
 import { readLocalDataset } from './local-store';
 import { SportsDbProvider, sportsDbPosition, sportsDbTeamMatches } from './providers/thesportsdb';
@@ -142,15 +143,36 @@ export async function syncSportsDbPlayers(limit = 30) {
           });
           continue;
         }
+        const knownPlayers = new Map(
+          (await db.footballIdentity.findMany({
+            where: {
+              provider: 'thesportsdb',
+              kind: 'player',
+              externalId: { in: valid.map((row) => row.idPlayer) },
+            },
+            select: { externalId: true, entityId: true },
+          })).map((row) => [row.externalId, row.entityId]),
+        );
+        const newPlayerIdentities: {
+          provider: string;
+          kind: string;
+          externalId: string;
+          externalName: string;
+          entityId: string;
+        }[] = [];
         const next: Player[] = [];
         for (const row of valid) {
-          const id = await resolveIdentity(
-            'thesportsdb',
-            'player',
-            row.idPlayer,
-            row.strPlayer,
-            [],
-          );
+          const id = knownPlayers.get(row.idPlayer) ?? randomUUID();
+          if (!knownPlayers.has(row.idPlayer)) {
+            knownPlayers.set(row.idPlayer, id);
+            newPlayerIdentities.push({
+              provider: 'thesportsdb',
+              kind: 'player',
+              externalId: row.idPlayer,
+              externalName: row.strPlayer,
+              entityId: id,
+            });
+          }
           const old = data.players.find((player) => player.id === id);
           const licensedPhoto = row.idWikidata ? photos.get(row.idWikidata) : undefined;
           const player: Player = {
@@ -174,10 +196,14 @@ export async function syncSportsDbPlayers(limit = 30) {
             stats: emptyStats,
           };
           next.push(player);
-          await db.player.upsert({
-            where: { id },
+        }
+        if (newPlayerIdentities.length)
+          await db.footballIdentity.createMany({ data: newPlayerIdentities, skipDuplicates: true });
+        for (let offset = 0; offset < next.length; offset += 12)
+          await Promise.all(next.slice(offset, offset + 12).map((player) => db.player.upsert({
+            where: { id: player.id },
             create: {
-              id,
+              id: player.id,
               slug: player.slug,
               name: player.name,
               teamId: team.id,
@@ -196,13 +222,14 @@ export async function syncSportsDbPlayers(limit = 30) {
               photo: player.photo,
               birthDate: player.birthDate ? new Date(player.birthDate) : null,
             },
-          });
-          await db.searchIndex.upsert({
-            where: { id: `player:${id}` },
+          })));
+        for (let offset = 0; offset < next.length; offset += 12)
+          await Promise.all(next.slice(offset, offset + 12).map((player) => db.searchIndex.upsert({
+            where: { id: `player:${player.id}` },
             create: {
-              id: `player:${id}`,
+              id: `player:${player.id}`,
               entityType: 'player',
-              entityId: id,
+              entityId: player.id,
               title: player.name,
               normalized: slugify(player.name),
               href: `/joueur/${player.slug}`,
@@ -212,8 +239,7 @@ export async function syncSportsDbPlayers(limit = 30) {
               normalized: slugify(player.name),
               href: `/joueur/${player.slug}`,
             },
-          });
-        }
+          })));
         const removed = data.players.filter(
           (player) =>
             player.teamId === team.id &&
