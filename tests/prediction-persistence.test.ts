@@ -7,6 +7,8 @@ const mocks = vi.hoisted(() => ({
   predict: vi.fn(),
   findUnique: vi.fn(),
   upsert: vi.fn(),
+  marker: vi.fn(),
+  updateMarker: vi.fn(),
 }));
 vi.mock('server-only', () => ({}));
 vi.mock('@/database/client', () => ({
@@ -14,6 +16,7 @@ vi.mock('@/database/client', () => ({
     prediction: { findMany: mocks.find, findUnique: mocks.findUnique, upsert: mocks.upsert },
     predictionResult: { create: mocks.create },
     predictionVersion: { upsert: mocks.version },
+    cacheEntry: { findUnique: mocks.marker, update: mocks.updateMarker },
   },
 }));
 vi.mock('@/prediction-engine', () => ({
@@ -76,14 +79,19 @@ it('archives a real pre-match projection 15 days ahead during background sync', 
     id: 'projection', matchId: 'upcoming', cutoff: now.toISOString(),
     home: .4, draw: .3, away: .3, confidence: 50, inputHash: 'hash', lineupConfirmed: false,
   });
+  mocks.marker.mockResolvedValue({ updatedAt: now });
   await persistPredictions(data, now);
   expect(mocks.predict).toHaveBeenCalledOnce();
   expect(mocks.upsert).toHaveBeenCalledOnce();
   expect(mocks.upsert.mock.calls[0][0].create).toMatchObject({matchId: 'upcoming', kind: 'initial'});
+  expect(mocks.updateMarker).toHaveBeenCalledOnce();
+  expect(mocks.updateMarker.mock.calls[0][0].data.updatedAt.getTime()).toBeGreaterThan(now.getTime());
   mocks.predict.mockClear();
   mocks.upsert.mockClear();
+  mocks.updateMarker.mockClear();
   mocks.findUnique.mockResolvedValue({id: 'projection'});
   await persistPredictions(data, now);
   expect(mocks.predict).not.toHaveBeenCalled();
   expect(mocks.upsert).not.toHaveBeenCalled();
+  expect(mocks.updateMarker).not.toHaveBeenCalled();
 });

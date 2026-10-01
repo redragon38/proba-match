@@ -49,6 +49,7 @@ export async function getPredictionHistory(
 }
 export async function persistPredictions(data: Dataset, now = new Date()) {
   if (data.source === 'demo') return;
+  let contentChanged = false;
   await db.predictionVersion.upsert({
     where: { id: MODEL_VERSION },
     create: {
@@ -86,9 +87,16 @@ export async function persistPredictions(data: Dataset, now = new Date()) {
           matchId_versionId_kind: { matchId: match.id, versionId: MODEL_VERSION, kind: 'initial' },
         },
       });
-      // Existing snapshots are immutable. Skip the costly model calculation unless
-      // newly confirmed lineups can produce a second snapshot.
-      if (initial && (match.lineups.length !== 2 || !match.lineups.every((lineup) => lineup.confirmed))) continue;
+      // Existing snapshots are immutable. Avoid recalculating a published kind.
+      if (initial) {
+        if (match.lineups.length !== 2 || !match.lineups.every((lineup) => lineup.confirmed)) continue;
+        const lineup = await db.prediction.findUnique({
+          where: {
+            matchId_versionId_kind: { matchId: match.id, versionId: MODEL_VERSION, kind: 'lineup' },
+          },
+        });
+        if (lineup) continue;
+      }
       const p = predictionEngine.predict(match, data.matches, now.toISOString());
       if (!p) continue;
       const kind = initial && p.lineupConfirmed ? 'lineup' : 'initial';
@@ -112,6 +120,7 @@ export async function persistPredictions(data: Dataset, now = new Date()) {
           payload: JSON.parse(JSON.stringify(p)),
         },
       });
+      contentChanged = true;
     }
     if (match.status === 'finished' && match.homeScore !== null && match.awayScore !== null) {
       const predictions = pendingByMatch.get(match.id) ?? [];
@@ -136,8 +145,22 @@ export async function persistPredictions(data: Dataset, now = new Date()) {
             logLoss: score.logLoss,
           },
         });
+        contentChanged = true;
       }
     }
+  }
+  if (contentChanged) {
+    // The browser watches this marker every 30 s. Snapshot-only writes must
+    // invalidate it too, even when the football dataset payload is unchanged.
+    const marker = await db.cacheEntry.findUnique({
+      where: { key: 'football:dataset' },
+      select: { updatedAt: true },
+    });
+    if (marker)
+      await db.cacheEntry.update({
+        where: { key: 'football:dataset' },
+        data: { updatedAt: new Date(Math.max(Date.now(), marker.updatedAt.getTime() + 1)) },
+      });
   }
   const evaluations = await getEvaluations();
   const performance = metrics(evaluations.filter((r) => r.prediction.version === MODEL_VERSION));
