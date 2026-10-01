@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { db } from '@/database/client';
 import { cache } from '@/services/cache';
+import { log } from '@/lib/logger';
 /** All writers share the same lease, so OpenFootball cannot overwrite an enrichment snapshot. */
 export async function footballJob<T>(provider: string, work: () => Promise<T>) {
   if (!process.env.DATABASE_URL) throw new Error('DATABASE_NOT_CONFIGURED');
@@ -34,7 +35,15 @@ export async function footballJob<T>(provider: string, work: () => Promise<T>) {
     });
     cache.clear();
     return result;
-  } catch {
+  } catch (error) {
+    const knownCode =
+      error && typeof error === 'object' && 'code' in error &&
+      typeof error.code === 'string' && /^[A-Z][A-Z0-9_]{1,63}$/.test(error.code)
+        ? error.code
+        : error instanceof Error && /^[A-Z][A-Z0-9_]{1,63}$/.test(error.message)
+          ? error.message
+          : 'UNEXPECTED_ERROR';
+    log('FOOTBALL_JOB_FAILED', { code: knownCode, runId: run?.id });
     if (run)
       await db.syncRun
         .update({

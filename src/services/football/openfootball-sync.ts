@@ -67,9 +67,16 @@ export async function syncOpenFootball(
 ) {
   return footballJob('openfootball', async () => {
     log('OPENFOOTBALL_IMPORT_STARTED');
+    const initialReadAt = Date.now();
     let data = await readLocalDataset();
+    log('OPENFOOTBALL_CACHE_READ', { durationMs: Date.now() - initialReadAt });
     // The relational corpus, rather than a truncated display snapshot, feeds the import/model.
+    const historyReadAt = Date.now();
     data.matches = await readLocalHistory();
+    log('OPENFOOTBALL_HISTORY_READ', {
+      durationMs: Date.now() - historyReadAt,
+      count: data.matches.length,
+    });
     const provider = new OpenFootballProvider();
     let imported = 0,
       requests = 0,
