@@ -11,6 +11,15 @@ export function Breakdowns({ rows, data }: { rows: EvaluatedPrediction[]; data: 
     },
     { title: 'Par mois', key: (r: EvaluatedPrediction) => r.kickoff.slice(0, 7) },
     {
+      title: 'Par saison',
+      key: (r: EvaluatedPrediction) => {
+        const year = Number(r.kickoff.slice(0, 4));
+        const start = Number(r.kickoff.slice(5, 7)) >= 7 ? year : year - 1;
+        return `${start}–${start + 1}`;
+      },
+    },
+    { title: 'Par version', key: (r: EvaluatedPrediction) => r.prediction.version },
+    {
       title: 'Par qualité des informations',
       key: (r: EvaluatedPrediction) =>
         r.prediction.confidence >= 70 ? '70–100' : r.prediction.confidence >= 50 ? '50–69' : '0–49',
@@ -45,6 +54,7 @@ export function Breakdowns({ rows, data }: { rows: EvaluatedPrediction[]; data: 
                     <th>N</th>
                     <th>Exactitude</th>
                     <th>Brier</th>
+                    <th>Log-loss</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -54,8 +64,9 @@ export function Breakdowns({ rows, data }: { rows: EvaluatedPrediction[]; data: 
                       <tr key={key}>
                         <th>{key}</th>
                         <td>{m.sample}</td>
-                        <td>{percent(m.accuracy)}</td>
-                        <td>{number(m.brier, 3)}</td>
+                        <td>{m.sample >= 30 ? percent(m.accuracy) : 'Échantillon faible'}</td>
+                        <td>{m.sample >= 30 ? number(m.brier, 3) : '—'}</td>
+                        <td>{m.sample >= 30 ? number(m.logLoss, 3) : '—'}</td>
                       </tr>
                     );
                   })}

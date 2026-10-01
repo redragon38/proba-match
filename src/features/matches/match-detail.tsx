@@ -14,6 +14,8 @@ import { useLive } from './use-live';
 import { LocalTime } from '@/components/local-time';
 import { ShareButton } from '@/components/share-button';
 import { probabilityPercentages } from '@/lib/probability-format';
+import { roundedPercentages } from '@/lib/probability-format';
+import type { predictionInsights, predictionExplanation, informationQuality } from '@/prediction-engine/insights';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { MatchOverview } from './match-overview';
 const tabs = [
@@ -31,12 +33,18 @@ export function MatchDetail({
   prediction,
   tab,
   history = [],
+  analysis,
+  explanation,
+  quality,
 }: {
   data: Dataset;
   match: Match;
   prediction?: Prediction;
   tab: string;
   history?: Prediction[];
+  analysis?: ReturnType<typeof predictionInsights>;
+  explanation?: ReturnType<typeof predictionExplanation>;
+  quality?: ReturnType<typeof informationQuality>;
 }) {
   const live = useLive([initialMatch], true);
   const match = live.matches[0];
@@ -226,7 +234,7 @@ export function MatchDetail({
                     value={number(prediction.expectedHome, 2)}
                   />
                   <Metric
-                    label="Score le plus plausible"
+                    label="Score le plus probable"
                     value={prediction.likelyScore}
                     note={`${percent(prediction.scores[0].probability)} de probabilité`}
                   />
@@ -238,15 +246,19 @@ export function MatchDetail({
                 <div className="quality-info">
                   <ShieldCheck size={20} />
                   <div>
-                    <strong>Qualité des informations : {prediction.confidence}/100</strong>
+                    <strong>Qualité des informations : {quality?.level ?? 'Non évaluée'}</strong>
                     <p>
-                      Échantillon minimal : {prediction.sample} matchs par équipe. Ce score ne
-                      mesure pas la probabilité du résultat.
+                      Indice de qualité {prediction.confidence}/100, distinct de la probabilité du résultat.
                     </p>
+                    {quality?.reasons.map((reason) => <p key={reason}>{reason}</p>)}
                   </div>
                 </div>
+                <div className="advanced-panel">
+                  <h4>Pourquoi cette prédiction ?</h4>
+                  <p>{explanation?.summary ?? 'Les résultats antérieurs alimentent le modèle.'}</p>
+                </div>
                 <details className="advanced-panel">
-                  <summary>Pourquoi cette prédiction ?</summary>
+                  <summary>Facteurs observés et limites</summary>
                   {prediction.factors.map((f) => (
                     <div className="factor" key={f.label}>
                       <strong>{f.label}</strong>
@@ -259,7 +271,7 @@ export function MatchDetail({
                     ? 'Calcul illustratif sur données fictives ; les rencontres déjà commencées sont des reconstitutions, pas des prédictions archivées avant match.'
                     : `Prédiction enregistrée le ${new Date(prediction.createdAt).toLocaleString('fr-FR')}.`}
                   {prediction.lineupConfirmed &&
-                    ' Compositions officielles disponibles lors du calcul ; elles affectent la qualité des informations, sans ajustement de force dans la v1.'}
+                    ' Compositions officielles disponibles lors du calcul ; elles affectent la qualité des informations, sans ajustement de force dans ce modèle.'}
                 </p>
                 <Link href="/methodologie" className="text-link">
                   Lire la méthodologie et les limites →
@@ -276,27 +288,37 @@ export function MatchDetail({
                 } />
               </div>
             )}
-            {tab === 'prediction' && prediction && (
+            {tab === 'prediction' && prediction && analysis && (
               <>
                 <SectionTitle title="Projections complémentaires" />
                 <div className="metrics three">
                   <Metric
                     label="Total de buts attendu"
-                    value={number(prediction.expectedHome + prediction.expectedAway, 2)}
+                    value={number(analysis.expectedTotal, 2)}
                   />
                   <Metric
                     label={`Clean sheet · ${home.short}`}
-                    value={percent(prediction.cleanHome)}
+                    value={percent(analysis.cleanHome)}
                   />
                   <Metric
                     label={`Clean sheet · ${away.short}`}
-                    value={percent(prediction.cleanAway)}
+                    value={percent(analysis.cleanAway)}
                   />
                 </div>
-                <p className="data-note">La v1 ne projette pas la possession, les tirs, les corners ni les cartons.</p>
-                <SectionTitle title="Les scores les plus plausibles" />
+                <SectionTitle title="Autres probabilités dérivées" />
+                <div className="metrics three">
+                  <Metric label="Les deux équipes marquent" value={percent(analysis.bothScore)} />
+                  <Metric label={`${home.short} marque`} value={percent(analysis.homeScores)} />
+                  <Metric label={`${away.short} marque`} value={percent(analysis.awayScores)} />
+                  <Metric label="Au moins 3 buts" value={percent(analysis.totalGoals.slice(3).reduce((sum, value) => sum + value, 0))} />
+                  <Metric label="Au moins 4 buts" value={percent(analysis.totalGoals.slice(4).reduce((sum, value) => sum + value, 0))} />
+                </div>
+                <p className="data-note">Répartition du nombre total de buts : {roundedPercentages(analysis.totalGoals).map((value, index) => `${index === 5 ? '5+' : index} : ${value} %`).join(' · ')}</p>
+                <p className="data-note">Écart de buts : {roundedPercentages(analysis.margin).map((value, index) => `${index === 3 ? '3+' : index} : ${value} %`).join(' · ')}</p>
+                <p className="data-note">Ces probabilités sont calculées à partir de la même matrice de scores que le 1N2. Elles ne prédisent pas la possession, les tirs, les corners ni les cartons.</p>
+                <SectionTitle title="Les scores les plus probables" />
                 <div className="score-projections">
-                  {prediction.scores.map((s) => (
+                  {analysis.topScores.slice(0, 3).map((s) => (
                     <div className="card" key={`${s.home}-${s.away}`}>
                       <strong>
                         {s.home}–{s.away}
@@ -305,6 +327,17 @@ export function MatchDetail({
                     </div>
                   ))}
                 </div>
+                <details className="advanced-panel">
+                  <summary>Voir deux autres scores possibles</summary>
+                  <div className="score-projections">
+                    {analysis.topScores.slice(3).map((s) => (
+                      <div className="card" key={`${s.home}-${s.away}`}>
+                        <strong>{s.home}–{s.away}</strong>
+                        <span>{percent(s.probability)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </details>
               </>
             )}
           </div>
@@ -523,7 +556,7 @@ export function MatchDetail({
         <>
           <SectionTitle title="Confrontations directes" eyebrow="LES 10 DERNIÈRES DISPONIBLES" />
           <p className="data-note">
-            Uniquement les rencontres antérieures à ce match. La v1 n’ajoute pas de poids spécifique
+            Uniquement les rencontres antérieures à ce match. Le modèle n’ajoute pas de poids spécifique
             aux confrontations directes.
           </p>
           {h2h.length ? (

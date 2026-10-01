@@ -4,6 +4,7 @@ import { teamDataset } from '@/services/football/read-model';
 import { getDataset } from '@/services/football';
 import { getPredictions, getPredictionHistory } from '@/services/predictions';
 import { MatchDetail } from '@/features/matches/match-detail';
+import { informationQuality, predictionExplanation, predictionInsights } from '@/prediction-engine/insights';
 import { JsonLd } from '@/components/json-ld';
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -79,6 +80,9 @@ export default async function Page({
         match={m}
         history={history}
         prediction={prediction}
+        analysis={prediction ? predictionInsights(prediction) : undefined}
+        explanation={prediction ? predictionExplanation(prediction, data.teams.find((t) => t.id === m.homeId)?.name ?? 'domicile', data.teams.find((t) => t.id === m.awayId)?.name ?? 'extérieur') : undefined}
+        quality={prediction ? informationQuality(prediction, data.degraded) : undefined}
         tab={q.onglet && allowed.includes(q.onglet) ? q.onglet : 'apercu'}
       />
     </>

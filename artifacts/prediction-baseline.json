@@ -1,0 +1,118 @@
+{
+  "generatedAt": "2026-10-01T20:53:29.025Z",
+  "modelVersion": "elo-poisson-1.1.0",
+  "source": "OpenFootball historical-import",
+  "method": "Retrospective walk-forward, prior result assumed available 3h after kickoff",
+  "limitation": "Original result publication timestamps are unavailable; not proof of actual pre-match publication or leakage-free live accuracy.",
+  "archivedPreMatchEvaluations": 0,
+  "overall": {
+    "sample": 5089,
+    "brier": 0.5998937409893912,
+    "logLoss": 1.0041089694815928,
+    "accuracy": 0.5197484771074867,
+    "homeGoalMae": 0.9717736374504051,
+    "awayGoalMae": 0.8989260528733901,
+    "exactScoreAccuracy": 0.1171153468264885,
+    "calibrationError": 0.035419533653218996,
+    "calibration": [
+      {
+        "bin": 0,
+        "count": 789,
+        "predicted": 0.07500975232210089,
+        "actual": 0.09885931558935361
+      },
+      {
+        "bin": 1,
+        "count": 3103,
+        "predicted": 0.15617758321365569,
+        "actual": 0.19626168224299065
+      },
+      {
+        "bin": 2,
+        "count": 5034,
+        "predicted": 0.2456939321740248,
+        "actual": 0.2709574890742948
+      },
+      {
+        "bin": 3,
+        "count": 1757,
+        "predicted": 0.34746993030460377,
+        "actual": 0.3346613545816733
+      },
+      {
+        "bin": 4,
+        "count": 1408,
+        "predicted": 0.4494600865852435,
+        "actual": 0.42329545454545453
+      },
+      {
+        "bin": 5,
+        "count": 1174,
+        "predicted": 0.547099087300846,
+        "actual": 0.4957410562180579
+      },
+      {
+        "bin": 6,
+        "count": 967,
+        "predicted": 0.6481193787405057,
+        "actual": 0.5842812823164426
+      },
+      {
+        "bin": 7,
+        "count": 769,
+        "predicted": 0.7447407908020487,
+        "actual": 0.6527958387516255
+      },
+      {
+        "bin": 8,
+        "count": 252,
+        "predicted": 0.8351661985500682,
+        "actual": 0.7698412698412699
+      },
+      {
+        "bin": 9,
+        "count": 14,
+        "predicted": 0.9169444849985647,
+        "actual": 0.7857142857142857
+      }
+    ]
+  },
+  "byCalendarYear": {
+    "2023": {
+      "sample": 610,
+      "brier": 0.5885610999744627,
+      "logLoss": 0.9908656699849586,
+      "accuracy": 0.5229508196721312,
+      "homeGoalMae": 0.9627530551879487,
+      "awayGoalMae": 0.8804745031344318,
+      "exactScoreAccuracy": 0.14590163934426228
+    },
+    "2024": {
+      "sample": 1651,
+      "brier": 0.5978447498378624,
+      "logLoss": 0.9986593899018513,
+      "accuracy": 0.51847365233192,
+      "homeGoalMae": 0.979651128069257,
+      "awayGoalMae": 0.9149724312866626,
+      "exactScoreAccuracy": 0.11811023622047244
+    },
+    "2025": {
+      "sample": 1673,
+      "brier": 0.5965420326289497,
+      "logLoss": 0.9993733507392378,
+      "accuracy": 0.5277943813508668,
+      "homeGoalMae": 0.963676363218281,
+      "awayGoalMae": 0.8980263092267362,
+      "exactScoreAccuracy": 0.100418410041841
+    },
+    "2026": {
+      "sample": 1155,
+      "brier": 0.6136627483463625,
+      "logLoss": 1.0257525701180175,
+      "accuracy": 0.5082251082251082,
+      "homeGoalMae": 0.9770061551635691,
+      "awayGoalMae": 0.8870370015325235,
+      "exactScoreAccuracy": 0.12467532467532468
+    }
+  }
+}

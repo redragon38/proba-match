@@ -177,7 +177,7 @@ export interface Prediction {
   cleanAway: number;
   confidence: number;
   sample: number;
-  factors: { label: string; detail: string }[];
+  factors: { label: string; detail: string; side?: 'home' | 'away' | 'neutral' }[];
   inputHash: string;
   lineupConfirmed: boolean;
 }

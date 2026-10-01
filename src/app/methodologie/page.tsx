@@ -33,7 +33,7 @@ export default function Page() {
         <h2>02 — Elo : le niveau relatif</h2>
         <p>
           Chaque équipe commence à 1 500 points. Après une rencontre, son rating évolue selon le
-          résultat, l’adversaire et l’écart de buts. La v1 utilise K = 24 et un avantage domicile de
+          résultat, l’adversaire et l’écart de buts. Le moteur utilise K = 24 et un avantage domicile de
           60 points, paramétrables dans le moteur. L’écart de buts est amorti par un logarithme. Les
           historiques de rating sont conservés.
         </p>
@@ -49,7 +49,7 @@ export default function Page() {
           ; il ne constitue pas une preuve d’amélioration.
         </p>
         <p>
-          La v1 retient jusqu’à 20 matchs terminés par équipe et exige au moins cinq observations de
+          Le modèle retient jusqu’à 20 matchs terminés par équipe et exige au moins cinq observations de
           chaque côté. Le poids diminue de moitié tous les 60 jours. Un match joué dans le contexte
           domicile/extérieur opposé reçoit un poids de 0,65. La force adverse ajuste les buts
           observés par un facteur borné de 0,75 à 1,30.
@@ -75,6 +75,13 @@ export default function Page() {
           score le plus plausible reste une possibilité dont la probabilité peut être faible. Les
           probabilités de clean sheet suivent exp(−λ adverse).
         </p>
+        <p>
+          Depuis la version 1.2, le rapport entre les deux espérances de buts est réduit à 80 % de
+          sa valeur logarithmique, sans modifier leur moyenne géométrique. Ce paramètre a été choisi
+          sur les matchs antérieurs à 2025, puis vérifié sur 2025 et 2026 séparément. Les probabilités
+          « les deux marquent », buts totaux, marges et scores possibles proviennent de cette même
+          matrice, sans modèle supplémentaire. La probabilité d’un score précis reste faible.
+        </p>
       </section>
       <section>
         <h2>05 — La confiance décrit les informations</h2>
@@ -85,7 +92,7 @@ export default function Page() {
           modèle.
         </p>
         <p>
-          La v1 utilise les résultats, les lieux, les dates et l’Elo. Elle ne transforme pas les
+          Le modèle utilise les résultats, les lieux, les dates et l’Elo. Il ne transforme pas les
           absences, la fatigue, la météo, les compositions, les xG/xA ou les confrontations directes
           en ajustements de force sans un modèle validé. Les compositions disponibles améliorent
           seulement la qualité des informations. Possession, tirs, corners et cartons projetés
@@ -117,10 +124,12 @@ export default function Page() {
         </p>
         <p>
           Le backtest parcourt les matchs dans l’ordre. Seules les rencontres terminées dont le coup
-          d’envoi précède la cible d’au moins trois heures sont utilisables. Les statistiques
+          d’envoi précède la cible d’au moins trois heures dans le test historique initial, puis de
+          24 heures dans le test de validation renforcé. Les statistiques
           saisonnières actuelles, blessures actuelles et compositions connues plus tard sont
           exclues. Ce délai conservateur ne remplace pas un journal historique de disponibilité
-          exacte des données ; les imports doivent être audités.
+          exacte des données ; les imports doivent être audités. Les métriques de ce test
+          rétrospectif ne sont pas celles de prédictions réellement publiées avant-match.
         </p>
       </section>
       <section>
@@ -128,8 +137,10 @@ export default function Page() {
         <p>
           Le football est peu prévisible. Les cartons rouges, rotations, changements tactiques et
           petits échantillons peuvent rendre ces estimations fragiles. L’indépendance des deux
-          distributions ignore certaines corrélations entre scores. Les paramètres de la v1 sont des
-          hypothèses de départ, pas un modèle calibré et validé sur toutes les compétitions.
+          distributions ignore certaines corrélations entre scores. La validation chronologique
+          réduit certaines erreurs observées, mais ne prouve pas une amélioration future sur toutes
+          les compétitions. Le nombre de prédictions publiées puis évaluées reste insuffisant pour
+          mesurer la performance réelle en production.
         </p>
         <p>
           Les données réelles peuvent être retardées ou incomplètes. Une rencontre annulée ou

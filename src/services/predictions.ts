@@ -53,7 +53,7 @@ export async function persistPredictions(data: Dataset, now = new Date()) {
     where: { id: MODEL_VERSION },
     create: {
       id: MODEL_VERSION,
-      description: 'Elo et Poisson indépendants avec décroissance temporelle',
+      description: 'Elo, forme et Poisson indépendant ; rapport des buts attendus réduit à 0,8 après validation chronologique',
       parameters: MODEL_PARAMETERS,
     },
     update: {},

@@ -4,12 +4,14 @@ import { eloHistory } from './elo';
 import { scoreDistribution } from './poisson';
 import { confidenceScore } from './confidence';
 import { formIndex } from './form';
-export const MODEL_VERSION = 'elo-poisson-1.1.0';
+import { shrinkExpectedGoals } from './calibration';
+export const MODEL_VERSION = 'elo-poisson-1.2.0';
 export const MODEL_PARAMETERS = {
   homeAdvantage: 60,
   halfLifeDays: 60,
   formHalfLifeDays: 30,
   formTilt: 0.12,
+  goalStrength: 0.8,
   k: 24,
   minMatches: 5,
   maxMatches: 20,
@@ -19,6 +21,8 @@ export class PredictionEngine {
   constructor(
     private homeAdvantage = 60,
     private halfLifeDays = 60,
+    private goalStrength: number = MODEL_PARAMETERS.goalStrength,
+    private modelVersion = MODEL_VERSION,
   ) {}
   predict(
     match: Match,
@@ -76,8 +80,13 @@ export class PredictionEngine {
       0.75,
       1.35,
     );
-    const expectedHome = clamp((h.attack * 0.6 + a.defense * 0.4) * tilt, 0.15, 4.5),
-      expectedAway = clamp((a.attack * 0.6 + h.defense * 0.4) / tilt, 0.15, 4.5);
+    const rawHome = clamp((h.attack * 0.6 + a.defense * 0.4) * tilt, 0.15, 4.5),
+      rawAway = clamp((a.attack * 0.6 + h.defense * 0.4) / tilt, 0.15, 4.5);
+    const { home: expectedHome, away: expectedAway } = shrinkExpectedGoals(
+      rawHome,
+      rawAway,
+      this.goalStrength,
+    );
     const distribution = scoreDistribution(expectedHome, expectedAway);
     const sample = Math.min(homeMatches.length, awayMatches.length);
     const daysOld = Math.max(
@@ -105,9 +114,10 @@ export class PredictionEngine {
     const inputHash = createHash('sha256')
       .update(
         JSON.stringify({
-          version: MODEL_VERSION,
+          version: this.modelVersion,
           homeAdvantage: this.homeAdvantage,
           halfLifeDays: this.halfLifeDays,
+          goalStrength: this.goalStrength,
           cutoff,
           matches: eligible.map((m) => [m.id, m.homeScore, m.awayScore, m.kickoff]).sort(),
           lineupConfirmed,
@@ -115,9 +125,9 @@ export class PredictionEngine {
       )
       .digest('hex');
     return {
-      id: `${match.id}-${MODEL_VERSION}-${inputHash.slice(0, 12)}`,
+      id: `${match.id}-${this.modelVersion}-${inputHash.slice(0, 12)}`,
       matchId: match.id,
-      version: MODEL_VERSION,
+      version: this.modelVersion,
       createdAt: asOf,
       cutoff,
       home: distribution.home,
@@ -137,14 +147,17 @@ export class PredictionEngine {
         {
           label: 'Production offensive récente',
           detail: `Domicile : ${h.attack.toFixed(2)} ; extérieur : ${a.attack.toFixed(2)} buts pondérés par match.`,
+          side: h.attack > a.attack + 0.1 ? 'home' : a.attack > h.attack + 0.1 ? 'away' : 'neutral',
         },
         {
           label: 'Résistance défensive récente',
           detail: `Domicile : ${h.defense.toFixed(2)} ; extérieur : ${a.defense.toFixed(2)} buts encaissés pondérés.`,
+          side: h.defense + 0.1 < a.defense ? 'home' : a.defense + 0.1 < h.defense ? 'away' : 'neutral',
         },
         {
           label: 'Niveau Elo et terrain',
           detail: `Écart ajusté de ${Math.round(eloDiff)} points, dont ${this.homeAdvantage} points d’avantage à domicile.`,
+          side: eloDiff > 25 ? 'home' : eloDiff < -25 ? 'away' : 'neutral',
         },
         {
           label: 'Récence et échantillon',
@@ -153,6 +166,7 @@ export class PredictionEngine {
         {
           label: 'Forme ajustée aux adversaires',
           detail: `Domicile : ${Math.round(homeForm)}/100 ; extérieur : ${Math.round(awayForm)}/100. Dix résultats récents au maximum, pondérés sur 30 jours et comparés aux attentes Elo d’avant chaque rencontre. Ajustement des buts volontairement limité.`,
+          side: homeForm > awayForm + 5 ? 'home' : awayForm > homeForm + 5 ? 'away' : 'neutral',
         },
       ],
     };
