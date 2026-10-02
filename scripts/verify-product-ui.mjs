@@ -13,7 +13,19 @@ try {
   const context = await browser.newContext();
   const page = await context.newPage();
   const catalog = await (await page.request.get(`${base}/api/matches/today`)).json();
-  const match = catalog.matches[0];
+  let match = catalog.matches[0];
+  if (!match) {
+    const scheduled = await (
+      await page.request.get(`${base}/api/matches?status=scheduled&limit=1`)
+    ).json();
+    match = scheduled.matches?.[0];
+  }
+  if (!match) {
+    const finished = await (
+      await page.request.get(`${base}/api/matches?status=finished&limit=1`)
+    ).json();
+    match = finished.matches?.[0];
+  }
   if (!match || catalog.source !== 'openfootball') throw new Error('Real local catalogue required');
   const team = await (await page.request.get(`${base}/api/teams/${match.homeId}`)).json();
   const competition = await (

@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
+  expiredSnapshotWarning,
   hasLateOpenResults,
   lateResultsWarning,
+  withSnapshotExpiry,
   withSourceFreshness,
 } from '@/services/football/freshness';
 import type { Dataset, Match, MatchStatus } from '@/types/football';
@@ -37,6 +39,14 @@ const dataset = (changes: Partial<Match> = {}): Dataset => ({
 });
 
 describe('Source results freshness', () => {
+  it('marks a cached snapshot late when its DB deadline passes without a new revision', () => {
+    const data = dataset({ status: 'finished' });
+    expect(withSnapshotExpiry(data, now + 1, now)).toBe(data);
+    const expired = withSnapshotExpiry(data, now - 1, now);
+    expect(expired).toMatchObject({ degraded: true, warning: expiredSnapshotWarning });
+    expect(withSnapshotExpiry(expired, now - 1, now).warning).toBe(expiredSnapshotWarning);
+    expect(data.degraded).toBeUndefined();
+  });
   it('warns after six hours without treating elapsed time as a final score', () => {
     const data = dataset();
     expect(hasLateOpenResults(data, now)).toBe(false);

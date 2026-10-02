@@ -6,7 +6,7 @@ import { readLocalDataset, emptyDataset } from './local-store';
 import { log } from '@/lib/logger';
 import type { Dataset } from '@/types/football';
 import { db } from '@/database/client';
-import { withSourceFreshness } from './freshness';
+import { withSnapshotExpiry, withSourceFreshness } from './freshness';
 const datasets = new MemoryCache(2);
 export const getDataset = requestCache(async function getDataset(): Promise<Dataset> {
   if (!process.env.DATABASE_URL) {
@@ -19,7 +19,7 @@ export const getDataset = requestCache(async function getDataset(): Promise<Data
   try {
     const marker = await db.cacheEntry.findUnique({
       where: { key: 'football:dataset' },
-      select: { updatedAt: true },
+      select: { updatedAt: true, expiresAt: true },
     });
     return await datasets
       .get(
@@ -32,12 +32,14 @@ export const getDataset = requestCache(async function getDataset(): Promise<Data
             throw new Error('DATABASE_UNAVAILABLE');
           }
         },
-        15000,
-        7 * 86400_000,
+        10 * 60000,
+        0,
       )
       .then((data) => {
         lastDataset = data;
-        return withSourceFreshness(data);
+        return withSourceFreshness(
+          marker ? withSnapshotExpiry(data, marker.expiresAt.getTime()) : data,
+        );
       });
   } catch {
     return lastDataset

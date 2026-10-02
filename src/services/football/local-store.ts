@@ -1,6 +1,7 @@
 import { db } from '@/database/client';
 import type { Dataset, Match } from '@/types/football';
 import { teamLogo } from '@/lib/team-logo';
+import { withSnapshotExpiry } from './freshness';
 export function emptyDataset(warning?: string): Dataset {
   return {
     source: 'openfootball',
@@ -22,16 +23,14 @@ export async function readLocalDataset(): Promise<Dataset> {
     );
   const data = entry.payload as unknown as Dataset;
   if (data.source === 'demo') throw new Error('DEMO_NOT_ALLOWED_IN_REAL_STORE');
-  return {
-    ...data,
-    teams: data.teams.map((team) => ({ ...team, logo: teamLogo(team) })),
-    revision: entry.updatedAt.toISOString(),
-    degraded: !!data.degraded || entry.expiresAt.getTime() < Date.now(),
-    warning:
-      entry.expiresAt.getTime() < Date.now()
-        ? 'Dernières données sauvegardées. La synchronisation est en retard ; les scores peuvent être différés.'
-        : data.warning,
-  };
+  return withSnapshotExpiry(
+    {
+      ...data,
+      teams: data.teams.map((team) => ({ ...team, logo: teamLogo(team) })),
+      revision: entry.updatedAt.toISOString(),
+    },
+    entry.expiresAt.getTime(),
+  );
 }
 export async function readLocalHistory(): Promise<Match[]> {
   const rows = await db.match.findMany({

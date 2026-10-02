@@ -106,6 +106,17 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean }
     const injuryTeamIds = new Set<string>();
     const matched = new Map<string, string>();
     let detailAttempted = false;
+    let detailCache:
+      | {
+          externalId: string;
+          key: string;
+          fields: {
+            payload: { complete: boolean };
+            expiresAt: Date;
+            staleUntil: Date;
+          };
+        }
+      | undefined;
     try {
       for (const m of relevant) {
         const alias = await db.footballIdentity.findFirst({
@@ -206,11 +217,7 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean }
             expiresAt: new Date(now + ttl),
             staleUntil: new Date(now + ttl),
           };
-          await db.cacheEntry.upsert({
-            where: { key },
-            create: { key, ...fields },
-            update: fields,
-          });
+          detailCache = { externalId: detailedId, key, fields };
         }
         for (const ext of batch.matches) {
           const local = data.matches.find((m) => m.id === matched.get(ext.id));
@@ -405,6 +412,11 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean }
         );
     }
     await persistDataset(data, changed, { injuryTeamIds: [...injuryTeamIds] });
+    // A failed persistence must leave this fixture eligible for the next enrichment run.
+    if (detailCache && changed.has(matched.get(detailCache.externalId)!)) {
+      const { key, fields } = detailCache;
+      await db.cacheEntry.upsert({ where: { key }, create: { key, ...fields }, update: fields });
+    }
     if (predictionChanged) {
       const history = await readLocalHistory();
       if (resultCompetitions.size) await rebuildElo(history);

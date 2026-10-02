@@ -2,6 +2,20 @@ import type { Dataset } from '@/types/football';
 
 export const lateResultsWarning =
   'Certains matchs passés restent sans résultat dans la source OpenFootball. Les derniers scores et les classements peuvent être incomplets.';
+export const expiredSnapshotWarning =
+  'Dernières données sauvegardées. La synchronisation est en retard ; les scores peuvent être différés.';
+
+/** The database revision is stable while its freshness deadline can pass between requests. */
+export function withSnapshotExpiry(data: Dataset, expiresAt: number, now = Date.now()): Dataset {
+  if (expiresAt >= now) return data;
+  return {
+    ...data,
+    degraded: true,
+    warning: data.warning?.includes(expiredSnapshotWarning)
+      ? data.warning
+      : [data.warning, expiredSnapshotWarning].filter(Boolean).join(' '),
+  };
+}
 
 export function hasLateOpenResults(
   data: Pick<Dataset, 'source' | 'matches'> | undefined,
