@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import type { Match, Team, Competition, Prediction } from '@/types/football';
-import { TeamBadge, ProbabilityBar } from '@/components/ui';
+import { TeamBadge, ProbabilityCompact } from '@/components/ui';
 import { LocalTime } from '@/components/local-time';
 import { FavoriteButton } from '@/features/favorites';
 export function MatchCard({
@@ -72,8 +72,8 @@ export function MatchCard({
       </Link>
       {!compact && prediction && m.status === 'scheduled' && (
         <div className="sport-card-projection">
-          <span>Projection Proba Match · qualité des données {prediction.confidence}/100</span>
-          <ProbabilityBar {...prediction} />
+          <span>Probabilités du match · 1 domicile, N nul, 2 extérieur</span>
+          <ProbabilityCompact {...prediction} homeName={home.name} awayName={away.name} />
         </div>
       )}
       {live &&

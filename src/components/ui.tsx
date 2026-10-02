@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ProviderImage } from './provider-image';
 import { ArrowUpRight, Trophy } from 'lucide-react';
 import type { Team } from '@/types/football';
-import { probabilityPercentages } from '@/lib/probability-format';
+import { probabilityPercentages, probabilityReading } from '@/lib/probability-format';
 import { teamLogo } from '@/lib/team-logo';
 export function TeamBadge({
   team,
@@ -108,9 +108,9 @@ export function ProbabilityBar({
         role="img"
         aria-label={`Domicile ${values[0]} %, nul ${values[1]} %, extérieur ${values[2]} %`}
       >
-        <span style={{ width: `${home * 100}%` }} />
-        <span style={{ width: `${draw * 100}%` }} />
-        <span style={{ width: `${away * 100}%` }} />
+        <span style={{ width: `${values[0]}%` }} />
+        <span style={{ width: `${values[1]}%` }} />
+        <span style={{ width: `${values[2]}%` }} />
       </div>
       {labels && (
         <div className="prob-labels">
@@ -125,6 +125,39 @@ export function ProbabilityBar({
           </span>
         </div>
       )}
+    </div>
+  );
+}
+export function ProbabilityCompact({
+  home,
+  draw,
+  away,
+  homeName,
+  awayName,
+}: {
+  home: number;
+  draw: number;
+  away: number;
+  homeName: string;
+  awayName: string;
+}) {
+  const values = probabilityPercentages(home, draw, away);
+  const reading = probabilityReading(home, draw, away);
+  return (
+    <div
+      className="compact-probabilities"
+      role="group"
+      aria-label={`Probabilités avant-match : ${homeName} ${values[0]} %, nul ${values[1]} %, ${awayName} ${values[2]} %`}
+    >
+      {['1', 'N', '2'].map((label, index) => (
+        <span
+          key={label}
+          className={reading?.emphasize && reading.leader === index ? 'is-leading' : ''}
+        >
+          <small>{label}</small>
+          <strong>{values[index]} %</strong>
+        </span>
+      ))}
     </div>
   );
 }

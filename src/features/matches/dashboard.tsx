@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import type { Dataset, Match, Prediction } from '@/types/football';
 import { dateKey } from '@/lib/format';
+import { formatProbability } from '@/lib/probability-format';
 import { AdSlot, Empty, ProbabilityBar, SectionTitle, TeamBadge } from '@/components/ui';
 import { SourceBanner } from '@/components/source-banner';
 import { MatchList } from './match-list';
@@ -71,12 +72,15 @@ export function Dashboard({
   const { values } = useFavorites();
   const zone = useTimeZone();
   const today = dateKey(new Date(), zone);
-  const hasMatchesToday = automaticDate && data.matches.some((match) =>
-    (match.kickoffKnown === false && match.sourceDate
-      ? match.sourceDate
-      : dateKey(new Date(match.kickoff), zone)) === today &&
-    (status === 'all' || status === 'favorites' || match.status === status),
-  );
+  const hasMatchesToday =
+    automaticDate &&
+    data.matches.some(
+      (match) =>
+        (match.kickoffKnown === false && match.sourceDate
+          ? match.sourceDate
+          : dateKey(new Date(match.kickoff), zone)) === today &&
+        (status === 'all' || status === 'favorites' || match.status === status),
+    );
   const activeDate = hasMatchesToday ? today : initialDate;
   const live = useLive(data.matches);
   const dayMatches = full
@@ -166,7 +170,9 @@ export function Dashboard({
             {full && !params.has('date')
               ? 'Le calendrier et les résultats'
               : automaticDate && activeDate !== today
-                ? activeDate < today ? 'Les derniers résultats' : 'Les prochains matchs'
+                ? activeDate < today
+                  ? 'Les derniers résultats'
+                  : 'Les prochains matchs'
                 : `Les matchs ${activeDate === today ? 'du jour' : 'à l’affiche'}`}
           </h2>
           <span>
@@ -465,9 +471,16 @@ export function Dashboard({
                   </span>
                 </div>
                 <div className="insight-main">
-                  <span>Score le plus plausible</span>
-                  <strong>{predictions[featured.id].likelyScore}</strong>
-                  <small>Une possibilité parmi toutes les autres</small>
+                  <span>Score individuel le plus probable</span>
+                  <strong>
+                    {predictions[featured.id].scores[0]
+                      ? predictions[featured.id].likelyScore
+                      : 'Non disponible'}
+                  </strong>
+                  <small>
+                    {formatProbability(predictions[featured.id].scores[0]?.probability)} pour ce
+                    score précis
+                  </small>
                 </div>
                 <ProbabilityBar {...predictions[featured.id]} />
                 <div className="quality-row">

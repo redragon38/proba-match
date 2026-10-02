@@ -3,10 +3,9 @@ import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 import type { Competition, Match, Prediction, Team } from '@/types/football';
-import { TeamBadge, Empty } from '@/components/ui';
+import { TeamBadge, Empty, ProbabilityCompact } from '@/components/ui';
 import { FavoriteButton, useFavorites } from '@/features/favorites';
 import { LocalTime } from '@/components/local-time';
-import { probabilityPercentages } from '@/lib/probability-format';
 export function MatchList({
   matches,
   teams,
@@ -70,7 +69,7 @@ export function MatchList({
                 <>
                   <div className="match-column-labels">
                     <span>RENCONTRE</span>
-                    <span>PROBABILITÉS 1 · N · 2</span>
+                    <span>PRÉDICTION AVANT-MATCH · 1 N 2</span>
                   </div>
                   {rows.map((m) => {
                     const home = teams.find((t) => t.id === m.homeId)!,
@@ -142,27 +141,7 @@ export function MatchList({
                         </Link>
                         <div className="row-prediction">
                           {p ? (
-                            <>
-                              <div className="prob-chips">
-                                {[p.home, p.draw, p.away].map((v, i) => (
-                                  <span
-                                    key={i}
-                                    className={
-                                      v === Math.max(p.home, p.draw, p.away) ? 'highest' : ''
-                                    }
-                                  >
-                                    {probabilityPercentages(p.home, p.draw, p.away)[i]}
-                                    <small>%</small>
-                                  </span>
-                                ))}
-                              </div>
-                              <span
-                                className="confidence-caption"
-                                title="La confiance mesure la qualité des informations, pas la chance de victoire."
-                              >
-                                <i /> Qualité des données : {p.confidence}/100
-                              </span>
-                            </>
+                            <ProbabilityCompact {...p} homeName={home.name} awayName={away.name} />
                           ) : (
                             <span className="muted tiny">Données insuffisantes</span>
                           )}

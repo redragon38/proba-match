@@ -386,9 +386,12 @@ input[type='search'] {
 .prob-track {
   height: 6px;
   display: flex;
-  gap: 3px;
+  gap: 0;
   border-radius: 4px;
   overflow: hidden;
+}
+.prob-track span + span {
+  box-shadow: inset 2px 0 var(--surface);
 }
 .prob-track span:first-child {
   background: #209478;

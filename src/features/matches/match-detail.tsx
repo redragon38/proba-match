@@ -1,11 +1,11 @@
 'use client';
 import Link from 'next/link';
-import { ArrowLeft, MapPin, ShieldCheck, Sparkles, UserRound } from 'lucide-react';
+import { ArrowLeft, MapPin, UserRound } from 'lucide-react';
 import type { Dataset, Match, Prediction } from '@/types/football';
 import { Empty, Form, Metric, ProbabilityBar, SectionTitle, TeamBadge } from '@/components/ui';
 import { SourceBanner } from '@/components/source-banner';
 import { FavoriteButton } from '@/features/favorites';
-import { dayLabel, number, percent, time } from '@/lib/format';
+import { dayLabel, number, time } from '@/lib/format';
 import { playerWatch } from '@/prediction-engine/player';
 import { MatchList } from './match-list';
 import { PlayerPerformances } from './player-performances';
@@ -13,11 +13,10 @@ import { teamSummary } from '@/services/statistics';
 import { useLive } from './use-live';
 import { LocalTime } from '@/components/local-time';
 import { ShareButton } from '@/components/share-button';
-import { probabilityPercentages } from '@/lib/probability-format';
-import { roundedPercentages } from '@/lib/probability-format';
-import type { predictionInsights, predictionExplanation, informationQuality } from '@/prediction-engine/insights';
+import type { predictionInsights, informationQuality } from '@/prediction-engine/insights';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { MatchOverview } from './match-overview';
+import { ProbabilitySummary } from './probability-summary';
 const tabs = [
   ['apercu', 'Aperçu'],
   ['prediction', 'Prédiction'],
@@ -34,7 +33,6 @@ export function MatchDetail({
   tab,
   history = [],
   analysis,
-  explanation,
   quality,
 }: {
   data: Dataset;
@@ -43,7 +41,6 @@ export function MatchDetail({
   tab: string;
   history?: Prediction[];
   analysis?: ReturnType<typeof predictionInsights>;
-  explanation?: ReturnType<typeof predictionExplanation>;
   quality?: ReturnType<typeof informationQuality>;
 }) {
   const live = useLive([initialMatch], true);
@@ -169,185 +166,50 @@ export function MatchDetail({
           Actualisation indisponible : les dernières données reçues sont conservées.
         </p>
       )}
-      {tab === 'apercu' && <MatchOverview data={data} match={match} />}
-      {tab === 'prediction' && (
-        <details className="card advanced-panel prediction-history">
-          <summary>Historique des probabilités</summary>
-          {history.length ? (
-            <ol>
-              {history.map((p) => (
-                <li key={p.id}>
-                  <span>
-                    {dayLabel(p.createdAt)} · {time(p.createdAt)} ·{' '}
-                    {p.lineupConfirmed ? 'Compositions disponibles' : 'Avant-match'} · {p.version}
-                  </span>
-                  <ProbabilityBar {...p} />
-                </li>
-              ))}
-            </ol>
-          ) : (
-            <p className="data-note">
-              Aucun historique de prédictions publiées disponible. Une courbe ne sera affichée qu’à
-              partir de véritables instantanés enregistrés avant le match.
-            </p>
-          )}
-        </details>
+      {tab === 'apercu' && (match.status !== 'scheduled' || !prediction) && (
+        <MatchOverview data={data} match={match} />
       )}
       {(tab === 'prediction' || tab === 'apercu') && (
         <div className="detail-columns">
           <div>
             <SectionTitle title="La lecture du modèle" eyebrow="PROJECTIONS STATISTIQUES" />
             {prediction ? (
-              <section className="card prediction-detail">
-                <div className="prediction-title">
-                  <Sparkles size={18} />
-                  <h3>Probabilités de résultat</h3>
-                  <span className="version-badge">{prediction.version}</span>
-                </div>
-                <div className="prob-big-labels">
-                  <span>
-                    {home.short}
-                    <b>
-                      {probabilityPercentages(prediction.home, prediction.draw, prediction.away)[0]}{' '}
-                      %
-                    </b>
-                  </span>
-                  <span>
-                    Match nul
-                    <b>
-                      {probabilityPercentages(prediction.home, prediction.draw, prediction.away)[1]}{' '}
-                      %
-                    </b>
-                  </span>
-                  <span>
-                    {away.short}
-                    <b>
-                      {probabilityPercentages(prediction.home, prediction.draw, prediction.away)[2]}{' '}
-                      %
-                    </b>
-                  </span>
-                </div>
-                <ProbabilityBar {...prediction} labels={false} />
-                <div className="metrics three">
-                  <Metric
-                    label="Buts attendus · domicile"
-                    value={number(prediction.expectedHome, 2)}
-                  />
-                  <Metric
-                    label="Score le plus probable"
-                    value={prediction.likelyScore}
-                    note={`${percent(prediction.scores[0].probability)} de probabilité`}
-                  />
-                  <Metric
-                    label="Buts attendus · extérieur"
-                    value={number(prediction.expectedAway, 2)}
-                  />
-                </div>
-                <div className="quality-info">
-                  <ShieldCheck size={20} />
-                  <div>
-                    <strong>Qualité des informations : {quality?.level ?? 'Non évaluée'}</strong>
-                    <p>
-                      Indice de qualité {prediction.confidence}/100, distinct de la probabilité du résultat.
-                    </p>
-                    {quality?.reasons.map((reason) => <p key={reason}>{reason}</p>)}
-                  </div>
-                </div>
-                <div className="advanced-panel">
-                  <h4>Pourquoi cette prédiction ?</h4>
-                  <p>{explanation?.summary ?? 'Les résultats antérieurs alimentent le modèle.'}</p>
-                </div>
-                <details className="advanced-panel">
-                  <summary>Facteurs observés et limites</summary>
-                  {prediction.factors.map((f) => (
-                    <div className="factor" key={f.label}>
-                      <strong>{f.label}</strong>
-                      <p>{f.detail}</p>
-                    </div>
-                  ))}
-                </details>
-                <p className="data-note">
-                  {data.source === 'demo'
-                    ? 'Calcul illustratif sur données fictives ; les rencontres déjà commencées sont des reconstitutions, pas des prédictions archivées avant match.'
-                    : `Prédiction enregistrée le ${new Date(prediction.createdAt).toLocaleString('fr-FR')}.`}
-                  {prediction.lineupConfirmed &&
-                    ' Compositions officielles disponibles lors du calcul ; elles affectent la qualité des informations, sans ajustement de force dans ce modèle.'}
-                </p>
+              <>
+                <ProbabilitySummary
+                  prediction={prediction}
+                  home={home}
+                  away={away}
+                  analysis={analysis}
+                  quality={quality}
+                  demo={data.source === 'demo'}
+                />
                 <Link href="/methodologie" className="text-link">
                   Lire la méthodologie et les limites →
                 </Link>
-              </section>
+              </>
             ) : (
               <div className="card">
-                <Empty text={
-                  homeSummary.played < 5 || awaySummary.played < 5
-                    ? 'Une projection exige au moins cinq résultats antérieurs pour chaque équipe.'
-                    : match.status === 'scheduled'
-                      ? 'Aucune projection pré-match archivée pour cette rencontre. Les calculs sont publiés automatiquement dans les 21 jours avant le match.'
-                      : 'Aucune projection enregistrée avant cette rencontre.'
-                } />
+                <Empty
+                  text={
+                    homeSummary.played < 5 || awaySummary.played < 5
+                      ? 'Une projection exige au moins cinq résultats antérieurs pour chaque équipe.'
+                      : match.status === 'scheduled'
+                        ? 'Aucune projection pré-match archivée pour cette rencontre. Les calculs sont publiés automatiquement dans les 21 jours avant le match.'
+                        : 'Aucune projection enregistrée avant cette rencontre.'
+                  }
+                />
               </div>
-            )}
-            {tab === 'prediction' && prediction && analysis && (
-              <>
-                <SectionTitle title="Projections complémentaires" />
-                <div className="metrics three">
-                  <Metric
-                    label="Total de buts attendu"
-                    value={number(analysis.expectedTotal, 2)}
-                  />
-                  <Metric
-                    label={`Clean sheet · ${home.short}`}
-                    value={percent(analysis.cleanHome)}
-                  />
-                  <Metric
-                    label={`Clean sheet · ${away.short}`}
-                    value={percent(analysis.cleanAway)}
-                  />
-                </div>
-                <SectionTitle title="Autres probabilités dérivées" />
-                <div className="metrics three">
-                  <Metric label="Les deux équipes marquent" value={percent(analysis.bothScore)} />
-                  <Metric label={`${home.short} marque`} value={percent(analysis.homeScores)} />
-                  <Metric label={`${away.short} marque`} value={percent(analysis.awayScores)} />
-                  <Metric label="Au moins 3 buts" value={percent(analysis.totalGoals.slice(3).reduce((sum, value) => sum + value, 0))} />
-                  <Metric label="Au moins 4 buts" value={percent(analysis.totalGoals.slice(4).reduce((sum, value) => sum + value, 0))} />
-                </div>
-                <p className="data-note">Répartition du nombre total de buts : {roundedPercentages(analysis.totalGoals).map((value, index) => `${index === 5 ? '5+' : index} : ${value} %`).join(' · ')}</p>
-                <p className="data-note">Écart de buts : {roundedPercentages(analysis.margin).map((value, index) => `${index === 3 ? '3+' : index} : ${value} %`).join(' · ')}</p>
-                <p className="data-note">Ces probabilités sont calculées à partir de la même matrice de scores que le 1N2. Elles ne prédisent pas la possession, les tirs, les corners ni les cartons.</p>
-                <SectionTitle title="Les scores les plus probables" />
-                <div className="score-projections">
-                  {analysis.topScores.slice(0, 3).map((s) => (
-                    <div className="card" key={`${s.home}-${s.away}`}>
-                      <strong>
-                        {s.home}–{s.away}
-                      </strong>
-                      <span>{percent(s.probability)}</span>
-                    </div>
-                  ))}
-                </div>
-                <details className="advanced-panel">
-                  <summary>Voir deux autres scores possibles</summary>
-                  <div className="score-projections">
-                    {analysis.topScores.slice(3).map((s) => (
-                      <div className="card" key={`${s.home}-${s.away}`}>
-                        <strong>{s.home}–{s.away}</strong>
-                        <span>{percent(s.probability)}</span>
-                      </div>
-                    ))}
-                  </div>
-                </details>
-              </>
             )}
           </div>
           <aside>
             <SectionTitle title="Joueurs à suivre" />
             <section className="card padded">
-              {watched.length > 0 && <p className="data-note">
-                Indice heuristique sur les statistiques disponibles et la part de titularisations.
-                Ce classement n’est pas une probabilité de devenir homme du match.
-              </p>}
+              {watched.length > 0 && (
+                <p className="data-note">
+                  Indice heuristique sur les statistiques disponibles et la part de titularisations.
+                  Ce classement n’est pas une probabilité de devenir homme du match.
+                </p>
+              )}
               {watched.length ? (
                 watched.map(({ player: p, score }, i) => (
                   <Link href={`/joueur/${p.slug}`} className="player-ranking" key={p.id}>
@@ -363,9 +225,11 @@ export function MatchDetail({
                   </Link>
                 ))
               ) : (
-                <p className="data-note">{data.players.length
-                  ? 'Aucun joueur de ces équipes ne possède assez de statistiques pour cet indice.'
-                  : 'Aucune statistique individuelle disponible pour les joueurs de ces équipes. La source actuelle fournit les matchs et résultats, sans effectifs.'}</p>
+                <p className="data-note">
+                  {data.players.length
+                    ? 'Aucun joueur de ces équipes ne possède assez de statistiques pour cet indice.'
+                    : 'Aucune statistique individuelle disponible pour les joueurs de ces équipes. La source actuelle fournit les matchs et résultats, sans effectifs.'}
+                </p>
               )}
             </section>
             <SectionTitle title="Absences signalées" />
@@ -392,6 +256,32 @@ export function MatchDetail({
             </section>
           </aside>
         </div>
+      )}
+      {tab === 'apercu' && match.status === 'scheduled' && prediction && (
+        <MatchOverview data={data} match={match} />
+      )}
+      {tab === 'prediction' && (
+        <details className="card advanced-panel prediction-history">
+          <summary>Historique des probabilités</summary>
+          {history.length ? (
+            <ol>
+              {history.map((p) => (
+                <li key={p.id}>
+                  <span>
+                    {dayLabel(p.createdAt)} · {time(p.createdAt)} ·{' '}
+                    {p.lineupConfirmed ? 'Compositions disponibles' : 'Avant-match'} · {p.version}
+                  </span>
+                  <ProbabilityBar {...p} />
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="data-note">
+              Aucun historique de prédictions publiées disponible. Une courbe ne sera affichée qu’à
+              partir de véritables instantanés enregistrés avant le match.
+            </p>
+          )}
+        </details>
       )}
       {tab === 'statistiques' && (
         <>
@@ -430,7 +320,10 @@ export function MatchDetail({
             </section>
           ) : (
             <>
-              <p className="data-note">Aucune statistique détaillée de cette rencontre n’a été transmise. Les chiffres ci-dessous proviennent uniquement des résultats antérieurs des deux équipes.</p>
+              <p className="data-note">
+                Aucune statistique détaillée de cette rencontre n’a été transmise. Les chiffres
+                ci-dessous proviennent uniquement des résultats antérieurs des deux équipes.
+              </p>
               <SectionTitle title="Historique avant cette rencontre" />
               <div className="metrics three">
                 <Metric label={`Matchs · ${home.short}`} value={homeSummary.played} />
@@ -502,9 +395,13 @@ export function MatchDetail({
             </div>
           ) : (
             <div className="card">
-              <Empty text={match.status === 'scheduled'
-                ? 'Aucune composition publiée par la source pour le moment.'
-                : 'Aucune composition transmise par la source pour cette rencontre.'} />
+              <Empty
+                text={
+                  match.status === 'scheduled'
+                    ? 'Aucune composition publiée par la source pour le moment.'
+                    : 'Aucune composition transmise par la source pour cette rencontre.'
+                }
+              />
             </div>
           )}
         </>
@@ -556,8 +453,8 @@ export function MatchDetail({
         <>
           <SectionTitle title="Confrontations directes" eyebrow="LES 10 DERNIÈRES DISPONIBLES" />
           <p className="data-note">
-            Uniquement les rencontres antérieures à ce match. Le modèle n’ajoute pas de poids spécifique
-            aux confrontations directes.
+            Uniquement les rencontres antérieures à ce match. Le modèle n’ajoute pas de poids
+            spécifique aux confrontations directes.
           </p>
           {h2h.length ? (
             <>

@@ -1,0 +1,346 @@
+.prediction-summary {
+  padding: 24px;
+}
+.prediction-heading,
+.prediction-essential-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.prediction-heading h3 {
+  font-size: 20px;
+  margin-top: 5px;
+}
+.prob-help {
+  position: relative;
+  flex: none;
+  color: var(--muted);
+}
+.prob-help summary {
+  cursor: pointer;
+  list-style: none;
+  border-radius: 50%;
+  padding: 4px;
+  font-size: 15px;
+  line-height: 1;
+}
+.prob-help summary::-webkit-details-marker {
+  display: none;
+}
+.prob-help summary:focus-visible,
+.prediction-more summary:focus-visible,
+.more-scores summary:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+}
+.prob-help p {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  top: 100%;
+  width: min(250px, 70vw);
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.prediction-primary {
+  margin-top: 18px;
+}
+.prediction-outcomes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+}
+.prediction-outcome {
+  min-width: 0;
+  min-height: 112px;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+}
+.prediction-outcome.is-leading {
+  border-color: var(--green);
+  background: var(--green-light);
+}
+.prediction-outcome-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.prediction-outcome-name .team-logo,
+.prediction-outcome-name .team-badge {
+  flex: none;
+}
+.prediction-outcome > strong {
+  display: block;
+  margin-top: 8px;
+  font-size: clamp(27px, 3vw, 40px);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.prediction-outcome > small {
+  color: var(--muted);
+  font-size: 10px;
+}
+.prediction-primary .probability {
+  margin-top: 13px;
+}
+.prediction-primary .prob-track {
+  height: 10px;
+  gap: 0;
+  border-radius: 7px;
+}
+.prediction-reading {
+  margin: 13px 0 0;
+  line-height: 1.4;
+}
+.prediction-reading strong {
+  color: var(--green);
+}
+.prediction-caution {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+.prediction-essentials {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+.prediction-essential {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--bg);
+}
+.prediction-essential-title {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+.prediction-essential > strong {
+  display: block;
+  margin: 13px 0 5px;
+  font-size: 27px;
+  line-height: 1.1;
+}
+.prediction-essential > span,
+.prediction-essential > small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.prediction-essential.score > span {
+  color: var(--text);
+  font-weight: 700;
+}
+.expected-teams {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 11px 0 7px;
+}
+.expected-teams span {
+  min-width: 0;
+  color: var(--muted);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+.expected-teams b {
+  display: block;
+  color: var(--text);
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+}
+.prediction-why {
+  margin-top: 21px;
+}
+.prediction-why h4,
+.prediction-more h4 {
+  font-size: 14px;
+  margin-bottom: 7px;
+}
+.prediction-why p {
+  line-height: 1.55;
+  max-width: 75ch;
+}
+.prediction-more {
+  margin-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.prediction-more > summary {
+  cursor: pointer;
+  padding: 17px 0 3px;
+  color: var(--green);
+  font-weight: 700;
+}
+.prediction-more-content {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  padding-top: 19px;
+}
+.prediction-more-content > .data-note {
+  grid-column: 1 / -1;
+}
+.alternative-scores {
+  display: grid;
+  gap: 7px;
+}
+.alternative-scores > div,
+.prediction-derived > div,
+.prob-distribution-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+}
+.alternative-scores strong {
+  font-size: 17px;
+}
+.alternative-scores span,
+.prediction-derived strong,
+.prob-distribution-row strong {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.more-scores summary {
+  cursor: pointer;
+  margin: 10px 0;
+  color: var(--green);
+}
+.prob-distribution-row {
+  display: grid;
+  grid-template-columns: minmax(90px, 1fr) minmax(55px, 2fr) 42px;
+  font-size: 12px;
+}
+.prob-distribution-track {
+  display: block;
+  height: 8px;
+  border-radius: 6px;
+  background: var(--line);
+  overflow: hidden;
+}
+.prob-distribution-track > span {
+  display: block;
+  height: 100%;
+  background: var(--green);
+}
+.prob-distribution-row strong {
+  text-align: right;
+}
+.prediction-derived > div {
+  font-size: 12px;
+}
+.prediction-quality-detail p {
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 7px 0;
+}
+.prediction-factors .factor {
+  padding: 10px 0;
+}
+.prediction-factors .factor strong {
+  font-size: 12px;
+}
+.compact-probabilities {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  width: 100%;
+}
+.compact-probabilities > span {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 6px 3px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.compact-probabilities > span.is-leading {
+  border-color: var(--green);
+  background: var(--green-light);
+}
+.compact-probabilities small {
+  color: var(--muted);
+  font-size: 10px;
+}
+.compact-probabilities strong {
+  font-size: 12px;
+}
+.sport-card-projection > span {
+  margin-bottom: 7px;
+}
+.row-prediction .compact-probabilities {
+  max-width: 210px;
+}
+
+@media (max-width: 1100px) {
+  .prediction-essentials {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .prediction-essential.confidence {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 650px) {
+  .prediction-summary {
+    padding: 15px;
+  }
+  .prediction-heading h3 {
+    font-size: 17px;
+  }
+  .prediction-outcomes {
+    gap: 5px;
+  }
+  .prediction-outcome {
+    padding: 8px 6px;
+    min-height: 112px;
+  }
+  .prediction-outcome-name {
+    display: block;
+    min-height: 49px;
+    font-size: 10px;
+  }
+  .prediction-outcome-name .team-logo,
+  .prediction-outcome-name .team-badge {
+    display: block;
+    margin-bottom: 4px;
+  }
+  .prediction-outcome > strong {
+    font-size: clamp(23px, 7vw, 31px);
+    margin-top: 4px;
+  }
+  .prediction-essential {
+    padding: 12px;
+  }
+  .prediction-essential > strong {
+    font-size: 23px;
+  }
+  .prediction-more-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}

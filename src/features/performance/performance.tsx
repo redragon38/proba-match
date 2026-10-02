@@ -159,6 +159,11 @@ export function Performance({
                 title="Les probabilités tiennent-elles leurs promesses ?"
                 eyebrow="CALIBRATION MULTICLASSE"
               />
+              <p className="data-note">
+                Probabilités annoncées avant les matchs, comparées aux résultats observés. Une
+                estimation proche de 70 % devrait se réaliser environ 7 fois sur 10 sur un grand
+                nombre de cas comparables ; une petite tranche reste incertaine.
+              </p>
               <figure className="calibration-chart">
                 <svg
                   viewBox="0 0 500 320"
@@ -227,8 +232,8 @@ export function Performance({
                   <thead>
                     <tr>
                       <th>Tranche</th>
-                      <th>Prévu</th>
-                      <th>Observé</th>
+                      <th>Probabilité annoncée</th>
+                      <th>Fréquence observée</th>
                       <th>Observations</th>
                     </tr>
                   </thead>
