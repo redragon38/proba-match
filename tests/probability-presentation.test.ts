@@ -31,6 +31,8 @@ describe('lecture des probabilités sans modifier le modèle', () => {
     expect(formatProbability(0)).toBe('0 %');
     expect(formatProbability(null)).toBe('Non disponible');
     expect(formatProbability(NaN)).toBe('Non disponible');
+    expect(formatProbability(1.2)).toBe('Non disponible');
+    expect(probabilityReading(1.2, 0.1, 0.1)).toBeNull();
     expect(probabilityReading(NaN, 0.5, 0.5)).toBeNull();
   });
 });

@@ -159,18 +159,18 @@ export function ProbabilitySummary({
               <b>{number(prediction.expectedAway, 1)}</b>
             </span>
           </div>
-          {analysis && <span>Total attendu ≈ {number(analysis.expectedTotal, 1)} buts</span>}
+          {analysis && <span>Total avant arrondi ≈ {number(analysis.expectedTotal, 1)} buts</span>}
         </div>
         <div className="prediction-essential confidence">
           <div className="prediction-essential-title">
-            Confiance du modèle{' '}
+            Qualité des données{' '}
             <Help
               label="la confiance du modèle"
               text="Indique la qualité des données utilisées, pas la probabilité qu’une équipe gagne."
             />
           </div>
           <strong>{quality?.level ?? 'Non évaluée'}</strong>
-          <span>Qualité des données : {prediction.confidence}/100</span>
+          <span>Indice des données : {prediction.confidence}/100 · précision non mesurée ici</span>
           {quality?.level === 'Faible' && (
             <small>
               {quality.reasons[0] ?? 'Les données disponibles limitent cette estimation.'}

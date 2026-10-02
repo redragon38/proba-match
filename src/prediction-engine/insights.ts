@@ -1,5 +1,6 @@
 import type { Prediction } from '@/types/football';
 import { scoreDistribution } from './poisson';
+import { probabilityReading } from '@/lib/probability-format';
 
 export function predictionInsights(prediction: Prediction) {
   const distribution = scoreDistribution(prediction.expectedHome, prediction.expectedAway);
@@ -29,32 +30,23 @@ export function predictionInsights(prediction: Prediction) {
   };
 }
 
-export function predictionExplanation(
-  prediction: Prediction,
-  homeName: string,
-  awayName: string,
-) {
-  const difference = Math.abs(prediction.home - prediction.away);
-  const balance =
-    difference < 0.05
-      ? 'Très équilibré'
-      : difference < 0.12
-        ? 'Équilibré'
-        : difference < 0.25
-          ? 'Léger avantage'
-          : 'Avantage marqué';
-  const leader = prediction.home > prediction.away ? 'home' : 'away';
-  const name = leader === 'home' ? homeName : awayName;
+export function predictionExplanation(prediction: Prediction, homeName: string, awayName: string) {
+  const reading = probabilityReading(prediction.home, prediction.draw, prediction.away);
+  if (!reading) return { balance: 'Non disponible', summary: 'Probabilités non disponibles.' };
+  const balance = reading.label;
+  const leader = reading.leader === 0 ? 'home' : reading.leader === 2 ? 'away' : 'neutral';
+  const name = reading.leader === 0 ? homeName : reading.leader === 2 ? awayName : 'le match nul';
   const drivers = prediction.factors
     .filter((factor) => factor.side === leader)
     .slice(0, 3)
     .map((factor) => factor.label.toLowerCase());
   const reason = drivers.length
     ? `Les facteurs observés qui vont dans ce sens sont ${drivers.join(', ')}.`
-    : 'L’estimation combine les buts récents, la force des adversaires, la forme et le contexte domicile/extérieur.';
-  const summary =
-    difference < 0.05
-      ? `Les deux équipes sont très proches selon le modèle. ${reason}`
+    : 'Aucun facteur détaillé n’est disponible pour cette estimation.';
+  const summary = !reading.emphasize
+    ? `Aucune issue ne se détache nettement selon le modèle. ${reason}`
+    : reading.leader === 1
+      ? `Le match nul est l’issue individuelle la plus probable selon le modèle. ${reason}`
       : `${balance} pour ${name} selon le modèle. ${reason}`;
   return { balance, summary };
 }

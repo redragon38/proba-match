@@ -731,3 +731,144 @@ small,
     transition: none !important;
   }
 }
+
+/* Shared reading scale: scores stay prominent while source and method remain legible. */
+body {
+  font-size: 15px;
+  line-height: 1.5;
+}
+.page {
+  padding-top: 28px;
+}
+.page-heading p,
+.intro-text,
+.data-note,
+.warning,
+.source-banner,
+.source-banner strong,
+.source-banner > span,
+.side-link,
+.league-link,
+.match-teams > span,
+.sport-team,
+.sport-card-meta,
+.sport-card-projection > span,
+.match-filters button,
+.detail-tabs > a,
+.prob-labels,
+.prob-labels b,
+.prediction-essential-title,
+.prediction-essential > span,
+.prediction-essential > small,
+.prediction-outcome-name,
+.prediction-caution,
+.filter-panel label,
+.filter-panel select {
+  font-size: 12px;
+}
+.source-banner {
+  flex-wrap: wrap;
+  row-gap: 3px;
+  margin-bottom: 16px;
+}
+.warning {
+  line-height: 1.5;
+}
+.side-link {
+  min-height: 44px;
+}
+.league-link {
+  min-height: 38px;
+}
+.eyebrow,
+.sidebar-label {
+  font-size: 10px;
+}
+.card,
+.sport-match-card,
+.metric {
+  box-shadow: 0 5px 22px #0000000d;
+}
+[data-theme='dark'] {
+  --bg: #101518;
+  --surface: #1a2226;
+  --surface-raised: #263035;
+  --line: #364349;
+  --muted: #b9c7cb;
+  --green-light: #244234;
+}
+[data-theme='dark'] .topbar,
+[data-theme='dark'] .sidebar,
+[data-theme='dark'] .mobile-bottom {
+  background: #171f22;
+}
+.match-filters button.selected {
+  background: var(--green-light);
+  color: var(--green);
+}
+.match-hero .match-meta {
+  padding: 16px 20px 4px;
+  font-size: 12px;
+}
+.detail-columns.single-column {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 1100px;
+}
+.match-hero .match-headline {
+  padding-block: 14px 18px;
+}
+.match-hero .match-headline > a {
+  gap: 9px;
+}
+.match-hero .score-block {
+  gap: 4px;
+}
+.match-hero .venue-meta {
+  padding-bottom: 16px;
+  font-size: 11px;
+}
+.detail-tabs > a {
+  padding-block: 14px;
+}
+.prediction-outcome > strong,
+.prediction-essential > strong,
+.compact-probabilities strong {
+  font-variant-numeric: tabular-nums;
+}
+.prediction-essentials .prediction-essential.score > span {
+  font-size: 13px;
+}
+.prediction-caution {
+  font-size: 12px;
+}
+.prob-track {
+  background: var(--surface-raised);
+}
+@media (max-width: 650px) {
+  .page {
+    padding-top: 18px;
+  }
+  .match-hero .match-headline {
+    gap: 9px;
+    padding: 12px 14px 16px;
+  }
+  .match-hero .match-headline h1,
+  .match-hero .match-headline h2 {
+    font-size: 15px;
+    line-height: 1.25;
+  }
+  .match-hero .venue-meta {
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
+  .prediction-outcome-name {
+    font-size: 11px;
+  }
+  .prediction-essential > span,
+  .prediction-essential > small {
+    font-size: 12px;
+  }
+  .compact-probabilities small {
+    font-size: 10px;
+  }
+}

@@ -15,7 +15,7 @@ export function probabilityPercentages(home: number, draw: number, away: number)
 }
 
 export function formatProbability(value: number | null | undefined): string {
-  return value == null || !Number.isFinite(value)
+  return value == null || !Number.isFinite(value) || value < 0 || value > 1
     ? 'Non disponible'
     : `${Math.round(value * 100)} %`;
 }
@@ -24,7 +24,7 @@ export function formatProbability(value: number | null | undefined): string {
 export function probabilityReading(home: number, draw: number, away: number) {
   const values = [home, draw, away];
   if (
-    values.some((value) => !Number.isFinite(value) || value < 0) ||
+    values.some((value) => !Number.isFinite(value) || value < 0 || value > 1) ||
     values.every((value) => value === 0)
   )
     return null;

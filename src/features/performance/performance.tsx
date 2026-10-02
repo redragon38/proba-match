@@ -5,6 +5,7 @@ import { metrics } from '@/prediction-engine/evaluation';
 import { Metric, Empty, SectionTitle } from '@/components/ui';
 import { SourceBanner } from '@/components/source-banner';
 import { number, percent } from '@/lib/format';
+import { probabilityPercentages } from '@/lib/probability-format';
 import { Breakdowns } from './breakdowns';
 export function Performance({
   data,
@@ -283,9 +284,9 @@ export function Performance({
                 </p>
               </div>
               <p className="data-note">
-                Version : {rows[0]?.prediction.version}. La vue réelle porte sur les 10 000
-                dernières prédictions initiales évaluées, sans sélection des réussites. Les mises à
-                jour de composition sont conservées séparément.
+                {version === 'all' ? 'Versions regroupées' : `Version ${version}`} · {stats.sample}{' '}
+                matchs évalués dans cette sélection. Les prédictions initiales sont conservées avant
+                le résultat ; les mises à jour de composition restent séparées.
               </p>
             </section>
           </div>
@@ -319,8 +320,12 @@ export function Performance({
                         {data.teams.find((t) => t.id === m?.awayId)?.short ?? 'Extérieur'}
                       </th>
                       <td>
-                        {[r.prediction.home, r.prediction.draw, r.prediction.away]
-                          .map(percent)
+                        {probabilityPercentages(
+                          r.prediction.home,
+                          r.prediction.draw,
+                          r.prediction.away,
+                        )
+                          .map((value) => `${value} %`)
                           .join(' / ')}
                       </td>
                       <td>

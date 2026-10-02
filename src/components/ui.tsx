@@ -115,13 +115,13 @@ export function ProbabilityBar({
       {labels && (
         <div className="prob-labels">
           <span>
-            1 <b>{values[0]} %</b>
+            Domicile <b>{values[0]} %</b>
           </span>
           <span>
-            N <b>{values[1]} %</b>
+            Nul <b>{values[1]} %</b>
           </span>
           <span>
-            2 <b>{values[2]} %</b>
+            Extérieur <b>{values[2]} %</b>
           </span>
         </div>
       )}
@@ -149,7 +149,7 @@ export function ProbabilityCompact({
       role="group"
       aria-label={`Probabilités avant-match : ${homeName} ${values[0]} %, nul ${values[1]} %, ${awayName} ${values[2]} %`}
     >
-      {['1', 'N', '2'].map((label, index) => (
+      {['Domicile', 'Nul', 'Extérieur'].map((label, index) => (
         <span
           key={label}
           className={reading?.emphasize && reading.leader === index ? 'is-leading' : ''}

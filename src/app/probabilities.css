@@ -268,9 +268,10 @@
 }
 .compact-probabilities > span {
   display: flex;
-  align-items: baseline;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 3px;
   min-width: 0;
   padding: 6px 3px;
   border: 1px solid var(--line);
@@ -285,10 +286,10 @@
 }
 .compact-probabilities small {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 11px;
 }
 .compact-probabilities strong {
-  font-size: 12px;
+  font-size: 16px;
 }
 .sport-card-projection > span {
   margin-bottom: 7px;

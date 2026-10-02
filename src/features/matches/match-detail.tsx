@@ -68,6 +68,9 @@ export function MatchDetail({
     .filter((p) => p.score !== null)
     .sort((a, b) => b.score! - a.score!)
     .slice(0, 5);
+  const reportedInjuries = data.injuries.filter((injury) =>
+    [home.id, away.id].includes(injury.teamId),
+  );
   return (
     <div className="page">
       <SourceBanner data={data} />
@@ -171,7 +174,9 @@ export function MatchDetail({
         <MatchOverview data={data} match={match} />
       )}
       {(tab === 'prediction' || tab === 'apercu') && (
-        <div className="detail-columns">
+        <div
+          className={`detail-columns ${watched.length || reportedInjuries.length ? '' : 'single-column'}`}
+        >
           <div>
             <SectionTitle title="La lecture du modèle" eyebrow="PROJECTIONS STATISTIQUES" />
             {prediction ? (
@@ -202,60 +207,53 @@ export function MatchDetail({
               </div>
             )}
           </div>
-          <aside>
-            <SectionTitle title="Joueurs à suivre" />
-            <section className="card padded">
+          {(watched.length > 0 || reportedInjuries.length > 0) && (
+            <aside>
               {watched.length > 0 && (
-                <p className="data-note">
-                  Indice heuristique sur les statistiques disponibles et la part de titularisations.
-                  Ce classement n’est pas une probabilité de devenir homme du match.
-                </p>
+                <>
+                  <SectionTitle title="Joueurs à suivre" />
+                  <section className="card padded">
+                    <p className="data-note">
+                      Indice heuristique sur les statistiques disponibles et la part de
+                      titularisations. Ce classement n’est pas une probabilité de devenir homme du
+                      match.
+                    </p>
+                    {watched.map(({ player: p, score }, i) => (
+                      <Link href={`/joueur/${p.slug}`} className="player-ranking" key={p.id}>
+                        <span className="rank-index">{i + 1}</span>
+                        <span>
+                          <strong>{p.name}</strong>
+                          <small>{p.position}</small>
+                        </span>
+                        <b>
+                          {score}
+                          <small>/100</small>
+                        </b>
+                      </Link>
+                    ))}
+                  </section>
+                </>
               )}
-              {watched.length ? (
-                watched.map(({ player: p, score }, i) => (
-                  <Link href={`/joueur/${p.slug}`} className="player-ranking" key={p.id}>
-                    <span className="rank-index">{i + 1}</span>
-                    <span>
-                      <strong>{p.name}</strong>
-                      <small>{p.position}</small>
-                    </span>
-                    <b>
-                      {score}
-                      <small>/100</small>
-                    </b>
-                  </Link>
-                ))
-              ) : (
-                <p className="data-note">
-                  {data.players.length
-                    ? 'Aucun joueur de ces équipes ne possède assez de statistiques pour cet indice.'
-                    : 'Aucune statistique individuelle disponible pour les joueurs de ces équipes. La source actuelle fournit les matchs et résultats, sans effectifs.'}
-                </p>
+              {reportedInjuries.length > 0 && (
+                <>
+                  <SectionTitle title="Absences signalées" />
+                  <section className="card padded">
+                    {reportedInjuries.map((i) => (
+                      <div className="factor" key={i.id}>
+                        <strong>
+                          {data.players.find((p) => p.id === i.playerId)?.name ??
+                            'Joueur non disponible'}
+                        </strong>
+                        <p>
+                          {i.reason} · {i.status}
+                        </p>
+                      </div>
+                    ))}
+                  </section>
+                </>
               )}
-            </section>
-            <SectionTitle title="Absences signalées" />
-            <section className="card padded">
-              {data.injuries.filter((i) => [home.id, away.id].includes(i.teamId)).length ? (
-                data.injuries
-                  .filter((i) => [home.id, away.id].includes(i.teamId))
-                  .map((i) => (
-                    <div className="factor" key={i.id}>
-                      <strong>
-                        {data.players.find((p) => p.id === i.playerId)?.name ??
-                          'Joueur non disponible'}
-                      </strong>
-                      <p>
-                        {i.reason} · {i.status}
-                      </p>
-                    </div>
-                  ))
-              ) : (
-                <p className="data-note">
-                  Non disponible. L’absence de signalement ne signifie pas l’absence de blessure.
-                </p>
-              )}
-            </section>
-          </aside>
+            </aside>
+          )}
         </div>
       )}
       {tab === 'apercu' && match.status === 'scheduled' && prediction && (

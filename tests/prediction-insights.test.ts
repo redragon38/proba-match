@@ -1,15 +1,32 @@
 import { describe, expect, it } from 'vitest';
 import { shrinkExpectedGoals } from '@/prediction-engine/calibration';
-import { informationQuality, predictionExplanation, predictionInsights } from '@/prediction-engine/insights';
+import {
+  informationQuality,
+  predictionExplanation,
+  predictionInsights,
+} from '@/prediction-engine/insights';
 import { roundedPercentages } from '@/lib/probability-format';
 import type { Prediction } from '@/types/football';
 
 const prediction: Prediction = {
-  id: 'test', matchId: 'match', version: 'elo-poisson-1.2.0',
-  createdAt: '2026-09-01T00:00:00Z', cutoff: '2026-09-01T00:00:00Z',
-  home: 0.5, draw: 0.25, away: 0.25, expectedHome: 1.6, expectedAway: 1.1,
-  likelyScore: '1–1', scores: [], cleanHome: 0, cleanAway: 0,
-  confidence: 65, sample: 12, inputHash: 'test', lineupConfirmed: false,
+  id: 'test',
+  matchId: 'match',
+  version: 'elo-poisson-1.2.0',
+  createdAt: '2026-09-01T00:00:00Z',
+  cutoff: '2026-09-01T00:00:00Z',
+  home: 0.5,
+  draw: 0.25,
+  away: 0.25,
+  expectedHome: 1.6,
+  expectedAway: 1.1,
+  likelyScore: '1–1',
+  scores: [],
+  cleanHome: 0,
+  cleanAway: 0,
+  confidence: 65,
+  sample: 12,
+  inputHash: 'test',
+  lineupConfirmed: false,
   factors: [{ label: 'Forme récente', detail: 'Résultats antérieurs', side: 'home' }],
 };
 
@@ -35,6 +52,14 @@ describe('Calibrage et probabilités dérivées', () => {
   it('sépare la qualité de données des probabilités et explique les facteurs observés', () => {
     expect(informationQuality(prediction).level).toBe('Moyenne');
     expect(informationQuality(prediction, true).level).toBe('Faible');
-    expect(predictionExplanation(prediction, 'Domicile', 'Extérieur').summary).toContain('forme récente');
+    expect(predictionExplanation(prediction, 'Domicile', 'Extérieur').summary).toContain(
+      'forme récente',
+    );
+  });
+  it('décrit le nul sans attribuer à tort un avantage à une équipe', () => {
+    const drawFavorite = { ...prediction, home: 0.25, draw: 0.5, away: 0.25 };
+    const summary = predictionExplanation(drawFavorite, 'Domicile', 'Extérieur').summary;
+    expect(summary).toContain('match nul');
+    expect(summary).not.toContain('pour Extérieur');
   });
 });

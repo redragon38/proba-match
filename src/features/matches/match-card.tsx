@@ -72,7 +72,7 @@ export function MatchCard({
       </Link>
       {!compact && prediction && m.status === 'scheduled' && (
         <div className="sport-card-projection">
-          <span>Probabilités du match · 1 domicile, N nul, 2 extérieur</span>
+          <span>Estimation avant-match · chaque issue reste incertaine</span>
           <ProbabilityCompact {...prediction} homeName={home.name} awayName={away.name} />
         </div>
       )}
