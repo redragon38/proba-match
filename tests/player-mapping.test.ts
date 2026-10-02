@@ -14,6 +14,10 @@ describe('Statistiques individuelles par match', () => {
               {
                 games: { minutes: 90, position: 'G', rating: '7.2' },
                 goals: { saves: 5, conceded: 1 },
+                passes: { total: 20, key: 0, accuracy: '75%' },
+                tackles: { total: 0, blocks: 2, interceptions: 1 },
+                duels: { total: 4, won: 3 },
+                fouls: { committed: 0 },
               },
             ],
           },
@@ -22,6 +26,10 @@ describe('Statistiques individuelles par match', () => {
     ]);
     expect(rows[0].position).toBe('Gardien');
     expect(rows[0].stats.shots).toBeNull();
+    expect(rows[0].stats.passAccuracy).toBe(75);
+    expect(rows[0].stats.keyPasses).toBe(0);
+    expect(rows[0].stats.duelsTotal).toBe(4);
+    expect(rows[0].stats.fouls).toBe(0);
     expect(playerPerformance(rows[0].stats, rows[0].position)).toBeGreaterThan(0);
   });
   it('n’assigne pas arbitrairement un poste en cas d’absence', () => {

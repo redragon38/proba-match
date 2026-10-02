@@ -13,10 +13,18 @@ export const statsSchema = z.object({
     .object({ total: nullable, assists: nullable, saves: nullable, conceded: nullable })
     .optional(),
   shots: z.object({ total: nullable, on: nullable }).optional(),
-  passes: z.object({ total: nullable, key: nullable }).optional(),
-  tackles: z.object({ total: nullable, interceptions: nullable }).optional(),
+  passes: z
+    .object({
+      total: nullable,
+      key: nullable,
+      accuracy: z.union([z.string(), z.number()]).nullish(),
+    })
+    .optional(),
+  tackles: z.object({ total: nullable, interceptions: nullable, blocks: nullable }).optional(),
   duels: z.object({ total: nullable, won: nullable }).optional(),
   dribbles: z.object({ success: nullable }).optional(),
+  fouls: z.object({ committed: nullable }).optional(),
+  penalty: z.object({ saved: nullable }).optional(),
   cards: z.object({ yellow: nullable, red: nullable }).optional(),
 });
 export function mapPosition(position: string | undefined | null): Position {
@@ -36,7 +44,7 @@ export function mapMatchPlayers(input: unknown): MatchPlayerPerformance[] {
       team: z.object({ id: z.number() }),
       players: z.array(
         z.object({
-          player: z.object({ id: z.number(), name: z.string() }),
+          player: z.object({ id: z.number(), name: z.string(), photo: z.string().url().nullish() }),
           statistics: z.array(statsSchema),
         }),
       ),
@@ -64,10 +72,20 @@ export function mapMatchPlayers(input: unknown): MatchPlayerPerformance[] {
         shotsOnTarget: s.shots?.on ?? null,
         keyPasses: s.passes?.key ?? null,
         passes: s.passes?.total ?? null,
+        passAccuracy:
+          s.passes?.accuracy == null
+            ? null
+            : Number.isFinite(Number(String(s.passes.accuracy).replace('%', '')))
+              ? Number(String(s.passes.accuracy).replace('%', ''))
+              : null,
         tackles: s.tackles?.total ?? null,
         interceptions: s.tackles?.interceptions ?? null,
+        blocks: s.tackles?.blocks ?? null,
         duels: s.duels?.won ?? null,
+        duelsTotal: s.duels?.total ?? null,
         dribbles: s.dribbles?.success ?? null,
+        fouls: s.fouls?.committed ?? null,
+        penaltiesSaved: s.penalty?.saved ?? null,
         saves: s.goals?.saves ?? null,
         conceded: s.goals?.conceded ?? null,
         yellow: s.cards?.yellow ?? null,
@@ -77,6 +95,7 @@ export function mapMatchPlayers(input: unknown): MatchPlayerPerformance[] {
         {
           playerId: String(p.player.id),
           name: p.player.name,
+          photo: p.player.photo ?? undefined,
           teamId: String(t.team.id),
           position: mapPosition(s.games.position),
           number: s.games.number ?? null,

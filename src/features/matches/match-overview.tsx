@@ -2,12 +2,13 @@ import Link from 'next/link';
 import type { Dataset, Match } from '@/types/football';
 import { Form, SectionTitle } from '@/components/ui';
 import { teamSummary } from '@/services/statistics';
-import { number } from '@/lib/format';
+import { matchStatsSummary, StatComparisonRow } from './match-statistics';
 export function MatchOverview({ data, match }: { data: Dataset; match: Match }) {
   const teams = [match.homeId, match.awayId].map((id) => data.teams.find((t) => t.id === id)!);
   const stats = match.statistics.filter((s) =>
     ['Possession', 'Tirs', 'Tirs cadrés', 'Corners'].includes(s.label),
   );
+  const summary = matchStatsSummary(stats, teams[0], teams[1]);
   return (
     <section className="match-overview">
       <SectionTitle
@@ -36,13 +37,15 @@ export function MatchOverview({ data, match }: { data: Dataset; match: Match }) 
                   <b>{event.minute}′</b> ·{' '}
                   {event.type === 'goal'
                     ? 'But'
-                    : event.type === 'yellow'
-                      ? 'Carton jaune'
-                      : event.type === 'red'
-                        ? 'Carton rouge'
-                        : event.type === 'substitution'
-                          ? 'Remplacement'
-                          : 'Vérification vidéo'}{' '}
+                    : event.type === 'penalty-miss'
+                      ? 'Penalty manqué'
+                      : event.type === 'yellow'
+                        ? 'Carton jaune'
+                        : event.type === 'red'
+                          ? 'Carton rouge'
+                          : event.type === 'substitution'
+                            ? 'Remplacement'
+                            : 'Vérification vidéo'}{' '}
                   · {event.player}
                 </p>
               ))
@@ -55,27 +58,18 @@ export function MatchOverview({ data, match }: { data: Dataset; match: Match }) 
         </div>
       </div>
       {stats.some((s) => s.home != null || s.away != null) && (
-        <div className="card stat-comparison">
-          <div className="settings-row">
-            <strong>{teams[0].short}</strong>
-            <span>Données du match</span>
-            <strong>{teams[1].short}</strong>
-          </div>
-          {stats.map((stat) => (
-            <div className="stat-compare-row" key={stat.label}>
-              <div>
-                <b>
-                  {number(stat.home, 0)}
-                  {stat.home != null ? stat.unit : ''}
-                </b>
-                <span>{stat.label}</span>
-                <b>
-                  {number(stat.away, 0)}
-                  {stat.away != null ? stat.unit : ''}
-                </b>
-              </div>
+        <div>
+          {summary && <p className="card padded match-stats-summary">{summary}</p>}
+          <div className="card match-stats-card">
+            <div className="match-stat-header">
+              <strong>{teams[0].short}</strong>
+              <span>Données du match</span>
+              <strong>{teams[1].short}</strong>
             </div>
-          ))}
+            {stats.map((stat) => (
+              <StatComparisonRow stat={stat} key={stat.label} />
+            ))}
+          </div>
         </div>
       )}
     </section>

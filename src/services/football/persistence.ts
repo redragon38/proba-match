@@ -90,7 +90,7 @@ export async function persistDataset(
     const t = data.teams.find((t) => t.id === p.teamId),
       c = data.competitions.find((c) => c.id === t?.competitionId);
     const observedAt = p.updatedAt ?? data.updatedAt;
-    if (c)
+    if (c && Object.values(p.stats).some((value) => value != null))
       await db.playerStatistics.upsert({
         where: { id: `${p.id}-${c.id}-${c.season}-${observedAt}` },
         create: {
@@ -107,25 +107,31 @@ export async function persistDataset(
   if (options.profiles === false) {
     // OpenFootball changes schedules and results only. Existing detail rows stay intact;
     // one PostgreSQL upsert per chunk avoids a transaction round trip per fixture.
-    const competitions = new Map(data.competitions.map((competition) => [competition.id, competition]));
+    const competitions = new Map(
+      data.competitions.map((competition) => [competition.id, competition]),
+    );
     for (let offset = 0; offset < changedMatches.length; offset += 500) {
       const rows = changedMatches.slice(offset, offset + 500).flatMap((match) => {
         const competition = competitions.get(match.competitionId);
-        return competition ? [{
-          id: match.id,
-          slug: match.slug,
-          seasonId: `${competition.id}-${match.season ?? competition.season}`,
-          homeId: match.homeId,
-          awayId: match.awayId,
-          kickoff: match.kickoff,
-          status: match.status,
-          homeScore: match.homeScore,
-          awayScore: match.awayScore,
-          minute: match.minute ?? null,
-          referee: match.referee ?? null,
-          source: match.source,
-          payload: json(match),
-        }] : [];
+        return competition
+          ? [
+              {
+                id: match.id,
+                slug: match.slug,
+                seasonId: `${competition.id}-${match.season ?? competition.season}`,
+                homeId: match.homeId,
+                awayId: match.awayId,
+                kickoff: match.kickoff,
+                status: match.status,
+                homeScore: match.homeScore,
+                awayScore: match.awayScore,
+                minute: match.minute ?? null,
+                referee: match.referee ?? null,
+                source: match.source,
+                payload: json(match),
+              },
+            ]
+          : [];
       });
       if (!rows.length) continue;
       await db.$executeRaw`
@@ -148,85 +154,86 @@ export async function persistDataset(
           "updatedAt" = EXCLUDED."updatedAt"
       `;
     }
-  } else await inBatches(changedMatches, async (m) => {
-    const comp = data.competitions.find((c) => c.id === m.competitionId);
-    if (!comp) return;
-    const fields = {
-      slug: m.slug,
-      seasonId: `${comp.id}-${m.season ?? comp.season}`,
-      homeId: m.homeId,
-      awayId: m.awayId,
-      kickoff: new Date(m.kickoff),
-      status: m.status,
-      homeScore: m.homeScore,
-      awayScore: m.awayScore,
-      minute: m.minute,
-      referee: m.referee,
-      source: m.source,
-      payload: json(m),
-    };
-    await db.$transaction(async (tx) => {
-      await tx.match.upsert({
-        where: { id: m.id },
-        create: { id: m.id, ...fields },
-        update: fields,
+  } else
+    await inBatches(changedMatches, async (m) => {
+      const comp = data.competitions.find((c) => c.id === m.competitionId);
+      if (!comp) return;
+      const fields = {
+        slug: m.slug,
+        seasonId: `${comp.id}-${m.season ?? comp.season}`,
+        homeId: m.homeId,
+        awayId: m.awayId,
+        kickoff: new Date(m.kickoff),
+        status: m.status,
+        homeScore: m.homeScore,
+        awayScore: m.awayScore,
+        minute: m.minute,
+        referee: m.referee,
+        source: m.source,
+        payload: json(m),
+      };
+      await db.$transaction(async (tx) => {
+        await tx.match.upsert({
+          where: { id: m.id },
+          create: { id: m.id, ...fields },
+          update: fields,
+        });
+        await tx.matchEvent.deleteMany({ where: { matchId: m.id } });
+        if (m.events.length)
+          await tx.matchEvent.createMany({
+            data: m.events.map((e, i) => ({
+              id: `${m.id}-event-${i}`,
+              matchId: m.id,
+              teamId: e.teamId,
+              minute: e.minute,
+              extra: e.extra,
+              type: e.type,
+              payload: json(e),
+            })),
+          });
+        for (const l of m.lineups)
+          await tx.matchLineup.upsert({
+            where: { matchId_teamId: { matchId: m.id, teamId: l.teamId } },
+            create: {
+              id: `${m.id}-${l.teamId}`,
+              matchId: m.id,
+              teamId: l.teamId,
+              formation: l.formation,
+              confirmed: l.confirmed,
+              publishedAt: new Date(m.updatedAt),
+              payload: json(l),
+            },
+            update: { formation: l.formation, confirmed: l.confirmed, payload: json(l) },
+          });
+        for (const p of m.performances ?? []) {
+          await tx.player.upsert({
+            where: { id: p.playerId },
+            create: {
+              id: p.playerId,
+              slug: `${slugify(p.name)}-${p.playerId}`,
+              name: p.name,
+              teamId: p.teamId,
+              position: p.position,
+              number: p.number,
+            },
+            update: {},
+          });
+          const score = playerPerformance(p.stats, p.position);
+          await tx.matchPlayer.upsert({
+            where: { matchId_playerId: { matchId: m.id, playerId: p.playerId } },
+            create: {
+              id: `${m.id}-${p.playerId}`,
+              matchId: m.id,
+              playerId: p.playerId,
+              minutes: p.stats.minutes,
+              score,
+              statistics: json(p.stats),
+            },
+            update: { minutes: p.stats.minutes, score, statistics: json(p.stats) },
+          });
+        }
       });
-      await tx.matchEvent.deleteMany({ where: { matchId: m.id } });
-      if (m.events.length)
-        await tx.matchEvent.createMany({
-          data: m.events.map((e, i) => ({
-            id: `${m.id}-event-${i}`,
-            matchId: m.id,
-            teamId: e.teamId,
-            minute: e.minute,
-            extra: e.extra,
-            type: e.type,
-            payload: json(e),
-          })),
-        });
-      for (const l of m.lineups)
-        await tx.matchLineup.upsert({
-          where: { matchId_teamId: { matchId: m.id, teamId: l.teamId } },
-          create: {
-            id: `${m.id}-${l.teamId}`,
-            matchId: m.id,
-            teamId: l.teamId,
-            formation: l.formation,
-            confirmed: l.confirmed,
-            publishedAt: new Date(m.updatedAt),
-            payload: json(l),
-          },
-          update: { formation: l.formation, confirmed: l.confirmed, payload: json(l) },
-        });
-      for (const p of m.performances ?? []) {
-        await tx.player.upsert({
-          where: { id: p.playerId },
-          create: {
-            id: p.playerId,
-            slug: `${slugify(p.name)}-${p.playerId}`,
-            name: p.name,
-            teamId: p.teamId,
-            position: p.position,
-            number: p.number,
-          },
-          update: {},
-        });
-        const score = playerPerformance(p.stats, p.position);
-        await tx.matchPlayer.upsert({
-          where: { matchId_playerId: { matchId: m.id, playerId: p.playerId } },
-          create: {
-            id: `${m.id}-${p.playerId}`,
-            matchId: m.id,
-            playerId: p.playerId,
-            minutes: p.stats.minutes,
-            score,
-            statistics: json(p.stats),
-          },
-          update: { minutes: p.stats.minutes, score, statistics: json(p.stats) },
-        });
-      }
     });
-  });
   for (const [compId, rows] of Object.entries(data.standings)) {
     const comp = data.competitions.find((c) => c.id === compId);
     if (!comp) continue;

@@ -13,6 +13,7 @@ import './accessibility.css';
 import './sport.css';
 import './product.css';
 import './probabilities.css';
+import './match-insights.css';
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   metadataBase: new URL(siteOrigin()),

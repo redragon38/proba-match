@@ -11,6 +11,8 @@ import { persistPredictions } from '@/services/predictions';
 import { rebuildElo } from './rebuild-elo';
 import type { Dataset, Match } from '@/types/football';
 import { derivedStandings } from '@/services/derived-standings';
+import { matchQualityIssues } from './match-quality';
+import { addObservedPlayerProfiles } from './match-profiles';
 
 const secondaryWarning =
   'Certaines statistiques live peuvent être temporairement indisponibles. Les dernières données locales restent disponibles.';
@@ -103,6 +105,7 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean }
     let predictionChanged = false;
     const injuryTeamIds = new Set<string>();
     const matched = new Map<string, string>();
+    let detailAttempted = false;
     try {
       for (const m of relevant) {
         const alias = await db.footballIdentity.findFirst({
@@ -162,7 +165,53 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean }
         })
           ? 'live'
           : 'normal';
-        const batch = await provider.details(chunk);
+        let detailedId: string | undefined;
+        if (!detailAttempted) {
+          const eligible = chunk.filter((id) => {
+            const match = data.matches.find((row) => row.id === matched.get(id));
+            return (
+              match &&
+              (match.status === 'live' ||
+                match.status === 'finished' ||
+                (match.status === 'scheduled' && Date.parse(match.kickoff) - now < 2 * 3600000))
+            );
+          });
+          if (eligible.length) {
+            const cached = await db.cacheEntry.findMany({
+              where: { key: { in: eligible.map((id) => `secondary:fixture-details:${id}`) } },
+              select: { key: true, expiresAt: true },
+            });
+            const fresh = new Set(
+              cached.filter((entry) => entry.expiresAt.getTime() > now).map((entry) => entry.key),
+            );
+            detailedId = eligible.find((id) => !fresh.has(`secondary:fixture-details:${id}`));
+          }
+        }
+        if (detailedId) detailAttempted = true;
+        const batch = await provider.details(chunk, detailedId ? [detailedId] : []);
+        if (detailedId) {
+          const match = data.matches.find((row) => row.id === matched.get(detailedId))!;
+          const complete = batch.enriched.includes(detailedId);
+          if (!complete) failures++;
+          const ttl = !complete
+            ? 10 * 60000
+            : match.status === 'live'
+              ? 20 * 60000
+              : match.status === 'finished'
+                ? 24 * 3600000
+                : 15 * 60000;
+          const key = `secondary:fixture-details:${detailedId}`;
+          const fields = {
+            payload: { complete },
+            expiresAt: new Date(now + ttl),
+            staleUntil: new Date(now + ttl),
+          };
+          await db.cacheEntry.upsert({
+            where: { key },
+            create: { key, ...fields },
+            update: fields,
+          });
+        }
         for (const ext of batch.matches) {
           const local = data.matches.find((m) => m.id === matched.get(ext.id));
           if (!local) continue;
@@ -179,7 +228,11 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean }
             ...ext.lineups.flatMap((l) => [...l.starters, ...l.substitutes]),
             ...(ext.performances ?? []).map((p) => ({ id: p.playerId, name: p.name })),
           ]) {
-            playerIds.set(p.id, await resolveIdentity('api-football', 'player', p.id, p.name, []));
+            if (!playerIds.has(p.id))
+              playerIds.set(
+                p.id,
+                await resolveIdentity('api-football', 'player', p.id, p.name, []),
+              );
           }
           const merged: Match = {
             ...local,
@@ -190,10 +243,13 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean }
             homeId: local.homeId,
             awayId: local.awayId,
             season: local.season,
+            scoreBreakdown: ext.scoreBreakdown ?? local.scoreBreakdown,
             kickoffKnown: true,
-            events: ext.events
-              .filter((e) => team(e.teamId))
-              .map((e) => ({ ...e, teamId: team(e.teamId)! })),
+            events: ext.events.length
+              ? ext.events
+                  .filter((e) => team(e.teamId))
+                  .map((e) => ({ ...e, teamId: team(e.teamId)! }))
+              : local.events,
             lineups: ext.lineups
               .filter((l) => team(l.teamId))
               .map((l) => ({
@@ -213,7 +269,13 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean }
           };
           if (!merged.lineups.length) merged.lineups = local.lineups;
           if (!merged.performances?.length) merged.performances = local.performances;
-          merged.statistics = merged.statistics.map((stat) => {
+          addObservedPlayerProfiles(data, merged);
+          for (const issue of matchQualityIssues(merged, data.players)) log(issue);
+          const received = ext.statistics.length ? ext.statistics : local.statistics;
+          merged.statistics = [
+            ...received,
+            ...local.statistics.filter((stat) => !received.some((row) => row.label === stat.label)),
+          ].map((stat) => {
             const previous = local.statistics.find((s) => s.label === stat.label);
             return {
               ...stat,

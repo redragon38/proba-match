@@ -3,6 +3,7 @@ import { slugify, dateKey } from '@/lib/format';
 import { mapMatchPlayers, mapPosition } from './player-mapping';
 import type { Competition, Injury, Match, Player, Standing, Team } from '@/types/football';
 import type { FootballDataProvider, FixtureBatch } from '../provider';
+import { log } from '@/lib/logger';
 
 const teamSchema = z.object({ id: z.number(), name: z.string(), logo: z.string().nullish() });
 const nullableNumber = z.number().nullish();
@@ -24,6 +25,14 @@ const fixtureSchema = z.object({
   }),
   teams: z.object({ home: teamSchema, away: teamSchema }),
   goals: z.object({ home: nullableNumber, away: nullableNumber }),
+  score: z
+    .object({
+      halftime: z.object({ home: nullableNumber, away: nullableNumber }).optional(),
+      fulltime: z.object({ home: nullableNumber, away: nullableNumber }).optional(),
+      extratime: z.object({ home: nullableNumber, away: nullableNumber }).optional(),
+      penalty: z.object({ home: nullableNumber, away: nullableNumber }).optional(),
+    })
+    .optional(),
   events: z
     .array(
       z.object({
@@ -75,6 +84,12 @@ const statLabels: Record<string, string> = {
   'Ball Possession': 'Possession',
   'Total Shots': 'Tirs',
   'Shots on Goal': 'Tirs cadrés',
+  'Shots off Goal': 'Tirs non cadrés',
+  'Blocked Shots': 'Tirs bloqués',
+  'Shots insidebox': 'Tirs dans la surface',
+  'Shots outsidebox': 'Tirs hors surface',
+  'Big Chances': 'Grosses occasions',
+  'Big Chances Missed': 'Grosses occasions manquées',
   'Corner Kicks': 'Corners',
   Fouls: 'Fautes',
   'Yellow Cards': 'Cartons jaunes',
@@ -82,8 +97,16 @@ const statLabels: Record<string, string> = {
   Offsides: 'Hors-jeu',
   'Goalkeeper Saves': 'Arrêts',
   'Total passes': 'Passes',
+  'Passes accurate': 'Passes réussies',
+  'Accurate Passes': 'Passes réussies',
   'Passes %': 'Précision des passes',
+  Tackles: 'Tacles',
+  Interceptions: 'Interceptions',
+  Clearances: 'Dégagements',
+  'Total Duels': 'Duels',
+  'Duels won': 'Duels gagnés',
   expected_goals: 'xG',
+  'Expected Goals': 'xG',
 };
 const numeric = (value: unknown): number | null => {
   if (value == null || value === '') return null;
@@ -136,6 +159,7 @@ export function mapFixture(input: unknown, now = new Date()): FixtureBatch {
     extra: f.fixture.status.extra,
     homeScore: f.goals.home ?? null,
     awayScore: f.goals.away ?? null,
+    scoreBreakdown: f.score,
     round: f.league.round ?? '',
     venue: f.fixture.venue?.name ?? undefined,
     referee: f.fixture.referee ?? undefined,
@@ -148,7 +172,9 @@ export function mapFixture(input: unknown, now = new Date()): FixtureBatch {
   match.events = (f.events ?? []).flatMap((e) => {
     const type =
       e.type === 'Goal'
-        ? 'goal'
+        ? e.detail?.toLowerCase().includes('missed penalty')
+          ? 'penalty-miss'
+          : 'goal'
         : e.type === 'Card'
           ? e.detail?.includes('Red')
             ? 'red'
@@ -174,12 +200,14 @@ export function mapFixture(input: unknown, now = new Date()): FixtureBatch {
   });
   const homeStats = f.statistics?.find((s) => String(s.team.id) === match.homeId)?.statistics ?? [],
     awayStats = f.statistics?.find((s) => String(s.team.id) === match.awayId)?.statistics ?? [];
-  match.statistics = Object.entries(statLabels).map(([key, label]) => ({
-    label,
-    home: numeric(homeStats.find((s) => s.type === key)?.value),
-    away: numeric(awayStats.find((s) => s.type === key)?.value),
-    unit: key === 'Ball Possession' || key === 'Passes %' ? '%' : undefined,
-  }));
+  match.statistics = [...new Set([...homeStats, ...awayStats].map((stat) => stat.type))]
+    .map((key) => ({
+      label: statLabels[key] ?? key,
+      home: numeric(homeStats.find((s) => s.type === key)?.value),
+      away: numeric(awayStats.find((s) => s.type === key)?.value),
+      unit: key === 'Ball Possession' || key === 'Passes %' || key.includes('%') ? '%' : undefined,
+    }))
+    .filter((stat) => stat.home !== null || stat.away !== null);
   match.lineups = (f.lineups ?? []).map((l) => ({
     teamId: String(l.team.id),
     formation: l.formation ?? 'Non disponible',
@@ -248,15 +276,34 @@ export class ApiFootballProvider implements FootballDataProvider {
   async discover(league: string, date: string) {
     return this.batch(await this.request('fixtures', { league, date, timezone: 'UTC' }));
   }
-  async details(ids: string[]) {
-    if (!ids.length) return { matches: [], teams: [], competitions: [] };
+  async details(ids: string[], detailedIds: string[] = []) {
+    if (!ids.length)
+      return { matches: [], teams: [], competitions: [], enriched: [], detailFailed: false };
     if (ids.length > 20) throw new Error('MAX_20_FIXTURES');
-    const batch = this.batch(await this.request('fixtures', { ids: ids.join('-') }));
+    const requested = new Set(detailedIds.slice(0, 1));
+    const enriched: string[] = [];
+    const rows = await this.request('fixtures', { ids: ids.join('-') });
+    for (const row of rows) {
+      const id = z.object({ fixture: z.object({ id: z.number() }) }).parse(row).fixture.id;
+      if (!requested.has(String(id))) continue;
+      const fields = row as Record<string, unknown>;
+      try {
+        // These are separate API-Football endpoints; the fixtures response alone has no match detail.
+        fields.events = await this.request('fixtures/events', { fixture: String(id) });
+        fields.statistics = await this.request('fixtures/statistics', { fixture: String(id) });
+        fields.lineups = await this.request('fixtures/lineups', { fixture: String(id) });
+        fields.players = await this.request('fixtures/players', { fixture: String(id) });
+        enriched.push(String(id));
+      } catch {
+        log('SECONDARY_DETAILS_UNAVAILABLE', { code: 'DETAIL_OR_QUOTA_FAILURE' });
+      }
+    }
+    const batch = this.batch(rows);
     batch.matches = batch.matches.map((m) => ({
       ...m,
       detailsUpdatedAt: new Date().toISOString(),
     }));
-    return batch;
+    return { ...batch, enriched, detailFailed: requested.size > enriched.length };
   }
   async standings(competitionId: string, season: number): Promise<Standing[]> {
     const rows = await this.request('standings', { league: competitionId, season: String(season) });

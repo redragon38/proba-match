@@ -42,6 +42,22 @@ describe('API-Football', () => {
     expect(map('HT').phase).toBe('halftime');
     expect(map('1H').phase).toBe('playing');
   });
+  it('ne transforme pas un penalty manqué en but', () => {
+    const mapped = mapFixture({
+      ...fixture,
+      events: [
+        {
+          time: { elapsed: 74, extra: null },
+          team: { id: 1 },
+          player: { name: 'Joueur 9' },
+          assist: null,
+          type: 'Goal',
+          detail: 'Missed Penalty',
+        },
+      ],
+    }).matches[0];
+    expect(mapped.events[0].type).toBe('penalty-miss');
+  });
   it('réserve le quota avant chaque appel et garde la clé dans les headers', async () => {
     const reserve = vi.fn(async () => {});
     const fetcher = vi.fn(
@@ -66,6 +82,90 @@ describe('API-Football', () => {
     );
     await expect(provider.fixtures('2026-09-11')).rejects.toThrow('quota');
     expect(fetcher).not.toHaveBeenCalled();
+  });
+  it('récupère les endpoints de détail séparés et ne confond pas statistiques absentes et zéro', async () => {
+    const responses: Record<string, unknown[]> = {
+      fixtures: [
+        {
+          ...fixture,
+          fixture: { ...fixture.fixture, status: { short: 'FT', elapsed: 90 } },
+          goals: { home: 1, away: 0 },
+        },
+      ],
+      'fixtures/events': [
+        {
+          time: { elapsed: 42, extra: null },
+          team: { id: 1 },
+          player: { name: 'Joueur 9' },
+          assist: null,
+          type: 'Goal',
+          detail: 'Normal Goal',
+        },
+      ],
+      'fixtures/statistics': [
+        {
+          team: { id: 1 },
+          statistics: [
+            { type: 'Ball Possession', value: '58%' },
+            { type: 'Shots on Goal', value: 6 },
+            { type: 'Blocked Shots', value: 0 },
+          ],
+        },
+        {
+          team: { id: 2 },
+          statistics: [
+            { type: 'Ball Possession', value: '42%' },
+            { type: 'Shots on Goal', value: null },
+          ],
+        },
+      ],
+      'fixtures/lineups': [
+        {
+          team: { id: 1 },
+          formation: '4-4-2',
+          coach: { name: null },
+          startXI: [{ player: { id: 9, name: 'Joueur 9', number: 9, grid: '1:1' } }],
+          substitutes: [],
+        },
+      ],
+      'fixtures/players': [
+        {
+          team: { id: 1 },
+          players: [
+            {
+              player: { id: 9, name: 'Joueur 9', photo: 'https://example.com/player-9.png' },
+              statistics: [
+                {
+                  games: { minutes: 90, position: 'F', number: 9, substitute: false },
+                  goals: { total: 1 },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+    const reserve = vi.fn(async () => {});
+    const fetcher = vi.fn(
+      async (url: string) =>
+        new Response(
+          JSON.stringify({ errors: [], response: responses[new URL(url).pathname.slice(1)] ?? [] }),
+        ),
+    );
+    const provider = new ApiFootballProvider('test', reserve, fetcher as typeof fetch);
+    const result = await provider.details(['123'], ['123']);
+    expect(result.enriched).toEqual(['123']);
+    expect(result.matches[0].events).toHaveLength(1);
+    expect(result.matches[0].lineups[0].starters[0].id).toBe('9');
+    expect(result.matches[0].performances?.[0].stats.goals).toBe(1);
+    expect(result.matches[0].performances?.[0].photo).toBe('https://example.com/player-9.png');
+    expect(result.matches[0].statistics.find((stat) => stat.label === 'Tirs bloqués')?.home).toBe(
+      0,
+    );
+    expect(
+      result.matches[0].statistics.find((stat) => stat.label === 'Tirs cadrés')?.away,
+    ).toBeNull();
+    expect(reserve).toHaveBeenCalledTimes(5);
   });
   it('détecte les erreurs métier même avec HTTP 200', async () => {
     const provider = new ApiFootballProvider(

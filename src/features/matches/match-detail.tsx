@@ -17,6 +17,7 @@ import type { predictionInsights, informationQuality } from '@/prediction-engine
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { MatchOverview } from './match-overview';
 import { ProbabilitySummary } from './probability-summary';
+import { MatchStatistics } from './match-statistics';
 const tabs = [
   ['apercu', 'Aperçu'],
   ['prediction', 'Prédiction'],
@@ -286,55 +287,21 @@ export function MatchDetail({
       {tab === 'statistiques' && (
         <>
           <SectionTitle title="Le match en chiffres" />
-          {match.statistics.some((s) => s.home !== null || s.away !== null) ? (
-            <section className="card stat-comparison">
-              {match.statistics.map((s) => (
-                <div className="stat-compare-row" key={s.label}>
-                  <div>
-                    <b>
-                      {number(s.home, 2)}
-                      {s.home !== null ? s.unit : ''}
-                    </b>
-                    <span>{s.label}</span>
-                    <b>
-                      {number(s.away, 2)}
-                      {s.away !== null ? s.unit : ''}
-                    </b>
-                  </div>
-                  {s.home !== null && s.away !== null && (
-                    <div className="compare-bar">
-                      <span
-                        style={{
-                          width: `${(s.home + s.away ? s.home / (s.home + s.away) : 0.5) * 100}%`,
-                        }}
-                      />
-                      <span
-                        style={{
-                          width: `${(s.home + s.away ? s.away / (s.home + s.away) : 0.5) * 100}%`,
-                        }}
-                      />
-                    </div>
-                  )}
+          <MatchStatistics match={match} home={home} away={away} />
+          {!match.statistics.some((s) => s.home != null || s.away != null) &&
+            match.status !== 'scheduled' && (
+              <>
+                <SectionTitle title="Historique avant cette rencontre" />
+                <div className="metrics three">
+                  <Metric label={`Matchs · ${home.short}`} value={homeSummary.played} />
+                  <Metric label={`Buts marqués · ${home.short}`} value={homeSummary.scored} />
+                  <Metric label={`Buts encaissés · ${home.short}`} value={homeSummary.conceded} />
+                  <Metric label={`Matchs · ${away.short}`} value={awaySummary.played} />
+                  <Metric label={`Buts marqués · ${away.short}`} value={awaySummary.scored} />
+                  <Metric label={`Buts encaissés · ${away.short}`} value={awaySummary.conceded} />
                 </div>
-              ))}
-            </section>
-          ) : (
-            <>
-              <p className="data-note">
-                Aucune statistique détaillée de cette rencontre n’a été transmise. Les chiffres
-                ci-dessous proviennent uniquement des résultats antérieurs des deux équipes.
-              </p>
-              <SectionTitle title="Historique avant cette rencontre" />
-              <div className="metrics three">
-                <Metric label={`Matchs · ${home.short}`} value={homeSummary.played} />
-                <Metric label={`Buts marqués · ${home.short}`} value={homeSummary.scored} />
-                <Metric label={`Buts encaissés · ${home.short}`} value={homeSummary.conceded} />
-                <Metric label={`Matchs · ${away.short}`} value={awaySummary.played} />
-                <Metric label={`Buts marqués · ${away.short}`} value={awaySummary.scored} />
-                <Metric label={`Buts encaissés · ${away.short}`} value={awaySummary.conceded} />
-              </div>
-            </>
-          )}
+              </>
+            )}
         </>
       )}
       {tab === 'compositions' && (
@@ -347,7 +314,7 @@ export function MatchDetail({
                   <div className="section-title">
                     <h2>{data.teams.find((t) => t.id === l.teamId)?.name}</h2>
                     <span className="tag">
-                      {l.formation} · {l.confirmed ? 'Officielle' : 'Probable'}
+                      {l.formation} · {l.confirmed ? 'Officielle' : 'Données incomplètes'}
                     </span>
                   </div>
                   <p className="data-note">
@@ -387,7 +354,15 @@ export function MatchDetail({
                   {l.substitutes.map((p) => (
                     <div className="bench-player" key={p.id}>
                       <span>{p.number ?? '–'}</span>
-                      {p.name}
+                      {data.players.find((player) => player.id === p.id) ? (
+                        <Link
+                          href={`/joueur/${data.players.find((player) => player.id === p.id)!.slug}`}
+                        >
+                          {p.name}
+                        </Link>
+                      ) : (
+                        p.name
+                      )}
                     </div>
                   ))}
                 </section>
@@ -420,15 +395,34 @@ export function MatchDetail({
                   <span className={`event-symbol event-${e.type}`}>
                     {e.type === 'goal'
                       ? '⚽'
-                      : e.type === 'yellow'
-                        ? '🟨'
-                        : e.type === 'red'
-                          ? '🟥'
-                          : e.type === 'substitution'
-                            ? '↔'
-                            : 'VAR'}
+                      : e.type === 'penalty-miss'
+                        ? '×'
+                        : e.type === 'yellow'
+                          ? '🟨'
+                          : e.type === 'red'
+                            ? '🟥'
+                            : e.type === 'substitution'
+                              ? '↔'
+                              : 'VAR'}
                   </span>
                   <div>
+                    <small>
+                      {e.type === 'goal'
+                        ? e.detail?.toLowerCase().includes('penalty')
+                          ? 'But sur penalty'
+                          : 'But'
+                        : e.type === 'penalty-miss'
+                          ? 'Penalty manqué'
+                          : e.type === 'yellow'
+                            ? 'Carton jaune'
+                            : e.type === 'red'
+                              ? e.detail?.toLowerCase().includes('second yellow')
+                                ? 'Deuxième jaune'
+                                : 'Carton rouge'
+                              : e.type === 'substitution'
+                                ? 'Remplacement'
+                                : 'VAR'}
+                    </small>
                     <b>{e.player}</b>
                     <small>
                       {data.teams.find((t) => t.id === e.teamId)?.name}

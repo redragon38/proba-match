@@ -26,11 +26,29 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     d.source !== 'demo' && (p.stats.appearances ?? 0) >= 5,
   );
 }
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ match?: string }>;
+}) {
+  const [{ slug }, query] = await Promise.all([params, searchParams]);
   const data = await getDataset();
   const p = data.players.find((p) => p.slug === slug);
   if (!p) notFound();
+  const fromMatch =
+    query.match &&
+    data.matches.find(
+      (match) =>
+        match.slug === query.match &&
+        (match.homeId === p.teamId ||
+          match.awayId === p.teamId ||
+          match.lineups.some((lineup) =>
+            [...lineup.starters, ...lineup.substitutes].some((row) => row.id === p.id),
+          ) ||
+          match.performances?.some((row) => row.playerId === p.id)),
+    );
   const history = p.source === 'thesportsdb' ? [] : await playerHistory(p.id);
   const t = data.teams.find((t) => t.id === p.teamId)!;
   const score = playerPerformance(p.stats, p.position);
@@ -108,6 +126,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         />
       )}
       <SourceBanner data={data} />
+      {fromMatch && (
+        <Link className="text-link" href={`/match/${fromMatch.slug}?onglet=joueurs`}>
+          ← Retour au match
+        </Link>
+      )}
       {p.source === 'thesportsdb' && (
         <p className="data-note">
           Profil issu du catalogue communautaire TheSportsDB, synchronisé le{' '}

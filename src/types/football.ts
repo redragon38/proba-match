@@ -5,6 +5,7 @@ export type Position = 'Gardien' | 'Défenseur' | 'Milieu' | 'Attaquant' | 'Non 
 export interface MatchPlayerPerformance {
   playerId: string;
   name: string;
+  photo?: string;
   teamId: string;
   position: Position;
   number: number | null;
@@ -18,6 +19,12 @@ export interface Match {
   performances?: MatchPlayerPerformance[];
   phase?: 'halftime' | 'playing';
   detailsUpdatedAt?: string;
+  scoreBreakdown?: {
+    halftime?: { home?: number | null; away?: number | null };
+    fulltime?: { home?: number | null; away?: number | null };
+    extratime?: { home?: number | null; away?: number | null };
+    penalty?: { home?: number | null; away?: number | null };
+  };
 }
 export interface Competition {
   id: string;
@@ -83,12 +90,17 @@ export interface PlayerStats {
   duels?: number | null;
   dribbles?: number | null;
   passes?: number | null;
+  passAccuracy?: number | null;
+  blocks?: number | null;
+  duelsTotal?: number | null;
+  fouls?: number | null;
+  penaltiesSaved?: number | null;
 }
 export interface MatchEvent {
   minute: number;
   extra?: number | null;
   teamId: string;
-  type: 'goal' | 'yellow' | 'red' | 'substitution' | 'var';
+  type: 'goal' | 'penalty-miss' | 'yellow' | 'red' | 'substitution' | 'var';
   player: string;
   assist?: string | null;
   detail?: string;

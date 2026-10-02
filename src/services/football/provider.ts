@@ -16,7 +16,7 @@ export interface HistoricalFootballProvider extends BaseFootballProvider {
 }
 export interface FootballDataProvider extends BaseFootballProvider {
   fixtures(date: string): Promise<FixtureBatch>;
-  details(ids: string[]): Promise<FixtureBatch>;
+  details(ids: string[], detailedIds?: string[]): Promise<FixtureBatch>;
   standings(competitionId: string, season: number): Promise<Standing[]>;
   players(teamId: string, season: number, competitionId?: string): Promise<Player[]>;
 }
