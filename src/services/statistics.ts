@@ -1,4 +1,22 @@
-import type { Dataset } from '@/types/football';
+import type { Dataset, Match } from '@/types/football';
+
+/** A missing result cannot contribute zero goals to a historical summary. */
+export function recordedGoals(matches: Pick<Match, 'homeScore' | 'awayScore'>[]) {
+  const scored = matches.filter(
+    (match) =>
+      match.homeScore != null &&
+      Number.isInteger(match.homeScore) &&
+      match.homeScore >= 0 &&
+      match.awayScore != null &&
+      Number.isInteger(match.awayScore) &&
+      match.awayScore >= 0,
+  );
+  const goals = scored.length
+    ? scored.reduce((total, match) => total + match.homeScore! + match.awayScore!, 0)
+    : null;
+  return { matches: scored.length, goals, average: goals === null ? null : goals / scored.length };
+}
+
 /** The home leaderboard needs only each team's latest five results, not 129 full history scans. */
 export function homeFormLeaders(data: Dataset, cutoff = new Date().toISOString()) {
   type Result = { kickoff: string; gf: number; ga: number };

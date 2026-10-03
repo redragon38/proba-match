@@ -13,6 +13,12 @@ export default function Page() {
         Notre rôle est de rendre le football plus lisible. Voici exactement ce que notre première
         version calcule, et ce qu’elle ne sait pas encore.
       </p>
+      <p>
+        Proba Match calcule automatiquement ses probabilités avec un modèle statistique
+        Elo–Poisson. Les explications sont assemblées selon des règles à partir des données et
+        des facteurs calculés, sans IA générative. Elles décrivent une estimation du modèle,
+        pas une certitude sur le déroulement du match.
+      </p>
       <section>
         <h2>01 — Des sources clairement identifiées</h2>
         <p>

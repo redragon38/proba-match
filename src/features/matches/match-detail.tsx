@@ -9,7 +9,7 @@ import { dayLabel, number, time } from '@/lib/format';
 import { playerWatch } from '@/prediction-engine/player';
 import { MatchList } from './match-list';
 import { PlayerPerformances } from './player-performances';
-import { teamSummary } from '@/services/statistics';
+import { recordedGoals, teamSummary } from '@/services/statistics';
 import { useLive } from './use-live';
 import { LocalTime } from '@/components/local-time';
 import { ShareButton } from '@/components/share-button';
@@ -62,6 +62,7 @@ export function MatchDetail({
     )
     .sort((a, b) => b.kickoff.localeCompare(a.kickoff))
     .slice(0, 10);
+  const h2hGoals = recordedGoals(h2h);
   const watched = data.players
     .filter((p) => [home.id, away.id].includes(p.teamId))
     .map((p) => ({ player: p, score: playerWatch(p) }))
@@ -454,13 +455,13 @@ export function MatchDetail({
                 <Metric label="Confrontations" value={h2h.length} />
                 <Metric
                   label="Total de buts"
-                  value={h2h.reduce((s, m) => s + (m.homeScore ?? 0) + (m.awayScore ?? 0), 0)}
+                  value={h2hGoals.goals ?? 'Non disponible'}
+                  note={`${h2hGoals.matches} score(s) disponible(s) sur ${h2h.length} rencontres`}
                 />
                 <Metric
                   label="Buts par rencontre"
                   value={number(
-                    h2h.reduce((s, m) => s + (m.homeScore ?? 0) + (m.awayScore ?? 0), 0) /
-                      h2h.length,
+                    h2hGoals.average,
                     2,
                   )}
                 />
