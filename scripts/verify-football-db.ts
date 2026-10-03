@@ -248,66 +248,79 @@ try {
   process.env.FOOTBALL_DAILY_BUDGET = '10';
   let calls = 0;
   let final = false;
-  globalThis.fetch = async () => {
+  globalThis.fetch = async (input) => {
     calls++;
-    return Response.json({
-      errors: [],
-      response: [
+    const fixture = {
+      fixture: {
+        id: 123,
+        date: match.kickoff,
+        referee: null,
+        venue: { name: null },
+        status: { short: final ? 'FT' : '1H', elapsed: final ? 90 : 30 },
+      },
+      league: { id: 61, name: 'Ligue 1', country: 'France', season: scope.season, round: '1' },
+      teams: {
+        home: { id: 1, name: 'Integration Home' },
+        away: { id: 2, name: 'Integration Away' },
+      },
+      goals: { home: final ? 2 : 1, away: 0 },
+      events: [
         {
-          fixture: {
-            id: 123,
-            date: match.kickoff,
-            referee: null,
-            venue: { name: null },
-            status: { short: final ? 'FT' : '1H', elapsed: final ? 90 : 30 },
-          },
-          league: { id: 61, name: 'Ligue 1', country: 'France', season: scope.season, round: '1' },
-          teams: {
-            home: { id: 1, name: 'Integration Home' },
-            away: { id: 2, name: 'Integration Away' },
-          },
-          goals: { home: final ? 2 : 1, away: 0 },
-          events: [
-            {
-              time: { elapsed: 25 },
-              team: { id: 1 },
-              player: { name: 'Integration Scorer' },
-              type: 'Goal',
-              detail: 'Normal Goal',
-            },
-            {
-              time: { elapsed: 27 },
-              team: { id: 2 },
-              player: { name: 'Integration Card' },
-              type: 'Card',
-              detail: 'Yellow Card',
-            },
-            {
-              time: { elapsed: 29 },
-              team: { id: 1 },
-              player: { name: 'Integration Sub' },
-              assist: { name: 'Integration Out' },
-              type: 'subst',
-            },
-          ],
-          statistics: [
-            { team: { id: 1 }, statistics: [{ type: 'Ball Possession', value: '60%' }] },
-            { team: { id: 2 }, statistics: [{ type: 'Ball Possession', value: '40%' }] },
-          ],
-          lineups: [1, 2].map((team) => ({
-            team: { id: team },
-            formation: '4-4-2',
-            startXI: [
-              { player: { id: team * 10, name: `Integration Player ${team}`, number: 10 } },
-            ],
-            substitutes: [],
-          })),
+          time: { elapsed: 25 },
+          team: { id: 1 },
+          player: { name: 'Integration Scorer' },
+          type: 'Goal',
+          detail: 'Normal Goal',
+        },
+        {
+          time: { elapsed: 27 },
+          team: { id: 2 },
+          player: { name: 'Integration Card' },
+          type: 'Card',
+          detail: 'Yellow Card',
+        },
+        {
+          time: { elapsed: 29 },
+          team: { id: 1 },
+          player: { name: 'Integration Sub' },
+          assist: { name: 'Integration Out' },
+          type: 'subst',
         },
       ],
-    });
+      statistics: [
+        { team: { id: 1 }, statistics: [{ type: 'Ball Possession', value: '60%' }] },
+        { team: { id: 2 }, statistics: [{ type: 'Ball Possession', value: '40%' }] },
+      ],
+      lineups: [1, 2].map((team) => ({
+        team: { id: team },
+        formation: '4-4-2',
+        startXI: [
+          { player: { id: team * 10, name: `Integration Player ${team}`, number: 10 } },
+        ],
+        substitutes: [],
+      })),
+    };
+    const path = new URL(String(input)).pathname;
+    // Model the real separate endpoints, not fixture objects returned for every request.
+    let response: unknown[];
+    if (path === '/fixtures') {
+      response = [
+        {
+          fixture: fixture.fixture,
+          league: fixture.league,
+          teams: fixture.teams,
+          goals: fixture.goals,
+        },
+      ];
+    } else if (path === '/fixtures/events') response = fixture.events;
+    else if (path === '/fixtures/statistics') response = fixture.statistics;
+    else if (path === '/fixtures/lineups') response = fixture.lineups;
+    else if (path === '/fixtures/players') response = [];
+    else throw new Error(`Unexpected fixture endpoint: ${path}`);
+    return Response.json({ errors: [], response });
   };
   assert.equal((await syncSecondary()).status, 'success');
-  assert.equal(calls, 1);
+  assert.equal(calls, 5, 'One fixture request plus four detail endpoints');
   data = await readLocalDataset();
   assert.equal(data.matches[0].id, id);
   assert.equal(data.matches[0].homeId, match.homeId);
@@ -337,7 +350,7 @@ try {
     );
   }
   await syncSecondary();
-  assert.equal(calls, 1, 'fresh data performs no external request');
+  assert.equal(calls, 5, 'fresh data performs no external request');
   final = true;
   data.matches[0].detailsUpdatedAt = new Date(Date.now() - 120000).toISOString();
   await persistDataset(data, new Set([id]));
@@ -359,7 +372,7 @@ try {
   data.matches[0].detailsUpdatedAt = new Date(Date.now() - 7200000).toISOString();
   await persistDataset(data, new Set([id]));
   assert.equal((await syncSecondary()).status, 'partial');
-  assert.equal(calls, 2, 'quota exhausted performs no external request');
+  assert.equal(calls, 6, 'Cached details avoid redundant requests; quota exhaustion adds none');
   assert.equal((await readLocalDataset()).matches[0].homeScore, 2);
   globalThis.fetch = async () => {
     throw new Error('offline');
@@ -453,18 +466,35 @@ try {
   );
   assert.equal((await readLocalDataset()).injuries.length, 0);
   if (page) {
-    const profile = (await readLocalDataset()).players[0];
-    assert.ok(profile, 'Controlled provider fixture creates a player profile');
-    for (const width of [320, 390, 1440]) {
-      await page.setViewportSize({ width, height: 900 });
-      const response = await page.goto(`http://localhost:3001/joueur/${profile.slug}`);
-      assert.equal(response?.status(), 200);
-      await expect(page.getByRole('heading', { name: profile.name, exact: true })).toBeVisible();
-      assert.equal(
-        await page.evaluate(() => window.document.documentElement.scrollWidth > innerWidth),
-        false,
-        `Player profile fits ${width}px`,
-      );
+    const profiles = (await readLocalDataset()).players;
+    assert.ok(profiles.length, 'Controlled provider fixtures create player profiles');
+    for (const profile of profiles) {
+      for (const width of [320, 390, 1440]) {
+        await page.setViewportSize({ width, height: 900 });
+        const response = await page.goto(`http://localhost:3001/joueur/${profile.slug}`);
+        assert.equal(response?.status(), 200);
+        await expect(page.getByRole('heading', { name: profile.name, exact: true })).toBeVisible();
+        assert.ok((await page.title()).includes(profile.name), 'Player title uses observed identity');
+        const description = await page.locator('meta[name="description"]').getAttribute('content');
+        assert.ok(description?.includes(profile.name), 'Player description matches visible identity');
+        assert.ok(!/undefined|NaN|Invalid Date/.test(description!), 'No invalid metadata values');
+        const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+        assert.equal(new URL(canonical!).pathname, `/joueur/${profile.slug}`);
+        await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+        const schemas: Record<string, unknown>[] = await page
+          .locator('script[type="application/ld+json"]')
+          .evaluateAll((nodes) => nodes.map((node) => JSON.parse(node.textContent!)));
+        assert.equal(
+          schemas.find((schema) => schema['@type'] === 'Person')?.name,
+          profile.source === 'thesportsdb' ? undefined : profile.name,
+          'Person schema matches the observed profile; community fallback remains excluded',
+        );
+        assert.equal(
+          await page.evaluate(() => window.document.documentElement.scrollWidth > innerWidth),
+          false,
+          `Player profile fits ${width}px`,
+        );
+      }
     }
   }
   if (page && process.env.ADMIN_SECRET) {

@@ -12,16 +12,24 @@ des métadonnées s'appliquent aux pages programmatiques et aux explications sta
 Le moteur Elo–Poisson et les textes construits par règles ne sont pas des appels à une IA
 générative. Aucun SDK, endpoint ou appel LLM n'a été trouvé dans le code applicatif.
 
-La publication précise datée du **1er octobre 2026 n'a pas pu être confirmée** :
-le proxy renvoie HTTP 403 pour les documents officiels suivants. Ce rapport n'est
-donc pas une certification d'une mise à jour Google datée, ni une garantie de classement.
+**Vérification complémentaire effectuée le 3 octobre 2026 :** les deux documents officiels
+ci-dessous ont été téléchargés et lus. La page sur le contenu génératif indique bien
+**« Last updated 2026-10-01 UTC »** ; la politique spam indique **2026-08-28 UTC**.
+La première confirme explicitement l'exactitude/qualité/pertinence, la revue des titles,
+meta descriptions, données structurées et alt, ainsi que le contexte sur l'automatisation.
+La seconde définit le scaled content abuse indépendamment de la méthode de création.
+La date du document est confirmée ; elle ne démontre pas une mise à jour de l'algorithme
+de classement, et cet audit n'est pas une garantie de classement.
 
 - https://developers.google.com/search/docs/fundamentals/using-gen-ai-content
 - https://developers.google.com/search/docs/essentials/spam-policies
 
-L'audit traite les exigences concrètes de la demande sans assimiler automatisation à spam.
-Les domaines nécessaires ont été ajoutés au brouillon réseau ; cela ne prouve pas leur
-activation dans l'instance courante.
+Empreintes SHA-256 des captures HTML officielles consultées :
+
+- Contenu génératif : `354f1cad1340c10ae5aea0cd21cd882448ede54a3713e90392eef714cc391ae9`.
+- Politique spam : `86bdc6636c17003cdacd57253278279efffd82d96cd56f0ca126200e7fd2fd91`.
+
+L'audit traite les exigences vérifiées sans assimiler automatisation à spam.
 
 ## Contenu automatisé détecté
 
@@ -156,10 +164,24 @@ Toutes les commandes ci-dessous ont été exécutées ; les limites sont conserv
   10 vues navigateur, 0 échec, 0 avertissement** ; **1 170 liens découverts**, 1 013 cibles
   supplémentaires vérifiées, aucun lien cassé ni redirection interne découverte.
   Le résultat n'établit pas l'état du déploiement public.
-- Tests DB/UI : la suite `test:football-db` échoue avant cette mission sur le mock
-  d'enrichissement API-Football (`scripts/verify-football-db.ts:309`, partial vs success).
-  Le mock renvoie des fixtures pour les nouveaux endpoints de détails ; ce défaut indépendant
-  n'a pas été changé dans une mission SEO sans changement d'API/DB.
+- Tests DB/UI complémentaires : **PASS**, `npm run test:football-db`, puis
+  `FOOTBALL_VERIFY_UI=true npm run test:football-db`, sur une base isolée créée et supprimée.
+  Le mock obsolète a été corrigé : les endpoints fixtures/events/statistics/lineups/players
+  renvoient maintenant leurs réponses propres, plutôt qu'un objet fixture pour chaque endpoint.
+  Aucun endpoint applicatif ni assertion métier n'a été supprimé. Les assertions de quota
+  vérifient cinq appels initiaux, aucun appel quand le cache est frais, puis un appel de score
+  avec détails en cache et aucun appel supplémentaire lorsque le quota est épuisé.
+  Sont validés : imports/idempotence, reprogrammation, créations, résultats/minutes,
+  événements/stats/compositions, blessures/récupération, classement, quotas, panne source,
+  cache de production, rafraîchissement UI automatique et authentification cron.
+  Les profils contrôlés (communautaires et observés) ont aussi été vérifiés à 320/390/1440 :
+  titre et description correspondant au nom visible, canonical exact, noindex des profils
+  sans statistiques, absence de valeurs invalides et Person cohérent avec le type de source.
+  Cela valide le comportement applicatif, pas l'exactitude de données externes réelles.
+- Sécurité HTTP : **PASS**, `scripts/verify-security.mjs` : **14 contrôles**, aucun échec.
+- Responsive complémentaire : **PASS**, `scripts/responsive-check.mjs` : **196 vues**,
+  **14 interactions**, thèmes clair/sombre et largeurs 320/360/375/390/430/768/1440,
+  aucun statut inattendu, débordement, erreur JS ou ressource cassée. Profil joueur réel absent.
 
 Preuve additionnelle : 10 équipes, 10 matchs et 5 compétitions rendus sans JavaScript,
 titres/descriptions distincts, noms cohérents avec le snapshot, aucune valeur invalide dans
@@ -186,17 +208,38 @@ La preview finale reste noindex ; les mesures locales ne sont pas des Core Web V
 | Mobile | PASS, vues 390/1440 et tests complémentaires jusqu'à 375/768/1024 ; aucun débordement dans l'audit |
 | Performance | PASS pour les budgets locaux du runner ; CWV terrain NON VÉRIFIÉS EXTERNEMENT |
 | Structured Data | PASS syntaxe/code ; Rich Results Test NON VÉRIFIÉ EXTERNEMENT |
-| Erreurs techniques | PASS audit SEO ; WARNING couverture joueurs / échec DB préexistant décrit plus haut |
+| Erreurs techniques | PASS audit SEO, sécurité et DB/UI ; WARNING couverture joueurs réels |
 
 Les sorties détaillées de l'exécution restent dans les fichiers locaux ignorés
 `.local/seo-after.json`, `.local/content-samples.json`, `.local/content-inventory.json`,
 `test-results/` et `playwright-report/`. Le rapport Git conserve les résultats agrégés,
 sans exposer des fichiers de configuration ou des secrets.
 
+Les contrôles complémentaires écrivent dans `.local/verification/artifacts/`. Les screenshots
+historiques suivis ont été préservés et restaurés ; les nouveaux screenshots restent locaux.
+
+### Contrôles externes tentés
+
+| Contrôle | Observation réelle | Conclusion |
+| --- | --- | --- |
+| Documents Search Central | HTML officiel téléchargé et lu, dates et recommandations ci-dessus | PASS |
+| `https://proba-match.vercel.app/` | CONNECT du proxy refusé HTTP 403, aucune réponse du site | NON VÉRIFIÉ EXTERNEMENT ; ce n'est pas un HTTP 403 du site |
+| API publique TheSportsDB | CONNECT refusé HTTP 403 | Profils de joueurs réels NON VÉRIFIÉS ; profils contrôlés DB/UI vérifiés séparément |
+| Rich Results Test | CONNECT vers `search.google.com` refusé HTTP 403 | Résultat Google NON VÉRIFIÉ EXTERNEMENT ; validation locale effectuée |
+| PageSpeed Insights API | CONNECT vers `www.googleapis.com` refusé HTTP 403 | Mesures publiques et CWV terrain NON VÉRIFIÉS ; aucune note inventée |
+| Search Console | Pas de connecteur de propriété Search Console accessible ; accès authentifié à la propriété non vérifié | Indexation réelle, actions manuelles Google et rapport CWV NON VÉRIFIÉS |
+
+Les destinations exactes nécessaires ont été ajoutées au brouillon réseau, en préservant
+les règles existantes. Enregistrer ce brouillon n'active pas le réseau dans la machine et
+aucun outil d'activation n'est disponible dans cette session. Pas de contournement du proxy.
+
 ## Actions manuelles
 
-- Pour confirmer la publication précise du 1er octobre, appliquer l'accès réseau à
-  `developers.google.com` (ajout enregistré) ou fournir le lien/document officiel exact.
+- Pour permettre les contrôles publics encore bloqués, appliquer dans les paramètres de
+  l'environnement les domaines enregistrés du site, des outils Google et des fournisseurs.
+  La documentation Google elle-même a été vérifiée et ne nécessite plus de document fourni.
+- Search Console nécessite un accès autorisé à la propriété du site ; aucun état de propriété
+  ni résultat d'indexation ne peut être inventé à partir de tests locaux.
 - Avant une ouverture publique, compléter l'identité réelle de l'exploitant mentionnée comme
   manquante dans les mentions légales. Ne pas inventer d'auteur ni d'expertise.
 - Pour valider des profils joueurs réels, configurer les sources d'enrichissement choisies et
@@ -204,6 +247,8 @@ sans exposer des fichiers de configuration ou des secrets.
 - Sur le déploiement réel seulement, refaire le test SEO HTTPS, vérifier les redirections et
   utiliser Search Console / Rich Results Test / CrUX pour les contrôles externes.
 
-Git : les seuls changements à publier sont les quatre fichiers code/tests décrits et
-ce rapport. Le push demandé vise la branche principale existante `master`, sans force,
-à partir du checkout cloud `work`. Le résultat du push est communiqué dans le compte rendu final.
+Git : premier correctif et rapport publiés sous `3ceb82e` sur `master`. La vérification
+complémentaire modifie uniquement ce rapport et `scripts/verify-football-db.ts` : correction
+du simulateur fournisseur, compte des appels/quota et assertions metadata/Person des profils.
+Les assertions métier restent actives ; aucune API ni donnée de production n'a été modifiée.
+Le push vise `master`, sans force, depuis le checkout cloud `work`.
