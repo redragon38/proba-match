@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { CompetitionBadge } from '@/components/ui';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { CompetitionView } from '@/services/competition-view';
 import { SourceBanner } from '@/components/source-banner';
@@ -46,7 +47,7 @@ export function CompetitionProfile({ view }: { view: CompetitionView }) {
         real={data.source !== 'demo'}
       />
       <div className="card profile-header">
-        <span className="competition-icon large">{c.flag}</span>
+        <CompetitionBadge competition={c} size={64} />
         <div>
           <span className="eyebrow">
             {c.country} · SAISON {c.season}/{c.season + 1}

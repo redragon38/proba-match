@@ -1,9 +1,49 @@
 import Link from 'next/link';
 import { ProviderImage } from './provider-image';
 import { ArrowUpRight, Trophy } from 'lucide-react';
-import type { Team } from '@/types/football';
+import type { Competition, Team } from '@/types/football';
 import { probabilityPercentages, probabilityReading } from '@/lib/probability-format';
+import { competitionLogo } from '@/lib/competition-logo';
 import { teamLogo } from '@/lib/team-logo';
+export function CompetitionBadge({
+  competition,
+  size = 28,
+}: {
+  competition: Pick<Competition, 'name' | 'logo' | 'flag'>;
+  size?: number;
+}) {
+  const logo = competitionLogo(competition);
+  const fallback = (
+    <span
+      aria-hidden="true"
+      style={{
+        width: size,
+        height: size,
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+      }}
+    >
+      {competition.flag}
+    </span>
+  );
+  return (
+    <span className="competition-badge" style={{ width: size, height: size }}>
+      {logo ? (
+        <ProviderImage
+          src={logo}
+          alt={`Logo de ${competition.name}`}
+          size={size}
+          eager={size >= 64}
+          fallback={fallback}
+        />
+      ) : (
+        fallback
+      )}
+    </span>
+  );
+}
 export function TeamBadge({
   team,
   size = 30,

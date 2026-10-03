@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { CompetitionBadge } from '@/components/ui';
 import { ArrowLeft, MapPin, UserRound } from 'lucide-react';
 import type { Dataset, Match, Prediction } from '@/types/football';
 import { Empty, Form, Metric, ProbabilityBar, SectionTitle, TeamBadge } from '@/components/ui';
@@ -88,7 +89,7 @@ export function MatchDetail({
       <section className="card match-hero">
         <div className="match-meta">
           <Link href={`/competition/${comp.slug}`}>
-            {comp.flag} {comp.name}
+            <CompetitionBadge competition={comp} size={20} /> {comp.name}
           </Link>{' '}
           · {match.round} · {dayLabel(match.kickoff)}
         </div>
@@ -458,13 +459,7 @@ export function MatchDetail({
                   value={h2hGoals.goals ?? 'Non disponible'}
                   note={`${h2hGoals.matches} score(s) disponible(s) sur ${h2h.length} rencontres`}
                 />
-                <Metric
-                  label="Buts par rencontre"
-                  value={number(
-                    h2hGoals.average,
-                    2,
-                  )}
-                />
+                <Metric label="Buts par rencontre" value={number(h2hGoals.average, 2)} />
               </div>
               <MatchList
                 matches={h2h}

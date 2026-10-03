@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { CompetitionBadge } from '@/components/ui';
 import { useState } from 'react';
 import type { Dataset } from '@/types/football';
 import { SourceBanner } from '@/components/source-banner';
@@ -75,8 +76,10 @@ export function Catalog({
               >
                 {team ? (
                   <TeamBadge team={team} size={40} />
+                ) : 'flag' in r ? (
+                  <CompetitionBadge competition={r} size={40} />
                 ) : (
-                  <span className="competition-icon">{'flag' in r ? r.flag : '⚽'}</span>
+                  <span className="competition-icon">⚽</span>
                 )}
                 <div>
                   <h2>{r.name}</h2>

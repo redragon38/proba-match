@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { CompetitionBadge } from '@/components/ui';
 import type { Match, Team, Competition, Prediction } from '@/types/football';
 import { TeamBadge, ProbabilityCompact } from '@/components/ui';
 import { LocalTime } from '@/components/local-time';
@@ -29,7 +30,8 @@ export function MatchCard({
     >
       <div className="sport-card-meta">
         <span>
-          {competition?.flag} {competition?.name ?? 'Compétition non disponible'}
+          {competition && <CompetitionBadge competition={competition} size={20} />}{' '}
+          {competition?.name ?? 'Compétition non disponible'}
         </span>
         <FavoriteButton id={`match:${m.id}`} label={`${home.short} – ${away.short}`} />
       </div>

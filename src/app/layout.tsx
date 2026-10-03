@@ -48,7 +48,12 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <Shell
           liveCount={data.degraded ? 0 : data.matches.filter((m) => m.status === 'live').length}
           year={new Date().getFullYear()}
-          leagues={data.competitions.map(({ flag, name, slug }) => ({ flag, name, slug }))}
+          leagues={data.competitions.map(({ flag, name, slug, logo }) => ({
+            flag,
+            name,
+            slug,
+            logo,
+          }))}
         >
           {children}
         </Shell>

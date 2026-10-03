@@ -1,0 +1,38 @@
+[
+  {
+    "file": "bundesliga.webp",
+    "source": "https://media.api-sports.io/football/leagues/78.png",
+    "retrieved": "2026-10-03",
+    "note": "Competition trademarks belong to their respective owners."
+  },
+  {
+    "file": "champions-league.webp",
+    "source": "https://media.api-sports.io/football/leagues/2.png",
+    "retrieved": "2026-10-03",
+    "note": "Competition trademarks belong to their respective owners."
+  },
+  {
+    "file": "la-liga.webp",
+    "source": "https://media.api-sports.io/football/leagues/140.png",
+    "retrieved": "2026-10-03",
+    "note": "Competition trademarks belong to their respective owners."
+  },
+  {
+    "file": "ligue-1.webp",
+    "source": "https://media.api-sports.io/football/leagues/61.png",
+    "retrieved": "2026-10-03",
+    "note": "Competition trademarks belong to their respective owners."
+  },
+  {
+    "file": "premier-league.webp",
+    "source": "https://media.api-sports.io/football/leagues/39.png",
+    "retrieved": "2026-10-03",
+    "note": "Competition trademarks belong to their respective owners."
+  },
+  {
+    "file": "serie-a.webp",
+    "source": "https://media.api-sports.io/football/leagues/135.png",
+    "retrieved": "2026-10-03",
+    "note": "Competition trademarks belong to their respective owners."
+  }
+]

@@ -22,6 +22,7 @@ import {
   Users,
   Shield,
 } from 'lucide-react';
+import { CompetitionBadge } from './ui';
 import { QuickSearch } from './quick-search';
 import { emitAnalytics } from '@/lib/analytics';
 import { usePreference } from '@/lib/preferences';
@@ -44,7 +45,7 @@ export function Shell({
 }: {
   children: React.ReactNode;
   year: number;
-  leagues: { flag: string; name: string; slug: string }[];
+  leagues: { flag: string; name: string; slug: string; logo?: string }[];
   liveCount?: number;
 }) {
   const pathname = usePathname();
@@ -174,15 +175,15 @@ export function Shell({
             </Link>
           </div>
           <nav aria-label="Compétitions">
-            {leagues.map(({ flag, name: label, slug }) => (
+            {leagues.map((league) => (
               <Link
-                key={slug}
+                key={league.slug}
                 className="league-link"
-                href={`/competition/${slug}`}
+                href={`/competition/${league.slug}`}
                 onClick={() => setMenu(false)}
               >
-                <span>{flag}</span>
-                {label}
+                <CompetitionBadge competition={league} size={24} />
+                {league.name}
                 <ChevronRight size={13} />
               </Link>
             ))}

@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { CompetitionBadge } from '@/components/ui';
 import { ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 import type { Competition, Match, Prediction, Team } from '@/types/football';
@@ -44,7 +45,7 @@ export function MatchList({
           return (
             <section className="card match-group" key={comp.id}>
               <div className="competition-heading">
-                <span className="competition-flag">{comp.flag}</span>
+                <CompetitionBadge competition={comp} size={28} />
                 <Link href={`/competition/${comp.slug}`}>
                   <strong>{comp.name}</strong>
                   <span>

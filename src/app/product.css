@@ -872,3 +872,19 @@ body {
     font-size: 10px;
   }
 }
+
+.competition-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  vertical-align: middle;
+  padding: 2px;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+}
+.competition-badge .team-logo {
+  width: 100%;
+  height: 100%;
+}
