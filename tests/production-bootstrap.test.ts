@@ -8,6 +8,7 @@ function dependencies(states: { seasons: boolean; rosters: boolean }[]) {
     state: vi.fn(async () => states[Math.min(cursor++, states.length - 1)]),
     seasons: vi.fn(async () => ({ status: 'success', failures: 0 })),
     players: vi.fn(async () => ({ status: 'success', failures: 0 })),
+    wait: vi.fn(async () => undefined),
   };
 }
 describe('production data initialization', () => {
@@ -37,6 +38,7 @@ describe('production data initialization', () => {
       { seasons: false, rosters: false },
       { seasons: true, rosters: false },
       { seasons: true, rosters: false },
+      { seasons: true, rosters: false },
       { seasons: true, rosters: true },
     ]);
     expect(await bootstrapExpandedProduction(production, deps)).toBe('initialized');
@@ -60,6 +62,7 @@ describe('production data initialization', () => {
       'PRODUCTION_LEAGUE_IMPORT_INCOMPLETE',
     );
     expect(deps.players).not.toHaveBeenCalled();
+    expect(deps.seasons).toHaveBeenCalledTimes(3);
   });
   it('does not claim success when roster imports fail', async () => {
     const deps = dependencies([{ seasons: true, rosters: false }]);
@@ -74,5 +77,29 @@ describe('production data initialization', () => {
       'PRODUCTION_BOOTSTRAP_INCOMPLETE',
     );
     expect(deps.players).toHaveBeenCalledTimes(8);
+  });
+  it('continues after a partial roster batch and verifies persisted completion', async () => {
+    const deps = dependencies([
+      { seasons: true, rosters: false },
+      { seasons: true, rosters: false },
+      { seasons: true, rosters: false },
+      { seasons: true, rosters: true },
+    ]);
+    deps.players.mockResolvedValueOnce({ status: 'partial', failures: 1 });
+    expect(await bootstrapExpandedProduction(production, deps)).toBe('initialized');
+    expect(deps.players).toHaveBeenCalledTimes(2);
+    expect(deps.wait).toHaveBeenCalledTimes(1);
+  });
+  it('retries a failed write without declaring the data ready', async () => {
+    const deps = dependencies([
+      { seasons: true, rosters: false },
+      { seasons: true, rosters: false },
+      { seasons: true, rosters: false },
+      { seasons: true, rosters: true },
+    ]);
+    deps.players.mockRejectedValueOnce(new Error('SYNC_FAILED'));
+    expect(await bootstrapExpandedProduction(production, deps)).toBe('initialized');
+    expect(deps.players).toHaveBeenCalledTimes(2);
+    expect(deps.wait).toHaveBeenCalledTimes(1);
   });
 });
