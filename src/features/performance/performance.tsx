@@ -181,13 +181,13 @@ export function Performance({
                         y2={270 - v * 2.3}
                         stroke="var(--line)"
                       />
-                      <text x="15" y={274 - v * 2.3} fontSize="10" fill="var(--muted)">
+                      <text x="15" y={274 - v * 2.3} fontSize="12" fill="var(--muted)">
                         {v}%
                       </text>
                       <text
                         x={50 + v * 4.1}
                         y="290"
-                        fontSize="10"
+                        fontSize="12"
                         textAnchor="middle"
                         fill="var(--muted)"
                       >

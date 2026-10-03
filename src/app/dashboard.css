@@ -96,7 +96,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 650;
   letter-spacing: 1.5px;
   color: #a4d8bb;
@@ -129,7 +129,7 @@
   background: #fff;
 }
 .hero-footnote {
-  font-size: 8px;
+  font-size: 12px;
   color: #92b6a3;
   display: flex;
   gap: 5px;
@@ -146,7 +146,7 @@
   padding: 25px 25px 25px 10px;
 }
 .hero-comp {
-  font-size: 7px;
+  font-size: 12px;
   color: #a6cbb5;
   letter-spacing: 1px;
 }
@@ -182,7 +182,7 @@
 }
 .hero-projection > span {
   display: block;
-  font-size: 7px;
+  font-size: 12px;
   letter-spacing: 1.3px;
   text-align: center;
   margin-bottom: 10px;
@@ -310,7 +310,7 @@
   padding: 1px 5px;
   background: #20957815;
   color: var(--green);
-  font-size: 9px;
+  font-size: 12px;
 }
 .selected .count-pill {
   color: #fff;
@@ -360,7 +360,7 @@
 }
 .competition-heading a > span {
   color: var(--muted);
-  font-size: 9px;
+  font-size: 12px;
 }
 .competition-heading > .favorite-button {
   margin-left: auto;
@@ -384,7 +384,7 @@
 .match-column-labels {
   display: flex;
   justify-content: space-between;
-  font-size: 7px;
+  font-size: 12px;
   letter-spacing: 1px;
   color: #9aa5ad;
   padding: 10px 85px 0 74px;
@@ -412,11 +412,11 @@
   color: #687983;
 }
 .match-clock > span:not(.live-dot) {
-  font-size: 8px;
+  font-size: 12px;
   letter-spacing: 0.3px;
 }
 .match-clock > small {
-  font-size: 9px;
+  font-size: 12px;
   color: #9ca6af;
 }
 .is-live {
@@ -473,7 +473,7 @@
   color: var(--green);
 }
 .prob-chips small {
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 400;
   padding-left: 1px;
 }
@@ -482,7 +482,7 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  font-size: 7px;
+  font-size: 12px;
   color: #9aa5ac;
   margin-top: 7px;
 }
@@ -502,14 +502,14 @@
   border-radius: 1px;
 }
 .tiny {
-  font-size: 9px;
+  font-size: 12px;
 }
 .list-note {
   display: flex;
   align-items: center;
   gap: 7px;
   flex-wrap: wrap;
-  font-size: 8px;
+  font-size: 12px;
   color: var(--muted);
   margin: 14px 0 23px;
 }
@@ -527,7 +527,7 @@
   padding: 15px;
 }
 .upcoming-card > small {
-  font-size: 9px;
+  font-size: 12px;
   color: var(--muted);
 }
 .upcoming-card > div {
@@ -541,7 +541,7 @@
   font-weight: 600;
 }
 .upcoming-card b {
-  font-size: 9px;
+  font-size: 12px;
   color: var(--muted);
   margin: auto;
 }
@@ -561,7 +561,7 @@
   font-size: 12px;
 }
 .popular-teams small {
-  font-size: 8px;
+  font-size: 12px;
   color: var(--muted);
 }
 .right-rail > section {
@@ -592,7 +592,7 @@
   color: #bd953c;
 }
 .beta {
-  font-size: 8px;
+  font-size: 12px;
   color: var(--green);
   border: 1px solid #bcdccd;
   border-radius: 4px;
@@ -623,7 +623,7 @@
   font-weight: 600;
 }
 .insight-teams > span.muted {
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 400;
 }
 .insight-main {
@@ -642,7 +642,7 @@
   color: var(--green);
 }
 .insight-main > small {
-  font-size: 8px;
+  font-size: 12px;
   color: var(--muted);
 }
 .quality-row {
@@ -650,7 +650,7 @@
   justify-content: space-between;
   align-items: center;
   margin: 18px 0 15px;
-  font-size: 9px;
+  font-size: 12px;
   color: var(--muted);
 }
 .quality-row b {
@@ -658,7 +658,7 @@
   color: var(--green);
   padding: 4px 7px;
   border-radius: 4px;
-  font-size: 9px;
+  font-size: 12px;
 }
 .outline-link {
   display: flex;
@@ -678,7 +678,7 @@
 .rail-disclaimer {
   background: var(--bg);
   color: var(--muted);
-  font-size: 8px;
+  font-size: 12px;
   text-align: center;
   margin: 17px -19px 0;
   padding: 11px 5px;
@@ -690,7 +690,7 @@
 .players-card > p {
   margin-top: 8px;
   margin-bottom: 13px;
-  font-size: 9px;
+  font-size: 12px;
 }
 .player-ranking {
   display: flex;
@@ -700,7 +700,7 @@
   border-bottom: 1px solid var(--line);
 }
 .rank-index {
-  font-size: 9px;
+  font-size: 12px;
   color: #a6afb5;
 }
 .player-avatar {
@@ -721,7 +721,7 @@
   line-height: 1.5;
 }
 .player-ranking > span > small {
-  font-size: 8px;
+  font-size: 12px;
   display: block;
   color: var(--muted);
   margin-top: 3px;
@@ -737,7 +737,7 @@
 .player-ranking > b > small {
   font-weight: 400;
   display: block;
-  font-size: 7px;
+  font-size: 12px;
   color: var(--muted);
   text-align: right;
 }
@@ -754,7 +754,7 @@
   overflow: hidden;
 }
 .model-promo .eyebrow {
-  font-size: 7px;
+  font-size: 12px;
   letter-spacing: 1.2px;
   color: #71865d;
 }
@@ -768,7 +768,7 @@
   z-index: 1;
 }
 .model-promo p {
-  font-size: 9px;
+  font-size: 12px;
   color: #7a8a74;
 }
 .model-promo > a {
@@ -847,7 +847,7 @@
     font-size: 23px;
   }
   .hero-copy p {
-    font-size: 9px;
+    font-size: 12px;
   }
   .hero-match {
     padding: 20px 15px 20px 5px;
@@ -856,7 +856,7 @@
     gap: 20px;
   }
   .hero-footnote {
-    font-size: 7px;
+    font-size: 12px;
   }
   .row-prediction {
     min-width: 125px;
@@ -888,13 +888,13 @@
   }
   .match-filters button {
     padding: 8px;
-    font-size: 9px;
+    font-size: 12px;
   }
   .source-banner > span {
-    font-size: 9px;
+    font-size: 12px;
   }
   .hero-comp {
-    font-size: 6px;
+    font-size: 12px;
   }
 }
 @media (max-width: 1000px) and (min-width: 851px) {
@@ -947,7 +947,7 @@
     font-size: 25px;
   }
   .hero-copy p {
-    font-size: 9px;
+    font-size: 12px;
   }
   .hero-copy {
     padding: 23px 19px;
@@ -959,13 +959,13 @@
     gap: 22px;
   }
   .hero-comp {
-    font-size: 6px;
+    font-size: 12px;
   }
   .match-filters {
     gap: 1px;
   }
   .match-filters button {
-    font-size: 9px;
+    font-size: 12px;
     padding: 9px 8px;
   }
   .match-row {
@@ -982,7 +982,7 @@
     font-size: 12px;
   }
   .competition-heading a > span {
-    font-size: 8px;
+    font-size: 12px;
   }
   .popular-teams {
     grid-template-columns: repeat(3, 1fr);
@@ -997,7 +997,7 @@
     font-size: 17px;
   }
   .hero-footnote {
-    font-size: 6px;
+    font-size: 12px;
   }
 }
 @media (max-width: 450px) {
@@ -1008,7 +1008,7 @@
     padding: 23px 14px;
   }
   .hero-copy p {
-    font-size: 8px;
+    font-size: 12px;
   }
   .hero-match {
     padding: 20px 13px 20px 0;
@@ -1021,10 +1021,10 @@
     height: 46px !important;
   }
   .hero-comp {
-    font-size: 5px;
+    font-size: 12px;
   }
   .hero-kicker {
-    font-size: 6px;
+    font-size: 12px;
   }
   .hero-projection {
     max-width: 130px;
@@ -1033,7 +1033,7 @@
     display: none;
   }
   .hero-button {
-    font-size: 9px;
+    font-size: 12px;
     gap: 7px;
   }
   .feature-hero {
@@ -1048,13 +1048,13 @@
   .prob-chips > span {
     padding: 5px 3px;
     min-width: 28px;
-    font-size: 9px;
+    font-size: 12px;
   }
   .prob-chips small {
-    font-size: 7px;
+    font-size: 12px;
   }
   .confidence-caption {
-    font-size: 6px;
+    font-size: 12px;
   }
   .match-row {
     padding: 13px 9px;
@@ -1062,10 +1062,10 @@
   }
   .match-clock {
     min-width: 26px;
-    font-size: 8px;
+    font-size: 12px;
   }
   .match-teams > span {
-    font-size: 9px;
+    font-size: 12px;
     gap: 6px;
   }
   .match-teams .team-badge {
@@ -1081,7 +1081,7 @@
   }
   .match-column-labels {
     padding: 10px 13px 0 43px;
-    font-size: 6px;
+    font-size: 12px;
   }
   .competition-heading {
     padding: 11px 12px;
@@ -1096,15 +1096,15 @@
     font-size: 12px;
   }
   .competition-heading a > span {
-    font-size: 7px;
+    font-size: 12px;
   }
   .match-filters button {
-    font-size: 8px;
+    font-size: 12px;
     padding: 8px 6px;
     gap: 4px;
   }
   .date-controls > button {
-    font-size: 9px;
+    font-size: 12px;
     padding: 8px;
   }
   .right-rail {
@@ -1124,9 +1124,9 @@
     height: 27px !important;
   }
   .upcoming-card > div > span:not(.team-badge) {
-    font-size: 9px;
+    font-size: 12px;
   }
   .source-banner > span {
-    font-size: 8px;
+    font-size: 12px;
   }
 }

@@ -86,14 +86,14 @@
     font-size: 30px;
   }
   .score-block > span {
-    font-size: 8px;
+    font-size: 12px;
   }
   .venue-meta {
     flex-wrap: wrap;
     gap: 10px;
   }
   .match-meta {
-    font-size: 9px;
+    font-size: 12px;
     padding: 18px 10px;
   }
   .detail-tabs {
@@ -119,7 +119,7 @@
     padding: 10px;
   }
   .metrics.three .metric > span {
-    font-size: 9px;
+    font-size: 12px;
   }
   .metrics.three .metric > strong {
     font-size: 20px;

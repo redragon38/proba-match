@@ -10,7 +10,8 @@
   "e2e": {
     "ciFixturePassed": 40,
     "realCorpusPassed": 40,
-    "conditionalSkippedEach": 2
+    "conditionalSkippedEach": 2,
+    "finalTypographyAndProbabilityPassed": 8
   },
   "integration": "PASS, isolated PostgreSQL DB/UI and concurrent distributed limiters",
   "build": "PASS with deliberately unreachable database and absent provider key",
@@ -466,6 +467,337 @@
     ]
   },
   "securityHttp": "14 checks PASS",
-  "ci": "Pending push and remote execution",
-  "publicDeployment": "Pending push and external audit"
+  "ci": {
+    "lastRun": 37147077084,
+    "quality": "FAIL: auditor visited the same URL twice; fixed and fixture audit passes",
+    "databaseUi": "PASS",
+    "nextRun": "Pending new push"
+  },
+  "publicDeployment": {
+    "commit": "b737a22",
+    "vercel": "success",
+    "functionalBrowserViews": 30,
+    "transport": "Node TLS verification retained; Chromium requests relayed through Node because Chromium lacks proxy CA",
+    "fullSeo": "Running: 8537 page visits completed, additional links pending"
+  },
+  "typography": {
+    "secondaryCssDeclarationsRaised": 179,
+    "svgLabelSize": 12,
+    "decorativeTeamInitials": "aria-hidden fallback retains proportional size",
+    "finalFocusedViews": [
+      {
+        "w": 320,
+        "path": "/competitions",
+        "status": 200,
+        "overflow": false,
+        "footerFont": "12px",
+        "svgText": []
+      },
+      {
+        "w": 320,
+        "path": "/equipe/ogc-nice-e47f4ff9",
+        "status": 200,
+        "overflow": false,
+        "footerFont": "12px",
+        "svgText": [
+          {
+            "label": "0",
+            "size": "12"
+          },
+          {
+            "label": "1",
+            "size": "12"
+          },
+          {
+            "label": "1",
+            "size": "12"
+          },
+          {
+            "label": "2",
+            "size": "12"
+          },
+          {
+            "label": "M1",
+            "size": "12"
+          },
+          {
+            "label": "M2",
+            "size": "12"
+          },
+          {
+            "label": "M3",
+            "size": "12"
+          },
+          {
+            "label": "M4",
+            "size": "12"
+          },
+          {
+            "label": "M5",
+            "size": "12"
+          },
+          {
+            "label": "M6",
+            "size": "12"
+          },
+          {
+            "label": "M7",
+            "size": "12"
+          },
+          {
+            "label": "M8",
+            "size": "12"
+          },
+          {
+            "label": "M9",
+            "size": "12"
+          },
+          {
+            "label": "M10",
+            "size": "12"
+          }
+        ]
+      },
+      {
+        "w": 320,
+        "path": "/comparateur/equipes",
+        "status": 200,
+        "overflow": false,
+        "footerFont": "12px",
+        "svgText": [
+          {
+            "label": "Attaque",
+            "size": "12"
+          },
+          {
+            "label": "Défense",
+            "size": "12"
+          },
+          {
+            "label": "Victoires",
+            "size": "12"
+          },
+          {
+            "label": "Clean sheets",
+            "size": "12"
+          },
+          {
+            "label": "Forme",
+            "size": "12"
+          }
+        ]
+      },
+      {
+        "w": 390,
+        "path": "/competitions",
+        "status": 200,
+        "overflow": false,
+        "footerFont": "12px",
+        "svgText": []
+      },
+      {
+        "w": 390,
+        "path": "/equipe/ogc-nice-e47f4ff9",
+        "status": 200,
+        "overflow": false,
+        "footerFont": "12px",
+        "svgText": [
+          {
+            "label": "0",
+            "size": "12"
+          },
+          {
+            "label": "1",
+            "size": "12"
+          },
+          {
+            "label": "1",
+            "size": "12"
+          },
+          {
+            "label": "2",
+            "size": "12"
+          },
+          {
+            "label": "M1",
+            "size": "12"
+          },
+          {
+            "label": "M2",
+            "size": "12"
+          },
+          {
+            "label": "M3",
+            "size": "12"
+          },
+          {
+            "label": "M4",
+            "size": "12"
+          },
+          {
+            "label": "M5",
+            "size": "12"
+          },
+          {
+            "label": "M6",
+            "size": "12"
+          },
+          {
+            "label": "M7",
+            "size": "12"
+          },
+          {
+            "label": "M8",
+            "size": "12"
+          },
+          {
+            "label": "M9",
+            "size": "12"
+          },
+          {
+            "label": "M10",
+            "size": "12"
+          }
+        ]
+      },
+      {
+        "w": 390,
+        "path": "/comparateur/equipes",
+        "status": 200,
+        "overflow": false,
+        "footerFont": "12px",
+        "svgText": [
+          {
+            "label": "Attaque",
+            "size": "12"
+          },
+          {
+            "label": "Défense",
+            "size": "12"
+          },
+          {
+            "label": "Victoires",
+            "size": "12"
+          },
+          {
+            "label": "Clean sheets",
+            "size": "12"
+          },
+          {
+            "label": "Forme",
+            "size": "12"
+          }
+        ]
+      },
+      {
+        "w": 1440,
+        "path": "/competitions",
+        "status": 200,
+        "overflow": false,
+        "footerFont": "12px",
+        "svgText": []
+      },
+      {
+        "w": 1440,
+        "path": "/equipe/ogc-nice-e47f4ff9",
+        "status": 200,
+        "overflow": false,
+        "footerFont": "12px",
+        "svgText": [
+          {
+            "label": "0",
+            "size": "12"
+          },
+          {
+            "label": "1",
+            "size": "12"
+          },
+          {
+            "label": "1",
+            "size": "12"
+          },
+          {
+            "label": "2",
+            "size": "12"
+          },
+          {
+            "label": "M1",
+            "size": "12"
+          },
+          {
+            "label": "M2",
+            "size": "12"
+          },
+          {
+            "label": "M3",
+            "size": "12"
+          },
+          {
+            "label": "M4",
+            "size": "12"
+          },
+          {
+            "label": "M5",
+            "size": "12"
+          },
+          {
+            "label": "M6",
+            "size": "12"
+          },
+          {
+            "label": "M7",
+            "size": "12"
+          },
+          {
+            "label": "M8",
+            "size": "12"
+          },
+          {
+            "label": "M9",
+            "size": "12"
+          },
+          {
+            "label": "M10",
+            "size": "12"
+          }
+        ]
+      },
+      {
+        "w": 1440,
+        "path": "/comparateur/equipes",
+        "status": 200,
+        "overflow": false,
+        "footerFont": "12px",
+        "svgText": [
+          {
+            "label": "Attaque",
+            "size": "12"
+          },
+          {
+            "label": "Défense",
+            "size": "12"
+          },
+          {
+            "label": "Victoires",
+            "size": "12"
+          },
+          {
+            "label": "Clean sheets",
+            "size": "12"
+          },
+          {
+            "label": "Forme",
+            "size": "12"
+          }
+        ]
+      }
+    ]
+  },
+  "fixtureSeoAfterAuditorFix": {
+    "pages": 594,
+    "checks": 8306,
+    "additionalLinks": 2290,
+    "failures": 0,
+    "warnings": 0
+  }
 }

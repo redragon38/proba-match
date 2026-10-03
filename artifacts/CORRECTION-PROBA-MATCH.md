@@ -36,7 +36,7 @@ N/D signifie « non disponible dans le barème précédent », et non zéro. La 
 
 - Suppression du `postbuild` important les données. `npm run build` construit seulement l’application. `npm run football:initialize` réutilise l’initialisation idempotente, les retries bornés et les jobs existants. Commande manuelle exécutée : état READY. Le build final passe avec une URL PostgreSQL volontairement inaccessible et sans clé fournisseur.
 - Configuration légale centralisée dans `src/lib/legal.ts` et `.env.example`. Les champs absents sont signalés comme informations non fournies ; aucune identité ou adresse n’a été fabriquée. Notices de sources et de collecte optionnelle actualisées.
-- CI avec PostgreSQL, secrets exclusivement de test et fixtures isolées déterministes. Réparation des hypothèses E2E erronées sur les compositions, les logos et les fournisseurs. Pas de `continue-on-error`.
+- CI avec PostgreSQL, secrets exclusivement de test et fixtures isolées déterministes. Réparation des hypothèses E2E erronées sur les compositions, les logos et les fournisseurs. Correction de l’auditeur ajoutant deux fois le match du jour déjà présent dans le sitemap : unicité vérifiée entre URLs distinctes. Pas de `continue-on-error`.
 - CSP couvrant les directives demandées, origines d’images explicites, absence de `unsafe-eval` en production, HSTS et upgrade HTTPS réservés à la production HTTPS. Les scripts et styles inline restent nécessaires à l’architecture actuelle.
 - Réutilisation du limiter admin PostgreSQL ; collecteur Web Vitals optionnel également limité dans PostgreSQL. Vérification concurrente de 20 tentatives admin et 65 envois métriques dans une base jetable, sans toucher aux utilisateurs.
 - Observabilité bornée des API importantes, DB, cache, transports fournisseurs et calcul des prédictions : durées, p50/p95, erreurs, logs lents structurés sans secret ni requête utilisateur. Compteurs en mémoire limités au processus courant, non présentés comme des métriques globales distribuées.
@@ -45,7 +45,7 @@ N/D signifie « non disponible dans le barème précédent », et non zéro. La 
 - Validateur en lecture seule des joueurs, matchs, statistiques, relations, IDs externes, valeurs numériques et dates. Alias `data:validate-players`, `data:validate-matches`, `data:validate-stats`. Photos : échantillon optionnel borné, sans parcourir toutes les ressources externes.
 - Correction de 115 blocs statistiques historiques ESPN présentant une possession 0–0 avec toutes les valeurs à zéro : traités comme données indisponibles à la lecture et lors des nouveaux imports. Les zéros réellement rapportés restent des zéros ; aucune migration destructive.
 - Recherche tolérant une faute simple en repli lorsque la recherche normale ne trouve rien ; limitation des recherches floues aux petits catalogues plutôt qu’aux milliers de matchs.
-- Textes secondaires auparavant à 10–11 px portés à 12 px dans les styles concernés, sans refonte du design ni suppression de fonctionnalités.
+- Textes secondaires CSS auparavant à 5–11 px portés à 12 px, avec libellés SVG portés à 12 unités dans les styles concernés, sans refonte du design ni suppression de fonctionnalités.
 - Collecteur first-party LCP/INP/CLS/FCP/TTFB, désactivé par défaut. Envoie uniquement nom/valeur, sans URL, identifiant utilisateur ou cookie. Validation stricte, taille bornée, origine vérifiée et limiter distribué. Ce mécanisme ne constitue pas des données CrUX ni une base analytique durable.
 - Audit SEO complet allégé en mémoire : analyse du véritable HTML serveur et HEAD des liens supplémentaires, sans supprimer les contrôles ni les URLs du sitemap.
 - Couverture supplémentaire des erreurs API, états sans base, thèmes, CSP, console, clavier et reflow. Runbook d’exploitation et preuves compactes conservés.
@@ -67,11 +67,11 @@ N/D signifie « non disponible dans le barème précédent », et non zéro. La 
 | Data quality | PASS : 10 compétitions, 262 équipes, 3 717 joueurs, 14 317 matchs ; zéro échec/avertissement. 20 photos échantillonnées valides. |
 | Build final | PASS avec DB inaccessible et sans clé provider ; aucune importation postbuild. |
 | Administration / health final | PASS fonctionnel : login et page authentifiée 200 ; durée/éléments visibles ; health 200 avec statut WARNING explicite. |
-| CI GitHub | En attente d’exécution après push ; les résultats locaux ne sont pas assimilés à une CI verte. |
+| CI GitHub | Première exécution : DB/UI PASS, quality FAIL uniquement sur le doublon d’URL dans l’auditeur. Correction validée localement : 594 pages, 8 306 contrôles, 2 290 liens supplémentaires, sans erreur. Nouvelle exécution après push à confirmer. |
 
 Dernière sonde locale : 180 requêtes, concurrence 4, aucune erreur. Accueil p50/p95 **264/354 ms**, matchs **225/257 ms**, API matchs **33/41 ms**, recherche fautive **17/28 ms**, recherche joueurs **18/33 ms**, page match **156/189 ms**, API match **11/17 ms**, API compétition **11/16 ms**, page joueur **56/71 ms**. Cache dataset : **108 hits / 109 lectures**, soit **99,08 %**, un chargement froid à environ 734 ms. Ces mesures sont locales, dépendantes de la machine et du corpus ; ce ne sont ni des SLO publics ni un stress test production.
 
-Audit frontend de trois pages dans Chromium : zéro erreur de page, zéro image cassée, polices chargées. À froid sur l’accueil, 11 ressources JS réellement chargées, environ **260 Ko compressés / 946 Ko décodés**, CSS environ **16 Ko compressés / 76 Ko décodés**. Les pages suivantes partagent le cache navigateur ; leurs transferts ne sont donc pas comparables à un premier chargement. Aucun score Lighthouse ou CWV terrain n’a été inventé.
+Audit frontend de trois pages dans Chromium : zéro erreur de page, zéro image cassée, polices chargées. À froid sur l’accueil, 11 ressources JS réellement chargées, environ **260 Ko compressés / 946 Ko décodés**, CSS environ **16 Ko compressés / 76 Ko décodés**. Les pages suivantes partagent le cache navigateur ; leurs transferts ne sont donc pas comparables à un premier chargement. Aucun score Lighthouse ou CWV terrain n’a été inventé. Après la dernière correction typographique : 210 vues responsive et 32 vues axe de nouveau PASS ; 8 E2E ciblés PASS. Footer mesuré à 12 px et 9 vues complémentaires sans débordement. Les labels SVG sont exprimés dans le repère du graphique ; leur taille physique dépend de sa réduction. Les initiales décoratives de badges restent proportionnelles et `aria-hidden`.
 
 ## Production
 
@@ -82,7 +82,7 @@ Audit frontend de trois pages dans Chromium : zéro erreur de page, zéro image 
 | Data freshness | WARNING : le health détecte `OPENFOOTBALL_RESULTS_LATE` et `SECONDARY_NOT_CONFIGURED` ; il ne prétend pas que toutes les données sont à jour. |
 | Health | PASS fonctionnel, authentifié ; santé métier WARNING. |
 | CSP | WARNING : directives complètes et compatibilité testée, mais `unsafe-inline` reste autorisé. |
-| Déploiement public de ces changements | En attente du push et de la vérification Vercel. |
+| Déploiement public de ces changements | Commit `b737a22` déployé avec succès par Vercel ; 30 parcours publics PASS. Patch final de typographie et auditeur : déploiement à confirmer après push. |
 
 ## P0 restants
 

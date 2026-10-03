@@ -543,7 +543,7 @@ h1 {
   }
   .row-prediction .confidence-caption {
     margin: 0;
-    font-size: 9px;
+    font-size: 12px;
     justify-content: flex-start;
   }
   .row-prediction .prob-chips > span {
@@ -552,7 +552,7 @@ h1 {
     padding: 5px;
   }
   .row-prediction .prob-chips small {
-    font-size: 9px;
+    font-size: 12px;
   }
   .match-row > .row-arrow {
     display: none;

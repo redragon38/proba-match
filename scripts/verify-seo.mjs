@@ -99,7 +99,10 @@ try {
     ]),
   ];
   const catalog = await (await request.get(`${base}/api/matches/today`)).json();
-  if (catalog.matches?.[0]) paths.push(`/match/${catalog.matches[0].slug}`);
+  if (catalog.matches?.[0]) {
+    const sample = `/match/${catalog.matches[0].slug}`;
+    if (!paths.includes(sample)) paths.push(sample);
+  }
   const sitemapPaths = new Set(parsed.urls.map(pathOf));
   const links = new Set();
   for (const path of paths) {

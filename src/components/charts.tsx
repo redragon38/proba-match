@@ -19,7 +19,7 @@ export function TrendChart({
         {[0, 1, 2, 3].map((i) => (
           <g key={i}>
             <line x1="30" x2="575" y1={165 - i * 42} y2={165 - i * 42} stroke="var(--line)" />
-            <text x="5" y={168 - i * 42} fontSize="10" fill="var(--muted)">
+            <text x="5" y={168 - i * 42} fontSize="12" fill="var(--muted)">
               {((max * i) / 3).toFixed(0)}
             </text>
           </g>
@@ -40,7 +40,7 @@ export function TrendChart({
               x={30 + (i * 540) / Math.max(1, values.length - 1)}
               y="188"
               textAnchor="middle"
-              fontSize="9"
+              fontSize="12"
               fill="var(--muted)"
             >
               {v.label}
@@ -92,7 +92,7 @@ export function RadarChart({
                 y2={point(i, 100).split(',')[1]}
                 stroke="var(--line)"
               />
-              <text x={x} y={y} textAnchor="middle" fontSize="10" fill="var(--muted)">
+              <text x={x} y={y} textAnchor="middle" fontSize="12" fill="var(--muted)">
                 {label}
               </text>
             </g>

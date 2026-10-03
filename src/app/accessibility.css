@@ -70,7 +70,7 @@ main {
 .hero-footnote,
 .list-note,
 .sidebar-bottom {
-  font-size: 9px;
+  font-size: 12px;
 }
 .sidebar-label,
 .hero-kicker {
@@ -115,17 +115,17 @@ main {
 }
 @media (max-width: 500px) {
   .match-filters button {
-    font-size: 9px;
+    font-size: 12px;
     padding: 9px 6px;
   }
   .confidence-caption {
-    font-size: 7px;
+    font-size: 12px;
   }
   .match-column-labels {
-    font-size: 7px;
+    font-size: 12px;
   }
   .list-note {
-    font-size: 9px;
+    font-size: 12px;
   }
   .hero-footnote {
     display: none;
