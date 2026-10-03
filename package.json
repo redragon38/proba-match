@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
-    "postbuild": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/bootstrap-expanded-production.ts",
+    "football:initialize": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/bootstrap-expanded-production.ts --manual",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
@@ -29,7 +29,13 @@
     "football:rebuild-elo": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts elo",
     "football:validate": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts validate",
     "football:worker": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football-worker.ts",
-    "test:football-db": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/verify-football-db.ts"
+    "test:football-db": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/verify-football-db.ts",
+    "data:validate": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/validate-data.ts",
+    "data:validate-players": "npm run data:validate",
+    "data:validate-matches": "npm run data:validate",
+    "data:validate-stats": "npm run data:validate",
+    "test:seed": "node --conditions=react-server --import tsx scripts/seed-e2e.ts",
+    "test:load": "node --env-file-if-exists=.env scripts/load-local.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.19.0",

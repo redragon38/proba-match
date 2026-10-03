@@ -1,0 +1,471 @@
+{
+  "baselineCommit": "f53cc0cbc3af71d106d62f45e4b62fb940af75d0",
+  "environment": "cloud local, not Windows PC or production field data",
+  "typecheck": "PASS",
+  "lint": "PASS, zero warning",
+  "unit": {
+    "passed": 204,
+    "files": 36
+  },
+  "e2e": {
+    "ciFixturePassed": 40,
+    "realCorpusPassed": 40,
+    "conditionalSkippedEach": 2
+  },
+  "integration": "PASS, isolated PostgreSQL DB/UI and concurrent distributed limiters",
+  "build": "PASS with deliberately unreachable database and absent provider key",
+  "seo": {
+    "generatedAt": "2026-10-03T14:03:45.159Z",
+    "pages": 8504,
+    "checks": {
+      "PASS": 119040
+    },
+    "links": {
+      "discovered": 57573,
+      "additionalChecked": 49070,
+      "broken": [],
+      "redirects": []
+    },
+    "browserViews": 12
+  },
+  "responsive": {
+    "views": 210,
+    "interactions": 14
+  },
+  "accessibility": {
+    "additionalAxeViews": 32,
+    "violations": 0
+  },
+  "data": {
+    "status": "PASS",
+    "generatedAt": "2026-10-03T14:06:50.225Z",
+    "counts": {
+      "competitions": 10,
+      "teams": 262,
+      "players": 3717,
+      "matches": 14317
+    },
+    "failures": 0,
+    "warnings": 0,
+    "issues": [],
+    "limitations": [
+      "Transfers and season attribution require provider history; absence of historical roster membership is not proof of a wrong transfer.",
+      "Photo availability is checked separately with a bounded sample; URL validity does not prove image availability."
+    ],
+    "photoSample": [
+      {
+        "player": "24e27602-f5dc-4825-9a98-b7636090304f",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "be965055-89e1-46c8-9bc7-b9a19bbc0806",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "c0f642b1-22c8-4e4b-8adc-52fa60389b87",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "3ce7ce03-fdfb-4fdb-9c16-7698d40e28cc",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "d5f7eab0-cef3-4379-ac87-e1c8d2c04b87",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "e7c6ae79-d13c-47fb-be48-5f3f6e8ac251",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "1c8a5969-5ffd-4ba3-883e-4ff0c41cf041",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "25f5334c-71c5-4e63-a165-b1d320d01860",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "1066a264-2163-448b-a3e0-51084daeff3c",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "12243467-f29c-4291-969c-122a61760523",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "b0fabbf4-94bb-44eb-be52-a043dfbb6649",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "5a2529f7-a6b3-4f28-b67e-15050401200c",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "a0295b8a-a3ba-422b-bd65-451558066578",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "ed7750ea-62ea-4c69-aa8e-d0637e3946e7",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "906e3229-00bf-45cb-9e67-57d9cab48b7d",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "77a29fe0-ba3a-48f0-a1cf-d6479eaa0f58",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "b673b993-baf5-488f-907e-1b542107945d",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "4b6a66ee-d69a-473d-a4e1-f5a81885147d",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "0218e1c8-996b-4592-a352-a3ce3a21c73f",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "d9f51049-10c1-4d2c-950e-134de170ce59",
+        "status": 200,
+        "image": true
+      }
+    ],
+    "photoChecksEnabled": true
+  },
+  "load": {
+    "generatedAt": "2026-10-03T19:10:54.555Z",
+    "base": "http://127.0.0.1:3000",
+    "rows": [
+      {
+        "path": "/",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 264,
+        "p95Ms": 354,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 187319
+      },
+      {
+        "path": "/matchs",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 225,
+        "p95Ms": 257,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 269538
+      },
+      {
+        "path": "/api/matches",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 33,
+        "p95Ms": 41,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 14265
+      },
+      {
+        "path": "/api/search?q=ronlado",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 17,
+        "p95Ms": 28,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 801
+      },
+      {
+        "path": "/api/search?scope=catalogue&category=Joueur&q=messi",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 18,
+        "p95Ms": 33,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 325
+      },
+      {
+        "path": "/match/11a9986d-1589-4baa-a16c-7a9956ce3c85",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 156,
+        "p95Ms": 189,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 484610
+      },
+      {
+        "path": "/api/matches/11a9986d-1589-4baa-a16c-7a9956ce3c85",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 11,
+        "p95Ms": 17,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 577
+      },
+      {
+        "path": "/api/competitions/83cd5dd0-3aa7-45f7-8798-855983b4603a",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 11,
+        "p95Ms": 16,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 184
+      },
+      {
+        "path": "/joueur/aaron-bouwman-5a92aab0",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 56,
+        "p95Ms": 71,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 50878
+      }
+    ],
+    "health": {
+      "httpStatus": 200,
+      "status": "warning",
+      "cache": {
+        "scope": "current_process",
+        "requests": 0,
+        "hits": 0,
+        "stale": 0,
+        "coalesced": 0,
+        "loads": 0,
+        "failures": 0,
+        "loadMs": 0,
+        "entries": 0,
+        "hitRate": null
+      },
+      "datasetCache": {
+        "scope": "current_process",
+        "requests": 109,
+        "hits": 108,
+        "stale": 0,
+        "coalesced": 0,
+        "loads": 1,
+        "failures": 0,
+        "loadMs": 733.8396040000007,
+        "entries": 1,
+        "hitRate": 0.9908256880733946
+      },
+      "telemetry": {
+        "scope": "current_process_last_15_minutes_max_200_samples",
+        "operations": {
+          "db:dataset_revision": {
+            "count": 109,
+            "errors": 0,
+            "p50Ms": 3.96,
+            "p95Ms": 17.04
+          },
+          "db:health": {
+            "count": 2,
+            "errors": 0,
+            "p50Ms": 613.25,
+            "p95Ms": 737.32
+          },
+          "db:dataset_load": {
+            "count": 1,
+            "errors": 0,
+            "p50Ms": 733.73,
+            "p95Ms": 733.73
+          },
+          "/api/matches": {
+            "count": 23,
+            "errors": 0,
+            "p50Ms": 15.99,
+            "p95Ms": 33.06
+          },
+          "/api/search": {
+            "count": 45,
+            "errors": 0,
+            "p50Ms": 8.9,
+            "p95Ms": 19.08
+          }
+        }
+      }
+    },
+    "scope": "local cloud instance; not public production capacity or field Core Web Vitals",
+    "failures": 0
+  },
+  "frontend": {
+    "scope": "local Chromium; not field CWV or Lighthouse score",
+    "rows": [
+      {
+        "path": "/",
+        "resources": {
+          "css": {
+            "count": 1,
+            "encodedBytes": 15980,
+            "decodedBytes": 76243
+          },
+          "link": {
+            "count": 3,
+            "encodedBytes": 69091,
+            "decodedBytes": 69091
+          },
+          "js": {
+            "count": 11,
+            "encodedBytes": 260135,
+            "decodedBytes": 946367
+          },
+          "img": {
+            "count": 31,
+            "encodedBytes": 230862,
+            "decodedBytes": 230862
+          },
+          "other": {
+            "count": 1,
+            "encodedBytes": 2402,
+            "decodedBytes": 2402
+          },
+          "fetch": {
+            "count": 29,
+            "encodedBytes": 20519,
+            "decodedBytes": 51434
+          }
+        },
+        "brokenImages": 0,
+        "fonts": "loaded"
+      },
+      {
+        "path": "/joueurs",
+        "resources": {
+          "css": {
+            "count": 1,
+            "encodedBytes": 15980,
+            "decodedBytes": 76243
+          },
+          "link": {
+            "count": 3,
+            "encodedBytes": 0,
+            "decodedBytes": 0
+          },
+          "js": {
+            "count": 11,
+            "encodedBytes": 165235,
+            "decodedBytes": 537605
+          },
+          "img": {
+            "count": 26,
+            "encodedBytes": 120104,
+            "decodedBytes": 120104
+          },
+          "other": {
+            "count": 1,
+            "encodedBytes": 2402,
+            "decodedBytes": 2402
+          },
+          "fetch": {
+            "count": 42,
+            "encodedBytes": 35432,
+            "decodedBytes": 91079
+          }
+        },
+        "brokenImages": 0,
+        "fonts": "loaded"
+      },
+      {
+        "path": "/competitions",
+        "resources": {
+          "css": {
+            "count": 1,
+            "encodedBytes": 15980,
+            "decodedBytes": 76243
+          },
+          "link": {
+            "count": 3,
+            "encodedBytes": 0,
+            "decodedBytes": 0
+          },
+          "js": {
+            "count": 10,
+            "encodedBytes": 164768,
+            "decodedBytes": 537138
+          },
+          "img": {
+            "count": 10,
+            "encodedBytes": 0,
+            "decodedBytes": 0
+          },
+          "other": {
+            "count": 1,
+            "encodedBytes": 2402,
+            "decodedBytes": 2402
+          },
+          "fetch": {
+            "count": 43,
+            "encodedBytes": 33663,
+            "decodedBytes": 84976
+          }
+        },
+        "brokenImages": 0,
+        "fonts": "loaded"
+      }
+    ],
+    "errors": []
+  },
+  "finalSmoke": {
+    "adminLogin": 200,
+    "adminStatus": 200,
+    "durationColumn": true,
+    "itemsColumn": true,
+    "healthHttp": 200,
+    "healthStatus": "warning",
+    "healthIssues": [],
+    "healthWarnings": [
+      "OPENFOOTBALL_RESULTS_LATE",
+      "SECONDARY_NOT_CONFIGURED"
+    ]
+  },
+  "securityHttp": "14 checks PASS",
+  "ci": "Pending push and remote execution",
+  "publicDeployment": "Pending push and external audit"
+}

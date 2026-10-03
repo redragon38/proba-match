@@ -1,6 +1,7 @@
+import { legalConfig } from '@/lib/legal';
 export const metadata = { title: 'Contact', robots: { index: false, follow: true } };
 export default function Page() {
-  const email = process.env.CONTACT_EMAIL;
+  const email = legalConfig().contact;
   return (
     <div className="page prose">
       <span className="eyebrow">NOUS CONTACTER</span>

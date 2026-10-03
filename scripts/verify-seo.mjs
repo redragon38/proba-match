@@ -103,21 +103,30 @@ try {
   const sitemapPaths = new Set(parsed.urls.map(pathOf));
   const links = new Set();
   for (const path of paths) {
-    const response = await page.goto(`${base}${path}`, { waitUntil: 'load' });
-    const html = await response.text();
-    const data = await page.evaluate(() => {
+    // Parse actual server HTML without retaining thousands of browser navigations/assets.
+    const network = await fetch(`${base}${path}`, { signal: AbortSignal.timeout(30000) });
+    const response = {
+      status: () => network.status,
+      headers: () => Object.fromEntries(network.headers),
+    };
+    const html = await network.text();
+    if (sitemapPaths.has(path))
+      check('sitemap', !network.redirected, `${path}: sitemap URL does not redirect`);
+    const data = await page.evaluate((html) => {
+      const document = new DOMParser().parseFromString(html, 'text/html');
       const meta = (name) =>
         document
           .querySelector(`meta[name="${name}"],meta[property="${name}"]`)
           ?.getAttribute('content') || '';
-      const main = document.querySelector('main');
+      const main = document.querySelector('main')?.cloneNode(true);
+      main?.querySelectorAll('script,style,[hidden]').forEach((node) => node.remove());
       return {
         title: document.title,
         description: meta('description'),
         canonical: document.querySelector('link[rel=canonical]')?.href || '',
         robots: meta('robots'),
         h1: [...document.querySelectorAll('main h1')].map((n) => n.textContent.trim()),
-        visibleText: main?.innerText.length || 0,
+        visibleText: main?.textContent.length || 0,
         headings: [...document.querySelectorAll('main h1,main h2,main h3,main h4')].map((n) => ({
           level: Number(n.tagName[1]),
           text: n.textContent.trim(),
@@ -146,7 +155,9 @@ try {
           }
         }),
       };
-    });
+    }, html);
+    if (report.pages.length % 250 === 0)
+      console.info(`SEO: ${report.pages.length}/${paths.length} server-rendered pages`);
     const indexable = !data.robots.includes('noindex');
     const row = { path, status: response.status(), htmlBytes: Buffer.byteLength(html), ...data };
     report.pages.push(row);
@@ -233,7 +244,16 @@ try {
     Array.from({ length: 4 }, async () => {
       while (cursor < missing.length) {
         const path = missing[cursor++];
-        const response = await request.get(`${base}${path}`, { maxRedirects: 0 });
+        const result = await fetch(`${base}${path}`, {
+          method: 'HEAD',
+          redirect: 'manual',
+          signal: AbortSignal.timeout(30000),
+        });
+        const response = {
+          status: () => result.status,
+          headers: () => Object.fromEntries(result.headers),
+          dispose: async () => {},
+        };
         if (response.status() >= 400) broken.push({ path, status: response.status() });
         if (response.status() >= 300 && response.status() < 400)
           redirects.push({ path, status: response.status(), target: response.headers().location });

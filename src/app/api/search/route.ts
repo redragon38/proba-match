@@ -1,7 +1,8 @@
+import { monitoredRoute } from '@/services/telemetry';
 import { getDataset } from '@/services/football';
 import { searchAutocomplete, normalizeSearch, searchResults } from '@/services/search-index';
 import { readJsonBody } from '@/lib/request-body';
-export async function GET(request: Request) {
+async function get(request: Request) {
   const params = new URL(request.url).searchParams;
   const q = normalizeSearch(params.get('q') ?? '');
   if (params.get('scope') === 'catalogue') {
@@ -49,3 +50,5 @@ export async function POST(request: Request) {
     { headers: { 'Cache-Control': 'private, no-store' } },
   );
 }
+
+export const GET = monitoredRoute('/api/search', get);

@@ -23,12 +23,17 @@ export async function footballJob<T>(provider: string, work: () => Promise<T>) {
   try {
     run = await db.syncRun.create({ data: { provider, status: 'running' } });
     const result = await work();
-    const summary = result as { matches?: number; requests?: number; status?: string };
+    const summary = result as {
+      matches?: number;
+      players?: number;
+      requests?: number;
+      status?: string;
+    };
     await db.syncRun.update({
       where: { id: run.id },
       data: {
         status: summary.status ?? 'success',
-        matches: summary.matches ?? 0,
+        matches: summary.players ?? summary.matches ?? 0,
         requests: summary.requests ?? 0,
         finishedAt: new Date(),
       },
@@ -37,8 +42,11 @@ export async function footballJob<T>(provider: string, work: () => Promise<T>) {
     return result;
   } catch (error) {
     const knownCode =
-      error && typeof error === 'object' && 'code' in error &&
-      typeof error.code === 'string' && /^[A-Z][A-Z0-9_]{1,63}$/.test(error.code)
+      error &&
+      typeof error === 'object' &&
+      'code' in error &&
+      typeof error.code === 'string' &&
+      /^[A-Z][A-Z0-9_]{1,63}$/.test(error.code)
         ? error.code
         : error instanceof Error && /^[A-Z][A-Z0-9_]{1,63}$/.test(error.message)
           ? error.message
@@ -48,7 +56,7 @@ export async function footballJob<T>(provider: string, work: () => Promise<T>) {
       await db.syncRun
         .update({
           where: { id: run.id },
-          data: { status: 'failed', errorCode: 'SYNC_FAILED', finishedAt: new Date() },
+          data: { status: 'failed', errorCode: knownCode, finishedAt: new Date() },
         })
         .catch(() => undefined);
     throw new Error('SYNC_FAILED');

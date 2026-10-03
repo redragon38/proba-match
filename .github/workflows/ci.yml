@@ -3,6 +3,21 @@ on: [push, pull_request]
 jobs:
   quality:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: integration-only
+          POSTGRES_DB: proba_match_ci_e2e
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:integration-only@localhost:5432/proba_match_ci_e2e
+      CRON_SECRET: ci-test-cron-secret-not-a-production-secret
+      ADMIN_SECRET: ci-test-admin-secret-not-a-production-secret
+      NEXT_PUBLIC_SITE_URL: https://proba-match.vercel.app
+      APP_ENV: production
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -16,7 +31,10 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npx playwright install --with-deps chromium
+      - run: npm run db:migrate
+      - run: npm run test:seed
       - run: npm run test:e2e
+      - run: node scripts/verify-empty-states.mjs
       - name: Audit SEO du build de production
         shell: bash
         run: |

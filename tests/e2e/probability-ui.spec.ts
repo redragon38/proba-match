@@ -35,16 +35,21 @@ test('probabilités réelles lisibles sur mobile, tablette et desktop', async ({
   }
 });
 
-test('la projection reste lisible sans JavaScript et une URL inconnue répond 404', async ({ browser }) => {
-  const context = await browser.newContext({ javaScriptEnabled: false });
+test('la projection reste lisible sans JavaScript et une URL inconnue répond 404', async ({
+  browser,
+}) => {
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    baseURL: process.env.E2E_BASE_URL ?? 'http://localhost:3000',
+  });
   const page = await context.newPage();
   try {
-    await page.goto('http://localhost:3000/');
+    await page.goto('/');
     const href = await page.locator('a[href*="onglet=prediction"]').first().getAttribute('href');
     expect(href).toBeTruthy();
-    await page.goto(`http://localhost:3000${href}`);
+    await page.goto(href!);
     await expect(page.getByRole('heading', { name: 'Probabilités du match' })).toBeVisible();
-    const missing = await page.goto('http://localhost:3000/match/inconnu');
+    const missing = await page.goto('/match/inconnu');
     expect(missing?.status()).toBe(404);
   } finally {
     await context.close();

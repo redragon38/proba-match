@@ -1,3 +1,4 @@
+import { timed } from '@/services/telemetry';
 import { z } from 'zod';
 import { createHash } from 'node:crypto';
 import { slugify } from '@/lib/format';
@@ -113,10 +114,12 @@ export class OpenFootballProvider implements HistoricalFootballProvider {
     if (!OPEN_LEAGUES[league] || !Number.isInteger(year) || year < 2000 || year > 2100)
       throw new Error('INVALID_SCOPE');
     const url = `https://raw.githubusercontent.com/openfootball/football.json/master/${year}-${String(year + 1).slice(-2)}/${league}.json`;
-    const response = await this.transport(url, {
-      headers: etag ? { 'If-None-Match': etag } : {},
-      signal: AbortSignal.timeout(30000),
-    });
+    const response = await timed('provider:openfootball_transport', () =>
+      this.transport(url, {
+        headers: etag ? { 'If-None-Match': etag } : {},
+        signal: AbortSignal.timeout(30000),
+      }),
+    );
     if (response.status === 304) return { unchanged: true as const, url };
     if (!response.ok) throw new Error(`OPENFOOTBALL_HTTP_${response.status}`);
     const text = await response.text();

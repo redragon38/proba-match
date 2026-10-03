@@ -48,6 +48,26 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllEnvs());
 describe('Operational readiness', () => {
+  it('escalates repeated provider failures and exposes bounded, non-sensitive job details', async () => {
+    mocks.runs.mockResolvedValue(
+      Array.from({ length: 3 }, () => ({
+        provider: 'espn',
+        status: 'failed',
+        startedAt: new Date(now - 1000),
+        finishedAt: new Date(now),
+        matches: 0,
+        requests: 1,
+        errorCode: 'ESPN_HTTP_503',
+      })),
+    );
+    expect(await footballHealth(now)).toMatchObject({
+      status: 'fail',
+      issues: ['espn:REPEATED_SYNC_FAILURE'],
+      providerStatus: {
+        espn: { consecutiveFailures: 3, durationMs: 1000, lastError: { code: 'ESPN_HTTP_503' } },
+      },
+    });
+  });
   it('does not query the database without authentication', async () => {
     const response = await GET(new Request('http://localhost/api/health'));
     expect(response.status).toBe(401);

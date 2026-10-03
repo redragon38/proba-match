@@ -56,7 +56,8 @@ test('real match tabs, pagination, upcoming cards and public cleanup', async ({
   await page.goto('/joueurs');
   if (await page.locator('.catalog-item').count()) {
     await expect(page.locator('main a[href^="/joueur/"]').first()).toBeVisible();
-    await expect(page.getByText(/Catalogue (partiel fourni par|ESPN)/).first()).toBeVisible();
+    await expect(page.locator('.source-banner')).toContainText('Données football');
+    await expect(page.locator('.source-banner')).toContainText('Synchronisé le');
   } else {
     await expect(
       page.getByText('Les données des joueurs ne sont pas disponibles pour le moment.', {

@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { legalConfig } from '@/lib/legal';
 const content: Record<string, { title: string; sections: { title: string; text: string }[] }> = {
   confidentialite: {
     title: 'Confidentialité',
@@ -13,7 +14,7 @@ const content: Record<string, { title: string; sections: { title: string; text: 
       },
       {
         title: 'Données techniques',
-        text: 'L’hébergeur peut traiter des journaux techniques lors des requêtes. L’exploitant doit préciser son identité, son contact, les durées de conservation et les modalités d’exercice des droits avant ouverture publique. Aucun contact fictif n’est fourni ici.',
+        text: 'L’hébergeur peut traiter des journaux techniques lors des requêtes. Les coordonnées de l’éditeur et la politique de conservation disponibles figurent dans les mentions légales. Une information absente n’est pas remplacée par une identité ou une durée fictive.',
       },
       {
         title: 'Effacer les préférences',
@@ -43,15 +44,15 @@ const content: Record<string, { title: string; sections: { title: string; text: 
     sections: [
       {
         title: 'État de publication',
-        text: 'Cette installation est une version de développement. L’identité de l’éditeur, sa forme juridique éventuelle, son adresse, son contact et le responsable de publication doivent être renseignés par l’exploitant avant ouverture publique.',
+        text: 'Les informations de publication effectivement fournies par l’éditeur sont présentées ci-dessous. Les champs manquants sont signalés explicitement ; ils nécessitent une validation par l’exploitant.',
       },
       {
         title: 'Hébergement',
-        text: 'Le site est accessible sur proba-match.vercel.app, hébergé par Vercel. Les coordonnées légales de l’hébergeur et les informations de publication doivent être complétées et vérifiées avant ouverture publique.',
+        text: 'Les coordonnées de l’hébergeur figurent ci-dessous lorsqu’elles ont été vérifiées et fournies par l’exploitant.',
       },
       {
         title: 'Sources et droits',
-        text: 'Les calendriers et résultats proviennent d’OpenFootball. API-Football / API-Sports peut enrichir les données selon l’abonnement configuré. La diffusion des données, logos et photos dépend des licences applicables et des droits de l’exploitant. En mode démonstration, les calendriers et statistiques sont fictifs.',
+        text: 'Les calendriers et résultats proviennent d’OpenFootball et d’ESPN. ESPN et TheSportsDB fournissent des profils et effectifs ; API-Football / API-Sports peut enrichir les données selon l’abonnement configuré. La diffusion des données, logos et photos dépend des licences applicables et des droits de l’exploitant. Les crédits disponibles sont affichés sur les profils. Les données de démonstration sont réservées au développement et aux tests isolés.',
       },
       {
         title: 'Objet du site',
@@ -72,10 +73,43 @@ export default async function Page({ params }: { params: Promise<{ legal: string
   const { legal } = await params;
   const page = content[legal];
   if (!page) notFound();
+  const config = legalConfig();
+  const fields = [
+    ['Éditeur', config.editor],
+    ['Responsable de publication', config.director],
+    ['Adresse de l’éditeur', config.address],
+    ['Contact', config.contact],
+    ['Immatriculation / forme juridique, si applicable', config.registration],
+    ['Hébergeur', config.host],
+    ['Adresse de l’hébergeur', config.hostAddress],
+    ['Conservation des journaux techniques et exercice des droits', config.retention],
+  ];
+  const metricsEnabled = process.env.NEXT_PUBLIC_WEB_VITALS_ENABLED === 'true';
   return (
     <article className="page prose">
       <span className="eyebrow">TRANSPARENCE</span>
       <h1>{page.title}</h1>
+      {legal === 'confidentialite' && metricsEnabled && (
+        <section>
+          <h2>Mesures de performance</h2>
+          <p>
+            Les mesures techniques LCP, INP, CLS, FCP et TTFB sont envoyées à l’API du site et
+            inscrites dans les journaux de l’hébergeur. Aucun identifiant visiteur, URL, recherche
+            ou cookie de suivi n’est envoyé par ce dispositif. La politique de conservation figure
+            dans les mentions légales lorsqu’elle est fournie.
+          </p>
+        </section>
+      )}
+      {legal === 'mentions-legales' && (
+        <dl>
+          {fields.map(([label, value]) => (
+            <div key={label}>
+              <dt>{label}</dt>
+              <dd>{value ?? 'Information non fournie par l’éditeur'}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
       {page.sections.map((s) => (
         <section key={s.title}>
           <h2>{s.title}</h2>

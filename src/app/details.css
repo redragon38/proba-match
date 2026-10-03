@@ -61,7 +61,7 @@
     height: 65px !important;
   }
   .profile-header p {
-    font-size: 10px;
+    font-size: 12px;
   }
   .player-header .team-logo {
     width: 65px;
@@ -100,7 +100,7 @@
     padding: 0 8px;
   }
   .detail-tabs > a {
-    font-size: 10px;
+    font-size: 12px;
     padding: 14px 12px;
   }
   .prediction-detail {

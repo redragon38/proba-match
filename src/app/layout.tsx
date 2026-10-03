@@ -5,6 +5,7 @@ import { DataUpdates } from '@/components/data-updates';
 import { siteOrigin } from '@/lib/seo';
 import { isPreviewDeployment } from '@/lib/deployment';
 import { JsonLd } from '@/components/json-ld';
+import { WebVitals } from '@/components/web-vitals';
 import './globals.css';
 import './dashboard.css';
 import './features.css';
@@ -35,6 +36,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="fr" data-theme="dark" suppressHydrationWarning>
       <body>
+        {process.env.NEXT_PUBLIC_WEB_VITALS_ENABLED === 'true' && <WebVitals />}
         <JsonLd
           value={{
             '@context': 'https://schema.org',

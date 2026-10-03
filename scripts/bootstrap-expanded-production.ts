@@ -8,7 +8,8 @@ import { log } from '../src/lib/logger';
 try {
   const outcome = await bootstrapExpandedProduction(
     {
-      production: process.env.VERCEL_ENV === 'production',
+      // Explicit maintenance command; never run implicitly during a deployment/build.
+      production: process.argv.includes('--manual'),
       databaseConfigured: !!process.env.DATABASE_URL,
     },
     {
@@ -49,6 +50,11 @@ try {
     },
   );
   log('PRODUCTION_EXPANDED_BOOTSTRAP', { code: outcome.toUpperCase() });
+} catch (error) {
+  const code = error instanceof Error && /^[A-Z][A-Z0-9_]{1,63}$/.test(error.message)
+    ? error.message : 'INITIALIZATION_FAILED';
+  log('PRODUCTION_EXPANDED_BOOTSTRAP_FAILED', { code });
+  process.exitCode = 1;
 } finally {
   await db.$disconnect();
 }

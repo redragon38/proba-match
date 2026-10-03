@@ -16,11 +16,19 @@ describe('Security and canonical host configuration', () => {
     const csp = headers.find((header) => header.key === 'Content-Security-Policy')!.value;
     for (const directive of [
       "object-src 'none'",
+      "default-src 'self'",
+      "script-src 'self'",
+      "style-src 'self'",
+      "connect-src 'self'",
+      "font-src 'self'",
+      "frame-src 'none'",
+      'upgrade-insecure-requests',
       "base-uri 'self'",
       "form-action 'self'",
       "frame-ancestors 'none'",
     ])
       expect(csp).toContain(directive);
+    expect(csp).not.toContain('unsafe-eval');
     expect(headers).toContainEqual({ key: 'X-Content-Type-Options', value: 'nosniff' });
     expect(headers).toContainEqual({ key: 'X-Frame-Options', value: 'DENY' });
     expect(headers).toContainEqual({ key: 'Strict-Transport-Security', value: 'max-age=31536000' });
@@ -28,6 +36,9 @@ describe('Security and canonical host configuration', () => {
   it('adds global noindex to preview without blocking production', async () => {
     expect((await globalHeaders()).some((header) => header.key === 'X-Robots-Tag')).toBe(false);
     vi.stubEnv('VERCEL_ENV', 'preview');
+    expect(
+      (await globalHeaders()).find((h) => h.key === 'Content-Security-Policy')!.value,
+    ).not.toContain('upgrade-insecure-requests');
     expect(await globalHeaders()).toContainEqual({
       key: 'X-Robots-Tag',
       value: 'noindex, nofollow',

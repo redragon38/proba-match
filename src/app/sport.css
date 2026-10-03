@@ -153,7 +153,7 @@ h1 {
 .sport-card-foot {
   padding: 10px 16px;
   border-top: 1px solid var(--line);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
 }
 .sport-card-projection {
@@ -162,7 +162,7 @@ h1 {
 }
 .sport-card-projection > span {
   display: block;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
   margin-bottom: 12px;
 }
@@ -356,7 +356,7 @@ h1 {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  font-size: 10px;
+  font-size: 12px;
 }
 .mobile-bottom [aria-current='page'] {
   color: var(--green);
@@ -418,7 +418,7 @@ h1 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .live-strip .sport-card-meta {
-    font-size: 10px;
+    font-size: 12px;
     padding: 8px;
   }
   .live-strip .sport-card-body {
@@ -426,7 +426,7 @@ h1 {
   }
   .live-strip .sport-team {
     gap: 6px;
-    font-size: 11px;
+    font-size: 12px;
   }
   .live-strip .sport-team > b {
     font-size: 22px;
@@ -447,7 +447,7 @@ h1 {
     margin-top: 7vh;
   }
   .sport-card-projection > span {
-    font-size: 11px;
+    font-size: 12px;
   }
   .sidebar.is-open {
     bottom: 64px;
@@ -480,13 +480,13 @@ h1 {
     gap: 0;
   }
   .date-controls button {
-    font-size: 11px;
+    font-size: 12px;
   }
   .hero-copy h2 {
     font-size: 18px;
   }
   .hero-copy p {
-    font-size: 10px;
+    font-size: 12px;
   }
   .match-column-labels {
     display: none;
@@ -506,7 +506,7 @@ h1 {
   .match-row > .match-clock {
     grid-column: 1;
     grid-row: 1;
-    font-size: 10px;
+    font-size: 12px;
   }
   .match-row > .match-teams {
     grid-column: 2;
@@ -547,7 +547,7 @@ h1 {
     justify-content: flex-start;
   }
   .row-prediction .prob-chips > span {
-    font-size: 11px;
+    font-size: 12px;
     min-width: 36px;
     padding: 5px;
   }
@@ -561,7 +561,7 @@ h1 {
     display: none;
   }
   .competition-heading a > span {
-    font-size: 10px;
+    font-size: 12px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -1,5 +1,6 @@
+import { monitoredRoute } from '@/services/telemetry';
 import { matchesOnDate } from '@/services/football/catalog';
-export async function GET(request: Request) {
+async function get(request: Request) {
   const date =
     new URL(request.url).searchParams.get('date') ?? new Date().toISOString().slice(0, 10);
   if (
@@ -12,3 +13,5 @@ export async function GET(request: Request) {
     headers: { 'Cache-Control': 'public, s-maxage=15, stale-while-revalidate=60' },
   });
 }
+
+export const GET = monitoredRoute('/api/matches/today', get);

@@ -571,7 +571,7 @@ small,
   .mobile-bottom button {
     min-height: 48px;
     min-width: 52px;
-    font-size: 11px;
+    font-size: 12px;
     border-radius: 10px;
     position: relative;
   }
@@ -588,7 +588,7 @@ small,
     border-radius: 10px;
     background: var(--live);
     color: var(--surface);
-    font-size: 10px;
+    font-size: 12px;
     padding: 1px 4px;
   }
   .source-banner {
@@ -782,7 +782,7 @@ body {
 }
 .eyebrow,
 .sidebar-label {
-  font-size: 10px;
+  font-size: 12px;
 }
 .card,
 .sport-match-card,
@@ -825,7 +825,7 @@ body {
 }
 .match-hero .venue-meta {
   padding-bottom: 16px;
-  font-size: 11px;
+  font-size: 12px;
 }
 .detail-tabs > a {
   padding-block: 14px;
@@ -862,14 +862,14 @@ body {
     gap: 8px 16px;
   }
   .prediction-outcome-name {
-    font-size: 11px;
+    font-size: 12px;
   }
   .prediction-essential > span,
   .prediction-essential > small {
     font-size: 12px;
   }
   .compact-probabilities small {
-    font-size: 10px;
+    font-size: 12px;
   }
 }
 

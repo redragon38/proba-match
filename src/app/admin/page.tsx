@@ -32,6 +32,8 @@ export default async function Page() {
     runs: {
       id: string;
       startedAt: Date;
+      finishedAt: Date | null;
+      provider: string;
       status: string;
       requests: number;
       matches: number;
@@ -198,8 +200,10 @@ export default async function Page() {
               <tr>
                 <th>Date</th>
                 <th>État</th>
+                <th>Source</th>
                 <th>Requêtes</th>
-                <th>Matchs</th>
+                <th>Éléments importés</th>
+                <th>Durée</th>
                 <th>Code d’erreur</th>
               </tr>
             </thead>
@@ -208,8 +212,14 @@ export default async function Page() {
                 <tr key={r.id}>
                   <td>{r.startedAt.toLocaleString('fr-FR')}</td>
                   <td>{r.status}</td>
+                  <td>{r.provider}</td>
                   <td>{r.requests}</td>
                   <td>{r.matches}</td>
+                  <td>
+                    {r.finishedAt
+                      ? `${Math.round((r.finishedAt.getTime() - r.startedAt.getTime()) / 1000)} s`
+                      : 'En cours'}
+                  </td>
                   <td>{r.errorCode ?? '—'}</td>
                 </tr>
               ))}

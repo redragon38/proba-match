@@ -16,6 +16,9 @@ try {
   await admin.$executeRawUnsafe(`CREATE DATABASE "${name}"`);
   process.env.DATABASE_URL = testUrl.toString();
   process.env.FOOTBALL_API_KEY = '';
+  // This process and its child serve only the disposable integration database.
+  process.env.CRON_SECRET = 'integration-only-cron-secret-32-chars';
+  process.env.ADMIN_SECRET = 'integration-only-admin-secret-32-chars';
   const migration = spawnSync(
     process.execPath,
     ['node_modules/prisma/build/index.js', 'migrate', 'deploy'],
@@ -24,6 +27,31 @@ try {
   assert.equal(migration.status, 0, 'Test database migrations');
   const { db } = await import('../src/database/client');
   client = db;
+  const { allowAdminAttempt } = await import('../src/services/admin-throttle');
+  const { allowVitalsReport } = await import('../src/services/vitals-limit');
+  const attempts = await Promise.all(
+    Array.from({ length: 20 }, () =>
+      allowAdminAttempt(new Request('http://localhost/api/admin/session')),
+    ),
+  );
+  assert.equal(
+    attempts.filter(Boolean).length,
+    10,
+    'PostgreSQL atomically limits concurrent admin attempts',
+  );
+  const measurements = await Promise.all(
+    Array.from({ length: 65 }, () => allowVitalsReport(new Request('http://localhost/api/vitals'))),
+  );
+  assert.equal(
+    measurements.filter(Boolean).length,
+    60,
+    'PostgreSQL atomically limits concurrent telemetry reports',
+  );
+  await db.cacheEntry.deleteMany({
+    where: {
+      OR: [{ key: { startsWith: 'admin-attempt:' } }, { key: { startsWith: 'vitals-attempt:' } }],
+    },
+  });
   const { syncOpenFootball, currentSeason } =
     await import('../src/services/football/openfootball-sync');
   const { syncSecondary } = await import('../src/services/football/secondary');
@@ -294,9 +322,7 @@ try {
       lineups: [1, 2].map((team) => ({
         team: { id: team },
         formation: '4-4-2',
-        startXI: [
-          { player: { id: team * 10, name: `Integration Player ${team}`, number: 10 } },
-        ],
+        startXI: [{ player: { id: team * 10, name: `Integration Player ${team}`, number: 10 } }],
         substitutes: [],
       })),
     };
@@ -474,9 +500,15 @@ try {
         const response = await page.goto(`http://localhost:3001/joueur/${profile.slug}`);
         assert.equal(response?.status(), 200);
         await expect(page.getByRole('heading', { name: profile.name, exact: true })).toBeVisible();
-        assert.ok((await page.title()).includes(profile.name), 'Player title uses observed identity');
+        assert.ok(
+          (await page.title()).includes(profile.name),
+          'Player title uses observed identity',
+        );
         const description = await page.locator('meta[name="description"]').getAttribute('content');
-        assert.ok(description?.includes(profile.name), 'Player description matches visible identity');
+        assert.ok(
+          description?.includes(profile.name),
+          'Player description matches visible identity',
+        );
         assert.ok(!/undefined|NaN|Invalid Date/.test(description!), 'No invalid metadata values');
         const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
         assert.equal(new URL(canonical!).pathname, `/joueur/${profile.slug}`);

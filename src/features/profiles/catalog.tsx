@@ -7,7 +7,7 @@ import type { Dataset } from '@/types/football';
 import { SourceBanner } from '@/components/source-banner';
 import { Empty, TeamBadge } from '@/components/ui';
 import { FavoriteButton } from '@/features/favorites';
-import { normalizeSearch } from '@/services/search-index';
+import { normalizeSearch, tolerantNameMatch } from '@/services/search-index';
 export function Catalog({
   data,
   kind,
@@ -35,7 +35,7 @@ export function Catalog({
   }, [search, initialSearch, total, path, router]);
   const rows = (
     kind === 'players' ? data.players : kind === 'teams' ? data.teams : data.competitions
-  ).filter((r) => normalizeSearch(r.name).includes(normalizeSearch(search)));
+  ).filter((r) => tolerantNameMatch(normalizeSearch(r.name), normalizeSearch(search)));
   const count = total ?? rows.length;
   const pageHref = (n: number) =>
     `${path}${n > 1 || search ? `?${new URLSearchParams({ ...(n > 1 ? { page: String(n) } : {}), ...(search ? { q: search } : {}) })}` : ''}`;

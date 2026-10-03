@@ -2,6 +2,7 @@ import { db } from '@/database/client';
 import type { Dataset, Match } from '@/types/football';
 import { teamLogo } from '@/lib/team-logo';
 import { withSnapshotExpiry } from './freshness';
+import { reportedStatistics } from './reported-statistics';
 export function emptyDataset(warning?: string): Dataset {
   return {
     source: 'openfootball',
@@ -26,6 +27,11 @@ export async function readLocalDataset(): Promise<Dataset> {
   return withSnapshotExpiry(
     {
       ...data,
+      matches: data.matches.map((match) =>
+        match.source === 'espn'
+          ? { ...match, statistics: reportedStatistics(match.statistics) }
+          : match,
+      ),
       teams: data.teams.map((team) => ({ ...team, logo: teamLogo(team) })),
       revision: entry.updatedAt.toISOString(),
     },
@@ -37,5 +43,12 @@ export async function readLocalHistory(): Promise<Match[]> {
     orderBy: [{ kickoff: 'asc' }, { id: 'asc' }],
     select: { payload: true },
   });
-  return rows.map((r) => r.payload as unknown as Match).filter((m) => m.source !== 'demo');
+  return rows
+    .map((r) => r.payload as unknown as Match)
+    .filter((m) => m.source !== 'demo')
+    .map((match) =>
+      match.source === 'espn'
+        ? { ...match, statistics: reportedStatistics(match.statistics) }
+        : match,
+    );
 }

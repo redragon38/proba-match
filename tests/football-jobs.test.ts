@@ -28,6 +28,20 @@ afterEach(() => {
   vi.useRealTimers();
 });
 describe('Nettoyage des synchronisations', () => {
+  it('records imported players and a safe provider error code in the persisted job log', async () => {
+    await footballJob('espn-players', async () => ({ players: 27, requests: 1 }));
+    expect(mocks.update).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ matches: 27 }) }),
+    );
+    await expect(
+      footballJob('espn', async () => {
+        throw new Error('ESPN_HTTP_503');
+      }),
+    ).rejects.toThrow('SYNC_FAILED');
+    expect(mocks.update).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ errorCode: 'ESPN_HTTP_503' }) }),
+    );
+  });
   it('allows the next job after a provider failure releases its lease', async () => {
     await expect(
       footballJob('test', async () => {

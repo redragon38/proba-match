@@ -13,8 +13,16 @@ test('plusieurs vrais matchs affichent leurs profils disponibles et la navigatio
       await page.goto(`/match/${match.slug}?onglet=joueurs`);
       const links = page.locator('.match-player-row a[href^="/joueur/"]');
       if ((await links.count()) < 2) continue;
+      // List API intentionally omits details to bound its payload. Read the actual fixture.
+      const details = (await (await request.get(`/api/matches/${match.id}`)).json()) as Match;
       await expect(page.getByRole('heading', { name: 'Joueurs', exact: true })).toBeVisible();
-      await expect(page.getByText('participation non confirmée').first()).toBeVisible();
+      if (match.status === 'scheduled' && !details.lineups.length)
+        await expect(page.getByText('participation non confirmée').first()).toBeVisible();
+      else if (match.status === 'scheduled' && details.lineups.some((l) => !l.confirmed))
+        await expect(
+          page.getByText('Composition transmise, statut ou contenu incomplet').first(),
+        ).toBeVisible();
+      else await expect(page.locator('.match-player-row').first()).toBeVisible();
       const href = await links.first().getAttribute('href');
       expect(href).toContain(`match=${encodeURIComponent(match.slug)}`);
       await links.first().click();

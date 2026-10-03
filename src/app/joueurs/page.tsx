@@ -3,10 +3,10 @@ import { getDataset } from '@/services/football';
 import { catalogueMetadata } from '@/lib/seo';
 import { cataloguePage } from '@/services/seo';
 import { catalogDataset } from '@/services/football/read-model';
-import { normalizeSearch } from '@/services/search-index';
+import { normalizeSearch, tolerantNameMatch } from '@/services/search-index';
 type Props = { searchParams: Promise<{ page?: string; q?: string }> };
 const filtered = (data: Awaited<ReturnType<typeof getDataset>>, q = '') =>
-  data.players.filter((r) => normalizeSearch(r.name).includes(normalizeSearch(q.slice(0, 100))));
+  data.players.filter((r) => tolerantNameMatch(normalizeSearch(r.name), normalizeSearch(q.slice(0, 100))));
 export async function generateMetadata({ searchParams }: Props) {
   const [data, query] = await Promise.all([getDataset(), searchParams]);
   const page = cataloguePage(query.page, filtered(data, query.q).length);

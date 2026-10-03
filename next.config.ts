@@ -1,5 +1,6 @@
 import type { NextConfig } from 'next';
 import { isPreviewDeployment } from './src/lib/deployment';
+import { contentSecurityPolicy } from './src/lib/security-policy';
 const config: NextConfig = {
   poweredByHeader: false,
   images: {
@@ -15,6 +16,11 @@ const config: NextConfig = {
     }));
   },
   async headers() {
+    const publicHttps =
+      process.env.NODE_ENV === 'production' &&
+      process.env.VERCEL_ENV === 'production' &&
+      !isPreviewDeployment() &&
+      !!process.env.NEXT_PUBLIC_SITE_URL?.startsWith('https://');
     return [
       { source: '/api/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
       {
@@ -26,12 +32,12 @@ const config: NextConfig = {
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
           {
             key: 'Content-Security-Policy',
-            value: "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+            value: contentSecurityPolicy({
+              development: process.env.NODE_ENV === 'development',
+              publicHttps,
+            }),
           },
-          ...(process.env.NODE_ENV === 'production' &&
-          process.env.NEXT_PUBLIC_SITE_URL?.startsWith('https://')
-            ? [{ key: 'Strict-Transport-Security', value: 'max-age=31536000' }]
-            : []),
+          ...(publicHttps ? [{ key: 'Strict-Transport-Security', value: 'max-age=31536000' }] : []),
           ...(isPreviewDeployment() ? [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] : []),
         ],
       },

@@ -3,6 +3,7 @@ import { db } from '@/database/client';
 import { predictionEngine, MODEL_VERSION, MODEL_PARAMETERS } from '@/prediction-engine';
 import type { Dataset, EvaluatedPrediction, Prediction } from '@/types/football';
 import { metrics } from '@/prediction-engine/evaluation';
+import { recordTiming } from '@/services/telemetry';
 export async function getPredictions(data: Dataset): Promise<Record<string, Prediction>> {
   if (data.source === 'demo')
     return Object.fromEntries(
@@ -28,7 +29,9 @@ export async function getPredictions(data: Dataset): Promise<Record<string, Pred
       select: { matchId: true, payload: true },
     });
     return Object.fromEntries(
-      rows.filter((r) => ids.has(r.matchId)).map((r) => [r.matchId, r.payload as unknown as Prediction]),
+      rows
+        .filter((r) => ids.has(r.matchId))
+        .map((r) => [r.matchId, r.payload as unknown as Prediction]),
     );
   } catch {
     return {};
@@ -54,7 +57,8 @@ export async function persistPredictions(data: Dataset, now = new Date()) {
     where: { id: MODEL_VERSION },
     create: {
       id: MODEL_VERSION,
-      description: 'Elo, forme et Poisson indépendant ; rapport des buts attendus réduit à 0,8 après validation chronologique',
+      description:
+        'Elo, forme et Poisson indépendant ; rapport des buts attendus réduit à 0,8 après validation chronologique',
       parameters: MODEL_PARAMETERS,
     },
     update: {},
@@ -89,7 +93,8 @@ export async function persistPredictions(data: Dataset, now = new Date()) {
       });
       // Existing snapshots are immutable. Avoid recalculating a published kind.
       if (initial) {
-        if (match.lineups.length !== 2 || !match.lineups.every((lineup) => lineup.confirmed)) continue;
+        if (match.lineups.length !== 2 || !match.lineups.every((lineup) => lineup.confirmed))
+          continue;
         const lineup = await db.prediction.findUnique({
           where: {
             matchId_versionId_kind: { matchId: match.id, versionId: MODEL_VERSION, kind: 'lineup' },
@@ -97,7 +102,9 @@ export async function persistPredictions(data: Dataset, now = new Date()) {
         });
         if (lineup) continue;
       }
+      const started = globalThis.performance.now();
       const p = predictionEngine.predict(match, data.matches, now.toISOString());
+      recordTiming('prediction:compute', globalThis.performance.now() - started);
       if (!p) continue;
       const kind = initial && p.lineupConfirmed ? 'lineup' : 'initial';
       if (initial && kind === 'initial') continue;

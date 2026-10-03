@@ -6,7 +6,7 @@ export default defineConfig({
   timeout: 60000,
   expect: { timeout: 15000 },
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: process.env.E2E_BASE_URL ?? 'http://localhost:3000',
     channel:
       process.env.PLAYWRIGHT_CHANNEL ?? (process.platform === 'win32' ? 'chrome' : 'chromium'),
     launchOptions: { timeout: 20000 },
@@ -18,7 +18,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'npm run start',
-    url: 'http://localhost:3000',
+    url: process.env.E2E_BASE_URL ?? 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
   },

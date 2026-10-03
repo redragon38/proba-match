@@ -20,7 +20,6 @@ export default async function Image() {
       }}
     >
       {/* ImageResponse renders PNG bytes directly, without a browser image optimizer. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={`data:image/png;base64,${logo.toString('base64')}`}
         width={1040}

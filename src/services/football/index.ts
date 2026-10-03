@@ -1,13 +1,14 @@
 import 'server-only';
 import { cache as requestCache } from 'react';
-import { cache, MemoryCache } from '@/services/cache';
+import { cache, datasetCache } from '@/services/cache';
 import { createDemoDataset } from './providers/mock';
 import { readLocalDataset, emptyDataset } from './local-store';
 import { log } from '@/lib/logger';
 import type { Dataset } from '@/types/football';
 import { db } from '@/database/client';
+import { timed } from '@/services/telemetry';
 import { withSnapshotExpiry, withSourceFreshness } from './freshness';
-const datasets = new MemoryCache(2);
+const datasets = datasetCache;
 export const getDataset = requestCache(async function getDataset(): Promise<Dataset> {
   if (!process.env.DATABASE_URL) {
     if (process.env.NODE_ENV !== 'production' && process.env.MATCHSCORE_DEMO === 'true')
@@ -17,16 +18,18 @@ export const getDataset = requestCache(async function getDataset(): Promise<Data
     );
   }
   try {
-    const marker = await db.cacheEntry.findUnique({
-      where: { key: 'football:dataset' },
-      select: { updatedAt: true, expiresAt: true },
-    });
+    const marker = await timed('db:dataset_revision', () =>
+      db.cacheEntry.findUnique({
+        where: { key: 'football:dataset' },
+        select: { updatedAt: true, expiresAt: true },
+      }),
+    );
     return await datasets
       .get(
         `dataset:${marker?.updatedAt.toISOString() ?? 'empty'}`,
         async () => {
           try {
-            return await readLocalDataset();
+            return await timed('db:dataset_load', readLocalDataset);
           } catch {
             log('dataset_read_failed', { code: 'DATABASE_UNAVAILABLE' });
             throw new Error('DATABASE_UNAVAILABLE');

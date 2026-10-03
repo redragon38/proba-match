@@ -75,7 +75,7 @@ p {
   line-height: 1.65;
 }
 small {
-  font-size: 11px;
+  font-size: 12px;
 }
 svg {
   flex-shrink: 0;
@@ -166,7 +166,7 @@ input[type='search'] {
   padding: 10px 13px;
   border-radius: 7px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
 }
 .search-trigger kbd {
   border: 1px solid var(--line);
@@ -241,7 +241,7 @@ input[type='search'] {
   display: flex;
   gap: 10px;
   padding: 10px 13px;
-  font-size: 11px;
+  font-size: 12px;
   border-radius: 7px;
 }
 .league-link > span {
@@ -269,13 +269,13 @@ input[type='search'] {
 }
 .sidebar-promo p {
   color: #7b8d83;
-  font-size: 11px;
+  font-size: 12px;
 }
 .sidebar-promo a {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   margin-top: 16px;
 }
@@ -318,7 +318,7 @@ input[type='search'] {
   gap: 12px;
 }
 .text-link {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--green);
   display: inline-flex;
   align-items: center;
@@ -405,14 +405,14 @@ input[type='search'] {
 .prob-labels {
   display: flex;
   justify-content: space-between;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
   margin-top: 9px;
 }
 .prob-labels b {
   margin-left: 6px;
   color: var(--text);
-  font-size: 11px;
+  font-size: 12px;
 }
 .metric {
   padding: 22px;
@@ -421,7 +421,7 @@ input[type='search'] {
   background: var(--surface);
 }
 .metric > span {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
 }
 .metric > strong {
@@ -477,7 +477,7 @@ input[type='search'] {
   letter-spacing: 2px;
 }
 .ad-slot p {
-  font-size: 10px;
+  font-size: 12px;
   margin-top: 15px;
 }
 .ad-slot small {

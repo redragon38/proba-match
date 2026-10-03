@@ -1,5 +1,6 @@
+import { monitoredRoute } from '@/services/telemetry';
 import { getDataset } from '@/services/football';
-export async function GET(request: Request) {
+async function get(request: Request) {
   const d = await getDataset();
   const url = new URL(request.url);
   const ids = url.searchParams.get('ids')?.split(',').slice(0, 100);
@@ -39,3 +40,5 @@ export async function GET(request: Request) {
     { headers: { 'Cache-Control': 'no-store' } },
   );
 }
+
+export const GET = monitoredRoute('/api/live', get);

@@ -1,6 +1,7 @@
+import { monitoredRoute } from '@/services/telemetry';
 import { getDataset } from '@/services/football';
 import { matchSelection, upcomingSelection } from '@/services/football/match-selection';
-export async function GET(request: Request) {
+async function get(request: Request) {
   const q = Object.fromEntries(new URL(request.url).searchParams);
   const data = await getDataset();
   try {
@@ -19,3 +20,5 @@ export async function GET(request: Request) {
     );
   }
 }
+
+export const GET = monitoredRoute('/api/matches', get);

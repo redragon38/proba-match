@@ -1,3 +1,5 @@
+import { reportedStatistics } from '../reported-statistics';
+import { timed } from '@/services/telemetry';
 import { z } from 'zod';
 import type { MatchStat, MatchStatus, PlayerStats, Position } from '@/types/football';
 
@@ -102,7 +104,7 @@ const event = z.object({
     .length(1),
 });
 const number = (value: string | number | undefined) => {
-  if (value == null || value === '') return null;
+  if (value == null || (typeof value === 'string' && !value.trim())) return null;
   const n = Number(String(value).replace('%', ''));
   return Number.isFinite(n) && n >= 0 ? n : null;
 };
@@ -158,7 +160,7 @@ export function parseEspnFixtures(input: unknown, league: ExpandedLeague, season
           !Number.isInteger(awayScore))
       )
         throw new Error('ESPN_INVALID_SCORE');
-      const statistics: MatchStat[] =
+      const rawStatistics: MatchStat[] =
         status === 'finished'
           ? Object.entries(labels).flatMap(([key, label]) => {
               const hv = number(h.statistics?.find((s) => s.name === key)?.displayValue),
@@ -175,7 +177,7 @@ export function parseEspnFixtures(input: unknown, league: ExpandedLeague, season
         status,
         homeScore,
         awayScore,
-        statistics,
+        statistics: reportedStatistics(rawStatistics),
         venue: c.venue?.fullName,
         round: e.season.slug === 'regular-season' ? 'Saison régulière' : e.season.slug,
         countsForStandings:
@@ -268,10 +270,12 @@ export class EspnProvider {
     this.lastRequest = Date.now();
     this.requests++;
     const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${path}`;
-    const response = await this.transport(url, {
-      signal: AbortSignal.timeout(30000),
-      cache: 'no-store',
-    });
+    const response = await timed('provider:espn_transport', () =>
+      this.transport(url, {
+        signal: AbortSignal.timeout(30000),
+        cache: 'no-store',
+      }),
+    );
     if (!response.ok) throw new Error(`ESPN_HTTP_${response.status}`);
     const text = await response.text();
     if (text.length > 20_000_000) throw new Error('ESPN_RESPONSE_TOO_LARGE');

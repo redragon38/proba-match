@@ -77,7 +77,7 @@
   display: block;
   margin-top: 3px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
 }
 .match-player-facts {
   display: flex;
@@ -91,7 +91,7 @@
   border: 1px solid var(--line);
   border-radius: 4px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
   white-space: nowrap;
 }
 .match-player-facts b {
@@ -177,7 +177,7 @@
   padding: 9px 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  font-size: 11px;
+  font-size: 12px;
 }
 .match-period-scores span {
   color: var(--muted);
@@ -203,7 +203,7 @@
   padding: 9px 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  font-size: 11px;
+  font-size: 12px;
 }
 .match-quick-read span {
   color: var(--muted);
@@ -223,7 +223,7 @@
 .match-stat-header {
   margin-bottom: 8px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
 }
 .match-stat-row {
   padding: 12px 0;
@@ -278,7 +278,7 @@
   background: var(--bg);
   color: var(--text);
   text-align: left;
-  font-size: 11px;
+  font-size: 12px;
 }
 .match-stats-more {
   margin-top: 14px;
