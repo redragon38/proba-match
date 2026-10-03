@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { competitionSeason } from '@/lib/competition-season';
 import { CompetitionBadge } from '@/components/ui';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { CompetitionView } from '@/services/competition-view';
@@ -50,7 +51,7 @@ export function CompetitionProfile({ view }: { view: CompetitionView }) {
         <CompetitionBadge competition={c} size={64} />
         <div>
           <span className="eyebrow">
-            {c.country} · SAISON {c.season}/{c.season + 1}
+            {c.country} · SAISON {competitionSeason(c, c.season)}
           </span>
           <h1>{c.name}</h1>
           <p>Le classement, les rencontres et ceux qui font la différence.</p>
@@ -70,7 +71,7 @@ export function CompetitionProfile({ view }: { view: CompetitionView }) {
         >
           {seasons.map((year) => (
             <option value={year} key={year}>
-              {year}/{year + 1}
+              {competitionSeason(c, year)}
             </option>
           ))}
         </select>
@@ -118,7 +119,7 @@ export function CompetitionProfile({ view }: { view: CompetitionView }) {
         {data.source === 'demo'
           ? 'Classement fictif calculé à partir du calendrier de démonstration.'
           : data.source === 'openfootball'
-            ? 'Classement Proba Match calculé sur les résultats OpenFootball disponibles, sans sanctions administratives ni règles spécifiques de départage.'
+            ? 'Classement Proba Match calculé sur les résultats disponibles (OpenFootball / ESPN), sans sanctions administratives ni règles spécifiques de départage. En MLS : saison régulière uniquement, tableau global hors conférences.'
             : 'Classement transmis par API-Football. Les formats à plusieurs groupes peuvent ne pas être disponibles.'}
       </p>
       <div className="detail-columns">

@@ -12,5 +12,12 @@ export async function generateMetadata({ searchParams }: Props) {
 export default async function Page({ searchParams }: Props) {
   const [data, query] = await Promise.all([getDataset(), searchParams]);
   const page = cataloguePage(query.page, data.competitions.length);
-  return <Catalog key={page} data={catalogDataset(data)} kind="competitions" initialPage={page} />;
+  return (
+    <Catalog
+      key={page}
+      data={{ ...catalogDataset(data), players: [], teams: [] }}
+      kind="competitions"
+      initialPage={page}
+    />
+  );
 }

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { competitionSeason } from '@/lib/competition-season';
 import { ProviderImage } from '@/components/provider-image';
 import { notFound } from 'next/navigation';
 import { getDataset } from '@/services/football';
@@ -17,12 +18,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const d = await getDataset();
   const p = d.players.find((p) => p.slug === slug);
   if (!p) notFound();
+  const club = d.teams.find((t) => t.id === p.teamId);
+  const homonym = d.players.some(
+    (other) => other.id !== p.id && other.name === p.name && other.teamId === p.teamId,
+  );
+  const identity = `${p.name}${club ? ` — ${club.name}` : ''}${homonym ? ` (${p.position}${p.birthDate ? `, ${p.birthDate.slice(0, 4)}` : ''})` : ''}`;
   return seoMetadata(
     `/joueur/${slug}`,
-    p.source === 'thesportsdb' ? `${p.name} — profil joueur` : `${p.name} — profil et statistiques`,
     p.source === 'thesportsdb'
-      ? `Profil communautaire de ${p.name} : club et poste indiqués par TheSportsDB. Effectif partiel, sans statistiques individuelles vérifiées.`
-      : `Profil de ${p.name} : poste, équipe, temps de jeu et performances disponibles. Explorez son historique et ses statistiques sur Proba Match.`,
+      ? `${identity} — profil joueur`
+      : `${identity} — profil et statistiques`,
+    p.source === 'thesportsdb'
+      ? `Profil communautaire de ${identity} : club et poste indiqués par TheSportsDB. Effectif partiel, sans statistiques individuelles vérifiées.`
+      : `Profil de ${identity} : poste, équipe, temps de jeu et performances disponibles. Explorez son historique et ses statistiques sur Proba Match.`,
     d.source !== 'demo' && (p.stats.appearances ?? 0) >= 5,
   );
 }
@@ -130,6 +138,12 @@ export default async function Page({
         <Link className="text-link" href={`/match/${fromMatch.slug}?onglet=joueurs`}>
           ← Retour au match
         </Link>
+      )}
+      {p.source === 'espn' && (
+        <p className="data-note">
+          Effectif et statistiques de saison fournis par ESPN. Les valeurs absentes restent
+          indisponibles ; l’effectif du club ne confirme pas la participation à une rencontre.
+        </p>
       )}
       {p.source === 'thesportsdb' && (
         <p className="data-note">
@@ -313,9 +327,7 @@ export default async function Page({
                     <tbody>
                       {history.map((h) => (
                         <tr key={`${h.competition}-${h.season}`}>
-                          <th>
-                            {h.season}/{h.season + 1}
-                          </th>
+                          <th>{competitionSeason({ name: h.competition }, h.season)}</th>
                           <td>{h.competition}</td>
                           <td>{number(h.stats.appearances)}</td>
                           <td>{number(h.stats.minutes)}</td>

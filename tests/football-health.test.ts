@@ -16,6 +16,9 @@ vi.mock('@/database/client', () => ({
 vi.mock('@/services/football/openfootball-sync', () => ({
   openScopes: () => [{ league: 'fr.1', season: 2026 }],
 }));
+vi.mock('@/services/football/providers/espn', () => ({
+  expandedScopes: () => [{ league: 'por.1', season: 2026 }],
+}));
 import { footballHealth } from '@/services/football/health';
 import { GET } from '@/app/api/health/route';
 const now = Date.now();
@@ -36,7 +39,10 @@ beforeEach(() => {
           },
         },
   );
-  mocks.sources.mockResolvedValue([{ id: 'openfootball:fr.1:2026', lastSyncedAt: new Date(now) }]);
+  mocks.sources.mockResolvedValue([
+    { id: 'openfootball:fr.1:2026', lastSyncedAt: new Date(now) },
+    { id: 'espn:por.1:2026', lastSyncedAt: new Date(now) },
+  ]);
   mocks.runs.mockResolvedValue([]);
   mocks.quota.mockResolvedValue(null);
 });
@@ -58,6 +64,7 @@ describe('Operational readiness', () => {
   it('does not hide stale sources behind a recent no-op job', async () => {
     mocks.sources.mockResolvedValue([
       { id: 'openfootball:fr.1:2026', lastSyncedAt: new Date(now - 8 * 3600000) },
+      { id: 'espn:por.1:2026', lastSyncedAt: new Date(now) },
     ]);
     mocks.runs.mockResolvedValue([
       { provider: 'openfootball', status: 'success', startedAt: new Date(now) },
@@ -104,6 +111,7 @@ describe('Operational readiness', () => {
     mocks.snapshot.mockResolvedValue({ updatedAt: new Date(now) });
     mocks.sources.mockResolvedValue([
       { id: 'openfootball:fr.1:2026', lastSyncedAt: new Date(now - 25 * 3600000) },
+      { id: 'espn:por.1:2026', lastSyncedAt: new Date(now - 25 * 3600000) },
     ]);
     expect(await footballHealth(now)).toMatchObject({ status: 'warning', issues: [] });
   });

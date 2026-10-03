@@ -4,6 +4,8 @@ import { db } from '../src/database/client';
 import { nextOpenDeadline, runWorkerLoop } from '../src/services/football/worker-loop';
 import { log } from '../src/lib/logger';
 import { syncSportsDbPlayers } from '../src/services/football/sportsdb-sync';
+import { syncExpandedFootball, syncExpandedPlayers } from '../src/services/football/espn-sync';
+import { expandedScopes } from '../src/services/football/providers/espn';
 let stopping = false;
 let nextPlayers = 0;
 let wake: (() => void) | undefined;
@@ -30,7 +32,10 @@ try {
         };
       }),
     nextOpen: async () => {
-      const ids = openScopes().map((scope) => `openfootball:${scope.league}:${scope.season}`);
+      const ids = [
+        ...openScopes().map((scope) => `openfootball:${scope.league}:${scope.season}`),
+        ...expandedScopes().map((scope) => `espn:${scope.league}:${scope.season}`),
+      ];
       const sources = await db.dataSource.findMany({
         where: { id: { in: ids } },
         select: { lastSyncedAt: true },
@@ -39,16 +44,27 @@ try {
     },
     open: async () => {
       const result = await syncOpenFootball();
-      console.log(result);
-      return result;
+      const expanded = await syncExpandedFootball();
+      console.log(result, expanded);
+      return {
+        status:
+          result.status === 'success' && expanded.status === 'success' ? 'success' : 'partial',
+      };
     },
     secondary: async () => {
       const secondary = process.env.FOOTBALL_API_KEY ? await syncSecondary({ enrich: true }) : null;
       if (secondary) console.log(secondary);
       if (Date.now() < nextPlayers) return secondary ?? { status: 'waiting' };
+      const expandedPlayers = await syncExpandedPlayers(15);
       const players = await syncSportsDbPlayers(15);
+      console.log(expandedPlayers);
       nextPlayers =
-        Date.now() + (players.status === 'awaiting_openfootball' ? 3600_000 : 6 * 3600_000);
+        Date.now() +
+        (expandedPlayers.remaining > 0
+          ? 15 * 60_000
+          : players.status === 'awaiting_openfootball'
+            ? 3600_000
+            : 6 * 3600_000);
       console.log(players);
       return secondary ?? players;
     },

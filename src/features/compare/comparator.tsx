@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import type { Dataset } from '@/types/football';
 import { SourceBanner } from '@/components/source-banner';
@@ -12,22 +13,45 @@ export function Comparator({
   data,
   kind,
   initialA,
+  initialB,
+  playerChoices,
   summaries,
 }: {
   data: Dataset;
   kind: 'teams' | 'players';
   initialA?: string;
+  initialB?: string;
+  playerChoices?: { id: string; name: string }[];
   summaries: ReturnType<typeof comparisonView>;
 }) {
-  const items = kind === 'teams' ? data.teams : data.players;
+  const router = useRouter();
+  const items = kind === 'teams' ? data.teams : (playerChoices ?? data.players);
   const [a, setA] = useState(
     items.some((i) => i.id === initialA) ? initialA! : (items[0]?.id ?? ''),
   );
-  const [b, setB] = useState(items.find((i) => i.id !== a)?.id ?? '');
+  const [b, setB] = useState(
+    items.some((i) => i.id === initialB) ? initialB! : (items.find((i) => i.id !== a)?.id ?? ''),
+  );
   const [search, setSearch] = useState('');
   const [detailed, setDetailed] = useState(false);
-  const A = items.find((i) => i.id === a),
-    B = items.find((i) => i.id === b);
+  const profiles = kind === 'teams' ? data.teams : data.players;
+  const A = profiles.find((i) => i.id === a),
+    B = profiles.find((i) => i.id === b);
+  function choose(nextA: string, nextB: string) {
+    setA(nextA);
+    setB(nextB);
+    if (kind === 'players')
+      router.replace(`/comparateur/joueurs?${new URLSearchParams({ a: nextA, b: nextB })}`, {
+        scroll: false,
+      });
+  }
+  function options(selected: string) {
+    const matches = items
+      .filter((i) => i.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+      .slice(0, 50);
+    const current = items.find((i) => i.id === selected);
+    return [...new Map([...(current ? [current] : []), ...matches].map((i) => [i.id, i])).values()];
+  }
   let rows: [string, number | null | undefined, number | null | undefined][] = [];
   let radar: { labels: string[]; a: number[]; b: number[] } | null = null;
   if (kind === 'teams' && A && B) {
@@ -131,8 +155,7 @@ export function Comparator({
           <button
             key={item.id}
             onClick={() => {
-              setA(items[0].id);
-              setB(item.id);
+              choose(items[0].id, item.id);
             }}
           >
             {items[0].name} / {item.name}
@@ -151,33 +174,23 @@ export function Comparator({
       <div className="comparison-selectors card">
         <label>
           {kind === 'teams' ? 'Première équipe' : 'Premier joueur'}
-          <select value={a} onChange={(e) => setA(e.target.value)}>
-            {items
-              .filter(
-                (i) =>
-                  i.id === a || i.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
-              )
-              .map((i) => (
-                <option value={i.id} key={i.id}>
-                  {i.name}
-                </option>
-              ))}
+          <select value={a} onChange={(e) => choose(e.target.value, b)}>
+            {options(a).map((i) => (
+              <option value={i.id} key={i.id}>
+                {i.name}
+              </option>
+            ))}
           </select>
         </label>
         <strong>VS</strong>
         <label>
           {kind === 'teams' ? 'Deuxième équipe' : 'Deuxième joueur'}
-          <select value={b} onChange={(e) => setB(e.target.value)}>
-            {items
-              .filter(
-                (i) =>
-                  i.id === b || i.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
-              )
-              .map((i) => (
-                <option value={i.id} key={i.id}>
-                  {i.name}
-                </option>
-              ))}
+          <select value={b} onChange={(e) => choose(a, e.target.value)}>
+            {options(b).map((i) => (
+              <option value={i.id} key={i.id}>
+                {i.name}
+              </option>
+            ))}
           </select>
         </label>
       </div>
@@ -275,6 +288,8 @@ export function Comparator({
             </p>
           </>
         )
+      ) : kind === 'players' && items.length >= 2 ? (
+        <p role="status">Chargement des statistiques…</p>
       ) : (
         <Empty />
       )}

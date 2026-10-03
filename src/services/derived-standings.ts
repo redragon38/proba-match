@@ -1,6 +1,7 @@
 import type { Match, Standing } from '@/types/football';
 export type StandingMatch = Pick<
   Match,
+  | 'countsForStandings'
   | 'competitionId'
   | 'season'
   | 'status'
@@ -20,6 +21,7 @@ export function derivedStandings(
     .filter(
       (m) =>
         m.competitionId === competitionId &&
+        m.countsForStandings !== false &&
         m.status === 'finished' &&
         m.homeScore !== null &&
         m.awayScore !== null,

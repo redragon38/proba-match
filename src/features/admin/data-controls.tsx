@@ -23,7 +23,7 @@ export function DataControls({
       const result = await response.json();
       setMessage(
         response.ok
-          ? `État : ${result.status}${result.matches != null ? ` · ${result.matches} matchs · ${result.failures ?? 0} fichiers en échec` : ''}`
+          ? `État : ${result.status}${result.players != null ? ` · ${result.players} joueurs · ${result.remaining ?? 0} clubs restants` : ''}${result.matches != null ? ` · ${result.matches} matchs · ${result.failures ?? 0} fichiers en échec` : ''}`
           : result.error,
       );
       router.refresh();
@@ -50,6 +50,32 @@ export function DataControls({
         onClick={() => submit('/api/admin/sync', { provider: 'openfootball' })}
       >
         Actualiser la saison
+      </button>
+      <h3>Portugal, Pays-Bas, Brésil, Arabie saoudite et MLS</h3>
+      <p>
+        Données ESPN : quatre saisons, équipes et statistiques disponibles. Les effectifs sont
+        actualisés par lots de 30 clubs.
+      </p>
+      <button
+        className="button"
+        disabled={busy}
+        onClick={() => submit('/api/admin/sync', { provider: 'espn', history: true })}
+      >
+        Importer les cinq championnats
+      </button>{' '}
+      <button
+        className="button secondary"
+        disabled={busy}
+        onClick={() => submit('/api/admin/sync', { provider: 'espn' })}
+      >
+        Actualiser les championnats
+      </button>{' '}
+      <button
+        className="button secondary"
+        disabled={busy}
+        onClick={() => submit('/api/admin/sync', { provider: 'espn-players' })}
+      >
+        Actualiser les effectifs
       </button>
       <p role="status">{message}</p>
       <h3>Correspondances à confirmer</h3>

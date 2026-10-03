@@ -5,9 +5,23 @@ import { footballJob } from '../src/services/football/jobs';
 import { db } from '../src/database/client';
 import { OpenFootballProvider } from '../src/services/football/providers/openfootball';
 import { syncSportsDbPlayers } from '../src/services/football/sportsdb-sync';
+import { syncExpandedFootball, syncExpandedPlayers } from '../src/services/football/espn-sync';
 const command = process.argv[2];
 try {
-  if (command === 'validate') {
+  if (command === 'expanded' || command === 'expanded-import')
+    console.log(
+      await syncExpandedFootball({
+        history: command === 'expanded-import',
+        force: process.argv.includes('--force'),
+      }),
+    );
+  else if (command === 'expanded-players')
+    console.log(
+      await syncExpandedPlayers(
+        Number(process.argv.find((a) => a.startsWith('--limit='))?.slice(8) ?? 30),
+      ),
+    );
+  else if (command === 'validate') {
     const scope = openScopes()[0];
     const response = await new OpenFootballProvider().season(scope.league, scope.season);
     if (!response.unchanged)

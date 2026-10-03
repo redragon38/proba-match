@@ -12,7 +12,7 @@ describe('Team logos', () => {
     expect(teamLogo({ name: 'Unknown club', country: 'France' })).toBeUndefined();
   });
   it('ships small valid WebP files for every registered crest', () => {
-    expect(Object.keys(logos)).toHaveLength(129);
+    expect(Object.keys(logos)).toHaveLength(261);
     for (const file of Object.values(logos)) {
       const bytes = readFileSync(`public${file}`);
       expect(bytes.subarray(0, 4).toString()).toBe('RIFF');

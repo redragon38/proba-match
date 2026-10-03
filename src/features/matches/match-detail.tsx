@@ -158,12 +158,14 @@ export function MatchDetail({
       {match.source !== 'demo' && (
         <p className="data-note">
           Calendrier / résultats :{' '}
-          {match.provenance?.schedule === 'openfootball' || match.source === 'openfootball'
-            ? 'OpenFootball'
-            : 'API-Football'}
+          {match.provenance?.schedule === 'espn' || match.source === 'espn'
+            ? 'ESPN'
+            : match.provenance?.schedule === 'openfootball' || match.source === 'openfootball'
+              ? 'OpenFootball'
+              : 'API-Football'}
           .{' '}
           {match.provenance?.details
-            ? 'Enrichissement : API-Football.'
+            ? `Statistiques : ${match.provenance.details === 'espn' ? 'ESPN' : 'API-Football'}.`
             : 'Statistiques avancées indisponibles sans enrichissement.'}
         </p>
       )}

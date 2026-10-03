@@ -14,18 +14,21 @@ export default function Page() {
         version calcule, et ce qu’elle ne sait pas encore.
       </p>
       <p>
-        Proba Match calcule automatiquement ses probabilités avec un modèle statistique
-        Elo–Poisson. Les explications sont assemblées selon des règles à partir des données et
-        des facteurs calculés, sans IA générative. Elles décrivent une estimation du modèle,
-        pas une certitude sur le déroulement du match.
+        Proba Match calcule automatiquement ses probabilités avec un modèle statistique Elo–Poisson.
+        Les explications sont assemblées selon des règles à partir des données et des facteurs
+        calculés, sans IA générative. Elles décrivent une estimation du modèle, pas une certitude
+        sur le déroulement du match.
       </p>
       <section>
         <h2>01 — Des sources clairement identifiées</h2>
         <p>
-          Les calendriers et résultats proviennent d’OpenFootball, importés dans notre base
-          PostgreSQL. Cette source gratuite n’exige aucune clé API. Sa mise à jour dépend des
+          Les calendriers et résultats proviennent d’OpenFootball et d’ESPN, importés dans notre
+          base PostgreSQL. OpenFootball n’exige aucune clé API. Sa mise à jour dépend des
           contributions : elle ne garantit pas un suivi en direct. Les classements Proba Match sont
-          calculés sur les résultats disponibles.
+          calculés sur les résultats disponibles. ESPN fournit les cinq championnats
+          supplémentaires, leurs effectifs et leurs statistiques disponibles. Les synchronisations
+          périodiques ne garantissent pas un suivi en direct. Les playoffs sont exclus des
+          classements de ligue calculés.
         </p>
         <p>
           Les données avancées peuvent être enrichies par{' '}
@@ -39,9 +42,9 @@ export default function Page() {
         <h2>02 — Elo : le niveau relatif</h2>
         <p>
           Chaque équipe commence à 1 500 points. Après une rencontre, son rating évolue selon le
-          résultat, l’adversaire et l’écart de buts. Le moteur utilise K = 24 et un avantage domicile de
-          60 points, paramétrables dans le moteur. L’écart de buts est amorti par un logarithme. Les
-          historiques de rating sont conservés.
+          résultat, l’adversaire et l’écart de buts. Le moteur utilise K = 24 et un avantage
+          domicile de 60 points, paramétrables dans le moteur. L’écart de buts est amorti par un
+          logarithme. Les historiques de rating sont conservés.
         </p>
         <code>E(domicile) = 1 / (1 + 10 ^ ((Elo extérieur − Elo domicile − 60) / 400))</code>
       </section>
@@ -55,10 +58,10 @@ export default function Page() {
           ; il ne constitue pas une preuve d’amélioration.
         </p>
         <p>
-          Le modèle retient jusqu’à 20 matchs terminés par équipe et exige au moins cinq observations de
-          chaque côté. Le poids diminue de moitié tous les 60 jours. Un match joué dans le contexte
-          domicile/extérieur opposé reçoit un poids de 0,65. La force adverse ajuste les buts
-          observés par un facteur borné de 0,75 à 1,30.
+          Le modèle retient jusqu’à 20 matchs terminés par équipe et exige au moins cinq
+          observations de chaque côté. Le poids diminue de moitié tous les 60 jours. Un match joué
+          dans le contexte domicile/extérieur opposé reçoit un poids de 0,65. La force adverse
+          ajuste les buts observés par un facteur borné de 0,75 à 1,30.
         </p>
         <p>
           Le modèle combine 60 % de la production offensive d’une équipe et 40 % des buts encaissés
@@ -84,9 +87,10 @@ export default function Page() {
         <p>
           Depuis la version 1.2, le rapport entre les deux espérances de buts est réduit à 80 % de
           sa valeur logarithmique, sans modifier leur moyenne géométrique. Ce paramètre a été choisi
-          sur les matchs antérieurs à 2025, puis vérifié sur 2025 et 2026 séparément. Les probabilités
-          « les deux marquent », buts totaux, marges et scores possibles proviennent de cette même
-          matrice, sans modèle supplémentaire. La probabilité d’un score précis reste faible.
+          sur les matchs antérieurs à 2025, puis vérifié sur 2025 et 2026 séparément. Les
+          probabilités « les deux marquent », buts totaux, marges et scores possibles proviennent de
+          cette même matrice, sans modèle supplémentaire. La probabilité d’un score précis reste
+          faible.
         </p>
       </section>
       <section>
@@ -131,11 +135,11 @@ export default function Page() {
         <p>
           Le backtest parcourt les matchs dans l’ordre. Seules les rencontres terminées dont le coup
           d’envoi précède la cible d’au moins trois heures dans le test historique initial, puis de
-          24 heures dans le test de validation renforcé. Les statistiques
-          saisonnières actuelles, blessures actuelles et compositions connues plus tard sont
-          exclues. Ce délai conservateur ne remplace pas un journal historique de disponibilité
-          exacte des données ; les imports doivent être audités. Les métriques de ce test
-          rétrospectif ne sont pas celles de prédictions réellement publiées avant-match.
+          24 heures dans le test de validation renforcé. Les statistiques saisonnières actuelles,
+          blessures actuelles et compositions connues plus tard sont exclues. Ce délai conservateur
+          ne remplace pas un journal historique de disponibilité exacte des données ; les imports
+          doivent être audités. Les métriques de ce test rétrospectif ne sont pas celles de
+          prédictions réellement publiées avant-match.
         </p>
       </section>
       <section>

@@ -1,6 +1,11 @@
 import type { Competition } from '@/types/football';
 
 const logos: Record<string, string> = {
+  'liga-portugal': 'liga-portugal',
+  eredivisie: 'eredivisie',
+  brasileirão: 'brasileirao',
+  'saudi-pro-league': 'saudi-pro-league',
+  'major-league-soccer': 'major-league-soccer',
   'ligue-1': 'ligue-1',
   'premier-league': 'premier-league',
   bundesliga: 'bundesliga',

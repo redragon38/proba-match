@@ -216,3 +216,20 @@ La connexion administrateur est limitée à dix tentatives par dix minutes. Post
 `CONTACT_EMAIL` configure le lien public de contact. Sans valeur, la page explique que le canal est indisponible. L’interface d’analytics émet uniquement des événements locaux nommés (`match_opened`, `team_opened`, `player_opened`, `search`, `favorite_added`), sans requête réseau, identifiant personnel ou texte recherché. Aucun collecteur n’est activé.
 
 Validation étendue : `npm run test:e2e`, `npm run test:visual`, `VISUAL_THEME=dark npm run test:visual` (PowerShell : `$env:VISUAL_THEME='dark'; npm run test:visual`), puis `node scripts/responsive-check.mjs`. Ce dernier couvre 320, 375, 390, 430, 768, 1024, 1280, 1440 et 1920 pixels. Les rapports sont dans `artifacts/` ; ils décrivent des contrôles locaux, pas une certification d’accessibilité ou un test de charge à grande échelle.
+
+## Cinq championnats supplémentaires (ESPN)
+
+Liga Portugal, Eredivisie, Brasileirão, Saudi Pro League et Major League Soccer utilisent le fournisseur public ESPN, sans clé supplémentaire. Les sources sont enregistrées séparément dans `DataSource` et les identités ESPN ne remplacent pas les identités OpenFootball existantes. ESPN n’est pas une source CC0 ; ses conditions s’appliquent.
+
+```sh
+# Calendriers, scores et statistiques de matchs : saison actuelle et trois précédentes
+node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts expanded-import
+# Actualisation des cinq saisons actuelles (cache de six heures)
+node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts expanded
+# Effectifs et statistiques individuelles de saison : jusqu’à 30 clubs par lot
+node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts expanded-players
+```
+
+Dans ce cloud, préfixer les commandes réseau avec `NODE_USE_ENV_PROXY=1`. Exécuter les lots joueurs jusqu’à `remaining: 0`. Les effectifs actuels sont rafraîchis après 24 heures ; les saisons historiques sont revalidées après 30 jours. Les saisons du Brésil et de MLS suivent l’année civile, les trois autres démarrent en été. Les statistiques absentes restent nulles, une liste d’effectif ne confirme pas la participation à un match et la synchronisation périodique ne constitue pas un direct. Les matchs de playoffs sont conservés mais exclus des classements de ligue calculés (en MLS, tableau global sans conférences, ni sanctions/départages officiels).
+
+L’administration propose les trois opérations. Le worker existant et les crons `/api/cron/openfootball` et `/api/cron/players` les intègrent ; les endpoints restent protégés par les contrôles administrateur/cron existants. Domaines nécessaires : `site.api.espn.com`, `a.espncdn.com` (écussons), `media.api-sports.io` (logos des championnats). La base de données ne se transfère pas par un push Git : exécuter ces imports sur l’environnement hébergé pour y afficher les nouveaux championnats.

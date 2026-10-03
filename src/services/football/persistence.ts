@@ -12,7 +12,7 @@ async function inBatches<T>(rows: T[], write: (row: T) => Promise<unknown>) {
 export async function persistDataset(
   data: Dataset,
   changedIds: Set<string>,
-  options: { profiles?: boolean; injuryTeamIds?: string[] } = {},
+  options: { profiles?: boolean; profileIds?: Set<string>; injuryTeamIds?: string[] } = {},
 ) {
   for (const c of data.competitions) {
     const countryId = slugify(c.country) || 'international';
@@ -32,13 +32,13 @@ export async function persistDataset(
       update: {},
     });
   }
+  // Create each country once before parallel team writes (MLS also contains Canadian clubs).
+  for (const country of new Set(data.teams.map((t) => t.country))) {
+    const id = slugify(country) || 'international';
+    await db.country.upsert({ where: { id }, create: { id, name: country }, update: {} });
+  }
   await inBatches(data.teams, async (t) => {
     const countryId = slugify(t.country) || 'international';
-    await db.country.upsert({
-      where: { id: countryId },
-      create: { id: countryId, name: t.country },
-      update: {},
-    });
     if (t.venue)
       await db.venue.upsert({
         where: { id: `team-${t.id}` },
@@ -62,10 +62,12 @@ export async function persistDataset(
         venueId: t.venue ? `team-${t.id}` : null,
         coachId: t.coach ? `team-${t.id}` : null,
       },
-      update: { name: t.name, logo: t.logo },
+      update: { name: t.name, logo: t.logo, countryId },
     });
   });
-  for (const p of options.profiles === false ? [] : data.players) {
+  for (const p of options.profiles === false
+    ? []
+    : data.players.filter((p) => !options.profileIds || options.profileIds.has(p.id))) {
     await db.player.upsert({
       where: { id: p.id },
       create: {
@@ -302,12 +304,18 @@ export async function persistDataset(
     create: {
       key: 'football:dataset',
       payload: json(data),
-      expiresAt: new Date(Date.now() + (data.source === 'openfootball' ? 7 * 3600_000 : 120_000)),
+      expiresAt: new Date(
+        Date.now() +
+          (data.source !== 'api-football' && data.source !== 'demo' ? 7 * 3600_000 : 120_000),
+      ),
       staleUntil: new Date(Date.now() + 7 * 86400_000),
     },
     update: {
       payload: json(data),
-      expiresAt: new Date(Date.now() + (data.source === 'openfootball' ? 7 * 3600_000 : 120_000)),
+      expiresAt: new Date(
+        Date.now() +
+          (data.source !== 'api-football' && data.source !== 'demo' ? 7 * 3600_000 : 120_000),
+      ),
       staleUntil: new Date(Date.now() + 7 * 86400_000),
     },
   });

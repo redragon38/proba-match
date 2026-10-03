@@ -1,0 +1,1062 @@
+{
+  "provider": "ESPN",
+  "rights": "Club trademarks belong to their owners; ESPN terms apply.",
+  "teams": [
+    {
+      "teamId": "c70b9ce9-d98b-40a2-866b-ace3afeae1c6",
+      "name": "Braga",
+      "country": "Portugal",
+      "file": "espn-c70b9ce9-d98b-40a2-866b-ace3afeae1c6.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/2994.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "c5838525-8ffd-4cf9-bea4-9be32ed9ca1c",
+      "name": "FC Famalicao",
+      "country": "Portugal",
+      "file": "espn-c5838525-8ffd-4cf9-bea4-9be32ed9ca1c.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/12698.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "3a39b409-ba00-41c2-8152-a347f61f0014",
+      "name": "Gil Vicente",
+      "country": "Portugal",
+      "file": "espn-3a39b409-ba00-41c2-8152-a347f61f0014.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/3699.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "1977932e-9b7e-4ab5-acc5-bef0c63942c2",
+      "name": "Portimonense",
+      "country": "Portugal",
+      "file": "espn-1977932e-9b7e-4ab5-acc5-bef0c63942c2.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/3719.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "b0b4650a-ba1f-401a-a1fd-0847231397ef",
+      "name": "SC Farense",
+      "country": "Portugal",
+      "file": "espn-b0b4650a-ba1f-401a-a1fd-0847231397ef.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/20740.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "a3f8706d-de2a-4078-a5a3-affbd47eec31",
+      "name": "Casa Pia",
+      "country": "Portugal",
+      "file": "espn-a3f8706d-de2a-4078-a5a3-affbd47eec31.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21581.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "1481d004-bec3-4c72-b186-047022210133",
+      "name": "Sporting CP",
+      "country": "Portugal",
+      "file": "espn-1481d004-bec3-4c72-b186-047022210133.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/2250.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "01e11c73-40af-4b65-aad3-35bf4ead0272",
+      "name": "Vizela",
+      "country": "Portugal",
+      "file": "espn-01e11c73-40af-4b65-aad3-35bf4ead0272.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/20995.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "5e1d0e2b-af69-49c8-b539-cd3cae906687",
+      "name": "Rio Ave",
+      "country": "Portugal",
+      "file": "espn-5e1d0e2b-af69-49c8-b539-cd3cae906687.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/3822.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "f1cc46e2-42ad-4cdd-9993-a955a2bbae16",
+      "name": "GD Chaves",
+      "country": "Portugal",
+      "file": "espn-f1cc46e2-42ad-4cdd-9993-a955a2bbae16.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/12705.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "dd0b2506-626e-4d2f-9de0-c1402113429d",
+      "name": "Estrela",
+      "country": "Portugal",
+      "file": "espn-dd0b2506-626e-4d2f-9de0-c1402113429d.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21610.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "d4e06cd9-ba5e-4a94-9739-cdb7bdd34175",
+      "name": "Vitória de Guimaraes",
+      "country": "Portugal",
+      "file": "espn-d4e06cd9-ba5e-4a94-9739-cdb7bdd34175.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/5309.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "6a722435-0359-4ea0-ae7d-db447114ca61",
+      "name": "Arouca",
+      "country": "Portugal",
+      "file": "espn-6a722435-0359-4ea0-ae7d-db447114ca61.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/15784.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "49c6d05f-5814-45f1-8911-863dee060dc4",
+      "name": "Estoril",
+      "country": "Portugal",
+      "file": "espn-49c6d05f-5814-45f1-8911-863dee060dc4.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/12216.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "99f740c9-8df4-4979-8b5e-487fdba05124",
+      "name": "Moreirense",
+      "country": "Portugal",
+      "file": "espn-99f740c9-8df4-4979-8b5e-487fdba05124.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/3696.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "648a1f93-adf6-41fb-8d4a-b7b972b92b55",
+      "name": "FC Porto",
+      "country": "Portugal",
+      "file": "espn-648a1f93-adf6-41fb-8d4a-b7b972b92b55.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/437.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "bf79f45f-5978-4cd8-9411-ca07f2c52d71",
+      "name": "Boavista",
+      "country": "Portugal",
+      "file": "espn-bf79f45f-5978-4cd8-9411-ca07f2c52d71.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/2256.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "6156fa40-c8d6-461a-909d-5315159069c7",
+      "name": "Benfica",
+      "country": "Portugal",
+      "file": "espn-6156fa40-c8d6-461a-909d-5315159069c7.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/1929.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "bcfb4fcc-f450-4622-ad74-7e9a5ccd9586",
+      "name": "AVS",
+      "country": "Portugal",
+      "file": "espn-bcfb4fcc-f450-4622-ad74-7e9a5ccd9586.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/22064.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "64ba83db-bba3-47cb-9b89-169a608816a5",
+      "name": "C.D. Nacional",
+      "country": "Portugal",
+      "file": "espn-64ba83db-bba3-47cb-9b89-169a608816a5.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/3472.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "f01ec8fb-af10-4482-b20a-407bcf4bc5a6",
+      "name": "Santa Clara",
+      "country": "Portugal",
+      "file": "espn-f01ec8fb-af10-4482-b20a-407bcf4bc5a6.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/12215.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "e190b41c-d538-4c1f-9859-d5e21d673f4d",
+      "name": "Tondela",
+      "country": "Portugal",
+      "file": "espn-e190b41c-d538-4c1f-9859-d5e21d673f4d.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/12706.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "8e0d08fb-f213-4d19-b4b4-40821113aa0b",
+      "name": "Alverca",
+      "country": "Portugal",
+      "file": "espn-8e0d08fb-f213-4d19-b4b4-40821113aa0b.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21613.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "e8f7326e-f998-46bc-8495-8a2813fe5733",
+      "name": "Maritimo",
+      "country": "Portugal",
+      "file": "espn-e8f7326e-f998-46bc-8495-8a2813fe5733.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/552.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "b140dbd2-b65c-4e15-bc6c-f6386dae0917",
+      "name": "Académico de Viseu",
+      "country": "Portugal",
+      "file": "espn-b140dbd2-b65c-4e15-bc6c-f6386dae0917.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21607.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "08321fff-bcbe-4349-abd2-672e926854b7",
+      "name": "FC Volendam",
+      "country": "Netherlands",
+      "file": "espn-08321fff-bcbe-4349-abd2-672e926854b7.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/2727.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "cdf1ba51-d3ac-4c46-8fc0-e68fcde61928",
+      "name": "Vitesse",
+      "country": "Netherlands",
+      "file": "espn-cdf1ba51-d3ac-4c46-8fc0-e68fcde61928.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/154.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "d098b5d1-bda1-40e6-b5f5-7d680f358065",
+      "name": "PSV Eindhoven",
+      "country": "Netherlands",
+      "file": "espn-d098b5d1-bda1-40e6-b5f5-7d680f358065.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/148.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "bb1192f2-16cf-48f3-a911-0fc89313ece7",
+      "name": "FC Utrecht",
+      "country": "Netherlands",
+      "file": "espn-bb1192f2-16cf-48f3-a911-0fc89313ece7.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/153.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "2bf23381-e26c-4b15-a5aa-2c65540f01de",
+      "name": "Heerenveen",
+      "country": "Netherlands",
+      "file": "espn-2bf23381-e26c-4b15-a5aa-2c65540f01de.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/146.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "fd3f3212-f51b-4ed0-b609-4a63ee5ff153",
+      "name": "RKC Waalwijk",
+      "country": "Netherlands",
+      "file": "espn-fd3f3212-f51b-4ed0-b609-4a63ee5ff153.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/155.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "2e1ea33e-6f1a-43e5-bd72-4f39426208f6",
+      "name": "Ajax Amsterdam",
+      "country": "Netherlands",
+      "file": "espn-2e1ea33e-6f1a-43e5-bd72-4f39426208f6.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/139.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "07c9568a-fcdf-4c12-87a9-8cd12bafeee8",
+      "name": "Heracles Almelo",
+      "country": "Netherlands",
+      "file": "espn-07c9568a-fcdf-4c12-87a9-8cd12bafeee8.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/3708.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "99ef149f-2876-4d43-aed1-8c5eb026390a",
+      "name": "PEC Zwolle",
+      "country": "Netherlands",
+      "file": "espn-99ef149f-2876-4d43-aed1-8c5eb026390a.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/2565.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "6066e251-2019-4995-a022-045794916220",
+      "name": "Sparta Rotterdam",
+      "country": "Netherlands",
+      "file": "espn-6066e251-2019-4995-a022-045794916220.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/151.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "765efa4d-b2c2-4ba2-9bc8-e7ac342f2a5c",
+      "name": "NEC Nijmegen",
+      "country": "Netherlands",
+      "file": "espn-765efa4d-b2c2-4ba2-9bc8-e7ac342f2a5c.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/147.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "01ccea21-8233-4b3c-937f-68842ee78993",
+      "name": "Excelsior",
+      "country": "Netherlands",
+      "file": "espn-01ccea21-8233-4b3c-937f-68842ee78993.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/2566.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "926986c4-30e1-4cb8-a396-4f5504c57ea7",
+      "name": "AZ Alkmaar",
+      "country": "Netherlands",
+      "file": "espn-926986c4-30e1-4cb8-a396-4f5504c57ea7.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/140.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "5f1c34e1-c8de-4953-a5b1-ff6e466aaa3f",
+      "name": "Go Ahead Eagles",
+      "country": "Netherlands",
+      "file": "espn-5f1c34e1-c8de-4953-a5b1-ff6e466aaa3f.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/3706.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "71fa0731-4eed-4316-a54c-1b630e5ed180",
+      "name": "Feyenoord Rotterdam",
+      "country": "Netherlands",
+      "file": "espn-71fa0731-4eed-4316-a54c-1b630e5ed180.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/142.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "f3ac9bd0-161d-4f96-91a4-e8b8dd811825",
+      "name": "Fortuna Sittard",
+      "country": "Netherlands",
+      "file": "espn-f3ac9bd0-161d-4f96-91a4-e8b8dd811825.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/143.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "baffb749-aad8-4f74-8ad0-a610edb6ea06",
+      "name": "Almere City",
+      "country": "Netherlands",
+      "file": "espn-baffb749-aad8-4f74-8ad0-a610edb6ea06.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/5291.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "2de1eee9-772c-4120-815c-e406b2980571",
+      "name": "FC Twente",
+      "country": "Netherlands",
+      "file": "espn-2de1eee9-772c-4120-815c-e406b2980571.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/152.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "8bd1b379-c713-4643-9a58-5ef0aecc2051",
+      "name": "FC Groningen",
+      "country": "Netherlands",
+      "file": "espn-8bd1b379-c713-4643-9a58-5ef0aecc2051.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/145.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "2182a81c-4500-4988-bfaa-42e7fce033c6",
+      "name": "NAC Breda",
+      "country": "Netherlands",
+      "file": "espn-2182a81c-4500-4988-bfaa-42e7fce033c6.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/141.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "75e65d3a-61b9-4197-8ed3-dfd2bcdaa2f2",
+      "name": "Willem II",
+      "country": "Netherlands",
+      "file": "espn-75e65d3a-61b9-4197-8ed3-dfd2bcdaa2f2.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/156.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "36e6db64-a790-4fa5-b7ff-a7bc28ba0adb",
+      "name": "Telstar",
+      "country": "Netherlands",
+      "file": "espn-36e6db64-a790-4fa5-b7ff-a7bc28ba0adb.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/3735.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "7e63f207-485f-4055-9abc-bbaf0902d202",
+      "name": "SC Cambuur",
+      "country": "Netherlands",
+      "file": "espn-7e63f207-485f-4055-9abc-bbaf0902d202.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/3736.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "314b2ed3-8d2e-487f-a56d-943810309098",
+      "name": "ADO Den Haag",
+      "country": "Netherlands",
+      "file": "espn-314b2ed3-8d2e-487f-a56d-943810309098.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/2726.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "72ecc8ab-6320-4e69-849a-ab4e90b87973",
+      "name": "América Mineiro",
+      "country": "Brazil",
+      "file": "espn-72ecc8ab-6320-4e69-849a-ab4e90b87973.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/6154.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "4be27bf2-e5e3-492e-954b-35055be0fbb7",
+      "name": "Fluminense",
+      "country": "Brazil",
+      "file": "espn-4be27bf2-e5e3-492e-954b-35055be0fbb7.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/3445.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "20daabd6-b7be-4178-b849-9e577275fd8b",
+      "name": "Palmeiras",
+      "country": "Brazil",
+      "file": "espn-20daabd6-b7be-4178-b849-9e577275fd8b.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/2029.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "47475ede-549a-45b6-a470-9e1c611becc7",
+      "name": "Cuiabá",
+      "country": "Brazil",
+      "file": "espn-47475ede-549a-45b6-a470-9e1c611becc7.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/17313.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "c5bca220-a9fe-4797-b49f-7a6601cb7d8e",
+      "name": "Athletico-PR",
+      "country": "Brazil",
+      "file": "espn-c5bca220-a9fe-4797-b49f-7a6601cb7d8e.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/3458.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "268812fc-7f08-4ba3-aa29-cfaf51146505",
+      "name": "Goiás",
+      "country": "Brazil",
+      "file": "espn-268812fc-7f08-4ba3-aa29-cfaf51146505.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/3395.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "b57dc1a0-2012-4888-937d-7d1c8e350b22",
+      "name": "Botafogo",
+      "country": "Brazil",
+      "file": "espn-b57dc1a0-2012-4888-937d-7d1c8e350b22.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/6086.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "ecec59ae-eb2d-4147-b143-dbf2afe05589",
+      "name": "São Paulo",
+      "country": "Brazil",
+      "file": "espn-ecec59ae-eb2d-4147-b143-dbf2afe05589.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/2026.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "b9ef65c7-8c6c-423c-a182-f826fe221589",
+      "name": "Fortaleza",
+      "country": "Brazil",
+      "file": "espn-b9ef65c7-8c6c-423c-a182-f826fe221589.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/6272.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "a9e2dba4-8cb0-44e2-a883-cce487859107",
+      "name": "Internacional",
+      "country": "Brazil",
+      "file": "espn-a9e2dba4-8cb0-44e2-a883-cce487859107.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/1936.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "d990eb29-4266-4b12-aea0-bb9d9bc21c25",
+      "name": "Red Bull Bragantino",
+      "country": "Brazil",
+      "file": "espn-d990eb29-4266-4b12-aea0-bb9d9bc21c25.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/6079.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "b1bd7198-786b-4482-a63c-c24b8c2d0b3f",
+      "name": "Bahia",
+      "country": "Brazil",
+      "file": "espn-b1bd7198-786b-4482-a63c-c24b8c2d0b3f.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/9967.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "c2bbf117-9bed-427f-a303-afa8bdbe6aea",
+      "name": "Atlético-MG",
+      "country": "Brazil",
+      "file": "espn-c2bbf117-9bed-427f-a303-afa8bdbe6aea.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/7632.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "0e051030-3a66-4d49-beba-8aa415d571ee",
+      "name": "Vasco da Gama",
+      "country": "Brazil",
+      "file": "espn-0e051030-3a66-4d49-beba-8aa415d571ee.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/3454.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "845fc600-2252-48b9-aa98-ece3562191ba",
+      "name": "Corinthians",
+      "country": "Brazil",
+      "file": "espn-845fc600-2252-48b9-aa98-ece3562191ba.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/874.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "17a8f6fd-d104-4e49-95af-5b9b0bd87d61",
+      "name": "Cruzeiro",
+      "country": "Brazil",
+      "file": "espn-17a8f6fd-d104-4e49-95af-5b9b0bd87d61.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/2022.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "f0f23f01-90ed-42c2-b315-8002200f75cc",
+      "name": "Flamengo",
+      "country": "Brazil",
+      "file": "espn-f0f23f01-90ed-42c2-b315-8002200f75cc.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/819.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "f17ad9b5-80ba-40d0-bd55-20f63b3b0e99",
+      "name": "Coritiba",
+      "country": "Brazil",
+      "file": "espn-f17ad9b5-80ba-40d0-bd55-20f63b3b0e99.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/3456.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "8ece02cc-5eb3-482f-b1a5-54b98d982525",
+      "name": "Grêmio",
+      "country": "Brazil",
+      "file": "espn-8ece02cc-5eb3-482f-b1a5-54b98d982525.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/6273.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "3f8d7d84-1649-42ba-a2e1-05dcfa19151a",
+      "name": "Santos",
+      "country": "Brazil",
+      "file": "espn-3f8d7d84-1649-42ba-a2e1-05dcfa19151a.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/2674.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "406e7afb-d340-49d8-ae29-5b7f5a9d91a2",
+      "name": "Criciúma",
+      "country": "Brazil",
+      "file": "espn-406e7afb-d340-49d8-ae29-5b7f5a9d91a2.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/9971.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "660b6836-e089-4799-a78a-fd3caa67f970",
+      "name": "Juventude",
+      "country": "Brazil",
+      "file": "espn-660b6836-e089-4799-a78a-fd3caa67f970.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/6270.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "515e8bc7-e886-4aa2-8099-67d5ca92a77b",
+      "name": "Atlético Goianiense",
+      "country": "Brazil",
+      "file": "espn-515e8bc7-e886-4aa2-8099-67d5ca92a77b.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/10357.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "73eab0ef-edd8-41fb-ae4b-07c9a043a31b",
+      "name": "Vitória",
+      "country": "Brazil",
+      "file": "espn-73eab0ef-edd8-41fb-ae4b-07c9a043a31b.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/3457.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "9e977721-7356-4f09-b6c6-081b5c9d778a",
+      "name": "Mirassol",
+      "country": "Brazil",
+      "file": "espn-9e977721-7356-4f09-b6c6-081b5c9d778a.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/9169.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "c320ce67-5ea3-4ca7-bde5-a828aaf0f9df",
+      "name": "Sport",
+      "country": "Brazil",
+      "file": "espn-c320ce67-5ea3-4ca7-bde5-a828aaf0f9df.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/7635.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "00f03672-1952-454b-aefa-47df1b962c8f",
+      "name": "Ceará",
+      "country": "Brazil",
+      "file": "espn-00f03672-1952-454b-aefa-47df1b962c8f.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/9969.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "dcbb4130-441b-4d0d-95d3-1515d312b1f2",
+      "name": "Remo",
+      "country": "Brazil",
+      "file": "espn-dcbb4130-441b-4d0d-95d3-1515d312b1f2.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/4936.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "288b03ee-a971-4c38-b4be-9416175e4ea0",
+      "name": "Chapecoense",
+      "country": "Brazil",
+      "file": "espn-288b03ee-a971-4c38-b4be-9416175e4ea0.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/9318.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "97310996-1622-4d8c-a692-967a68d5850d",
+      "name": "Al Taawoun",
+      "country": "Saudi Arabia",
+      "file": "espn-97310996-1622-4d8c-a692-967a68d5850d.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/18459.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "034d3541-732a-4636-b84b-2df3c0aa1b70",
+      "name": "Al Fayha",
+      "country": "Saudi Arabia",
+      "file": "espn-034d3541-732a-4636-b84b-2df3c0aa1b70.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21827.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "c75ed6ab-c161-4ad1-b4d6-76ac141e48f5",
+      "name": "Al Nassr",
+      "country": "Saudi Arabia",
+      "file": "espn-c75ed6ab-c161-4ad1-b4d6-76ac141e48f5.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/817.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "ababcd00-3dd5-4e41-8d8f-337bb1cd5bf4",
+      "name": "Al Raed",
+      "country": "Saudi Arabia",
+      "file": "espn-ababcd00-3dd5-4e41-8d8f-337bb1cd5bf4.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21834.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "f5111f33-16ad-4ae0-9307-b48279b75203",
+      "name": "Al Wehda",
+      "country": "Saudi Arabia",
+      "file": "espn-f5111f33-16ad-4ae0-9307-b48279b75203.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21835.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "83e1579d-da68-42a9-9893-4b7eb3a13943",
+      "name": "Al Riyadh",
+      "country": "Saudi Arabia",
+      "file": "espn-83e1579d-da68-42a9-9893-4b7eb3a13943.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21965.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "24e31289-e977-48af-a084-a203800e9fa4",
+      "name": "Damac",
+      "country": "Saudi Arabia",
+      "file": "espn-24e31289-e977-48af-a084-a203800e9fa4.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21828.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "f70380a6-9668-48b9-959b-f852afeb9eab",
+      "name": "Al Khaleej",
+      "country": "Saudi Arabia",
+      "file": "espn-f70380a6-9668-48b9-959b-f852afeb9eab.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21829.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "e3e5e274-bbee-48c5-bcdb-ed2ebbc3a9bf",
+      "name": "Al Ahli",
+      "country": "Saudi Arabia",
+      "file": "espn-e3e5e274-bbee-48c5-bcdb-ed2ebbc3a9bf.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/8346.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "dd6ec4a5-003b-493c-8bf6-80555ee5643e",
+      "name": "Al Orobah",
+      "country": "Saudi Arabia",
+      "file": "espn-dd6ec4a5-003b-493c-8bf6-80555ee5643e.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/22029.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "0f70732f-82c6-4cad-8f29-8ce5ace73409",
+      "name": "Al Qadsiah",
+      "country": "Saudi Arabia",
+      "file": "espn-0f70732f-82c6-4cad-8f29-8ce5ace73409.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/22022.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "08a838a0-828c-4b21-b875-4653271927ea",
+      "name": "Al Fateh",
+      "country": "Saudi Arabia",
+      "file": "espn-08a838a0-828c-4b21-b875-4653271927ea.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/13033.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "4dbca664-112c-4186-a890-d4d466b45ca8",
+      "name": "Al Kholood",
+      "country": "Saudi Arabia",
+      "file": "espn-4dbca664-112c-4186-a890-d4d466b45ca8.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/22028.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "dffe61b6-f8b1-4d43-834c-9e1f99fddba5",
+      "name": "Al Ittihad",
+      "country": "Saudi Arabia",
+      "file": "espn-dffe61b6-f8b1-4d43-834c-9e1f99fddba5.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/2276.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "23be2bd3-8812-43e1-bfc4-84509267a76e",
+      "name": "Al Okhdood",
+      "country": "Saudi Arabia",
+      "file": "espn-23be2bd3-8812-43e1-bfc4-84509267a76e.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21966.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "040cd040-2b3e-4ccf-bd73-a4d4a6534047",
+      "name": "Al Hilal",
+      "country": "Saudi Arabia",
+      "file": "espn-040cd040-2b3e-4ccf-bd73-a4d4a6534047.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/929.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "a73df4a9-b56f-4886-b04e-b8196b6e4374",
+      "name": "Al Shabab",
+      "country": "Saudi Arabia",
+      "file": "espn-a73df4a9-b56f-4886-b04e-b8196b6e4374.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/793.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "f1765f46-56d0-416b-bca3-329211b6a12a",
+      "name": "Al Ettifaq",
+      "country": "Saudi Arabia",
+      "file": "espn-f1765f46-56d0-416b-bca3-329211b6a12a.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/8363.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "5cdca54b-6b62-4660-866e-6b00cd98bfec",
+      "name": "Nashville SC",
+      "country": "USA",
+      "file": "espn-5cdca54b-6b62-4660-866e-6b00cd98bfec.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/18986.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "43078fd8-9bb7-494c-83f1-23be6978ef8c",
+      "name": "New York City FC",
+      "country": "USA",
+      "file": "espn-43078fd8-9bb7-494c-83f1-23be6978ef8c.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/17606.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "fdea8a52-ef98-40b6-9160-e0a9b71c458a",
+      "name": "Atlanta United FC",
+      "country": "USA",
+      "file": "espn-fdea8a52-ef98-40b6-9160-e0a9b71c458a.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/18418.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "7f648770-216d-4559-a133-8f87af478d59",
+      "name": "San Jose Earthquakes",
+      "country": "USA",
+      "file": "espn-7f648770-216d-4559-a133-8f87af478d59.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/191.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "6d67a8ef-2421-4c05-bc02-c9d7161b272c",
+      "name": "Charlotte FC",
+      "country": "USA",
+      "file": "espn-6d67a8ef-2421-4c05-bc02-c9d7161b272c.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21300.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "e77cb7d0-22a7-4289-9317-f26349d02292",
+      "name": "New England Revolution",
+      "country": "USA",
+      "file": "espn-e77cb7d0-22a7-4289-9317-f26349d02292.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/189.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "5f6dfe73-6e8e-403d-9d95-f48dc508b3a9",
+      "name": "D.C. United",
+      "country": "USA",
+      "file": "espn-5f6dfe73-6e8e-403d-9d95-f48dc508b3a9.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/193.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "f676c851-2563-4c7d-ab78-8e5ddab94a2f",
+      "name": "Toronto FC",
+      "country": "Canada",
+      "file": "espn-f676c851-2563-4c7d-ab78-8e5ddab94a2f.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/7318.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "36f472b4-92c9-479d-af70-abae000adecf",
+      "name": "FC Cincinnati",
+      "country": "USA",
+      "file": "espn-36f472b4-92c9-479d-af70-abae000adecf.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/18267.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "f1ce7165-52f1-44cc-aff8-b9dd6075dd06",
+      "name": "Houston Dynamo FC",
+      "country": "USA",
+      "file": "espn-f1ce7165-52f1-44cc-aff8-b9dd6075dd06.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/6077.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "3e4fe625-fea3-4ebe-a23f-e59704ec06c2",
+      "name": "Inter Miami CF",
+      "country": "USA",
+      "file": "espn-3e4fe625-fea3-4ebe-a23f-e59704ec06c2.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/20232.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "3186b6a4-8335-497e-afec-19e05a3b5689",
+      "name": "CF Montréal",
+      "country": "Canada",
+      "file": "espn-3186b6a4-8335-497e-afec-19e05a3b5689.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/9720.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "be8693ee-a261-4633-978d-ede70f71d981",
+      "name": "Orlando City SC",
+      "country": "USA",
+      "file": "espn-be8693ee-a261-4633-978d-ede70f71d981.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/12011.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "469ab0a4-1e30-40e0-bd48-c04f42dd2b6e",
+      "name": "Red Bull New York",
+      "country": "USA",
+      "file": "espn-469ab0a4-1e30-40e0-bd48-c04f42dd2b6e.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/190.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "7cfc1312-ba36-4403-8231-e19ca450ad5d",
+      "name": "Philadelphia Union",
+      "country": "USA",
+      "file": "espn-7cfc1312-ba36-4403-8231-e19ca450ad5d.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/10739.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "96352cbc-54a5-401b-ac55-808bc7f1de41",
+      "name": "Columbus Crew",
+      "country": "USA",
+      "file": "espn-96352cbc-54a5-401b-ac55-808bc7f1de41.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/183.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "5bdea73c-58e8-4fce-ab51-ede58d4a46d1",
+      "name": "Austin FC",
+      "country": "USA",
+      "file": "espn-5bdea73c-58e8-4fce-ab51-ede58d4a46d1.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/20906.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "54bca620-22ef-43dd-854d-45a9fdd31996",
+      "name": "St. Louis CITY SC",
+      "country": "USA",
+      "file": "espn-54bca620-22ef-43dd-854d-45a9fdd31996.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21812.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "fdc504ae-5fb4-40d8-9bc2-245ceb9c917c",
+      "name": "FC Dallas",
+      "country": "USA",
+      "file": "espn-fdc504ae-5fb4-40d8-9bc2-245ceb9c917c.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/185.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "6e4c7806-5ee5-4b47-b6c2-b30a185857af",
+      "name": "Minnesota United FC",
+      "country": "USA",
+      "file": "espn-6e4c7806-5ee5-4b47-b6c2-b30a185857af.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/17362.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "fbcf0180-4bea-480a-b84c-6acb683b8d8c",
+      "name": "Vancouver Whitecaps",
+      "country": "Canada",
+      "file": "espn-fbcf0180-4bea-480a-b84c-6acb683b8d8c.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/9727.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "8d03d120-5852-43c1-81ec-fd7852b946ee",
+      "name": "Real Salt Lake",
+      "country": "USA",
+      "file": "espn-8d03d120-5852-43c1-81ec-fd7852b946ee.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/4771.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "b01ab64c-9e04-4eb8-8138-1b5905e61079",
+      "name": "Seattle Sounders FC",
+      "country": "USA",
+      "file": "espn-b01ab64c-9e04-4eb8-8138-1b5905e61079.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/9726.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "fc6ddd55-7876-4d1d-a807-c06c6f3caf12",
+      "name": "Colorado Rapids",
+      "country": "USA",
+      "file": "espn-fc6ddd55-7876-4d1d-a807-c06c6f3caf12.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/184.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "75e9d621-0187-4556-9bb1-dd6b947ea03b",
+      "name": "Portland Timbers",
+      "country": "USA",
+      "file": "espn-75e9d621-0187-4556-9bb1-dd6b947ea03b.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/9723.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "4981009c-6771-4354-bf4a-8f75ad04342e",
+      "name": "Sporting Kansas City",
+      "country": "USA",
+      "file": "espn-4981009c-6771-4354-bf4a-8f75ad04342e.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/186.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "7eb0b94e-bc13-4e88-a587-84e5e59c29e7",
+      "name": "LAFC",
+      "country": "USA",
+      "file": "espn-7eb0b94e-bc13-4e88-a587-84e5e59c29e7.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/18966.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "a0d56417-fa62-489c-9740-85cfea8cdfbc",
+      "name": "Chicago Fire FC",
+      "country": "USA",
+      "file": "espn-a0d56417-fa62-489c-9740-85cfea8cdfbc.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/182.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "0327c8bd-9c54-4db6-b00c-c99d03294ec8",
+      "name": "LA Galaxy",
+      "country": "USA",
+      "file": "espn-0327c8bd-9c54-4db6-b00c-c99d03294ec8.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/187.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "210627a7-71b9-43f1-a365-08b206f47644",
+      "name": "San Diego FC",
+      "country": "USA",
+      "file": "espn-210627a7-71b9-43f1-a365-08b206f47644.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/22529.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "98f3abd0-b75d-42a3-a881-18665b4e43be",
+      "name": "Al Hazem",
+      "country": "Saudi Arabia",
+      "file": "espn-98f3abd0-b75d-42a3-a881-18665b4e43be.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21964.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "96a64b01-ddaa-4b7f-a36a-f139f9ab9288",
+      "name": "Al Tai",
+      "country": "Saudi Arabia",
+      "file": "espn-96a64b01-ddaa-4b7f-a36a-f139f9ab9288.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21831.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "f6196ac4-77f8-4a60-a2e9-658802734ca8",
+      "name": "Abha",
+      "country": "Saudi Arabia",
+      "file": "espn-f6196ac4-77f8-4a60-a2e9-658802734ca8.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/21833.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "4749ac7c-3341-461b-b813-ce0994a7ee38",
+      "name": "Neom SC",
+      "country": "Saudi Arabia",
+      "file": "espn-4749ac7c-3341-461b-b813-ce0994a7ee38.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/130899.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "18137ed9-f7de-4257-8e87-71219b954fb9",
+      "name": "Al Najma",
+      "country": "Saudi Arabia",
+      "file": "espn-18137ed9-f7de-4257-8e87-71219b954fb9.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/22023.png",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "teamId": "5ced8eec-ca70-494c-8b5b-6a975ab50948",
+      "name": "Al Diriyah",
+      "country": "Saudi Arabia",
+      "file": "espn-5ced8eec-ca70-494c-8b5b-6a975ab50948.webp",
+      "url": "https://a.espncdn.com/i/teamlogos/soccer/500/131746.png",
+      "retrieved": "2026-10-03"
+    }
+  ]
+}

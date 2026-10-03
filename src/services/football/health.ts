@@ -1,4 +1,5 @@
 import { db } from '@/database/client';
+import { expandedScopes } from './providers/espn';
 import { openScopes } from './openfootball-sync';
 import { secondaryBudget } from './quota';
 import { workerHealth } from './worker-health';
@@ -16,7 +17,14 @@ export async function footballHealth(now = Date.now()) {
     }),
     db.cacheEntry.findUnique({ where: { key: 'football:worker' }, select: { payload: true } }),
     db.dataSource.findMany({
-      where: { id: { in: openScopes().map((s) => `openfootball:${s.league}:${s.season}`) } },
+      where: {
+        id: {
+          in: [
+            ...openScopes().map((s) => `openfootball:${s.league}:${s.season}`),
+            ...expandedScopes().map((s) => `espn:${s.league}:${s.season}`),
+          ],
+        },
+      },
       select: { id: true, lastSyncedAt: true },
     }),
     db.syncRun.findMany({
@@ -35,18 +43,26 @@ export async function footballHealth(now = Date.now()) {
   if (hasLateOpenResults(snapshot?.payload as unknown as Dataset | undefined, now))
     warnings.push('OPENFOOTBALL_RESULTS_LATE');
   if (
-    sources.length !== openScopes().length ||
-    sources.some(
-      (s) =>
-        !s.lastSyncedAt ||
-        now < s.lastSyncedAt.getTime() ||
-        now - s.lastSyncedAt.getTime() > maxSourceAge,
-    )
+    sources.filter((s) => s.id.startsWith('openfootball:')).length !== openScopes().length ||
+    sources
+      .filter((s) => s.id.startsWith('openfootball:'))
+      .some(
+        (s) =>
+          !s.lastSyncedAt ||
+          now < s.lastSyncedAt.getTime() ||
+          now - s.lastSyncedAt.getTime() > maxSourceAge,
+      )
   )
     issues.push('OPENFOOTBALL_STALE');
+  const expanded = sources.filter((s) => s.id.startsWith('espn:'));
+  if (
+    expanded.length !== expandedScopes().length ||
+    expanded.some((s) => !s.lastSyncedAt || now - s.lastSyncedAt.getTime() > maxSourceAge)
+  )
+    issues.push('ESPN_STALE');
   if (!process.env.VERCEL && worker.state !== 'active') issues.push('WORKER_INACTIVE');
   if (!process.env.VERCEL && worker.status === 'DEGRADED') warnings.push('WORKER_DEGRADED');
-  for (const provider of ['openfootball', 'api-football']) {
+  for (const provider of ['openfootball', 'api-football', 'espn', 'espn-players']) {
     const run = latest.find((r) => r.provider === provider);
     if (run && ['partial', 'failed'].includes(run.status)) warnings.push(`${provider}:SYNC_FAILED`);
   }

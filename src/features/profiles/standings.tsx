@@ -1,4 +1,5 @@
 'use client';
+import { competitionSeason } from '@/lib/competition-season';
 import { useState } from 'react';
 import { SourceBanner } from '@/components/source-banner';
 import { Empty } from '@/components/ui';
@@ -61,7 +62,7 @@ export function Standings({ data, seasons, tables }: ReturnType<typeof standings
           <select aria-label="Saison" value={season} onChange={(e) => setSeason(e.target.value)}>
             {(seasons[competition] ?? []).map((y) => (
               <option key={y} value={y}>
-                {y}/{y + 1}
+                {competitionSeason(selected, y)}
               </option>
             ))}
           </select>

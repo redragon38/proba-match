@@ -56,7 +56,7 @@ test('real match tabs, pagination, upcoming cards and public cleanup', async ({
   await page.goto('/joueurs');
   if (await page.locator('.catalog-item').count()) {
     await expect(page.locator('main a[href^="/joueur/"]').first()).toBeVisible();
-    await expect(page.getByText('Catalogue partiel fourni par')).toBeVisible();
+    await expect(page.getByText(/Catalogue (partiel fourni par|ESPN)/).first()).toBeVisible();
   } else {
     await expect(
       page.getByText('Les données des joueurs ne sont pas disponibles pour le moment.', {

@@ -17,6 +17,10 @@ vi.mock('next/headers', () => ({
   }),
 }));
 vi.mock('@/services/admin-throttle', () => ({ allowAdminAttempt: state.allow }));
+vi.mock('@/services/football/espn-sync', () => ({
+  syncExpandedFootball: state.open,
+  syncExpandedPlayers: state.open,
+}));
 vi.mock('@/services/football/sync', () => ({ syncFootball: state.sync }));
 vi.mock('@/services/football/openfootball-sync', () => ({ syncOpenFootball: state.open }));
 import { POST as login, DELETE as logout } from '@/app/api/admin/session/route';

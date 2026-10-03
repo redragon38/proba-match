@@ -7,5 +7,6 @@ export function teamLogo(team: Pick<Team, 'name' | 'country' | 'logo'>): string 
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9]/g, '');
-  return team.logo || (logos as Record<string, string>)[`${team.country}:${name}`];
+  const local = (logos as Record<string, string>)[`${team.country}:${name}`];
+  return team.logo?.startsWith('https://a.espncdn.com/') ? local || team.logo : team.logo || local;
 }
