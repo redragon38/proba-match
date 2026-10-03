@@ -3,8 +3,7 @@ import { expandedScopes } from './providers/espn';
 import { openScopes } from './openfootball-sync';
 import { secondaryBudget } from './quota';
 import { workerHealth } from './worker-health';
-import { hasLateOpenResults } from './freshness';
-import type { Dataset } from '@/types/football';
+import { healthSnapshot } from './health-snapshot';
 import { cache, datasetCache } from '@/services/cache';
 import { telemetrySnapshot, timed } from '@/services/telemetry';
 
@@ -14,10 +13,7 @@ export async function footballHealth(now = Date.now()) {
     return { status: 'fail' as const, issues: ['DATABASE_NOT_CONFIGURED'] };
   const [snapshot, heartbeat, sources, latest, quota] = await timed('db:health', () =>
     Promise.all([
-      db.cacheEntry.findUnique({
-        where: { key: 'football:dataset' },
-        select: { updatedAt: true, payload: true },
-      }),
+      healthSnapshot(now),
       db.cacheEntry.findUnique({ where: { key: 'football:worker' }, select: { payload: true } }),
       db.dataSource.findMany({
         where: {
@@ -62,7 +58,7 @@ export async function footballHealth(now = Date.now()) {
   // Hobby cron has a daily cadence and an hour of scheduling tolerance.
   const maxSourceAge = process.env.VERCEL ? 26 * 3600000 : 7 * 3600000;
   if (!snapshot) issues.push('DATASET_MISSING');
-  if (hasLateOpenResults(snapshot?.payload as unknown as Dataset | undefined, now))
+  if (snapshot?.lateResults)
     warnings.push('OPENFOOTBALL_RESULTS_LATE');
   if (
     sources.filter((s) => s.id.startsWith('openfootball:')).length !== openScopes().length ||

@@ -39,11 +39,11 @@
   },
   "data": {
     "status": "PASS",
-    "generatedAt": "2026-10-03T14:06:50.225Z",
+    "generatedAt": "2026-10-03T19:31:03.520Z",
     "counts": {
       "competitions": 10,
       "teams": 262,
-      "players": 3717,
+      "players": 3994,
       "matches": 14317
     },
     "failures": 0,
@@ -55,12 +55,62 @@
     ],
     "photoSample": [
       {
+        "player": "6417dfe2-3a8f-4e4a-99a2-bd7ad9f9e0f7",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "b1b18d24-b38e-40a2-81e4-c360e23afb37",
+        "status": 200,
+        "image": true
+      },
+      {
         "player": "24e27602-f5dc-4825-9a98-b7636090304f",
         "status": 200,
         "image": true
       },
       {
+        "player": "b9182c08-43ad-42af-8935-2c46dbd77892",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "4aabc070-347d-427f-8789-cc6eb3be4b79",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "86159072-3b93-4948-ae5a-eb66720e5703",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "76540710-965f-44ad-a245-34c4fb896cbb",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "8d83ea23-72cc-4006-8558-f6111f2afd7e",
+        "status": 200,
+        "image": true
+      },
+      {
         "player": "be965055-89e1-46c8-9bc7-b9a19bbc0806",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "9fd1d6b0-9eb4-4e2a-a8d3-ddb86d46b30f",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "e6420c69-601b-480c-aaf6-4f0e37da855e",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "1c5677f6-dca0-4844-b195-a858b1a48628",
         "status": 200,
         "image": true
       },
@@ -80,77 +130,27 @@
         "image": true
       },
       {
+        "player": "28096e0d-86be-492e-8afc-79ce7230678c",
+        "status": 200,
+        "image": true
+      },
+      {
+        "player": "bc4ffcda-ecbf-4643-9043-506a53ff82c5",
+        "status": 200,
+        "image": true
+      },
+      {
         "player": "e7c6ae79-d13c-47fb-be48-5f3f6e8ac251",
         "status": 200,
         "image": true
       },
       {
-        "player": "1c8a5969-5ffd-4ba3-883e-4ff0c41cf041",
+        "player": "5d2f4470-c618-40a9-a26b-d31e32f7d680",
         "status": 200,
         "image": true
       },
       {
-        "player": "25f5334c-71c5-4e63-a165-b1d320d01860",
-        "status": 200,
-        "image": true
-      },
-      {
-        "player": "1066a264-2163-448b-a3e0-51084daeff3c",
-        "status": 200,
-        "image": true
-      },
-      {
-        "player": "12243467-f29c-4291-969c-122a61760523",
-        "status": 200,
-        "image": true
-      },
-      {
-        "player": "b0fabbf4-94bb-44eb-be52-a043dfbb6649",
-        "status": 200,
-        "image": true
-      },
-      {
-        "player": "5a2529f7-a6b3-4f28-b67e-15050401200c",
-        "status": 200,
-        "image": true
-      },
-      {
-        "player": "a0295b8a-a3ba-422b-bd65-451558066578",
-        "status": 200,
-        "image": true
-      },
-      {
-        "player": "ed7750ea-62ea-4c69-aa8e-d0637e3946e7",
-        "status": 200,
-        "image": true
-      },
-      {
-        "player": "906e3229-00bf-45cb-9e67-57d9cab48b7d",
-        "status": 200,
-        "image": true
-      },
-      {
-        "player": "77a29fe0-ba3a-48f0-a1cf-d6479eaa0f58",
-        "status": 200,
-        "image": true
-      },
-      {
-        "player": "b673b993-baf5-488f-907e-1b542107945d",
-        "status": 200,
-        "image": true
-      },
-      {
-        "player": "4b6a66ee-d69a-473d-a4e1-f5a81885147d",
-        "status": 200,
-        "image": true
-      },
-      {
-        "player": "0218e1c8-996b-4592-a352-a3ce3a21c73f",
-        "status": 200,
-        "image": true
-      },
-      {
-        "player": "d9f51049-10c1-4d2c-950e-134de170ce59",
+        "player": "b53dfa88-b7c8-4145-abea-eb363b6c6c98",
         "status": 200,
         "image": true
       }
@@ -468,17 +468,111 @@
   },
   "securityHttp": "14 checks PASS",
   "ci": {
-    "lastRun": 37147077084,
-    "quality": "FAIL: auditor visited the same URL twice; fixed and fixture audit passes",
+    "run": 37148064457,
+    "commit": "95a50d2",
+    "quality": "PASS",
     "databaseUi": "PASS",
-    "nextRun": "Pending new push"
+    "healthOptimization": "Pending new push"
   },
   "publicDeployment": {
-    "commit": "b737a22",
+    "commit": "95a50d2",
     "vercel": "success",
     "functionalBrowserViews": 30,
     "transport": "Node TLS verification retained; Chromium requests relayed through Node because Chromium lacks proxy CA",
-    "fullSeo": "Running: 8537 page visits completed, additional links pending"
+    "fullSeo": "Running: 8537 page visits completed, additional links pending",
+    "functionalBrowserCheckedAt": "2026-10-03T19:32:00.957Z",
+    "securityHttp": {
+      "at": "2026-10-03T19:31:36.312Z",
+      "base": "https://proba-match.vercel.app",
+      "baseline": false,
+      "checks": [
+        {
+          "path": "/admin",
+          "method": "GET",
+          "status": 200,
+          "errors": []
+        },
+        {
+          "path": "/api/cron/sync",
+          "method": "GET",
+          "status": 401,
+          "errors": []
+        },
+        {
+          "path": "/api/cron/live",
+          "method": "GET",
+          "status": 401,
+          "errors": []
+        },
+        {
+          "path": "/api/cron/fixtures",
+          "method": "GET",
+          "status": 401,
+          "errors": []
+        },
+        {
+          "path": "/api/cron/openfootball",
+          "method": "GET",
+          "status": 401,
+          "errors": []
+        },
+        {
+          "path": "/api/cron/standings",
+          "method": "GET",
+          "status": 401,
+          "errors": []
+        },
+        {
+          "path": "/api/health",
+          "method": "GET",
+          "status": 401,
+          "errors": []
+        },
+        {
+          "path": "/api/admin/sync",
+          "method": "POST",
+          "status": 401,
+          "errors": []
+        },
+        {
+          "path": "/api/admin/mapping",
+          "method": "POST",
+          "status": 401,
+          "errors": []
+        },
+        {
+          "path": "/api/admin/session",
+          "method": "POST",
+          "status": 403,
+          "errors": []
+        },
+        {
+          "path": "/api/admin/session",
+          "method": "DELETE",
+          "status": 403,
+          "errors": []
+        },
+        {
+          "path": "/api/matches?date=2026-02-30",
+          "method": "GET",
+          "status": 400,
+          "errors": []
+        },
+        {
+          "path": "/api/search?q=%3Cscript%3Ealert(1)%3C%2Fscript%3E",
+          "method": "GET",
+          "status": 200,
+          "errors": []
+        },
+        {
+          "path": "/api/search?q=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "method": "GET",
+          "status": 200,
+          "errors": []
+        }
+      ],
+      "failures": 0
+    }
   },
   "typography": {
     "secondaryCssDeclarationsRaised": 179,
@@ -799,5 +893,228 @@
     "additionalLinks": 2290,
     "failures": 0,
     "warnings": 0
+  },
+  "latestLoadAfterRosterRefresh": {
+    "generatedAt": "2026-10-03T19:31:12.004Z",
+    "base": "http://127.0.0.1:3000",
+    "rows": [
+      {
+        "path": "/",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 301,
+        "p95Ms": 511,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 187992
+      },
+      {
+        "path": "/matchs",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 255,
+        "p95Ms": 304,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 270211
+      },
+      {
+        "path": "/api/matches",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 39,
+        "p95Ms": 61,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 14265
+      },
+      {
+        "path": "/api/search?q=ronlado",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 25,
+        "p95Ms": 39,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 801
+      },
+      {
+        "path": "/api/search?scope=catalogue&category=Joueur&q=messi",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 17,
+        "p95Ms": 20,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 325
+      },
+      {
+        "path": "/match/11a9986d-1589-4baa-a16c-7a9956ce3c85",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 168,
+        "p95Ms": 281,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 484614
+      },
+      {
+        "path": "/api/matches/11a9986d-1589-4baa-a16c-7a9956ce3c85",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 13,
+        "p95Ms": 19,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 577
+      },
+      {
+        "path": "/api/competitions/83cd5dd0-3aa7-45f7-8798-855983b4603a",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 15,
+        "p95Ms": 21,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 184
+      },
+      {
+        "path": "/joueur/aaron-bouwman-5a92aab0",
+        "samples": 20,
+        "concurrency": 4,
+        "p50Ms": 91,
+        "p95Ms": 211,
+        "errors": 0,
+        "statuses": [
+          200
+        ],
+        "maxBytes": 50882
+      }
+    ],
+    "health": {
+      "httpStatus": 200,
+      "status": "warning",
+      "cache": {
+        "scope": "current_process",
+        "requests": 0,
+        "hits": 0,
+        "stale": 0,
+        "coalesced": 0,
+        "loads": 0,
+        "failures": 0,
+        "loadMs": 0,
+        "entries": 0,
+        "hitRate": null
+      },
+      "datasetCache": {
+        "scope": "current_process",
+        "requests": 107,
+        "hits": 106,
+        "stale": 0,
+        "coalesced": 0,
+        "loads": 1,
+        "failures": 0,
+        "loadMs": 875.678559,
+        "entries": 1,
+        "hitRate": 0.9906542056074766
+      },
+      "telemetry": {
+        "scope": "current_process_last_15_minutes_max_200_samples",
+        "operations": {
+          "db:dataset_revision": {
+            "count": 107,
+            "errors": 0,
+            "p50Ms": 5.62,
+            "p95Ms": 21.65
+          },
+          "db:dataset_load": {
+            "count": 1,
+            "errors": 0,
+            "p50Ms": 875.1,
+            "p95Ms": 875.1
+          },
+          "/api/matches": {
+            "count": 22,
+            "errors": 0,
+            "p50Ms": 20.13,
+            "p95Ms": 37.21
+          },
+          "/api/search": {
+            "count": 43,
+            "errors": 0,
+            "p50Ms": 9.56,
+            "p95Ms": 19
+          },
+          "db:health": {
+            "count": 1,
+            "errors": 0,
+            "p50Ms": 1154.88,
+            "p95Ms": 1154.88
+          }
+        }
+      }
+    },
+    "scope": "local cloud instance; not public production capacity or field Core Web Vitals",
+    "failures": 0
+  },
+  "healthReadOptimization": {
+    "sqlIntegrationCases": 10,
+    "pairedReads": {
+      "scope": "10 paired local PostgreSQL reads; not production SLO or public field measurement",
+      "fullPayload": {
+        "samples": 10,
+        "p50Ms": 655,
+        "p95Ms": 852
+      },
+      "readinessProjection": {
+        "samples": 10,
+        "p50Ms": 86,
+        "p95Ms": 105
+      }
+    },
+    "httpCold": {
+      "healthHttp": 200,
+      "totalMs": 756,
+      "status": "warning",
+      "issues": [],
+      "warnings": [
+        "OPENFOOTBALL_RESULTS_LATE",
+        "SECONDARY_NOT_CONFIGURED"
+      ],
+      "telemetry": {
+        "scope": "current_process_last_15_minutes_max_200_samples",
+        "operations": {
+          "db:health": {
+            "count": 1,
+            "errors": 0,
+            "p50Ms": 299.34,
+            "p95Ms": 299.34
+          }
+        }
+      }
+    },
+    "httpWarm": {
+      "scope": "10 authenticated local health requests after initial cold load",
+      "samples": 10,
+      "p50Ms": 88,
+      "p95Ms": 148,
+      "errors": 0
+    }
   }
 }

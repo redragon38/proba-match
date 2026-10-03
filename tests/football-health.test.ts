@@ -4,9 +4,11 @@ const mocks = vi.hoisted(() => ({
   sources: vi.fn(),
   runs: vi.fn(),
   quota: vi.fn(),
+  readiness: vi.fn(),
 }));
 vi.mock('@/database/client', () => ({
   db: {
+    $queryRaw: mocks.readiness,
     cacheEntry: { findUnique: mocks.snapshot },
     dataSource: { findMany: mocks.sources },
     syncRun: { findMany: mocks.runs },
@@ -45,6 +47,7 @@ beforeEach(() => {
   ]);
   mocks.runs.mockResolvedValue([]);
   mocks.quota.mockResolvedValue(null);
+  mocks.readiness.mockResolvedValue([{ updatedAt: new Date(now), lateResults: false }]);
 });
 afterEach(() => vi.unstubAllEnvs());
 describe('Operational readiness', () => {
@@ -73,6 +76,7 @@ describe('Operational readiness', () => {
     expect(response.status).toBe(401);
     expect(response.headers.get('cache-control')).toBe('no-store');
     expect(mocks.snapshot).not.toHaveBeenCalled();
+    expect(mocks.readiness).not.toHaveBeenCalled();
   });
   it('signals unavailable live coverage without claiming the source is broken', async () => {
     expect(await footballHealth(now)).toMatchObject({
@@ -95,6 +99,7 @@ describe('Operational readiness', () => {
     });
   });
   it('warns when a freshly fetched source still lacks past results', async () => {
+    mocks.readiness.mockResolvedValue([{ updatedAt: new Date(now), lateResults: true }]);
     mocks.snapshot.mockImplementation(async ({ where }: { where: { key: string } }) =>
       where.key === 'football:dataset'
         ? {
@@ -124,7 +129,7 @@ describe('Operational readiness', () => {
       issues: [],
       warnings: ['OPENFOOTBALL_RESULTS_LATE', 'SECONDARY_NOT_CONFIGURED'],
     });
-    expect(mocks.snapshot).toHaveBeenCalledTimes(2);
+    expect(mocks.snapshot).toHaveBeenCalledTimes(1);
   });
   it('allows the documented daily Vercel cadence without requiring a local worker', async () => {
     vi.stubEnv('VERCEL', '1');

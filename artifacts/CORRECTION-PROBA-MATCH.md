@@ -24,7 +24,7 @@ N/D signifie « non disponible dans le barème précédent », et non zéro. La 
 | Sécurité | N/D | N/D | N/D | Moyenne : 14 contrôles HTTP, authentification, CSP et limiters PostgreSQL concurrents ; scripts inline Next.js encore autorisés. |
 | Matchs | N/D | N/D | N/D | Élevée pour les contrats : 14 317 matchs validés, relations/statuts/scores ; exactitude éditoriale des sources non garantie. |
 | Statistiques | N/D | N/D | N/D | Élevée pour null/0 et relations : correction des blocs ESPN entièrement vides, sans inventer de statistique. |
-| Joueurs | N/D | N/D | N/D | Moyenne : 3 717 joueurs contrôlés, 20 photos sur 20 valides ; toutes les photos et les transferts ne sont pas certifiés. |
+| Joueurs | N/D | N/D | N/D | Moyenne : 3 994 joueurs contrôlés, 20 photos sur 20 valides ; toutes les photos et les transferts ne sont pas certifiés. |
 | Probabilités | N/D | N/D | N/D | Élevée pour la non-régression : moteur conservé, calcul chronométré et présentation E2E vérifiée ; aucun résultat sportif garanti. |
 | Navigation | N/D | N/D | N/D | Élevée : parcours match/équipe/joueur, mobile, favoris et liens internes testés. |
 | Recherche | N/D | N/D | N/D | Élevée : accents conservés, fautes simples tolérées et recherche vide/en erreur testée. |
@@ -41,6 +41,7 @@ N/D signifie « non disponible dans le barème précédent », et non zéro. La 
 - Réutilisation du limiter admin PostgreSQL ; collecteur Web Vitals optionnel également limité dans PostgreSQL. Vérification concurrente de 20 tentatives admin et 65 envois métriques dans une base jetable, sans toucher aux utilisateurs.
 - Observabilité bornée des API importantes, DB, cache, transports fournisseurs et calcul des prédictions : durées, p50/p95, erreurs, logs lents structurés sans secret ni requête utilisateur. Compteurs en mémoire limités au processus courant, non présentés comme des métriques globales distribuées.
 - Health check authentifié : fraîcheur réelle, providers, derniers jobs, dernière réussite/erreur, éléments importés, durée, seuils de retard/échecs/cache/API lente. Les statistiques des jobs portent sur les 50 derniers runs, sans prétendre couvrir tout l’historique.
+- Health allégé après une lenteur mesurée : PostgreSQL renvoie uniquement date de révision et présence de résultats en retard, sans transférer le snapshot joueurs/matchs. Dix scénarios SQL isolés valident les délais stricts 6 h/24 h, les horaires inconnus, les résultats finis et les sources secondaires. Dix lectures locales alternées : p50/p95 **655/852 ms** pour l’ancien payload complet, **86/105 ms** pour la projection. Dix requêtes health authentifiées à chaud : **88/148 ms**, zéro erreur. Les alertes métier restent visibles.
 - Administration : colonnes fournisseur, durée et éléments importés. Les joueurs importés ne sont plus comptés sous une étiquette trompeuse « matchs ».
 - Validateur en lecture seule des joueurs, matchs, statistiques, relations, IDs externes, valeurs numériques et dates. Alias `data:validate-players`, `data:validate-matches`, `data:validate-stats`. Photos : échantillon optionnel borné, sans parcourir toutes les ressources externes.
 - Correction de 115 blocs statistiques historiques ESPN présentant une possession 0–0 avec toutes les valeurs à zéro : traités comme données indisponibles à la lecture et lors des nouveaux imports. Les zéros réellement rapportés restent des zéros ; aucune migration destructive.
@@ -64,12 +65,12 @@ N/D signifie « non disponible dans le barème précédent », et non zéro. La 
 | Accessibilité | PASS sur le périmètre testé : 32 vues axe supplémentaires, zéro violation ; clavier et reflow via E2E. |
 | SEO complet local | PASS : 8 504 pages, 119 040 contrôles, 49 070 liens supplémentaires ; aucune erreur ni avertissement. |
 | Sécurité HTTP | PASS : 14 contrôles. |
-| Data quality | PASS : 10 compétitions, 262 équipes, 3 717 joueurs, 14 317 matchs ; zéro échec/avertissement. 20 photos échantillonnées valides. |
+| Data quality | PASS : 10 compétitions, 262 équipes, 3 994 joueurs, 14 317 matchs ; zéro échec/avertissement. 20 photos échantillonnées valides. |
 | Build final | PASS avec DB inaccessible et sans clé provider ; aucune importation postbuild. |
 | Administration / health final | PASS fonctionnel : login et page authentifiée 200 ; durée/éléments visibles ; health 200 avec statut WARNING explicite. |
-| CI GitHub | Première exécution : DB/UI PASS, quality FAIL uniquement sur le doublon d’URL dans l’auditeur. Correction validée localement : 594 pages, 8 306 contrôles, 2 290 liens supplémentaires, sans erreur. Nouvelle exécution après push à confirmer. |
+| CI GitHub | PASS sur le commit `95a50d2`, run [37148064457](https://github.com/redragon38/proba-match/actions/runs/37148064457), jobs `quality` et `database-ui`. L’optimisation finale du health attend sa propre exécution après push. |
 
-Dernière sonde locale : 180 requêtes, concurrence 4, aucune erreur. Accueil p50/p95 **264/354 ms**, matchs **225/257 ms**, API matchs **33/41 ms**, recherche fautive **17/28 ms**, recherche joueurs **18/33 ms**, page match **156/189 ms**, API match **11/17 ms**, API compétition **11/16 ms**, page joueur **56/71 ms**. Cache dataset : **108 hits / 109 lectures**, soit **99,08 %**, un chargement froid à environ 734 ms. Ces mesures sont locales, dépendantes de la machine et du corpus ; ce ne sont ni des SLO publics ni un stress test production.
+Dernière sonde locale : 180 requêtes, concurrence 4, aucune erreur. Accueil p50/p95 **264/354 ms**, matchs **225/257 ms**, API matchs **33/41 ms**, recherche fautive **17/28 ms**, recherche joueurs **18/33 ms**, page match **156/189 ms**, API match **11/17 ms**, API compétition **11/16 ms**, page joueur **56/71 ms**. Une seconde sonde après rafraîchissement à 3 994 joueurs confirme zéro erreur : accueil p50/p95 **301/511 ms**, API recherche fautive **25/39 ms**, API matchs **39/61 ms**. Cache dataset de cette seconde sonde : **106 hits / 107 lectures**, soit **99,07 %**, chargement froid autour de 876 ms. Révision DB p50/p95 **5,62/21,65 ms**. Les audits publics tournaient aussi sur la machine ; ces séries ne permettent pas de calculer un gain frontend comparable. Ces mesures sont locales, dépendantes de la machine et du corpus ; ce ne sont ni des SLO publics ni un stress test production.
 
 Audit frontend de trois pages dans Chromium : zéro erreur de page, zéro image cassée, polices chargées. À froid sur l’accueil, 11 ressources JS réellement chargées, environ **260 Ko compressés / 946 Ko décodés**, CSS environ **16 Ko compressés / 76 Ko décodés**. Les pages suivantes partagent le cache navigateur ; leurs transferts ne sont donc pas comparables à un premier chargement. Aucun score Lighthouse ou CWV terrain n’a été inventé. Après la dernière correction typographique : 210 vues responsive et 32 vues axe de nouveau PASS ; 8 E2E ciblés PASS. Footer mesuré à 12 px et 9 vues complémentaires sans débordement. Les labels SVG sont exprimés dans le repère du graphique ; leur taille physique dépend de sa réduction. Les initiales décoratives de badges restent proportionnelles et `aria-hidden`.
 
@@ -82,7 +83,7 @@ Audit frontend de trois pages dans Chromium : zéro erreur de page, zéro image 
 | Data freshness | WARNING : le health détecte `OPENFOOTBALL_RESULTS_LATE` et `SECONDARY_NOT_CONFIGURED` ; il ne prétend pas que toutes les données sont à jour. |
 | Health | PASS fonctionnel, authentifié ; santé métier WARNING. |
 | CSP | WARNING : directives complètes et compatibilité testée, mais `unsafe-inline` reste autorisé. |
-| Déploiement public de ces changements | Commit `b737a22` déployé avec succès par Vercel ; 30 parcours publics PASS. Patch final de typographie et auditeur : déploiement à confirmer après push. |
+| Déploiement public de ces changements | Commits `b737a22` puis `95a50d2` déployés avec succès par Vercel ; 30 parcours publics de nouveau PASS sur la typographie finale, 14 contrôles de sécurité HTTP publics PASS. Health optimisé : déploiement à confirmer après push. |
 
 ## P0 restants
 
@@ -99,7 +100,7 @@ Aucun défaut P0 détecté sur le périmètre testé. Ce constat n’est pas un 
 - CSP avec nonce/hash strict : chantier à évaluer avec les scripts Next.js et JSON-LD actuels ; pas de changement risquant une régression pour gagner des points.
 - Affiner le bundle client seulement après profilage des composants coûteux ; aucun retrait spéculatif de fonctionnalité.
 - Les bucket rate-limit partagés expirent logiquement ; leur purge physique périodique reste à prévoir si l’administration ou la collecte optionnelle génère beaucoup de clés.
-- Le health froid lit encore les métadonnées complètes de la source ; surveiller sa latence avant d’optimiser davantage.
+- Surveiller les cold starts : la projection du health est optimisée, mais sa première requête locale complète reste à 756 ms, incluant l’initialisation du serveur et de Prisma.
 - Vérification éditoriale exhaustive des photos, transferts et statistiques historiques ; les contrôles structurels ne peuvent la remplacer.
 
 ## Éléments impossibles à valider automatiquement ici

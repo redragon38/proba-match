@@ -27,6 +27,46 @@ try {
   assert.equal(migration.status, 0, 'Test database migrations');
   const { db } = await import('../src/database/client');
   client = db;
+  const { healthSnapshot } = await import('../src/services/football/health-snapshot');
+  const healthNow = Date.now();
+  assert.equal(await healthSnapshot(healthNow), null, 'Missing dataset is not reported healthy');
+  const healthCases = [
+    { hours: 7, known: true, source: 'openfootball', status: 'scheduled', late: true },
+    { hours: 6, known: true, source: 'openfootball', status: 'scheduled', late: false },
+    { hours: 7, known: undefined, source: 'openfootball', status: 'scheduled', late: true },
+    { hours: 7, known: false, source: 'openfootball', status: 'scheduled', late: false },
+    { hours: 25, known: false, source: 'openfootball', status: 'scheduled', late: true },
+    { hours: 24, known: false, source: 'openfootball', status: 'scheduled', late: false },
+    { hours: -2, known: true, source: 'openfootball', status: 'scheduled', late: false },
+    { hours: 7, known: true, source: 'espn', status: 'scheduled', late: false },
+    { hours: 7, known: true, source: 'openfootball', status: 'finished', late: false },
+  ];
+  for (const scenario of healthCases) {
+    const payload = {
+      source: 'openfootball',
+      matches: [{
+        source: scenario.source,
+        status: scenario.status,
+        kickoffKnown: scenario.known,
+        kickoff: new Date(healthNow - scenario.hours * 3600000).toISOString(),
+      }],
+      players: [{ privateFixture: 'must not be transferred by health' }],
+    };
+    await db.cacheEntry.upsert({
+      where: { key: 'football:dataset' },
+      create: { key: 'football:dataset', payload, expiresAt: new Date(), staleUntil: new Date() },
+      update: { payload },
+    });
+    const readiness = await healthSnapshot(healthNow);
+    assert.equal(readiness?.lateResults, scenario.late, 'SQL freshness preserves 6h/24h boundaries');
+    assert.deepEqual(Object.keys(readiness!).sort(), ['lateResults', 'updatedAt']);
+  }
+  await db.cacheEntry.update({
+    where: { key: 'football:dataset' },
+    data: { payload: { source: 'api-football', matches: [{ source: 'openfootball', status: 'scheduled', kickoff: new Date(healthNow - 48 * 3600000).toISOString() }] } },
+  });
+  assert.equal((await healthSnapshot(healthNow))?.lateResults, false, 'Secondary snapshot does not claim primary OpenFootball delay');
+  await db.cacheEntry.delete({ where: { key: 'football:dataset' } });
   const { allowAdminAttempt } = await import('../src/services/admin-throttle');
   const { allowVitalsReport } = await import('../src/services/vitals-limit');
   const attempts = await Promise.all(

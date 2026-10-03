@@ -46,3 +46,5 @@ Le domaine demeure `https://proba-match.vercel.app`. Le changement futur passe p
 - Zoom navigateur physique 200%/400% et appareils réels : compléter les tests automatisés de reflow 640/320px.
 - Hébergement : logs, alertes, cron réussi, erreurs fournisseur, budget, sauvegarde DB et restauration isolée. L'absence d'accès aux logs/sauvegardes est une limite, pas un PASS.
 - CSP : toutes les familles de directives sont explicites, mais `unsafe-inline` reste autorisé pour les scripts de Next et JSON-LD client. Une politique à nonce nécessiterait la propagation jusque dans ces composants et un audit spécifique ; ce résidu est WARNING, pas une certification.
+
+The health endpoint projects only the dataset revision and late-result boolean in PostgreSQL; it does not transfer the full player/match snapshot. Existing 6h/24h OpenFootball deadlines remain unchanged and are covered by the disposable DB integration suite. Process telemetry is local to each instance; warm local timing is not a production SLO.
