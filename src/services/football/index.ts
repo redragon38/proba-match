@@ -3,7 +3,7 @@ import { cache as requestCache } from 'react';
 import { cache, datasetCache } from '@/services/cache';
 import { createDemoDataset } from './providers/mock';
 import { readLocalDataset, emptyDataset } from './local-store';
-import { log } from '@/lib/logger';
+import { log, databaseErrorFields } from '@/lib/logger';
 import type { Dataset } from '@/types/football';
 import { db } from '@/database/client';
 import { timed } from '@/services/telemetry';
@@ -17,6 +17,7 @@ export const getDataset = requestCache(async function getDataset(): Promise<Data
       'Les données football ne sont pas disponibles pour le moment. Les guides et explications restent accessibles.',
     );
   }
+  let operation = 'db:dataset_revision';
   try {
     const marker = await timed('db:dataset_revision', () =>
       db.cacheEntry.findUnique({
@@ -28,12 +29,8 @@ export const getDataset = requestCache(async function getDataset(): Promise<Data
       .get(
         `dataset:${marker?.updatedAt.toISOString() ?? 'empty'}`,
         async () => {
-          try {
-            return await timed('db:dataset_load', readLocalDataset);
-          } catch {
-            log('dataset_read_failed', { code: 'DATABASE_UNAVAILABLE' });
-            throw new Error('DATABASE_UNAVAILABLE');
-          }
+          operation = 'db:dataset_load';
+          return await timed('db:dataset_load', readLocalDataset);
         },
         10 * 60000,
         0,
@@ -44,7 +41,8 @@ export const getDataset = requestCache(async function getDataset(): Promise<Data
           marker ? withSnapshotExpiry(data, marker.expiresAt.getTime()) : data,
         );
       });
-  } catch {
+  } catch (error) {
+    log('dataset_read_failed', { operation, ...databaseErrorFields(error) });
     return lastDataset
       ? withSourceFreshness({
           ...lastDataset,
