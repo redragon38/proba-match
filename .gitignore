@@ -16,3 +16,7 @@ artifacts/*debug*
 
 score-model-comparison.json
 derived-event-evaluation.json
+.database-migration/
+*.dump
+*.backup
+*.pgpass

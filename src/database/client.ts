@@ -1,4 +1,11 @@
 import { PrismaClient } from '@prisma/client';
+import { runtimeDatabaseUrl } from './connection';
 const globalDatabase = globalThis as unknown as { prisma?: PrismaClient };
-export const db = globalDatabase.prisma ?? new PrismaClient({ log: [] });
-if (process.env.NODE_ENV !== 'production') globalDatabase.prisma = db;
+const datasourceUrl = runtimeDatabaseUrl(process.env.DATABASE_URL, !!process.env.VERCEL);
+export const db =
+  globalDatabase.prisma ??
+  new PrismaClient({
+    log: [],
+    ...(datasourceUrl ? { datasourceUrl } : {}),
+  });
+globalDatabase.prisma = db;

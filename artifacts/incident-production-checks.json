@@ -1,0 +1,72 @@
+[
+  {
+    "host": "https://proba-match.vercel.app",
+    "path": "/",
+    "status": 500,
+    "finalUrl": "https://proba-match.vercel.app/",
+    "elapsedMs": 13203
+  },
+  {
+    "host": "https://proba-match.vercel.app",
+    "path": "/mentions-legales",
+    "status": 200,
+    "finalUrl": "https://proba-match.vercel.app/mentions-legales",
+    "elapsedMs": 13434
+  },
+  {
+    "host": "https://proba-match.vercel.app",
+    "path": "/methodologie",
+    "status": 200,
+    "finalUrl": "https://proba-match.vercel.app/methodologie",
+    "elapsedMs": 9577
+  },
+  {
+    "host": "https://proba-match.vercel.app",
+    "path": "/mentions-legales",
+    "status": 200,
+    "finalUrl": "https://proba-match.vercel.app/mentions-legales",
+    "elapsedMs": 9360
+  },
+  {
+    "host": "https://proba-match.vercel.app",
+    "path": "/",
+    "status": 500,
+    "finalUrl": "https://proba-match.vercel.app/",
+    "elapsedMs": 10475
+  },
+  {
+    "host": "https://proba-match.com",
+    "path": "/",
+    "status": 500,
+    "finalUrl": "https://www.proba-match.com/",
+    "elapsedMs": 15681
+  },
+  {
+    "host": "https://proba-match.com",
+    "path": "/mentions-legales",
+    "status": 200,
+    "finalUrl": "https://www.proba-match.com/mentions-legales",
+    "elapsedMs": 22667
+  },
+  {
+    "host": "https://proba-match.com",
+    "path": "/methodologie",
+    "status": 200,
+    "finalUrl": "https://www.proba-match.com/methodologie",
+    "elapsedMs": 17546
+  },
+  {
+    "host": "https://proba-match.com",
+    "path": "/mentions-legales",
+    "status": 200,
+    "finalUrl": "https://www.proba-match.com/mentions-legales",
+    "elapsedMs": 19332
+  },
+  {
+    "host": "https://proba-match.com",
+    "path": "/",
+    "status": 500,
+    "finalUrl": "https://www.proba-match.com/",
+    "elapsedMs": 19318
+  }
+]
