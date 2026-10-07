@@ -1,10 +1,10 @@
 import { db } from '@/database/client';
-import { randomUUID } from 'node:crypto';
 import { slugify } from '@/lib/format';
 import { log } from '@/lib/logger';
 import type { Player, Team } from '@/types/football';
 import { currentSeason } from './openfootball-sync';
 import { bindIdentity } from './identities';
+import { stableEntityId } from './stable-identity';
 import { footballJob } from './jobs';
 import { readLocalDataset } from './local-store';
 import { SportsDbProvider, sportsDbPosition, sportsDbTeamMatches } from './providers/thesportsdb';
@@ -164,7 +164,8 @@ export async function syncSportsDbPlayers(limit = 30) {
         }[] = [];
         const next: Player[] = [];
         for (const row of valid) {
-          const id = knownPlayers.get(row.idPlayer) ?? randomUUID();
+          const id =
+            knownPlayers.get(row.idPlayer) ?? stableEntityId('thesportsdb', 'player', row.idPlayer);
           if (!knownPlayers.has(row.idPlayer)) {
             knownPlayers.set(row.idPlayer, id);
             newPlayerIdentities.push({

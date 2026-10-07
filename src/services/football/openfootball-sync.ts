@@ -1,5 +1,4 @@
 import { db } from '@/database/client';
-import { randomUUID } from 'node:crypto';
 import { log } from '@/lib/logger';
 import { slugify } from '@/lib/format';
 import type { Dataset, Match, Team } from '@/types/football';
@@ -16,6 +15,7 @@ import { persistDataset } from './persistence';
 import { derivedStandings } from '@/services/derived-standings';
 import { persistPredictions } from '@/services/predictions';
 import { rebuildElo } from './rebuild-elo';
+import { stableEntityId } from './stable-identity';
 
 export function currentSeason(now = new Date()) {
   return now.getUTCFullYear() - (now.getUTCMonth() < 6 ? 1 : 0);
@@ -216,7 +216,7 @@ export async function syncOpenFootball(
                   `${row.homeName} / ${row.awayName}`,
                   candidates.map((m) => m.id),
                 )
-              : (candidates[0]?.id ?? randomUUID()));
+              : (candidates[0]?.id ?? stableEntityId('openfootball', 'match', row.externalId)));
           if (!existingId && candidates.length <= 1)
             newMatchIdentities.push({
               provider: 'openfootball',

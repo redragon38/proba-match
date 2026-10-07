@@ -1,6 +1,6 @@
-import { randomUUID } from 'node:crypto';
 import { db } from '@/database/client';
 import { log } from '@/lib/logger';
+import { stableEntityId } from './stable-identity';
 export type EntityKind = 'team' | 'competition' | 'match' | 'player';
 export async function identity(provider: string, kind: EntityKind, externalId: string) {
   return db.footballIdentity.findUnique({
@@ -41,7 +41,7 @@ export async function resolveIdentity(
     log('TEAM_MAPPING_REQUIRED', { code: 'AMBIGUOUS_IDENTITY' });
     throw new Error('TEAM_MAPPING_REQUIRED');
   }
-  const id = candidates[0] ?? randomUUID();
+  const id = candidates[0] ?? stableEntityId(provider, kind, externalId);
   await bindIdentity(provider, kind, externalId, id, externalName);
   return id;
 }

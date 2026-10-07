@@ -53,6 +53,8 @@ Les 31 lignes ci-dessous correspondent aux modèles du schéma versionné. Les t
 
 `resolveIdentity()` attribue `randomUUID()` si aucun mapping préalable n'existe ; OpenFootball et ESPN en font autant pour les matchs. Les slugs de match sont souvent cet UUID ; ceux des équipes et joueurs contiennent les huit premiers caractères de l'ID. Les imports conservent l'ancien slug **seulement si** l'entité et son mapping sont déjà présents. Sans `FootballIdentity` Neon ou manifeste des anciennes URL, les mêmes fixtures peuvent générer de nouvelles adresses. `/match/[id]` ne redirige que si l'ancien ID est encore connu ; anciens liens, favoris locaux, canonicals, maillage et sitemap sont donc à risque. Les slugs de compétition calculés depuis le nom sont plus stables, mais pas prouvés identiques.
 
+Le code de reprise durcit maintenant les nouveaux imports publics : si aucun mapping n'existe encore, l'ID reconstruit est deterministe a partir de `(provider, kind, externalId)`. Cela reduit le risque de nouvelles URLs differentes entre deux reconstructions successives, sans pretendre recuperer les anciens UUID Neon deja perdus.
+
 Avant toute Preview publique, obtenir l'inventaire des URL historiques (snapshot source, sitemap archivé complet ou export équivalent), mesurer la correspondance par identifiant externe, vérifier les redirections et les pages indexables. **Aucun inventaire complet de ces URL n'est présent dans les artefacts du dépôt**. Ne pas avancer si des URL indexées disparaissent en masse.
 
 ## Prédictions et pertes
@@ -68,3 +70,26 @@ Le code n'insère une nouvelle `Prediction` que pour un match futur programmé d
 3. Quand le réseau permet une connexion PostgreSQL directe au **nom de test uniquement** : revérifier l'absence de tables ; exécuter `prisma migrate status`, puis `prisma migrate deploy` (jamais reset). Contrôler l'historique `_prisma_migrations`, les 31 tables et leurs contraintes, puis importer les flux un par un dans l'ordre effectif des scripts (`football:import`, `football:expanded-import`, `football:expanded-players`, `football:players`, enrichissement secondaire si activé). Leurs résultats doivent être mesurés sans réétiqueter le corpus local de septembre comme production actuelle.
 4. Mesurer comptes par table, erreurs fournisseurs, IDs/slugs, pages et sitemap sur une **Preview pointant uniquement vers la base test**. Empêcher cron et autres writers de la Preview d'écrire dans Neon ou deux bases. Les tests CI sur base jetable et le build du commit précédent sont verts, mais ne prouvent pas cette Preview.
 5. Décider d'une éventuelle bascule seulement après comparaison vérifiable des données et URL essentielles, et récupération ou traitement explicite des historiques irréconstructibles. Ici ces critères ne sont pas atteints. **Recommandation actuelle : attendre Neon**, qui permettrait un dump exact et préserverait le plus d'URL et d'historique.
+
+## Procedure locale Windows ajoutee
+
+Le depot contient `scripts/reconstruct-aiven.ps1` pour lancer la reconstruction depuis un poste qui peut joindre Aiven directement. Le script refuse toute cible qui n'est pas exactement la base de test `proba_match_reconstruction_test`, un hote `.aivencloud.com` et `sslmode=require`.
+
+```powershell
+git checkout master
+git pull origin master
+
+$SecureUrl = Read-Host "Aiven TEST DATABASE_URL" -AsSecureString
+$Bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecureUrl)
+try {
+  $env:AIVEN_TEST_DATABASE_URL = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($Bstr)
+  powershell -ExecutionPolicy Bypass -File .\scripts\reconstruct-aiven.ps1
+}
+finally {
+  [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($Bstr)
+  Remove-Item Env:\AIVEN_TEST_DATABASE_URL -ErrorAction SilentlyContinue
+  Remove-Item Env:\DATABASE_URL -ErrorAction SilentlyContinue
+}
+```
+
+Le script installe les dependances exactes, genere Prisma, verifie que la base de test est vide, applique `prisma migrate deploy`, verifie les tables, lance les imports OpenFootball/ESPN/TheSportsDB bornes, reconstruit Elo et sort les compteurs. Il ne lance jamais `migrate reset`, ne touche pas `defaultdb`, ne change aucune variable Vercel et ne bascule pas Production.

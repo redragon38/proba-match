@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import { db } from '@/database/client';
 import { slugify } from '@/lib/format';
 import { log } from '@/lib/logger';
@@ -18,6 +17,7 @@ import { persistDataset } from './persistence';
 import { derivedStandings } from '@/services/derived-standings';
 import { rebuildElo } from './rebuild-elo';
 import { persistPredictions } from '@/services/predictions';
+import { stableEntityId } from './stable-identity';
 const upsert = <T extends { id: string }>(old: T[], fresh: T[]) => [
   ...new Map([...old, ...fresh].map((x) => [x.id, x])).values(),
 ];
@@ -132,7 +132,8 @@ export async function syncExpandedFootball(
           externalName: string;
         }[] = [];
         for (const row of rows) {
-          const id = knownMatches.get(row.externalId) ?? randomUUID();
+          const id =
+            knownMatches.get(row.externalId) ?? stableEntityId('espn', 'match', row.externalId);
           if (!knownMatches.has(row.externalId))
             newIdentities.push({
               provider: 'espn',
