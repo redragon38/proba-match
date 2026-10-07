@@ -8,6 +8,7 @@ import {
   catalogueMetadata,
   indexablePaths,
   matchIndexable,
+  editorialPaths,
 } from '@/lib/seo';
 import {
   catalogDataset,
@@ -62,7 +63,7 @@ describe('SEO contract', () => {
   });
   it('uses the same eligibility rules for metadata and the complete sitemap', () => {
     const data = createDemoDataset(new Date('2026-09-12T12:00:00Z'));
-    expect(indexablePaths(data)).toEqual([]);
+    expect(indexablePaths(data)).toEqual(editorialPaths);
     data.source = 'openfootball';
     data.players = [];
     const paths = indexablePaths(data);
@@ -70,7 +71,7 @@ describe('SEO contract', () => {
     expect(paths).not.toContain('/joueurs');
     expect(paths).not.toContain('/recherche');
     for (const m of data.matches)
-      expect(paths.includes(`/match/${m.slug}`)).toBe(matchIndexable(m));
+      expect(paths.includes(`/match/${m.slug}`)).toBe(matchIndexable(m, data));
     expect(new Set(paths).size).toBe(paths.length);
   });
 });

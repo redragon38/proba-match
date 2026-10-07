@@ -14,6 +14,9 @@ describe('Migrations PostgreSQL et historique immuable', () => {
       await readFile('prisma/migrations/202609130001_openfootball/migration.sql', 'utf8'),
     );
     await db.exec(
+      await readFile('prisma/migrations/202610060001_result_observations/migration.sql', 'utf8'),
+    );
+    await db.exec(
       `INSERT INTO "Country" (id,name) VALUES ('fr','France'); INSERT INTO "Competition" (id,slug,name,"countryId") VALUES ('c','ligue','Ligue','fr'); INSERT INTO "Season" (id,year,"competitionId") VALUES ('s',2026,'c'); INSERT INTO "Team" (id,slug,name,"countryId") VALUES ('h','home','Home','fr'),('a','away','Away','fr'); INSERT INTO "Match" (id,slug,"seasonId","homeId","awayId",kickoff,status,source,payload,"updatedAt") VALUES ('future','future','s','h','a',NOW()+INTERVAL '1 day','scheduled','api-football','{}',NOW()),('past','past','s','h','a',NOW()-INTERVAL '1 day','finished','api-football','{}',NOW()); INSERT INTO "PredictionVersion" (id,description,parameters) VALUES ('v1','Test','{}');`,
     );
   }, 30000);
@@ -22,6 +25,25 @@ describe('Migrations PostgreSQL et historique immuable', () => {
   });
   const insert = (id: string, match = 'future', home = 0.5, draw = 0.25, away = 0.25) =>
     `INSERT INTO "Prediction" (id,"matchId","versionId","createdAt",cutoff,home,draw,away,confidence,"inputHash",payload) VALUES ('${id}','${match}','v1',NOW(),NOW(),${home},${draw},${away},75,'hash','{}')`;
+  it('keeps source revisions append-only and rolls back an incomplete generation', async () => {
+    await db.exec(
+      `INSERT INTO "ResultObservation" (id,"matchId","receivedAt",source,payload) VALUES ('r1','past',NOW(),'api-football','{"homeScore":1}'),('r2','past',NOW(),'api-football','{"homeScore":0}')`,
+    );
+    await expect(
+      db.exec(`UPDATE "ResultObservation" SET payload='{}' WHERE id='r1'`),
+    ).rejects.toThrow('immutable');
+    await expect(db.exec(`DELETE FROM "ResultObservation" WHERE id='r1'`)).rejects.toThrow(
+      'immutable',
+    );
+    await db.exec('BEGIN');
+    await db.exec(`UPDATE "Match" SET "homeScore"=9 WHERE id='past'`);
+    await db.exec('ROLLBACK');
+    const row = await db.query<{ homeScore: number | null }>(
+      `SELECT "homeScore" FROM "Match" WHERE id='past'`,
+    );
+    expect(row.rows[0].homeScore).toBeNull();
+    expect((await db.query('SELECT * FROM "ResultObservation"')).rows).toHaveLength(2);
+  });
   it('interdit deux correspondances pour un même identifiant externe', async () => {
     await db.exec(
       `INSERT INTO "FootballIdentity" (id,provider,kind,"externalId","entityId") VALUES ('i','openfootball','team','fr:psg','h')`,

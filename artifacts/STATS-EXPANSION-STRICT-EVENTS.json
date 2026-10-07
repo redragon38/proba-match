@@ -1,0 +1,9 @@
+{
+  "generatedAt": "2026-10-05T19:21:09.995Z",
+  "inputSha256": "4bbae1f1e53af3d53b2c4736aab7078709f6ed87b28419d8b071ec55e1adfca6",
+  "availabilityMode": "observed",
+  "warning": "Évaluation exploratoire des événements dérivés du modèle actuel, sans calibrage ni modification active. Publication réelle inconnue en mode reconstruit. Les Brier binaires ne se comparent pas directement au Brier 1N2.",
+  "sample": 0,
+  "events": {},
+  "totalRange": null
+}

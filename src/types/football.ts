@@ -12,6 +12,18 @@ export interface MatchPlayerPerformance {
   stats: PlayerStats;
 }
 export interface Match {
+  detailSource?: Partial<
+    Record<'events' | 'lineups' | 'statistics' | 'performances', FootballSource>
+  >;
+  detailPresence?: Partial<Record<'events' | 'lineups' | 'statistics' | 'performances', boolean>>;
+  detailObservedAt?: Partial<Record<'events' | 'lineups' | 'statistics' | 'performances', string>>;
+  detailFallback?: string[];
+  /** Unknown legacy periods are not certified as 90-minute results. */
+  resultPeriod?: 'regulation' | 'extra-time' | 'penalties' | 'unknown';
+  neutralVenue?: boolean;
+  resultRevisions?: ResultRevision[];
+  /** Local ingestion time of the current final-score revision; never reconstructed. */
+  resultObservedAt?: string;
   countsForStandings?: boolean;
   season?: number;
   kickoffKnown?: boolean;
@@ -26,6 +38,19 @@ export interface Match {
     extratime?: { home?: number | null; away?: number | null };
     penalty?: { home?: number | null; away?: number | null };
   };
+}
+export interface ResultRevision {
+  observedAt: string;
+  source: FootballSource;
+  homeId: string;
+  awayId: string;
+  kickoff: string;
+  status: MatchStatus;
+  homeScore: number | null;
+  awayScore: number | null;
+  resultPeriod?: Match['resultPeriod'];
+  scoreBreakdown?: Match['scoreBreakdown'];
+  neutralVenue?: boolean;
 }
 export interface Competition {
   id: string;
@@ -49,6 +74,15 @@ export interface Team {
   coach?: string;
 }
 export interface Player {
+  statsScope?: {
+    competitionId: string;
+    season: number;
+    teamId: string;
+    source: string;
+    observedAt: string;
+    type: 'season';
+    verified: boolean;
+  };
   updatedAt?: string;
   source?: 'api-football' | 'thesportsdb' | 'espn';
   id: string;
@@ -161,6 +195,7 @@ export interface Standing {
   form: string[];
 }
 export interface Dataset {
+  verifiedAt?: { results?: string; calendar?: string; details?: string; players?: string };
   revision?: string;
   degraded?: boolean;
   source: FootballSource;
@@ -174,6 +209,17 @@ export interface Dataset {
   warning?: string;
 }
 export interface Prediction {
+  effectiveSample?: number;
+  inputArchive?: {
+    schemaVersion: number;
+    modelVersion: string;
+    parameters: Record<string, number | string>;
+    availabilityMode: 'observed' | 'reconstructed';
+    cutoff: string;
+    resultPeriod: string;
+    target: Match;
+    matches: Match[];
+  };
   id: string;
   matchId: string;
   version: string;

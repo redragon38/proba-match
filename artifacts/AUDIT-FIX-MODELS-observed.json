@@ -1,0 +1,23 @@
+{
+  "generatedAt": "2026-10-06T16:55:25.608Z",
+  "inputSha256": "4bbae1f1e53af3d53b2c4736aab7078709f6ed87b28419d8b071ec55e1adfca6",
+  "mode": "observed",
+  "warning": "Strict observed availability; unknown legacy score periods excluded.",
+  "corpus": 1298,
+  "coverage": {
+    "old": 0,
+    "current": 0,
+    "common": 0,
+    "abstainedCurrent": 1297
+  },
+  "commonSupport": {
+    "old": null,
+    "current": null,
+    "leagueFrequency": null,
+    "leaguePoisson": null
+  },
+  "allSupport": {
+    "old": null,
+    "current": null
+  }
+}

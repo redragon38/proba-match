@@ -1,3 +1,5 @@
+import { playerBirthDate, playerAge } from '@/lib/factual-dates';
+import { playerStructuredData } from '@/lib/sports-structured-data';
 import Link from 'next/link';
 import { competitionSeason } from '@/lib/competition-season';
 import { ProviderImage } from '@/components/provider-image';
@@ -12,17 +14,19 @@ import { playerHistory } from '@/services/profile-history';
 import { JsonLd } from '@/components/json-ld';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { TrendChart } from '@/components/charts';
-import { seoMetadata } from '@/lib/seo';
+import { seoMetadata, playerIndexable } from '@/lib/seo';
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const d = await getDataset();
   const p = d.players.find((p) => p.slug === slug);
   if (!p) notFound();
+  const birthDate = playerBirthDate(p.birthDate);
   const club = d.teams.find((t) => t.id === p.teamId);
+  if (!club) notFound();
   const homonym = d.players.some(
     (other) => other.id !== p.id && other.name === p.name && other.teamId === p.teamId,
   );
-  const identity = `${p.name}${club ? ` — ${club.name}` : ''}${homonym ? ` (${p.position}${p.birthDate ? `, ${p.birthDate.slice(0, 4)}` : ''})` : ''}`;
+  const identity = `${p.name}${club ? ` — ${club.name}` : ''}${homonym ? ` (${p.position}${birthDate ? `, ${birthDate.slice(0, 4)}` : ''})` : ''}`;
   return seoMetadata(
     `/joueur/${slug}`,
     p.source === 'thesportsdb'
@@ -31,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     p.source === 'thesportsdb'
       ? `Profil communautaire de ${identity} : club et poste indiqués par TheSportsDB. Effectif partiel, sans statistiques individuelles vérifiées.`
       : `Profil de ${identity} : poste, équipe, temps de jeu et performances disponibles. Explorez son historique et ses statistiques sur Proba Match.`,
-    d.source !== 'demo' && (p.stats.appearances ?? 0) >= 5,
+    d.source !== 'demo' && playerIndexable(p.stats.appearances),
   );
 }
 export default async function Page({
@@ -45,6 +49,7 @@ export default async function Page({
   const data = await getDataset();
   const p = data.players.find((p) => p.slug === slug);
   if (!p) notFound();
+  const birthDate = playerBirthDate(p.birthDate);
   const fromMatch =
     query.match &&
     data.matches.find(
@@ -57,8 +62,9 @@ export default async function Page({
           ) ||
           match.performances?.some((row) => row.playerId === p.id)),
     );
-  const history = p.source === 'thesportsdb' ? [] : await playerHistory(p.id);
-  const t = data.teams.find((t) => t.id === p.teamId)!;
+  const history = p.source === 'thesportsdb' ? [] : await playerHistory(p.id, data.updatedAt);
+  const t = data.teams.find((t) => t.id === p.teamId);
+  if (!t) notFound();
   const score = playerPerformance(p.stats, p.position);
   const mainMetric =
     p.position === 'Gardien'
@@ -91,12 +97,7 @@ export default async function Page({
     )
     .sort((a, b) => a.match.kickoff.localeCompare(b.match.kickoff))
     .slice(-10);
-  const age = p.birthDate
-    ? Math.floor(
-        (new Date(data.updatedAt).getTime() - new Date(p.birthDate).getTime()) /
-          (365.2425 * 86400_000),
-      )
-    : null;
+  const age = playerAge(birthDate, data.updatedAt);
   const rows: [string, number | null | undefined][] = [
     ['Matchs', p.stats.appearances],
     ['Titularisations', p.stats.starts],
@@ -121,19 +122,16 @@ export default async function Page({
   return (
     <div className="page">
       {data.source !== 'demo' && p.source !== 'thesportsdb' && (
-        <JsonLd
-          value={{
-            '@context': 'https://schema.org',
-            '@type': 'Person',
-            name: p.name,
-            birthDate: p.birthDate,
-            nationality: p.nationality,
-            image: p.photo,
-            memberOf: { '@type': 'SportsTeam', name: t.name },
-          }}
-        />
+        <JsonLd value={playerStructuredData(p, t)} />
       )}
       <SourceBanner data={data} />
+      {p.source !== 'thesportsdb' && (
+        <p className="data-note">
+          {p.statsScope?.verified
+            ? `Relevé identifié : saison ${p.statsScope.season}, compétition ${data.competitions.find((c) => c.id === p.statsScope!.competitionId)?.name ?? p.statsScope.competitionId}, observé le ${p.statsScope.observedAt.slice(0, 10)}.`
+            : 'Le périmètre exact de saison et de compétition de ces compteurs n’est pas confirmé. Ils ne sont pas utilisés dans les classements de compétition.'}
+        </p>
+      )}
       {fromMatch && (
         <Link className="text-link" href={`/match/${fromMatch.slug}?onglet=joueurs`}>
           ← Retour au match
@@ -188,7 +186,7 @@ export default async function Page({
           </span>
           <h1>{p.name}</h1>
           <p>
-            {age ? `${age} ans` : 'Âge non disponible'} ·{' '}
+            {age !== undefined ? `${age} ans` : 'Âge non disponible'} ·{' '}
             {p.nationality ?? 'Nationalité non disponible'}
           </p>
           <Link className="table-team" href={`/equipe/${t.slug}`}>
@@ -221,11 +219,11 @@ export default async function Page({
           </div>
           <section className="card padded player-known-facts">
             <h2>Profil du joueur</h2>
-            {p.birthDate && (
+            {birthDate && (
               <p>
                 Né le{' '}
                 {new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long', timeZone: 'UTC' }).format(
-                  new Date(p.birthDate),
+                  new Date(birthDate),
                 )}
                 .
               </p>

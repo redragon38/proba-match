@@ -20,7 +20,9 @@ export const dayLabel = (iso: string) =>
   }).format(new Date(iso));
 export const percent = (n: number) => `${Math.round(n * 100)} %`;
 export const number = (n: number | null | undefined, digits = 0) =>
-  n == null ? 'Non disponible' : n.toLocaleString('fr-FR', { maximumFractionDigits: digits });
+  n == null || !Number.isFinite(n)
+    ? 'Non disponible'
+    : n.toLocaleString('fr-FR', { maximumFractionDigits: digits });
 export const slugify = (s: string) =>
   s
     .normalize('NFD')

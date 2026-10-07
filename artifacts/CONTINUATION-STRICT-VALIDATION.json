@@ -1,0 +1,70 @@
+{
+  "generatedAt": "2026-10-05T17:54:00.240Z",
+  "inputSha256": "4bbae1f1e53af3d53b2c4736aab7078709f6ed87b28419d8b071ec55e1adfca6",
+  "candidates": [
+    {
+      "goalStrength": 0.8,
+      "homeAdvantage": 60,
+      "halfLifeDays": 60
+    },
+    {
+      "goalStrength": 0.6,
+      "homeAdvantage": 60,
+      "halfLifeDays": 60
+    },
+    {
+      "goalStrength": 1,
+      "homeAdvantage": 60,
+      "halfLifeDays": 60
+    }
+  ],
+  "warning": "Validation limitée aux résultats dont la disponibilité est journalisée. Ne valide pas à elle seule le moteur en production.",
+  "availabilityMode": "observed",
+  "objective": "logLoss",
+  "reference": "goal-strength-0.8",
+  "commonSample": 0,
+  "folds": [
+    {
+      "start": "2022-07-01T00:00:00.000Z",
+      "end": "2023-07-01T00:00:00.000Z",
+      "trainingSample": 0,
+      "testSample": 0,
+      "status": "INSUFFICIENT_DATA",
+      "selected": null
+    },
+    {
+      "start": "2023-07-01T00:00:00.000Z",
+      "end": "2024-07-01T00:00:00.000Z",
+      "trainingSample": 0,
+      "testSample": 0,
+      "status": "INSUFFICIENT_DATA",
+      "selected": null
+    },
+    {
+      "start": "2024-07-01T00:00:00.000Z",
+      "end": "2025-07-01T00:00:00.000Z",
+      "trainingSample": 0,
+      "testSample": 0,
+      "status": "INSUFFICIENT_DATA",
+      "selected": null
+    },
+    {
+      "start": "2025-07-01T00:00:00.000Z",
+      "end": "2026-07-01T00:00:00.000Z",
+      "trainingSample": 0,
+      "testSample": 0,
+      "status": "INSUFFICIENT_DATA",
+      "selected": null
+    },
+    {
+      "start": "2026-07-01T00:00:00.000Z",
+      "end": "2027-07-01T00:00:00.000Z",
+      "trainingSample": 0,
+      "testSample": 0,
+      "status": "INSUFFICIENT_DATA",
+      "selected": null
+    }
+  ],
+  "selectedMetrics": null,
+  "referenceMetrics": null
+}

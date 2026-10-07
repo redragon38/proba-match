@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-10-06T17:18:07.456Z",
+  "scope": "One local Node process, 32 deterministic temporal positions, reconstructed history. No PostgreSQL, provider, network, concurrency, production latency or accuracy measurement.",
+  "modelVersion": "elo-poisson-1.4.0",
+  "corpus": 1298,
+  "inputJsonBytes": 784245,
+  "computationMilliseconds": {
+    "sample": 32,
+    "median": 10.399913000000026,
+    "p95": 17.67393900000002,
+    "max": 18.978736000000026
+  },
+  "archivedPredictionBytes": {
+    "sample": 32,
+    "median": 428017,
+    "p95": 777714,
+    "max": 798789
+  },
+  "publicPredictionBytes": {
+    "sample": 32,
+    "median": 1919,
+    "p95": 1940,
+    "max": 1942
+  },
+  "rssBeforeBytes": 75599872,
+  "rssAfterBytes": 118902784
+}

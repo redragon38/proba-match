@@ -1,11 +1,18 @@
+import { Breadcrumbs } from '@/components/breadcrumbs';
+import { JsonLd } from '@/components/json-ld';
+import { editorialPageData } from '@/lib/editorial';
+import { EditorialContext, EditorialLinks } from '@/components/editorial-context';
 import { publicMetadata } from '@/lib/seo';
 export const metadata = publicMetadata('/a-propos');
 import Link from 'next/link';
 export default function Page() {
   return (
     <div className="page prose">
+      <JsonLd value={editorialPageData('/a-propos', 'AboutPage')} />
+      <Breadcrumbs items={[{ name: 'À propos', href: '/a-propos' }]} real />
       <span className="eyebrow">LE FOOTBALL, DÉCODÉ</span>
-      <h1>Le jeu mérite du contexte.</h1>
+      <h1>Proba Match : comprendre le football par les données</h1>
+      <EditorialContext />
       <p>
         Proba Match rassemble scores, statistiques et analyses pour comprendre les rencontres et
         suivre les équipes et les joueurs. L’accès est gratuit.
@@ -23,6 +30,7 @@ export default function Page() {
       <Link className="button" href="/methodologie">
         Comprendre la méthode
       </Link>
+      <EditorialLinks />
     </div>
   );
 }

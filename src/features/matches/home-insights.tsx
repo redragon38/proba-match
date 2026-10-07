@@ -58,6 +58,18 @@ export async function HomeInsights({
           />
         ))}
       </div>
+      <section className="card reading-entry" aria-labelledby="reading-entry-title">
+        <div>
+          <h2 id="reading-entry-title">Les probabilités, en clair</h2>
+          <p>
+            Une équipe favorite peut perdre. Découvrez comment lire les scores possibles, les buts
+            attendus et la qualité des données.
+          </p>
+        </div>
+        <Link href="/comprendre-probabilites" className="button">
+          Lire le guide →
+        </Link>
+      </section>
     </div>
   );
 }

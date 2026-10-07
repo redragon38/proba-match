@@ -14,7 +14,7 @@ export const getDataset = requestCache(async function getDataset(): Promise<Data
     if (process.env.NODE_ENV !== 'production' && process.env.MATCHSCORE_DEMO === 'true')
       return cache.get('demo', async () => createDemoDataset(), 30000, 0);
     return emptyDataset(
-      'PostgreSQL non configuré. Les données OpenFootball seront disponibles après le premier import.',
+      'Les données football ne sont pas disponibles pour le moment. Les guides et explications restent accessibles.',
     );
   }
   try {
@@ -56,7 +56,9 @@ export const getDataset = requestCache(async function getDataset(): Promise<Data
             .filter(Boolean)
             .join(' '),
         })
-      : emptyDataset('La base est temporairement indisponible. Réessayez plus tard.');
+      : (() => {
+          throw new Error('FOOTBALL_TEMPORARILY_UNAVAILABLE');
+        })();
   }
 });
 let lastDataset: Dataset | undefined;

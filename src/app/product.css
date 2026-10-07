@@ -888,3 +888,16 @@ body {
   width: 100%;
   height: 100%;
 }
+/* Documented metric samples need readable labels on narrow team profiles. */
+@media (max-width: 480px) {
+  .metrics.three.team-statistics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .team-statistics-grid .metric:last-child {
+    grid-column: 1 / -1;
+  }
+  .team-statistics-grid .metric > strong {
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+}

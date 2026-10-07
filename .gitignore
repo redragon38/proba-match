@@ -10,5 +10,9 @@ playwright-report/
 test-results/
 *.log
 backtest-results.json
+model-validation-results.json
 artifacts/*debug*
 .vercel/
+
+score-model-comparison.json
+derived-event-evaluation.json

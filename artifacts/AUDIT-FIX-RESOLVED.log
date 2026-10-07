@@ -1,0 +1,11 @@
+match-score@1.0.0 /workspace/scratch/c9d93a788bd6/current/proba-match
+├─┬ @tailwindcss/postcss@4.3.3
+│ ├─┬ @tailwindcss/node@4.3.3
+│ │ └── source-map-js@1.2.2 overridden
+│ └─┬ postcss@8.5.28
+│   └── source-map-js@1.2.2 deduped
+└─┬ next@16.3.8
+  ├─┬ postcss@8.5.23
+  │ └── source-map-js@1.2.2 deduped
+  └── sharp@0.35.5 overridden
+

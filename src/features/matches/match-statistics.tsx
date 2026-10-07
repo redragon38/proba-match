@@ -1,5 +1,6 @@
 import type { Match, MatchStat, Team } from '@/types/football';
 import { number } from '@/lib/format';
+import { statisticValue, sanitizeMatchStatistics, descriptiveRatios } from '@/lib/statistic-values';
 
 const groups: { title: string; labels: string[] }[] = [
   {
@@ -18,6 +19,7 @@ const groups: { title: string; labels: string[] }[] = [
   {
     title: 'Attaque',
     labels: [
+      'Part des tirs cadrés',
       'Grosses occasions',
       'Grosses occasions manquées',
       'Tirs non cadrés',
@@ -33,6 +35,7 @@ const groups: { title: string; labels: string[] }[] = [
   {
     title: 'Passes',
     labels: [
+      'Passes réussies (%) calculé',
       'Passes',
       'Passes réussies',
       'Précision des passes',
@@ -43,29 +46,84 @@ const groups: { title: string; labels: string[] }[] = [
   },
   {
     title: 'Défense',
-    labels: ['Tacles', 'Interceptions', 'Dégagements', 'Duels', 'Duels gagnés', 'Arrêts'],
+    labels: [
+      'Tacles',
+      'Interceptions',
+      'Dégagements',
+      'Duels',
+      'Duels gagnés',
+      'Duels gagnés (%) calculé',
+      'Arrêts',
+    ],
   },
   { title: 'Discipline', labels: ['Fautes', 'Cartons jaunes', 'Cartons rouges'] },
   { title: 'Autres données fournies', labels: [] },
 ];
 const explanations: Record<string, string> = {
-  xG: 'Estimation de la qualité des occasions créées.',
+  'Part des tirs cadrés':
+    'Tirs cadrés divisés par le total des tirs disponibles. Ce ratio décrit le cadrage, pas la qualité des occasions ; un faible volume reste peu représentatif.',
+  'Passes réussies (%) calculé':
+    'Passes réussies divisées par les passes tentées recensées. Ratio calculé par Proba Match, distinct d’un éventuel taux transmis par la source.',
+  'Duels gagnés (%) calculé':
+    'Duels gagnés divisés par les duels recensés. Ratio descriptif calculé uniquement si les deux compteurs sont disponibles.',
+  Possession:
+    'Part du temps de possession attribuée à l’équipe par le fournisseur. Avoir davantage le ballon ne garantit pas davantage d’occasions.',
+  Tirs: 'Tentatives de but recensées : cadrées, non cadrées et éventuellement bloquées selon la définition du fournisseur.',
+  Corners:
+    'Coups de pied de coin obtenus. Un nombre élevé ne suffit pas à démontrer une domination.',
+  Fautes: 'Infractions commises recensées par le fournisseur.',
+  'Cartons jaunes':
+    'Avertissements recensés ; le traitement d’un second jaune peut varier selon la source.',
+  'Cartons rouges':
+    'Expulsions recensées. Le total peut inclure ou distinguer les seconds jaunes selon la source.',
+  Passes: 'Tentatives de passe recensées ; ce volume dépend de la possession et du style de jeu.',
+  'Passes réussies': 'Passes arrivées à un coéquipier selon la définition du fournisseur.',
+  'Passes clés':
+    'Passes conduisant directement à un tir ; elles ne sont pas nécessairement des passes décisives.',
+  'Passes longues': 'Passes dépassant la distance minimale définie par le fournisseur.',
+  'Passes dans le dernier tiers':
+    'Passes recensées dans la partie du terrain la plus proche du but adverse.',
+  Tacles:
+    'Interventions au sol sur le porteur ; réussites et tentatives peuvent être distinguées selon la source.',
+  Interceptions: 'Passes adverses coupées avant d’atteindre leur destinataire.',
+  Dégagements: 'Ballons éloignés de la zone de danger, sans forcément chercher un coéquipier.',
+  Duels: 'Confrontations directes recensées entre joueurs. Leur définition dépend du fournisseur.',
+  'Duels gagnés': 'Duels remportés parmi ceux recensés par le fournisseur.',
+  Arrêts:
+    'Tirs stoppés par le gardien ; ne comprend pas nécessairement les tirs bloqués par des défenseurs.',
+  'Tirs non cadrés':
+    'Tentatives qui ne se dirigent pas dans le cadre du but ; les poteaux peuvent être traités à part.',
+  'Tirs bloqués': 'Tentatives interceptées par un adversaire avant d’atteindre le but.',
+  'Tirs dans la surface': 'Tentatives effectuées depuis l’intérieur de la surface de réparation.',
+  'Tirs hors surface': 'Tentatives effectuées depuis l’extérieur de la surface de réparation.',
+  'Hors-jeu': 'Positions de hors-jeu sanctionnées par l’arbitre.',
+  Centres: 'Ballons envoyés depuis un côté du terrain vers la zone du but adverse.',
+  'Grosses occasions':
+    'Occasions jugées particulièrement favorables par le fournisseur ; ce classement est subjectif.',
+  'Grosses occasions manquées':
+    'Grosses occasions sans but, selon la définition propre au fournisseur.',
+  Attaques: 'Séquences offensives comptabilisées par la source ; pas de définition universelle.',
+  'Attaques dangereuses':
+    'Séquences jugées menaçantes par la source ; indicateur à interpréter avec prudence.',
+
+  xG: 'Somme des probabilités de but des occasions, estimées par le fournisseur. Ce chiffre décrit les tirs observés ; il est distinct des buts attendus avant-match de Proba Match.',
   xGOT: 'Qualité estimée des tirs cadrés selon leur placement.',
   'Tirs cadrés': 'Tirs qui auraient fini dans le but sans intervention du gardien.',
   'Précision des passes': 'Pourcentage de passes réussies.',
-  PPDA: 'Indicateur de l’intensité du pressing.',
+  PPDA: 'Passes adverses par action défensive dans une zone définie par le fournisseur. Une valeur plus faible peut indiquer un pressing plus intense ; les définitions varient.',
   'Field tilt': 'Part de possession territoriale dans le dernier tiers.',
 };
 
 export function validMatchStats(stats: MatchStat[]) {
-  return stats.filter(
-    (stat) =>
-      (stat.home != null && Number.isFinite(stat.home) && stat.home >= 0) ||
-      (stat.away != null && Number.isFinite(stat.away) && stat.away >= 0),
-  );
+  return sanitizeMatchStatistics(stats);
 }
 
 export function statReading(stat: MatchStat, home: Team, away: Team) {
+  if (
+    statisticValue(stat.label, stat.home, stat.unit) === null ||
+    statisticValue(stat.label, stat.away, stat.unit) === null
+  )
+    return null;
   if (
     stat.home == null ||
     stat.away == null ||
@@ -97,8 +155,8 @@ export function matchStatsSummary(stats: MatchStat[], home: Team, away: Team) {
 }
 
 export function StatComparisonRow({ stat }: { stat: MatchStat }) {
-  const home = stat.home != null && Number.isFinite(stat.home) && stat.home >= 0 ? stat.home : null;
-  const away = stat.away != null && Number.isFinite(stat.away) && stat.away >= 0 ? stat.away : null;
+  const home = statisticValue(stat.label, stat.home, stat.unit);
+  const away = statisticValue(stat.label, stat.away, stat.unit);
   const total = home != null && away != null ? home + away : null;
   return (
     <div className="match-stat-row">
@@ -128,7 +186,8 @@ export function StatComparisonRow({ stat }: { stat: MatchStat }) {
 }
 
 export function MatchStatistics({ match, home, away }: { match: Match; home: Team; away: Team }) {
-  const stats = validMatchStats(match.statistics);
+  const observed = match.status === 'scheduled' ? [] : validMatchStats(match.statistics);
+  const stats = [...observed, ...descriptiveRatios(observed)];
   const periodScores = match.scoreBreakdown && (
     <div className="match-period-scores">
       {(
@@ -140,7 +199,13 @@ export function MatchStatistics({ match, home, away }: { match: Match; home: Tea
         ] as const
       ).map(([key, label]) => {
         const value = match.scoreBreakdown?.[key];
-        return value?.home != null && value.away != null ? (
+        return match.status !== 'scheduled' &&
+          value?.home != null &&
+          value.away != null &&
+          Number.isSafeInteger(value.home) &&
+          value.home >= 0 &&
+          Number.isSafeInteger(value.away) &&
+          value.away >= 0 ? (
           <p key={key}>
             <span>{label}</span>
             <strong>
@@ -158,7 +223,7 @@ export function MatchStatistics({ match, home, away }: { match: Match; home: Tea
         <p className="data-note">
           {match.status === 'scheduled'
             ? 'Les statistiques de cette rencontre seront affichées après le coup d’envoi si une source les transmet.'
-            : 'Aucune statistique détaillée de cette rencontre n’a été transmise.'}
+            : 'Aucune statistique détaillée exploitable n’est disponible pour cette rencontre.'}
         </p>
       </>
     );
@@ -182,6 +247,22 @@ export function MatchStatistics({ match, home, away }: { match: Match; home: Tea
   const primary = sections[0];
   return (
     <div className="match-stats-view">
+      {match.detailFallback?.includes('statistics') && (
+        <p className="warning" role="status">
+          La dernière réponse n’a pas fourni ces statistiques. Les anciennes valeurs sont conservées
+          ; leur fraîcheur n’est pas confirmée.
+        </p>
+      )}
+      <p className="data-note">
+        Dernière réception des statistiques :{' '}
+        {match.detailObservedAt?.statistics?.slice(0, 10) ?? 'date non confirmée'}.
+      </p>
+      <p className="data-note">
+        Statistiques observées transmises par le fournisseur, distinctes des probabilités calculées
+        avant le match. Une donnée manquante n’est pas un zéro. Les définitions peuvent varier entre
+        sources. Les ratios indiqués « calculé » sont descriptifs et ne modifient pas la prédiction
+        avant-match.
+      </p>
       {periodScores}
       {summary && <p className="card padded match-stats-summary">{summary}</p>}
       {quick.length > 0 && (

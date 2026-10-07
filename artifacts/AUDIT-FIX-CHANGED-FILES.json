@@ -1,0 +1,990 @@
+{
+  "generatedAt": "2026-10-06",
+  "repository": "redragon38/proba-match",
+  "baseBranch": "master",
+  "baseCommit": "f828972",
+  "sourceChanges": [
+    {
+      "path": ".env.example",
+      "status": "modified"
+    },
+    {
+      "path": ".gitignore",
+      "status": "modified"
+    },
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "docs/audit-fixes-operations.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/seo-geo-operations.md",
+      "status": "added"
+    },
+    {
+      "path": "package-lock.json",
+      "status": "modified"
+    },
+    {
+      "path": "package.json",
+      "status": "modified"
+    },
+    {
+      "path": "prisma/migrations/202610060001_result_observations/migration.sql",
+      "status": "added"
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/backtest-predictions.ts",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/backtest.ts",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/benchmark-comparison.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/compare-audit-models.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/compare-score-models.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/evaluate-derived-events.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/export-prediction.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/measure-prediction-footprint.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/replay-prediction.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/responsive-check.mjs",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/validate-models.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/verify-comparison-periods.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/verify-competition-seasons.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/verify-editorial-pages.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/verify-expanded-statistics.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/verify-seo.mjs",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/verify-ssr.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/verify-team-statistics.mjs",
+      "status": "added"
+    },
+    {
+      "path": "src/app/[legal]/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/a-propos/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/api/live/route.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/comparateur/[kind]/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/competition/[slug]/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/competitions/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/comprendre-probabilites/page.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/app/contact/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/equipe/[slug]/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/equipes/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/favoris/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/joueur/[slug]/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/joueurs/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/layout.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/lexique-football/page.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/app/match/[id]/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/methodologie/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/parametres/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/probabilities.css",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/product.css",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/reading.css",
+      "status": "added"
+    },
+    {
+      "path": "src/app/recherche/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/sitemap.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/sources-donnees/page.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/components/editorial-context.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/components/shell.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/source-banner.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/compare/comparator.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/matches/home-insights.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/matches/live-page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/matches/match-detail.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/matches/match-overview.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/matches/match-statistics.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/matches/probability-summary.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/notifications.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/performance/performance.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/profiles/competition-profile.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/profiles/standings.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/profiles/team-profile.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/catalogue-query.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/editorial.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/event-time.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/factual-dates.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/format.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/match-facts.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/prediction-explanations.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/probability-format.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/seo.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/sports-structured-data.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/statistic-values.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/team-facts.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/prediction-engine/availability.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/prediction-engine/backtest.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/dixon-coles.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/prediction-engine/elo.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/evaluation.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/form.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/index.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/insights.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/player.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/poisson.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/result-period.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/prediction-engine/validation.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/services/competition-view.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/derived-standings.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/detail-revisions.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/services/football/espn-sync.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/freshness.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/health-snapshot.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/health.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/index.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/jobs.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/lease-context.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/services/football/live-selection.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/services/football/local-store.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/match-selection.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/openfootball-sync.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/persistence.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/providers/apiFootball.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/providers/espn.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/read-model.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/rebuild-elo.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/secondary.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/sportsdb-sync.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/predictions.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/profile-history.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/seo.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/statistics.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/types/football.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/audit-regressions.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/database.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/e2e/audit-contracts.spec.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/e2e/editorial-geo.spec.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/e2e/query-integrity.spec.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/e2e/reading-guide.spec.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/editorial-seo.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/expanded-probabilities.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/comparison-periods.tsx",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/competition-seasons.tsx",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/expanded-statistics.tsx",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/availability.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/backtest.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/calibration.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/confidence.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/dixon-coles.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/elo.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/evaluation.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/form.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/index.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/insights.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/player.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/poisson.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/validation.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/prediction-statistics.json",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/team-statistics.tsx",
+      "status": "added"
+    },
+    {
+      "path": "tests/football-freshness.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/history-coverage.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/prediction-persistence.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/provider.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/publication-consistency.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/season-query-integrity.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/seo.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/sports-entities.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/statistical-integrity.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/team-profile-statistics.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/temporal-availability.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/temporal-model-selection.test.ts",
+      "status": "added"
+    }
+  ],
+  "sourceChangeCount": 155,
+  "remoteWrite": false,
+  "deployed": false,
+  "auditPassChanges": [
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "docs/audit-fixes-operations.md",
+      "status": "added"
+    },
+    {
+      "path": "package-lock.json",
+      "status": "modified"
+    },
+    {
+      "path": "package.json",
+      "status": "modified"
+    },
+    {
+      "path": "prisma/migrations/202610060001_result_observations/migration.sql",
+      "status": "added"
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/compare-audit-models.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/export-prediction.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/measure-prediction-footprint.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/replay-prediction.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/verify-comparison-periods.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/verify-team-statistics.mjs",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/api/live/route.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/comparateur/[kind]/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/comprendre-probabilites/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/joueur/[slug]/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/methodologie/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/sitemap.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/sources-donnees/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/editorial-context.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/source-banner.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/compare/comparator.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/matches/live-page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/matches/match-detail.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/matches/match-overview.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/matches/match-statistics.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/notifications.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/performance/performance.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/profiles/competition-profile.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/profiles/standings.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/profiles/team-profile.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/editorial.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/event-time.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/prediction-engine/availability.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/backtest.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/elo.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/form.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/index.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/result-period.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/services/competition-view.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/detail-revisions.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/services/football/espn-sync.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/freshness.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/health-snapshot.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/health.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/index.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/jobs.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/lease-context.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/services/football/live-selection.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/services/football/local-store.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/match-selection.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/openfootball-sync.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/persistence.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/providers/apiFootball.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/providers/espn.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/read-model.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/rebuild-elo.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/secondary.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/sportsdb-sync.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/predictions.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/profile-history.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/statistics.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/types/football.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/audit-regressions.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/database.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/e2e/audit-contracts.spec.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/comparison-periods.tsx",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/availability.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/backtest.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/calibration.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/confidence.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/dixon-coles.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/elo.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/evaluation.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/form.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/index.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/insights.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/player.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/poisson.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/model-1.3.0/validation.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/football-freshness.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/history-coverage.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/prediction-persistence.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/provider.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/publication-consistency.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/statistical-integrity.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/temporal-availability.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/temporal-model-selection.test.ts",
+      "status": "modified"
+    }
+  ],
+  "auditPassChangeCount": 89
+}

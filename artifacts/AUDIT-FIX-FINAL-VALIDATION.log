@@ -1,0 +1,113 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> match-score@1.0.0 check
+> npm run typecheck && npm run lint && npm test && npm run build
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> match-score@1.0.0 typecheck
+> tsc --noEmit
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> match-score@1.0.0 lint
+> eslint .
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> match-score@1.0.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /workspace/scratch/c9d93a788bd6/current/proba-match
+
+
+ Test Files  47 passed (47)
+      Tests  306 passed (306)
+   Start at  20:35:33
+   Duration  3.22s (transform 2.71s, setup 0ms, import 6.40s, tests 7.04s, environment 10ms)
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> match-score@1.0.0 build
+> prisma generate && next build
+
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 134ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+
+▲ Next.js 16.3.8 (Turbopack)
+✓ Running next.config.ts took 33ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 544ms
+  Running TypeScript ...
+  Finished TypeScript in 6.9s ...
+  Collecting page data using 8 workers ...
+  Generating static pages using 8 workers (0/22) ...
+  Generating static pages using 8 workers (5/22) 
+  Generating static pages using 8 workers (10/22) 
+  Generating static pages using 8 workers (16/22) 
+✓ Generating static pages using 8 workers (22/22) in 375ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[legal]
+├ ƒ /a-propos
+├ ƒ /admin
+├ ƒ /admin/performance-modele
+├ ƒ /api/admin/mapping
+├ ƒ /api/admin/session
+├ ƒ /api/admin/sync
+├ ƒ /api/competitions/[id]
+├ ƒ /api/cron/fixtures
+├ ƒ /api/cron/live
+├ ƒ /api/cron/openfootball
+├ ƒ /api/cron/players
+├ ƒ /api/cron/standings
+├ ƒ /api/cron/sync
+├ ƒ /api/health
+├ ƒ /api/live
+├ ƒ /api/matches
+├ ƒ /api/matches/[id]
+├ ƒ /api/matches/today
+├ ƒ /api/search
+├ ƒ /api/teams/[id]
+├ ƒ /api/updates
+├ ƒ /api/vitals
+├ ○ /apple-icon.png
+├ ƒ /classements
+├ ƒ /comparateur/[kind]
+├ ƒ /competition/[slug]
+├ ƒ /competitions
+├ ƒ /comprendre-probabilites
+├ ƒ /contact
+├ ƒ /equipe/[slug]
+├ ƒ /equipes
+├ ƒ /favoris
+├ ○ /icon.png
+├ ƒ /joueur/[slug]
+├ ƒ /joueurs
+├ ƒ /lexique-football
+├ ƒ /live
+├ ○ /manifest.webmanifest
+├ ƒ /match/[id]
+├ ƒ /matchs
+├ ƒ /methodologie
+├ ○ /opengraph-image
+├ ƒ /parametres
+├ ƒ /recherche
+├ ○ /robots.txt
+├ ƒ /sitemap.xml
+└ ƒ /sources-donnees
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

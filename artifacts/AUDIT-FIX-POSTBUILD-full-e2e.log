@@ -1,0 +1,46 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+Running 64 tests using 1 worker
+
+(node:1939) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [desktop] › tests/e2e/audit-contracts.spec.ts:3:1 › public pages do not expose database setup instructions (300ms)
+  ✓   2 [desktop] › tests/e2e/audit-contracts.spec.ts:13:3 › /comparateur/equipes: suggested comparisons use an allowed named role (746ms)
+  ✓   3 [desktop] › tests/e2e/audit-contracts.spec.ts:13:3 › /comparateur/joueurs: suggested comparisons use an allowed named role (780ms)
+  ✓   4 [desktop] › tests/e2e/editorial-geo.spec.ts:3:1 › discovers the glossary and verifies its definitions and source navigation (561ms)
+  ✓   5 [desktop] › tests/e2e/editorial-geo.spec.ts:36:1 › keeps FAQ text accessible and consistent with machine-readable answers without JavaScript (271ms)
+  ✘   6 [desktop] › tests/e2e/final-predeployment.spec.ts:2:1 › real match tabs, pagination, upcoming cards and public cleanup (1.1s)
+Testing stopped early after 1 maximum allowed failures.
+
+
+  1) [desktop] › tests/e2e/final-predeployment.spec.ts:2:1 › real match tabs, pagination, upcoming cards and public cleanup 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 0
+    Received:   0
+
+      38 |   await expect(page.getByText('Source OpenFootball.', { exact: false })).toHaveCount(0);
+      39 |   const featured = await (await request.get('/api/matches?featured=true')).json();
+    > 40 |   expect(featured.matches.length).toBeGreaterThan(0);
+         |                                   ^
+      41 |   await expect(page.locator('.upcoming-grid .sport-match-card')).toHaveCount(
+      42 |     featured.matches.length,
+      43 |   );
+        at /workspace/scratch/c9d93a788bd6/current/proba-match/tests/e2e/final-predeployment.spec.ts:40:35
+
+    Error Context: test-results/final-predeployment-real-m-e3203-ng-cards-and-public-cleanup-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/final-predeployment-real-m-e3203-ng-cards-and-public-cleanup-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/final-predeployment-real-m-e3203-ng-cards-and-public-cleanup-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [desktop] › tests/e2e/final-predeployment.spec.ts:2:1 › real match tabs, pagination, upcoming cards and public cleanup 
+  58 did not run
+  5 passed (4.4s)
+  1 error was not a part of any test, see above for details

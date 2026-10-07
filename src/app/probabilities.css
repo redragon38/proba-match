@@ -345,3 +345,34 @@
     gap: 20px;
   }
 }
+
+.prediction-top-three {
+  margin-block: 20px;
+}
+.prediction-score-grid {
+  min-width: 0;
+}
+.prediction-score-grid table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.prediction-score-grid caption {
+  text-align: left;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.prediction-score-grid th,
+.prediction-score-grid td {
+  padding: 9px 2px;
+  border: 1px solid var(--line);
+}
+.prediction-score-grid th {
+  background: var(--surface-raised);
+}
+.prediction-score-grid td {
+  font-weight: 650;
+}

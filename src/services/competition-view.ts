@@ -1,3 +1,4 @@
+import { validResult } from '@/prediction-engine/availability';
 import type { Competition, Dataset, Match } from '@/types/football';
 import { derivedStandings } from '@/services/derived-standings';
 import { searchSource } from '@/services/search-index';
@@ -23,21 +24,31 @@ export function competitionView(
     : current
       ? 'scheduled'
       : 'finished';
-  const matches = allMatches.filter((match) => match.season == null || match.season === season);
+  const matches = allMatches.filter((match) => (match.season ?? competition.season) === season);
   const table = current
     ? (data.standings[competition.id] ?? [])
     : derivedStandings(matches, competition.id, 'general');
   const teamIds = new Set(matches.flatMap((match) => [match.homeId, match.awayId]));
   for (const row of table) teamIds.add(row.teamId);
   const teams = data.teams.filter((team) => teamIds.has(team.id));
-  const finished = matches.filter(
-    (match) => match.status === 'finished' && match.homeScore !== null && match.awayScore !== null,
-  );
-  const players = current ? data.players.filter((player) => teamIds.has(player.teamId)) : [];
+  const finished = matches.filter(validResult);
+  const players = current
+    ? data.players.filter(
+        (player) =>
+          teamIds.has(player.teamId) &&
+          (data.source === 'demo' ||
+            (player.statsScope?.verified === true &&
+              player.statsScope.competitionId === competition.id &&
+              player.statsScope.season === season &&
+              player.statsScope.teamId === player.teamId)),
+      )
+    : [];
   const rank = (stat: 'goals' | 'assists', limit: number) =>
     players
-      .filter((player) => player.stats[stat] !== null)
-      .sort((a, b) => b.stats[stat]! - a.stats[stat]!)
+      .filter(
+        (player) => Number.isSafeInteger(player.stats[stat]) && (player.stats[stat] ?? -1) >= 0,
+      )
+      .sort((a, b) => b.stats[stat]! - a.stats[stat]! || a.id.localeCompare(b.id))
       .slice(0, limit)
       .map((player) => ({
         id: player.id,
@@ -51,6 +62,8 @@ export function competitionView(
     competition: { ...competition, season },
     seasons,
     mode,
+    seasonFallback: query.saison !== undefined && !seasons.includes(requestedSeason),
+    seasonInferredCount: current ? matches.filter((m) => m.season == null).length : 0,
     teams,
     metrics: {
       matches: matches.length,
@@ -78,12 +91,13 @@ export function competitionView(
         competitionId: match.competitionId,
         kickoff: match.kickoff,
         kickoffKnown: match.kickoffKnown,
+        sourceDate: match.sourceDate,
         status: match.status,
         phase: match.phase,
         minute: match.minute,
         extra: match.extra,
-        homeScore: match.homeScore,
-        awayScore: match.awayScore,
+        homeScore: match.status === 'finished' && !validResult(match) ? null : match.homeScore,
+        awayScore: match.status === 'finished' && !validResult(match) ? null : match.awayScore,
         round: match.round,
         source: match.source,
         updatedAt: match.updatedAt,

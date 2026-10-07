@@ -154,6 +154,7 @@ export async function syncExpandedFootball(
             kickoff: row.kickoff,
             kickoffKnown: row.kickoffKnown,
             status: row.status,
+            resultPeriod: row.resultPeriod,
             homeScore: row.homeScore,
             awayScore: row.awayScore,
             round: row.round,

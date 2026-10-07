@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { eventMinute, compareEventTime } from '@/lib/event-time';
 import type { Dataset, Match } from '@/types/football';
 import { Form, SectionTitle } from '@/components/ui';
 import { teamSummary } from '@/services/statistics';
@@ -18,7 +19,11 @@ export function MatchOverview({ data, match }: { data: Dataset; match: Match }) 
       />
       <div className="profile-shortcuts">
         <div className="card padded">
-          <h3>Forme avant le match</h3>
+          <h3>Résultats des matchs précédents</h3>
+          <p className="data-note">
+            Forme recalculée sur les résultats actuellement connus des matchs antérieurs à cette
+            rencontre.
+          </p>
           {teams.map((team) => (
             <div className="settings-row" key={team.id}>
               <Link href={`/equipe/${team.slug}`}>{team.name}</Link>
@@ -30,11 +35,11 @@ export function MatchOverview({ data, match }: { data: Dataset; match: Match }) 
           <h3>Derniers événements</h3>
           {match.events.length ? (
             [...match.events]
-              .sort((a, b) => b.minute - a.minute)
+              .sort((a, b) => compareEventTime(b, a))
               .slice(0, 3)
               .map((event, index) => (
                 <p key={index}>
-                  <b>{event.minute}′</b> ·{' '}
+                  <b>{eventMinute(event)}′</b> ·{' '}
                   {event.type === 'goal'
                     ? 'But'
                     : event.type === 'penalty-miss'

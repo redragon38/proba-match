@@ -1,0 +1,32 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+Running 22 tests using 1 worker
+
+(node:361) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [desktop] › tests/e2e/audit-contracts.spec.ts:3:1 › public pages do not expose database setup instructions (380ms)
+  ✓   2 [desktop] › tests/e2e/audit-contracts.spec.ts:13:3 › /comparateur/equipes: suggested comparisons use an allowed named role (746ms)
+  ✓   3 [desktop] › tests/e2e/audit-contracts.spec.ts:13:3 › /comparateur/joueurs: suggested comparisons use an allowed named role (704ms)
+  ✓   4 [desktop] › tests/e2e/editorial-geo.spec.ts:3:1 › discovers the glossary and verifies its definitions and source navigation (586ms)
+  ✓   5 [desktop] › tests/e2e/editorial-geo.spec.ts:36:1 › keeps FAQ text accessible and consistent with machine-readable answers without JavaScript (295ms)
+  ✓   6 [desktop] › tests/e2e/query-integrity.spec.ts:4:3 › /equipes: repeated searches keep the first term and a matching noindex canonical (240ms)
+  ✓   7 [desktop] › tests/e2e/query-integrity.spec.ts:15:3 › /equipes: non-decimal pagination returns 404 instead of a server failure (57ms)
+  ✓   8 [desktop] › tests/e2e/query-integrity.spec.ts:4:3 › /joueurs: repeated searches keep the first term and a matching noindex canonical (250ms)
+  ✓   9 [desktop] › tests/e2e/query-integrity.spec.ts:15:3 › /joueurs: non-decimal pagination returns 404 instead of a server failure (44ms)
+  ✓  10 [desktop] › tests/e2e/reading-guide.spec.ts:3:1 › explains probabilities and links to the actual methodology without client-only content (420ms)
+  ✓  11 [desktop] › tests/e2e/reading-guide.spec.ts:34:1 › makes the guide discoverable from the home page (328ms)
+(node:572) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  12 [mobile] › tests/e2e/audit-contracts.spec.ts:3:1 › public pages do not expose database setup instructions (305ms)
+  ✓  13 [mobile] › tests/e2e/audit-contracts.spec.ts:13:3 › /comparateur/equipes: suggested comparisons use an allowed named role (684ms)
+  ✓  14 [mobile] › tests/e2e/audit-contracts.spec.ts:13:3 › /comparateur/joueurs: suggested comparisons use an allowed named role (652ms)
+  ✓  15 [mobile] › tests/e2e/editorial-geo.spec.ts:3:1 › discovers the glossary and verifies its definitions and source navigation (531ms)
+  ✓  16 [mobile] › tests/e2e/editorial-geo.spec.ts:36:1 › keeps FAQ text accessible and consistent with machine-readable answers without JavaScript (277ms)
+  ✓  17 [mobile] › tests/e2e/query-integrity.spec.ts:4:3 › /equipes: repeated searches keep the first term and a matching noindex canonical (263ms)
+  ✓  18 [mobile] › tests/e2e/query-integrity.spec.ts:15:3 › /equipes: non-decimal pagination returns 404 instead of a server failure (52ms)
+  ✓  19 [mobile] › tests/e2e/query-integrity.spec.ts:4:3 › /joueurs: repeated searches keep the first term and a matching noindex canonical (259ms)
+  ✓  20 [mobile] › tests/e2e/query-integrity.spec.ts:15:3 › /joueurs: non-decimal pagination returns 404 instead of a server failure (43ms)
+  ✓  21 [mobile] › tests/e2e/reading-guide.spec.ts:3:1 › explains probabilities and links to the actual methodology without client-only content (451ms)
+  ✓  22 [mobile] › tests/e2e/reading-guide.spec.ts:34:1 › makes the guide discoverable from the home page (326ms)
+
+  22 passed (9.3s)

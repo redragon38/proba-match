@@ -1,0 +1,273 @@
+{
+  "source": "historical-import",
+  "warning": "Vérifiez les horodatages et la provenance du fichier importé.",
+  "metrics": {
+    "sample": 1208,
+    "accuracy": 0.5140728476821192,
+    "brier": 0.5978118954312069,
+    "logLoss": 0.9996862660800632,
+    "calibration": [
+      {
+        "bin": 0,
+        "count": 49,
+        "predicted": 0.08484041179899991,
+        "actual": 0.10204081632653061
+      },
+      {
+        "bin": 1,
+        "count": 592,
+        "predicted": 0.16275454347368135,
+        "actual": 0.15878378378378377
+      },
+      {
+        "bin": 2,
+        "count": 1426,
+        "predicted": 0.24565871230107364,
+        "actual": 0.2573632538569425
+      },
+      {
+        "bin": 3,
+        "count": 492,
+        "predicted": 0.34857592299447143,
+        "actual": 0.36585365853658536
+      },
+      {
+        "bin": 4,
+        "count": 401,
+        "predicted": 0.44883721425010675,
+        "actual": 0.4239401496259352
+      },
+      {
+        "bin": 5,
+        "count": 332,
+        "predicted": 0.5484540744985249,
+        "actual": 0.5060240963855421
+      },
+      {
+        "bin": 6,
+        "count": 246,
+        "predicted": 0.6490756663043081,
+        "actual": 0.6585365853658537
+      },
+      {
+        "bin": 7,
+        "count": 81,
+        "predicted": 0.73857110459057,
+        "actual": 0.7037037037037037
+      },
+      {
+        "bin": 8,
+        "count": 5,
+        "predicted": 0.8232206400638479,
+        "actual": 1
+      }
+    ]
+  },
+  "commit": "f828972",
+  "measuredAt": "2026-10-05",
+  "scope": "1298 Ligue 1 fixtures from existing public corpus",
+  "availability": "Exploratory reconstruction using kickoff + 3h; no publication timestamps; not certified point-in-time",
+  "extendedMetricsFromFrozenBaselineRows": {
+    "sample": 1208,
+    "accuracy": 0.5140728476821192,
+    "brier": 0.5978118954312069,
+    "logLoss": 0.9996862660800632,
+    "goalSample": 1208,
+    "homeGoalMae": 0.9757042964329833,
+    "awayGoalMae": 0.9180911778653765,
+    "totalGoalMae": 1.3565801369111334,
+    "scoreSample": 1208,
+    "exactScoreAccuracy": 0.1076158940397351,
+    "calibrationByOutcome": [
+      [
+        {
+          "bin": 0,
+          "count": 13,
+          "predicted": 0.08767570870168437,
+          "actual": 0.23076923076923078
+        },
+        {
+          "bin": 1,
+          "count": 127,
+          "predicted": 0.15722560834405394,
+          "actual": 0.16535433070866143
+        },
+        {
+          "bin": 2,
+          "count": 212,
+          "predicted": 0.25342897546878695,
+          "actual": 0.30660377358490565
+        },
+        {
+          "bin": 3,
+          "count": 233,
+          "predicted": 0.35240345375246707,
+          "actual": 0.3948497854077253
+        },
+        {
+          "bin": 4,
+          "count": 199,
+          "predicted": 0.4486035579708237,
+          "actual": 0.4321608040201005
+        },
+        {
+          "bin": 5,
+          "count": 206,
+          "predicted": 0.5498719450516525,
+          "actual": 0.5145631067961165
+        },
+        {
+          "bin": 6,
+          "count": 159,
+          "predicted": 0.6516334485451228,
+          "actual": 0.6855345911949685
+        },
+        {
+          "bin": 7,
+          "count": 54,
+          "predicted": 0.7386686098749436,
+          "actual": 0.7592592592592593
+        },
+        {
+          "bin": 8,
+          "count": 5,
+          "predicted": 0.8232206400638479,
+          "actual": 1
+        }
+      ],
+      [
+        {
+          "bin": 0,
+          "count": 1,
+          "predicted": 0.08509369015332464,
+          "actual": 0
+        },
+        {
+          "bin": 1,
+          "count": 231,
+          "predicted": 0.17519110957889553,
+          "actual": 0.18181818181818182
+        },
+        {
+          "bin": 2,
+          "count": 954,
+          "predicted": 0.24348436395648357,
+          "actual": 0.24737945492662475
+        },
+        {
+          "bin": 3,
+          "count": 22,
+          "predicted": 0.3130176855176911,
+          "actual": 0.22727272727272727
+        }
+      ],
+      [
+        {
+          "bin": 0,
+          "count": 35,
+          "predicted": 0.0837800649964507,
+          "actual": 0.05714285714285714
+        },
+        {
+          "bin": 1,
+          "count": 234,
+          "predicted": 0.15347816736752007,
+          "actual": 0.13247863247863248
+        },
+        {
+          "bin": 2,
+          "count": 260,
+          "predicted": 0.24730114510562745,
+          "actual": 0.25384615384615383
+        },
+        {
+          "bin": 3,
+          "count": 237,
+          "predicted": 0.3481137565720077,
+          "actual": 0.350210970464135
+        },
+        {
+          "bin": 4,
+          "count": 202,
+          "predicted": 0.44906740038662873,
+          "actual": 0.4158415841584158
+        },
+        {
+          "bin": 5,
+          "count": 126,
+          "predicted": 0.5461359686735713,
+          "actual": 0.49206349206349204
+        },
+        {
+          "bin": 6,
+          "count": 87,
+          "predicted": 0.6444010987607492,
+          "actual": 0.6091954022988506
+        },
+        {
+          "bin": 7,
+          "count": 27,
+          "predicted": 0.7383760940218226,
+          "actual": 0.5925925925925926
+        }
+      ]
+    ],
+    "calibrationError": 0.016139859192085434,
+    "calibration": [
+      {
+        "bin": 0,
+        "count": 49,
+        "predicted": 0.08484041179899991,
+        "actual": 0.10204081632653061
+      },
+      {
+        "bin": 1,
+        "count": 592,
+        "predicted": 0.16275454347368135,
+        "actual": 0.15878378378378377
+      },
+      {
+        "bin": 2,
+        "count": 1426,
+        "predicted": 0.24565871230107364,
+        "actual": 0.2573632538569425
+      },
+      {
+        "bin": 3,
+        "count": 492,
+        "predicted": 0.34857592299447143,
+        "actual": 0.36585365853658536
+      },
+      {
+        "bin": 4,
+        "count": 401,
+        "predicted": 0.44883721425010675,
+        "actual": 0.4239401496259352
+      },
+      {
+        "bin": 5,
+        "count": 332,
+        "predicted": 0.5484540744985249,
+        "actual": 0.5060240963855421
+      },
+      {
+        "bin": 6,
+        "count": 246,
+        "predicted": 0.6490756663043081,
+        "actual": 0.6585365853658537
+      },
+      {
+        "bin": 7,
+        "count": 81,
+        "predicted": 0.73857110459057,
+        "actual": 0.7037037037037037
+      },
+      {
+        "bin": 8,
+        "count": 5,
+        "predicted": 0.8232206400638479,
+        "actual": 1
+      }
+    ]
+  }
+}

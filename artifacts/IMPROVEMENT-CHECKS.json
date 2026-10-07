@@ -1,0 +1,36 @@
+[
+  {
+    "name": "ssr",
+    "exitCode": 0
+  },
+  {
+    "name": "seo",
+    "exitCode": 0
+  },
+  {
+    "name": "security",
+    "exitCode": 0
+  },
+  {
+    "name": "e2e",
+    "exitCode": 1
+  },
+  {
+    "name": "responsive",
+    "exitCode": 0
+  },
+  {
+    "name": "football-db",
+    "exitCode": 1
+  },
+  {
+    "name": "reading-e2e",
+    "exitCode": 0,
+    "tests": 4
+  },
+  {
+    "name": "reading-visual",
+    "exitCode": 0,
+    "views": 16
+  }
+]

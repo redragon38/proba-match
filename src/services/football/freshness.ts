@@ -1,7 +1,7 @@
 import type { Dataset } from '@/types/football';
 
 export const lateResultsWarning =
-  'Certains matchs passés restent sans résultat dans la source OpenFootball. Les derniers scores et les classements peuvent être incomplets.';
+  'Certains matchs passés restent sans résultat dans les sources football. Les derniers scores et les classements peuvent être incomplets.';
 export const expiredSnapshotWarning =
   'Dernières données sauvegardées. La synchronisation est en retard ; les scores peuvent être différés.';
 
@@ -21,14 +21,10 @@ export function hasLateOpenResults(
   data: Pick<Dataset, 'source' | 'matches'> | undefined,
   now = Date.now(),
 ) {
-  return (
-    data?.source === 'openfootball' &&
-    data.matches.some(
-      (match) =>
-        match.source === 'openfootball' &&
-        match.status === 'scheduled' &&
-        now - Date.parse(match.kickoff) > (match.kickoffKnown === false ? 24 : 6) * 3600000,
-    )
+  return data?.matches.some(
+    (match) =>
+      match.status === 'scheduled' &&
+      now - Date.parse(match.kickoff) > (match.kickoffKnown === false ? 24 : 6) * 3600000,
   );
 }
 

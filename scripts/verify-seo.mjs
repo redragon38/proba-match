@@ -85,6 +85,9 @@ try {
       '/classements',
       '/a-propos',
       '/methodologie',
+      '/comprendre-probabilites',
+      '/lexique-football',
+      '/sources-donnees',
       '/contact',
       '/confidentialite',
       '/cookies',
@@ -123,7 +126,47 @@ try {
           ?.getAttribute('content') || '';
       const main = document.querySelector('main')?.cloneNode(true);
       main?.querySelectorAll('script,style,[hidden]').forEach((node) => node.remove());
+      const semanticIssues = [];
+      const normalize = (text) => text.replace(/\s+/g, ' ').trim();
+      for (const script of document.querySelectorAll('script[type="application/ld+json"]')) {
+        let node;
+        try {
+          node = JSON.parse(script.textContent);
+        } catch {
+          continue;
+        }
+        if (node['@type'] === 'DefinedTermSet') {
+          for (const term of node.hasDefinedTerm ?? []) {
+            const section = document.getElementById(new URL(term.url).hash.slice(1));
+            const meaning = section
+              ? [...section.querySelectorAll('p')]
+                  .map((p) => p.textContent.replace(/^À retenir :\s*/, ''))
+                  .join(' ')
+              : '';
+            if (
+              !section ||
+              normalize(section.querySelector('h2')?.textContent ?? '') !== term.name ||
+              normalize(meaning) !== normalize(term.description)
+            )
+              semanticIssues.push(`Term not matched by visible content: ${term.name}`);
+          }
+        }
+        if (node['@type'] === 'FAQPage') {
+          for (const question of node.mainEntity ?? []) {
+            const heading = [...document.querySelectorAll('#questions h3')].find(
+              (h) => normalize(h.textContent) === question.name,
+            );
+            if (
+              !heading ||
+              normalize(heading.parentElement.querySelector('p')?.textContent ?? '') !==
+                normalize(question.acceptedAnswer.text)
+            )
+              semanticIssues.push(`FAQ not matched by visible content: ${question.name}`);
+          }
+        }
+      }
       return {
+        semanticIssues,
         title: document.title,
         description: meta('description'),
         canonical: document.querySelector('link[rel=canonical]')?.href || '',
@@ -165,6 +208,11 @@ try {
     const row = { path, status: response.status(), htmlBytes: Buffer.byteLength(html), ...data };
     report.pages.push(row);
     check('routes', response.status() === 200, `${path} HTTP 200`);
+    check(
+      'semantic content',
+      data.semanticIssues.length === 0,
+      `${path}: structured definitions and FAQ match visible text`,
+    );
     check(
       'SSR',
       data.h1.length === 1 && data.visibleText > 100,
@@ -209,7 +257,15 @@ try {
     );
     check(
       'structured data',
-      data.jsonLd.every((j) => j && j['@context'] === 'https://schema.org' && j['@type']),
+      data.jsonLd.every(
+        (j) =>
+          j &&
+          j['@context'] === 'https://schema.org' &&
+          (j['@type'] ||
+            (Array.isArray(j['@graph']) &&
+              j['@graph'].length > 0 &&
+              j['@graph'].every((node) => node['@type']))),
+      ),
       `${path}: JSON-LD syntax and type`,
     );
     check(
@@ -337,9 +393,17 @@ try {
     });
     let errors = [];
     p.on('pageerror', (e) => errors.push(e.message));
-    for (const path of ['/', '/equipes', '/classements', '/parametres', dynamic, matchPath].filter(
-      Boolean,
-    )) {
+    for (const path of [
+      '/',
+      '/equipes',
+      '/classements',
+      '/parametres',
+      '/comprendre-probabilites',
+      '/lexique-football',
+      '/sources-donnees',
+      dynamic,
+      matchPath,
+    ].filter(Boolean)) {
       errors = [];
       await p.goto(`${base}${path}`, { waitUntil: 'networkidle' });
       const metrics = await p.evaluate(() => ({

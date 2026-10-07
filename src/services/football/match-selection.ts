@@ -107,13 +107,16 @@ export function closestMatchDate(
   let closest: Match | undefined;
   let distance = Infinity;
   for (const match of data.matches) {
-    if (status === 'scheduled' ? !isUpcoming(match, now, today) : !['all', 'favorites'].includes(status) && match.status !== status)
+    if (
+      status === 'scheduled'
+        ? !isUpcoming(match, now, today)
+        : !['all', 'favorites'].includes(status) && match.status !== status
+    )
       continue;
     const kickoff = Date.parse(match.kickoff);
     if (!Number.isFinite(kickoff)) continue;
     // Only dates near today need a timezone conversion while scanning the full corpus.
-    if (Math.abs(kickoff - now) < 2 * 86400_000 && matchDate(match, zone) === today)
-      return today;
+    if (Math.abs(kickoff - now) < 2 * 86400_000 && matchDate(match, zone) === today) return today;
     const gap = Math.abs(kickoff - now);
     if (gap < distance) {
       closest = match;

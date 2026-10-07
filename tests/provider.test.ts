@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { ApiFootballProvider, mapFixture } from '@/services/football/providers/apiFootball';
+import { regulationResult } from '@/prediction-engine/result-period';
 const fixture = {
   fixture: {
     id: 123,
@@ -13,6 +14,80 @@ const fixture = {
   goals: { home: null, away: null },
 };
 describe('API-Football', () => {
+  it('keeps the extra-time final separate from the regulation result', () => {
+    const m = mapFixture({
+      ...fixture,
+      fixture: { ...fixture.fixture, status: { short: 'AET' } },
+      goals: { home: 2, away: 1 },
+      score: { fulltime: { home: 1, away: 1 }, extratime: { home: 2, away: 1 } },
+    }).matches[0];
+    expect(m.resultPeriod).toBe('extra-time');
+    expect(m.homeScore).toBe(2);
+    expect(regulationResult(m)).toMatchObject({ homeScore: 1, awayScore: 1 });
+    expect(regulationResult({ ...m, scoreBreakdown: undefined })).toBeNull();
+  });
+  it('selects player statistics by team, competition and season, not the first block', async () => {
+    const stat = (league: number, goals: number) => ({
+      team: { id: 1 },
+      league: { id: league, season: 2026 },
+      games: { position: 'Attacker' },
+      goals: { total: goals },
+      shots: {},
+      cards: {},
+    });
+    const fetcher = vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            errors: [],
+            response: [
+              {
+                player: { id: 9, name: 'Player', birth: {} },
+                statistics: [stat(39, 30), stat(61, 5)],
+              },
+            ],
+          }),
+        ),
+    );
+    const provider = new ApiFootballProvider('test', async () => {}, fetcher as typeof fetch);
+    const rows = await provider.players('1', 2026, '61');
+    expect(rows[0].stats.goals).toBe(5);
+    expect(rows[0].statsScope).toMatchObject({
+      competitionId: '61',
+      teamId: '1',
+      season: 2026,
+      verified: true,
+    });
+  });
+  it('does not arbitrarily pick one of two matching player statistic blocks', async () => {
+    const stat = {
+      team: { id: 1 },
+      league: { id: 61, season: 2026 },
+      games: {},
+      goals: { total: 5 },
+      shots: {},
+      cards: {},
+    };
+    const provider = new ApiFootballProvider(
+      'test',
+      async () => {},
+      async () =>
+        new Response(
+          JSON.stringify({
+            errors: [],
+            response: [
+              {
+                player: { id: 9, name: 'Player', birth: {} },
+                statistics: [stat, { ...stat, goals: { total: 8 } }],
+              },
+            ],
+          }),
+        ),
+    );
+    const rows = await provider.players('1', 2026, '61');
+    expect(rows[0].stats.goals).toBeNull();
+    expect(rows[0].statsScope).toBeUndefined();
+  });
   it('normalise sans inventer scores et statistiques', () => {
     const { matches, teams } = mapFixture(fixture);
     expect(matches[0].status).toBe('scheduled');

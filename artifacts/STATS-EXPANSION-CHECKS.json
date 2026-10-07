@@ -1,0 +1,22 @@
+[
+  {
+    "name": "ssr",
+    "exitCode": 0
+  },
+  {
+    "name": "seo",
+    "exitCode": 0
+  },
+  {
+    "name": "security",
+    "exitCode": 0
+  },
+  {
+    "name": "reading-e2e",
+    "exitCode": 0
+  },
+  {
+    "name": "responsive",
+    "exitCode": 0
+  }
+]

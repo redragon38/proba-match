@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { legalConfig } from '@/lib/legal';
+import { seoMetadata } from '@/lib/seo';
 const content: Record<string, { title: string; sections: { title: string; text: string }[] }> = {
   confidentialite: {
     title: 'Confidentialité',
@@ -64,10 +65,7 @@ const content: Record<string, { title: string; sections: { title: string; text: 
 export async function generateMetadata({ params }: { params: Promise<{ legal: string }> }) {
   const { legal } = await params;
   if (!content[legal]) notFound();
-  return {
-    title: content[legal]?.title ?? 'Page introuvable',
-    robots: { index: false, follow: true },
-  };
+  return seoMetadata(`/${legal}`, content[legal].title, content[legal].sections[0].text, false);
 }
 export default async function Page({ params }: { params: Promise<{ legal: string }> }) {
   const { legal } = await params;

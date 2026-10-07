@@ -2,6 +2,7 @@ import type { Prediction, Team } from '@/types/football';
 import type { informationQuality, predictionInsights } from '@/prediction-engine/insights';
 import { ProbabilityBar, TeamBadge } from '@/components/ui';
 import { number, time } from '@/lib/format';
+import { plainFactor } from '@/lib/prediction-explanations';
 import {
   formatProbability,
   probabilityPercentages,
@@ -40,7 +41,13 @@ function Distribution({
           <span className="prob-distribution-track" aria-hidden="true">
             <span style={{ width: `${rounded[index]}%` }} />
           </span>
-          <strong>{rounded[index]} %</strong>
+          <strong>
+            {rounded[index] === 0 && values[index] > 0
+              ? '< 1 %'
+              : rounded[index] === 100 && values[index] < 1
+                ? '> 99 %'
+                : `${rounded[index]} %`}
+          </strong>
         </div>
       ))}
     </section>
@@ -74,6 +81,10 @@ export function ProbabilitySummary({
       ? factor.side === 'neutral' || !factor.side
       : factor.side === (reading.leader === 0 ? 'home' : 'away'),
   );
+  const plainReasons = relevantFactors.slice(0, 3).flatMap((factor) => {
+    const explanation = plainFactor(factor, home.name, away.name);
+    return explanation ? [explanation] : [];
+  });
   const reason = relevantFactors
     .slice(0, 2)
     .map((factor) => factor.label.toLowerCase())
@@ -126,7 +137,9 @@ export function ProbabilitySummary({
             : 'Aucune issue ne se détache nettement.'}
         </p>
         <p className="prediction-caution">
-          Les probabilités sont des estimations, pas une garantie de résultat.
+          Les probabilités sont des estimations, pas une garantie de résultat. Sur 100 rencontres
+          comparables selon le modèle, environ {values[reading.leader]} auraient l’issue «{' '}
+          {names[reading.leader]} ». Cela ne décrit pas les 100 prochains matchs de cette équipe.
         </p>
       </div>
       <div className="prediction-essentials">
@@ -170,7 +183,7 @@ export function ProbabilitySummary({
             />
           </div>
           <strong>{quality?.level ?? 'Non évaluée'}</strong>
-          <span>Indice des données : {prediction.confidence}/100 · précision non mesurée ici</span>
+          <span>Qualité des informations, distincte de la probabilité du résultat.</span>
           {quality?.level === 'Faible' && (
             <small>
               {quality.reasons[0] ?? 'Les données disponibles limitent cette estimation.'}
@@ -178,8 +191,38 @@ export function ProbabilitySummary({
           )}
         </div>
       </div>
+      {prediction.scores.length >= 3 && (
+        <section className="prediction-top-three">
+          <h4>Trois scores les plus probables</h4>
+          <div className="alternative-scores">
+            {prediction.scores.slice(0, 3).map((score) => (
+              <div key={`${score.home}-${score.away}`}>
+                <strong>
+                  {score.home}–{score.away}
+                </strong>
+                <span>{formatProbability(score.probability)}</span>
+              </div>
+            ))}
+          </div>
+          <p className="data-note">
+            Chaque pourcentage concerne un score précis. D’autres scores restent possibles.
+          </p>
+        </section>
+      )}
       <div className="prediction-why">
         <h4>Pourquoi cette estimation ?</h4>
+        {plainReasons.length > 0 && (
+          <ul>
+            {plainReasons.map((text) => (
+              <li key={text}>{text}</li>
+            ))}
+          </ul>
+        )}
+        <p className="data-note">
+          Ces éléments sont combinés pour estimer les buts de chaque équipe, puis les scénarios de
+          score. On ne peut pas attribuer un nombre exact de points de probabilité à chacun de ces
+          facteurs.
+        </p>
         <p>
           {outcomeSummary}{' '}
           {reason
@@ -222,6 +265,88 @@ export function ProbabilitySummary({
           )}
           {analysis && (
             <>
+              <section className="prediction-derived">
+                <h4>Un éventail de buts possibles</h4>
+                <p>
+                  Entre{' '}
+                  <strong>
+                    {analysis.totalRange.from} et {analysis.totalRange.to} buts au total
+                  </strong>{' '}
+                  : cette plage regroupe {formatProbability(analysis.totalRange.probability)} de la
+                  distribution calculée.
+                </p>
+                <p className="data-note">
+                  C’est la plage entière la plus courte regroupant au moins 80 % des scénarios du
+                  modèle. Les autres totaux restent possibles. Ce chiffre n’est pas un indice de
+                  confiance ni une garantie.
+                </p>
+                {analysis.totalAtLeast.map((event) => (
+                  <div key={event.goals}>
+                    <span>Au moins {event.goals} buts au total</span>
+                    <strong>{formatProbability(event.probability)}</strong>
+                  </div>
+                ))}
+              </section>
+              <Distribution
+                title={`Buts de ${home.short}`}
+                labels={['0 but', '1 but', '2 buts', '3 ou plus']}
+                values={analysis.homeGoals}
+              />
+              <Distribution
+                title={`Buts de ${away.short}`}
+                labels={['0 but', '1 but', '2 buts', '3 ou plus']}
+                values={analysis.awayGoals}
+              />
+              <section className="prediction-score-grid">
+                <h4>Explorer les scénarios de score</h4>
+                <table>
+                  <caption>
+                    Buts de {home.short} en lignes ; buts de {away.short} en colonnes.
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">1 / 2</th>
+                      {['0', '1', '2', '3', '4+'].map((label) => (
+                        <th scope="col" key={label}>
+                          {label}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {analysis.scoreGrid.map((row, h) => (
+                      <tr key={h}>
+                        <th scope="row">{h === 4 ? '4+' : h}</th>
+                        {row.map((p, a) => (
+                          <td key={a}>{formatProbability(p)}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <p className="data-note">
+                  4+ regroupe quatre buts ou davantage. Les cases forment une seule distribution ;
+                  les pourcentages sont arrondis séparément.
+                </p>
+              </section>
+              <section className="prediction-derived">
+                <h4>Victoire et écart de buts</h4>
+                <p className="data-note">
+                  Probabilité de l’événement complet, sur tous les scénarios du match ; ces chiffres
+                  ne sont pas conditionnés à une victoire.
+                </p>
+                {(['home', 'away'] as const).map((side) =>
+                  analysis.winningMargins[side].map((p, index) => (
+                    <div key={`${side}-${index}`}>
+                      <span>
+                        {side === 'home' ? home.short : away.short} gagne par{' '}
+                        {index === 2 ? '3 buts ou plus' : `${index + 1} but${index ? 's' : ''}`}
+                      </span>
+                      <strong>{formatProbability(p)}</strong>
+                    </div>
+                  )),
+                )}
+              </section>
               <Distribution
                 title="Nombre total de buts"
                 labels={['0', '1', '2', '3', '4', '5 ou plus']}

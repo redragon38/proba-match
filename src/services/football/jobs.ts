@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { db } from '@/database/client';
 import { cache } from '@/services/cache';
 import { log } from '@/lib/logger';
+import { footballLease, assertJobActive } from './lease-context';
 /** All writers share the same lease, so OpenFootball cannot overwrite an enrichment snapshot. */
 export async function footballJob<T>(provider: string, work: () => Promise<T>) {
   if (!process.env.DATABASE_URL) throw new Error('DATABASE_NOT_CONFIGURED');
@@ -11,18 +12,28 @@ export async function footballJob<T>(provider: string, work: () => Promise<T>) {
     { key: string }[]
   >`INSERT INTO "SyncLock" ("key","token","expiresAt") VALUES ('football',${token},${expiresAt}::timestamptz AT TIME ZONE 'UTC') ON CONFLICT ("key") DO UPDATE SET "token"=${token},"expiresAt"=${expiresAt}::timestamptz AT TIME ZONE 'UTC' WHERE "SyncLock"."expiresAt"<(NOW() AT TIME ZONE 'UTC') RETURNING "key"`;
   if (!acquired.length) throw new Error('SYNC_ALREADY_RUNNING');
+  const lease = { token, lost: false };
   const heartbeat = setInterval(() => {
     void db.syncLock
       .updateMany({
         where: { key: 'football', token },
         data: { expiresAt: new Date(Date.now() + 30 * 60_000) },
       })
-      .catch(() => undefined);
+      .then((result) => {
+        if (result.count !== 1) lease.lost = true;
+      })
+      .catch(() => {
+        lease.lost = true;
+      });
   }, 60_000);
   let run: { id: string } | undefined;
   try {
     run = await db.syncRun.create({ data: { provider, status: 'running' } });
-    const result = await work();
+    const result = await footballLease.run(lease, async () => {
+      const value = await work();
+      assertJobActive();
+      return value;
+    });
     const summary = result as {
       matches?: number;
       players?: number;

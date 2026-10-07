@@ -16,6 +16,8 @@ export function Comparator({
   initialB,
   playerChoices,
   summaries,
+  periodMode = 'catalogue',
+  commonPeriod,
 }: {
   data: Dataset;
   kind: 'teams' | 'players';
@@ -23,6 +25,8 @@ export function Comparator({
   initialB?: string;
   playerChoices?: { id: string; name: string }[];
   summaries: ReturnType<typeof comparisonView>;
+  periodMode?: 'catalogue' | 'common';
+  commonPeriod?: { from?: string; to?: string };
 }) {
   const router = useRouter();
   const items = kind === 'teams' ? data.teams : (playerChoices ?? data.players);
@@ -38,12 +42,17 @@ export function Comparator({
   const A = profiles.find((i) => i.id === a),
     B = profiles.find((i) => i.id === b);
   function choose(nextA: string, nextB: string) {
-    setA(nextA);
-    setB(nextB);
-    if (kind === 'players')
-      router.replace(`/comparateur/joueurs?${new URLSearchParams({ a: nextA, b: nextB })}`, {
+    // A common window belongs to the server-selected pair; keep that pair until navigation resolves.
+    if (kind === 'players' || periodMode !== 'common') {
+      setA(nextA);
+      setB(nextB);
+    }
+    router.replace(
+      `/comparateur/${kind === 'teams' ? 'equipes' : 'joueurs'}?${new URLSearchParams({ a: nextA, b: nextB, ...(kind === 'teams' ? { period: periodMode } : {}) })}`,
+      {
         scroll: false,
-      });
+      },
+    );
   }
   function options(selected: string) {
     const matches = items
@@ -150,7 +159,77 @@ export function Comparator({
         Choisissez deux profils pour comparer leurs volumes de jeu, leur forme et leurs forces. Les
         données manquantes restent signalées.
       </p>
-      <div className="suggestions" aria-label="Comparaisons suggérées">
+      {kind === 'teams' && A && B && (
+        <div className="card padded">
+          <h2>Périmètre des chiffres</h2>
+          <p className="data-note">
+            {periodMode === 'common'
+              ? `Période commune : ${commonPeriod?.from?.slice(0, 10) ?? 'indisponible'} à ${commonPeriod?.to?.slice(0, 10) ?? 'indisponible'}.`
+              : 'Historique disponible du catalogue, pouvant couvrir plusieurs saisons et compétitions.'}
+            Les échantillons peuvent différer, même à période identique. Une période commune ne
+            garantit pas des adversaires ou des compétitions comparables.
+          </p>
+          <form action="/comparateur/equipes" method="get" className="catalog-search">
+            <input type="hidden" name="a" value={a} />
+            <input type="hidden" name="b" value={b} />
+            <label htmlFor="comparison-period">Période comparée</label>
+            <select
+              id="comparison-period"
+              name="period"
+              defaultValue={periodMode}
+              style={{ width: '100%', minWidth: 0, maxWidth: '100%' }}
+            >
+              <option value="catalogue">Tout l’historique disponible</option>
+              <option value="common">Période commune aux deux équipes</option>
+            </select>
+            <button type="submit" className="button secondary">
+              Appliquer la période
+            </button>
+          </form>
+          {periodMode === 'common' && !commonPeriod?.from && (
+            <p className="warning">
+              Aucune période commune : les statistiques comparées sont indisponibles.
+            </p>
+          )}
+          {[A, B].map((team) => (
+            <p className="data-note" key={team.id}>
+              {team.name} : {summaries[team.id].all.played} résultats ; période{' '}
+              {summaries[team.id].period.from?.slice(0, 10) ?? 'indisponible'} à{' '}
+              {summaries[team.id].period.to?.slice(0, 10) ?? 'indisponible'} ;{' '}
+              {Object.entries(summaries[team.id].coverage)
+                .map(
+                  ([label, value]) =>
+                    `${label} : ${value.sample} matchs documentés, ${value.from?.slice(0, 10) ?? 'date inconnue'} à ${value.to?.slice(0, 10) ?? 'date inconnue'}, source ${value.sources.join(', ') || 'indisponible'}`,
+                )
+                .join(' · ')}
+            </p>
+          ))}
+        </div>
+      )}
+      {kind === 'players' && A && B && 'stats' in A && 'stats' in B && (
+        <div className="card padded">
+          <h2>Périmètre des relevés joueurs</h2>
+          {[A, B].map((player) => (
+            <p className="data-note" key={player.id}>
+              {player.name} :{' '}
+              {player.statsScope?.verified
+                ? `saison ${player.statsScope.season}, compétition ${data.competitions.find((c) => c.id === player.statsScope!.competitionId)?.name ?? player.statsScope.competitionId}, équipe ${data.teams.find((t) => t.id === player.statsScope!.teamId)?.name ?? player.statsScope.teamId}, source ${player.statsScope.source}, relevé reçu le ${player.statsScope.observedAt.slice(0, 10)}`
+                : 'périmètre non confirmé par la source'}
+              .
+            </p>
+          ))}
+          {(!A.statsScope?.verified ||
+            !B.statsScope?.verified ||
+            A.statsScope.season !== B.statsScope.season ||
+            A.statsScope.competitionId !== B.statsScope.competitionId) && (
+            <p className="warning">
+              Ces relevés ne confirment pas une saison et une compétition communes. Ils ne
+              permettent pas un classement équitable entre ces joueurs.
+            </p>
+          )}
+        </div>
+      )}
+      <div className="suggestions" role="group" aria-label="Comparaisons suggérées">
         {items.slice(1, 4).map((item) => (
           <button
             key={item.id}

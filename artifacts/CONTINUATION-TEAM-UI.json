@@ -1,0 +1,78 @@
+{
+  "generatedAt": "2026-10-06T17:37:13.660Z",
+  "scope": "Actual TeamProfile component bundled locally, synthetic explicitly demo fixture. Not production DB or full routed application.",
+  "views": [
+    {
+      "width": 320,
+      "theme": "light",
+      "venueFilters": 3,
+      "metricAssertions": 9,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 320,
+      "theme": "dark",
+      "venueFilters": 3,
+      "metricAssertions": 9,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "venueFilters": 3,
+      "metricAssertions": 9,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "venueFilters": 3,
+      "metricAssertions": 9,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "venueFilters": 3,
+      "metricAssertions": 9,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "venueFilters": 3,
+      "metricAssertions": 9,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "venueFilters": 3,
+      "metricAssertions": 9,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "venueFilters": 3,
+      "metricAssertions": 9,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    }
+  ]
+}

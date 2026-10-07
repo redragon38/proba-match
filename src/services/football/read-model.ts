@@ -1,25 +1,90 @@
 import type { Dataset } from '@/types/football';
+import { validResult } from '@/prediction-engine/availability';
 import { playerWatch } from '@/prediction-engine/player';
 import { derivedStandings } from '@/services/derived-standings';
 import type { Standing } from '@/types/football';
-import { teamSummary, teamMetricAverage } from '@/services/statistics';
+import { teamSummary, teamMetricAverage, teamMetricSummary } from '@/services/statistics';
+/** Only genuine overlap is called common; no overlap produces no comparable values. */
+export function commonComparisonPeriod(
+  data: Dataset,
+  a: string,
+  b: string,
+  cutoff = new Date().toISOString(),
+) {
+  const bounds = (id: string) =>
+    data.matches
+      .filter(
+        (m) =>
+          validResult(m) &&
+          Date.parse(m.kickoff) < Date.parse(cutoff) &&
+          [m.homeId, m.awayId].includes(id),
+      )
+      .map((m) => Date.parse(m.kickoff))
+      .sort((a, b) => a - b);
+  const left = bounds(a),
+    right = bounds(b);
+  const from = Math.max(left.at(0) ?? Infinity, right.at(0) ?? Infinity);
+  const to = Math.min(left.at(-1) ?? -Infinity, right.at(-1) ?? -Infinity);
+  const available = Number.isFinite(from) && Number.isFinite(to) && from <= to;
+  return {
+    data: {
+      ...data,
+      matches: available
+        ? data.matches.filter((m) => Date.parse(m.kickoff) >= from && Date.parse(m.kickoff) <= to)
+        : [],
+    },
+    from: available ? new Date(from).toISOString() : undefined,
+    to: available ? new Date(to).toISOString() : undefined,
+  };
+}
 export function comparisonView(data: Dataset) {
-  const summary = (id: string, venue: 'all' | 'home' | 'away') => {
-    const value = teamSummary(data, id, undefined, venue);
+  // Index once: each fixture belongs to at most two team histories.
+  const histories = new Map<string, Dataset['matches']>();
+  for (const match of data.matches) {
+    for (const id of new Set([match.homeId, match.awayId])) {
+      const history = histories.get(id) ?? [];
+      history.push(match);
+      histories.set(id, history);
+    }
+  }
+  const cutoff = new Date().toISOString();
+  const summary = (scoped: Dataset, id: string, venue: 'all' | 'home' | 'away') => {
+    const value = teamSummary(scoped, id, cutoff, venue);
     return { ...value, matches: [], lastTen: [] };
   };
   return Object.fromEntries(
-    data.teams.map((team) => [
-      team.id,
-      {
-        all: summary(team.id, 'all'),
-        home: summary(team.id, 'home'),
-        away: summary(team.id, 'away'),
-        xg: teamMetricAverage(data, team.id, 'xG'),
-        possession: teamMetricAverage(data, team.id, 'Possession'),
-        shots: teamMetricAverage(data, team.id, 'Tirs'),
-      },
-    ]),
+    data.teams.map((team) => {
+      const scoped = { ...data, matches: histories.get(team.id) ?? [] };
+      return [
+        team.id,
+        {
+          all: summary(scoped, team.id, 'all'),
+          home: summary(scoped, team.id, 'home'),
+          away: summary(scoped, team.id, 'away'),
+          coverage: Object.fromEntries(
+            ['xG', 'Possession', 'Tirs'].map((label) => [
+              label,
+              teamMetricSummary(scoped, team.id, label),
+            ]),
+          ),
+          period: {
+            from: scoped.matches
+              .filter((m) => validResult(m) && Date.parse(m.kickoff) < Date.parse(cutoff))
+              .map((m) => m.kickoff)
+              .sort()
+              .at(0),
+            to: scoped.matches
+              .filter((m) => validResult(m) && Date.parse(m.kickoff) < Date.parse(cutoff))
+              .map((m) => m.kickoff)
+              .sort()
+              .at(-1),
+          },
+          xg: teamMetricAverage(scoped, team.id, 'xG'),
+          possession: teamMetricAverage(scoped, team.id, 'Possession'),
+          shots: teamMetricAverage(scoped, team.id, 'Tirs'),
+        },
+      ];
+    }),
   );
 }
 export function standingsView(data: Dataset) {

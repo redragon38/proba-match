@@ -1,6 +1,12 @@
 import { Settings } from '@/components/settings';
 import { getDataset } from '@/services/football';
-export const metadata = { title: 'Paramètres', robots: { index: false } };
+import { seoMetadata } from '@/lib/seo';
+export const metadata = seoMetadata(
+  '/parametres',
+  'Paramètres',
+  'Personnalisez l’affichage, les compétitions suivies et les préférences locales de votre navigateur sur Proba Match.',
+  false,
+);
 export default async function Page() {
   const data = await getDataset();
   return (

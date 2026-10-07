@@ -206,7 +206,8 @@ export async function syncOpenFootball(
               m.awayId === awayId,
           );
           const existingId = knownMatchIds.get(row.externalId);
-          const id = existingId ??
+          const id =
+            existingId ??
             (candidates.length > 1
               ? await resolveIdentity(
                   'openfootball',
@@ -215,7 +216,7 @@ export async function syncOpenFootball(
                   `${row.homeName} / ${row.awayName}`,
                   candidates.map((m) => m.id),
                 )
-              : candidates[0]?.id ?? randomUUID());
+              : (candidates[0]?.id ?? randomUUID()));
           if (!existingId && candidates.length <= 1)
             newMatchIdentities.push({
               provider: 'openfootball',
@@ -236,6 +237,7 @@ export async function syncOpenFootball(
             kickoffKnown: row.kickoffKnown,
             sourceDate: row.sourceDate,
             status: row.status,
+            resultPeriod: 'regulation',
             homeScore: row.homeScore,
             awayScore: row.awayScore,
             round: row.round,

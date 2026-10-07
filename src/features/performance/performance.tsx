@@ -20,6 +20,7 @@ export function Performance({
     [month, setMonth] = useState('all'),
     [confidence, setConfidence] = useState('all');
   const [page, setPage] = useState(1);
+  const [calibrationOutcome, setCalibrationOutcome] = useState('all');
   const [period, setPeriod] = useState('all'),
     [version, setVersion] = useState('all');
   const reference = Date.parse(data.updatedAt) || 0;
@@ -42,6 +43,11 @@ export function Performance({
     [rows, comp, month, confidence, period, version, reference],
   );
   const stats = metrics(filtered);
+  const calibration = stats
+    ? calibrationOutcome === 'all'
+      ? stats.calibration
+      : stats.calibrationByOutcome[Number(calibrationOutcome)]
+    : [];
   return (
     <div className="page">
       <SourceBanner data={data} />
@@ -56,6 +62,11 @@ export function Performance({
           performance réelle et ne constituent pas un historique de prédictions publiées.
         </p>
       )}
+      <p className="data-note">
+        {filtered.length} prédictions initiales sur{' '}
+        {new Set(filtered.map((r) => r.prediction.matchId)).size} matchs distincts. Plusieurs
+        versions peuvent porter sur le même match.
+      </p>
       <div className="filter-panel">
         <label>
           Période
@@ -141,7 +152,7 @@ export function Performance({
       {stats ? (
         <>
           <div className="metrics">
-            <Metric label="Matchs évalués" value={stats.sample} />
+            <Metric label="Prédictions évaluées" value={stats.sample} />
             <Metric label="Résultat le plus probable correct" value={percent(stats.accuracy)} />
             <Metric
               label="Brier Score"
@@ -152,6 +163,32 @@ export function Performance({
               label="Log Loss"
               value={number(stats.logLoss, 3)}
               note="Plus faible = meilleur"
+            />
+          </div>
+          <div className="metrics">
+            <Metric
+              label="MAE buts domicile"
+              value={number(stats.homeGoalMae, 2)}
+              note={`${stats.goalSample} matchs · erreur absolue moyenne`}
+            />
+            <Metric
+              label="MAE buts extérieur"
+              value={number(stats.awayGoalMae, 2)}
+              note={`${stats.goalSample} matchs · erreur absolue moyenne`}
+            />
+            <Metric
+              label="MAE buts totaux"
+              value={number(stats.totalGoalMae, 2)}
+              note="Plus faible = meilleur"
+            />
+            <Metric
+              label="Score exact le plus probable correct"
+              value={
+                stats.exactScoreAccuracy === null
+                  ? 'Non disponible'
+                  : percent(stats.exactScoreAccuracy)
+              }
+              note={`${stats.scoreSample} scores évaluables`}
             />
           </div>
           <div className="detail-columns">
@@ -165,6 +202,18 @@ export function Performance({
                 estimation proche de 70 % devrait se réaliser environ 7 fois sur 10 sur un grand
                 nombre de cas comparables ; une petite tranche reste incertaine.
               </p>
+              <label>
+                Issue évaluée{' '}
+                <select
+                  value={calibrationOutcome}
+                  onChange={(event) => setCalibrationOutcome(event.target.value)}
+                >
+                  <option value="all">Trois issues regroupées</option>
+                  <option value="0">Victoire domicile</option>
+                  <option value="1">Match nul</option>
+                  <option value="2">Victoire extérieur</option>
+                </select>
+              </label>
               <figure className="calibration-chart">
                 <svg
                   viewBox="0 0 500 320"
@@ -203,7 +252,7 @@ export function Performance({
                     stroke="var(--muted)"
                     strokeDasharray="5 5"
                   />
-                  {stats.calibration.map((c) => (
+                  {calibration.map((c) => (
                     <circle
                       key={c.bin}
                       cx={50 + c.predicted * 410}
@@ -239,7 +288,7 @@ export function Performance({
                     </tr>
                   </thead>
                   <tbody>
-                    {stats.calibration.map((c) => (
+                    {calibration.map((c) => (
                       <tr key={c.bin}>
                         <th>
                           {c.bin * 10}–{(c.bin + 1) * 10} %
@@ -285,12 +334,12 @@ export function Performance({
               </div>
               <p className="data-note">
                 {version === 'all' ? 'Versions regroupées' : `Version ${version}`} · {stats.sample}{' '}
-                matchs évalués dans cette sélection. Les prédictions initiales sont conservées avant
-                le résultat ; les mises à jour de composition restent séparées.
+                prédictions évaluées dans cette sélection. Les prédictions initiales sont conservées
+                avant le résultat ; les mises à jour de composition restent séparées.
               </p>
             </section>
           </div>
-          <SectionTitle title="Historique complet de la sélection" />
+          <SectionTitle title="Historique des prédictions de la sélection" />
           <Breakdowns rows={filtered} data={data} />
           <div
             className="card data-table"

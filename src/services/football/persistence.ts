@@ -1,5 +1,8 @@
-import { db } from '@/database/client';
-import type { Dataset } from '@/types/football';
+import { db as database } from '@/database/client';
+import type { Prisma } from '@prisma/client';
+import { fencePublication, assertJobActive } from './lease-context';
+import type { Dataset, Match } from '@/types/football';
+import { observeResult } from '@/prediction-engine/availability';
 import { slugify } from '@/lib/format';
 import { playerPerformance } from '@/prediction-engine/player';
 const json = (value: unknown) => JSON.parse(JSON.stringify(value));
@@ -9,11 +12,33 @@ async function inBatches<T>(rows: T[], write: (row: T) => Promise<unknown>) {
   for (let offset = 0; offset < rows.length; offset += 12)
     await Promise.all(rows.slice(offset, offset + 12).map(write));
 }
-export async function persistDataset(
+async function persistDatasetTransaction(
+  db: Prisma.TransactionClient,
   data: Dataset,
   changedIds: Set<string>,
   options: { profiles?: boolean; profileIds?: Set<string>; injuryTeamIds?: string[] } = {},
 ) {
+  const observedAt = new Date().toISOString();
+  // Also migrate existing results conservatively: first observation is NOW, not the kickoff.
+  for (let offset = 0; offset < data.matches.length; offset += 500) {
+    const chunk = data.matches.slice(offset, offset + 500);
+    const priorRows = await db.match.findMany({
+      where: { id: { in: chunk.map((m) => m.id) } },
+      select: { id: true, payload: true },
+    });
+    const previous = new Map(priorRows.map((r) => [r.id, r.payload as unknown as Match]));
+    for (let index = 0; index < chunk.length; index++) {
+      const match = chunk[index];
+      const observed = observeResult(match, previous.get(match.id), observedAt);
+      if (
+        observed.resultObservedAt !== previous.get(match.id)?.resultObservedAt ||
+        JSON.stringify(observed.resultRevisions) !==
+          JSON.stringify(previous.get(match.id)?.resultRevisions)
+      )
+        changedIds.add(match.id);
+      data.matches[offset + index] = observed;
+    }
+  }
   for (const c of data.competitions) {
     const countryId = slugify(c.country) || 'international';
     await db.country.upsert({
@@ -92,7 +117,14 @@ export async function persistDataset(
     const t = data.teams.find((t) => t.id === p.teamId),
       c = data.competitions.find((c) => c.id === t?.competitionId);
     const observedAt = p.updatedAt ?? data.updatedAt;
-    if (c && Object.values(p.stats).some((value) => value != null))
+    if (
+      c &&
+      p.statsScope?.verified === true &&
+      p.statsScope.teamId === p.teamId &&
+      p.statsScope.competitionId === c.id &&
+      p.statsScope.season === c.season &&
+      Object.values(p.stats).some((value) => value != null)
+    )
       await db.playerStatistics.upsert({
         where: { id: `${p.id}-${c.id}-${c.season}-${observedAt}` },
         create: {
@@ -100,9 +132,9 @@ export async function persistDataset(
           playerId: p.id,
           seasonId: `${c.id}-${c.season}`,
           asOf: new Date(observedAt),
-          payload: json(p.stats),
+          payload: json({ ...p.stats, scope: p.statsScope }),
         },
-        update: { payload: json(p.stats) },
+        update: { payload: json({ ...p.stats, scope: p.statsScope }) },
       });
   }
   const changedMatches = data.matches.filter((m) => changedIds.has(m.id));
@@ -174,7 +206,8 @@ export async function persistDataset(
         source: m.source,
         payload: json(m),
       };
-      await db.$transaction(async (tx) => {
+      {
+        const tx = db;
         await tx.match.upsert({
           where: { id: m.id },
           create: { id: m.id, ...fields },
@@ -193,6 +226,16 @@ export async function persistDataset(
               payload: json(e),
             })),
           });
+        // Remove withdrawn rows too: a cleared payload must not leave stale relations.
+        await tx.matchLineup.deleteMany({
+          where: { matchId: m.id, teamId: { notIn: m.lineups.map((l) => l.teamId) } },
+        });
+        await tx.matchPlayer.deleteMany({
+          where: {
+            matchId: m.id,
+            playerId: { notIn: (m.performances ?? []).map((p) => p.playerId) },
+          },
+        });
         for (const l of m.lineups)
           await tx.matchLineup.upsert({
             where: { matchId_teamId: { matchId: m.id, teamId: l.teamId } },
@@ -202,10 +245,19 @@ export async function persistDataset(
               teamId: l.teamId,
               formation: l.formation,
               confirmed: l.confirmed,
-              publishedAt: new Date(m.updatedAt),
+              publishedAt: new Date(
+                m.detailObservedAt?.lineups ?? m.detailsUpdatedAt ?? m.updatedAt,
+              ),
               payload: json(l),
             },
-            update: { formation: l.formation, confirmed: l.confirmed, payload: json(l) },
+            update: {
+              formation: l.formation,
+              confirmed: l.confirmed,
+              payload: json(l),
+              ...(m.detailObservedAt?.lineups
+                ? { publishedAt: new Date(m.detailObservedAt.lineups) }
+                : {}),
+            },
           });
         for (const p of m.performances ?? []) {
           await tx.player.upsert({
@@ -234,7 +286,7 @@ export async function persistDataset(
             update: { minutes: p.stats.minutes, score, statistics: json(p.stats) },
           });
         }
-      });
+      }
     });
   for (const [compId, rows] of Object.entries(data.standings)) {
     const comp = data.competitions.find((c) => c.id === compId);
@@ -299,6 +351,26 @@ export async function persistDataset(
   await inBatches(searchRows, (row) =>
     db.searchIndex.upsert({ where: { id: row.id }, create: row, update: row }),
   );
+  // Append-only source observations survive later payload/snapshot rewrites.
+  for (const m of changedMatches) {
+    if (!m.resultRevisions?.length) continue;
+    await db.resultObservation.createMany({
+      data: m.resultRevisions.map((r, index) => ({
+        id: `${m.id}:${r.observedAt}:${index}`,
+        matchId: m.id,
+        receivedAt: new Date(r.observedAt),
+        source: r.source,
+        payload: json(r),
+      })),
+      skipDuplicates: true,
+    });
+  }
+  data.verifiedAt = {
+    ...data.verifiedAt,
+    ...(changedMatches.length ? { calendar: observedAt, results: observedAt } : {}),
+    ...(options.profileIds?.size ? { players: observedAt } : {}),
+  };
+  await fencePublication(db);
   await db.cacheEntry.upsert({
     where: { key: 'football:dataset' },
     create: {
@@ -319,4 +391,19 @@ export async function persistDataset(
       staleUntil: new Date(Date.now() + 7 * 86400_000),
     },
   });
+}
+
+/** One generation publishes atomically across relations, observations and snapshot. */
+export async function persistDataset(
+  data: Dataset,
+  changedIds: Set<string>,
+  options: { profiles?: boolean; profileIds?: Set<string>; injuryTeamIds?: string[] } = {},
+) {
+  assertJobActive();
+  const working = structuredClone(data);
+  await database.$transaction((tx) => persistDatasetTransaction(tx, working, changedIds, options), {
+    maxWait: 10_000,
+    timeout: 30 * 60_000,
+  });
+  Object.assign(data, working); // Do not expose the new generation before its commit.
 }

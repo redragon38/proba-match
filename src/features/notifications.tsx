@@ -25,7 +25,7 @@ export function NotificationSettings() {
     if (permission === 'granted') {
       writePreference(key, 'true');
       window.dispatchEvent(new Event('notifications-changed'));
-      setMessage('Notifications activées pendant que le site est ouvert.');
+      setMessage('Notifications activées tant que cette page reste ouverte.');
     } else
       setMessage(
         'Autorisation non accordée. Vous pouvez la modifier dans les paramètres du navigateur.',
@@ -42,7 +42,8 @@ export function NotificationSettings() {
     let stopped = false;
     async function poll() {
       try {
-        const response = await fetch('/api/live');
+        if (!favoriteKey) return;
+        const response = await fetch(`/api/live?favorites=${encodeURIComponent(favoriteKey)}`);
         if (!response.ok) return;
         const json = (await response.json()) as {
           source: string;

@@ -1,0 +1,331 @@
+{
+  "generatedAt": "2026-10-05",
+  "repository": "redragon38/proba-match",
+  "baseBranch": "master",
+  "baseCommit": "f828972",
+  "sourceChanges": [
+    {
+      "path": ".env.example",
+      "status": "modified"
+    },
+    {
+      "path": ".gitignore",
+      "status": "modified"
+    },
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "docs/seo-geo-operations.md",
+      "status": "added"
+    },
+    {
+      "path": "package.json",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/backtest-predictions.ts",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/backtest.ts",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/benchmark-comparison.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/compare-score-models.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/evaluate-derived-events.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/responsive-check.mjs",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/validate-models.ts",
+      "status": "added"
+    },
+    {
+      "path": "scripts/verify-editorial-pages.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/verify-expanded-statistics.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/verify-seo.mjs",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/verify-ssr.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/verify-team-statistics.mjs",
+      "status": "added"
+    },
+    {
+      "path": "src/app/[legal]/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/a-propos/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/comparateur/[kind]/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/comprendre-probabilites/page.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/app/contact/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/favoris/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/joueur/[slug]/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/layout.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/lexique-football/page.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/app/match/[id]/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/methodologie/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/parametres/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/probabilities.css",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/product.css",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/reading.css",
+      "status": "added"
+    },
+    {
+      "path": "src/app/recherche/page.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/sitemap.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/app/sources-donnees/page.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/components/editorial-context.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/components/shell.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/matches/home-insights.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/matches/match-detail.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/matches/match-statistics.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/matches/probability-summary.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/performance/performance.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/features/profiles/team-profile.tsx",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/editorial.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/format.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/match-facts.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/prediction-explanations.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/probability-format.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/seo.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/statistic-values.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/prediction-engine/availability.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/prediction-engine/backtest.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/dixon-coles.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/prediction-engine/elo.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/evaluation.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/form.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/index.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/insights.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/player.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/poisson.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/prediction-engine/validation.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/services/derived-standings.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/persistence.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/football/read-model.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/predictions.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/services/statistics.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/types/football.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/e2e/editorial-geo.spec.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/e2e/reading-guide.spec.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/editorial-seo.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/expanded-probabilities.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/expanded-statistics.tsx",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/prediction-statistics.json",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/team-statistics.tsx",
+      "status": "added"
+    },
+    {
+      "path": "tests/prediction-persistence.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/seo.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "tests/statistical-integrity.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/team-profile-statistics.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/temporal-availability.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "tests/temporal-model-selection.test.ts",
+      "status": "added"
+    }
+  ],
+  "sourceChangeCount": 80,
+  "remoteWrite": false,
+  "deployed": false
+}

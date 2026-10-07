@@ -6,24 +6,37 @@ import { SourceBanner } from '@/components/source-banner';
 import { Empty, Form, Metric, SectionTitle, TeamBadge } from '@/components/ui';
 import { FavoriteButton } from '@/features/favorites';
 import { MatchList } from '@/features/matches/match-list';
-import { teamSummary, teamMetricAverage } from '@/services/statistics';
+import { teamSummary, teamMetricSummary } from '@/services/statistics';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { TrendChart } from '@/components/charts';
 import { number } from '@/lib/format';
 import { MatchCard } from '@/features/matches/match-card';
-export function TeamProfile({ data, team }: { data: Dataset; team: Team }) {
+const documentedMatches = (sample: number) =>
+  sample === 0
+    ? 'Aucun match documenté'
+    : `${sample} match${sample > 1 ? 's' : ''} documenté${sample > 1 ? 's' : ''}`;
+export function TeamProfile({
+  data,
+  team,
+  summary,
+}: {
+  data: Dataset;
+  team: Team;
+  summary?: string;
+}) {
   const [count, setCount] = useState(5);
   const [venue, setVenue] = useState<'all' | 'home' | 'away'>('all');
   const stats = teamSummary(data, team.id, undefined, venue),
     players = data.players.filter((p) => p.teamId === team.id),
     comp = data.competitions.find((c) => c.id === team.competitionId);
   const standing = data.standings[team.competitionId]?.find((r) => r.teamId === team.id);
+  const metrics = ['Possession', 'Tirs', 'Tirs cadrés'].map((label) =>
+    teamMetricSummary(data, team.id, label, venue),
+  );
   const nextMatch = data.matches
     .filter((m) => m.status === 'scheduled' && (m.homeId === team.id || m.awayId === team.id))
-    .sort((a, b) => a.kickoff.localeCompare(b.kickoff))[0];
-  const lastMatch = data.matches
-    .filter((m) => m.status === 'finished' && (m.homeId === team.id || m.awayId === team.id))
-    .sort((a, b) => b.kickoff.localeCompare(a.kickoff))[0];
+    .sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff))[0];
+  const lastMatch = teamSummary(data, team.id).matches[0];
   return (
     <div className="page">
       <SourceBanner data={data} />
@@ -48,6 +61,7 @@ export function TeamProfile({ data, team }: { data: Dataset; team: Team }) {
         </div>
         <FavoriteButton id={`team:${team.id}`} label={team.name} />
       </div>
+      {summary && <p className="match-fact-summary">{summary}</p>}
       <nav className="profile-tabs" aria-label="Rubriques de l’équipe">
         {[
           ['forme', 'Forme'],
@@ -126,28 +140,43 @@ export function TeamProfile({ data, team }: { data: Dataset; team: Team }) {
               complète. Moyenne : {number(stats.goalsPerGame, 2)} but(s) par match.
             </p>
           </div>
-          <div className="metrics three">
+          <div className="metrics three team-statistics-grid">
             <Metric
               label="Possession moyenne"
-              value={number(teamMetricAverage(data, team.id, 'Possession'), 1)}
+              value={
+                metrics[0].average === null
+                  ? 'Non disponible'
+                  : `${number(metrics[0].average, 1)} %`
+              }
+              note={documentedMatches(metrics[0].sample)}
             />
             <Metric
               label="Tirs moyens"
-              value={number(teamMetricAverage(data, team.id, 'Tirs'), 1)}
+              value={number(metrics[1].average, 1)}
+              note={documentedMatches(metrics[1].sample)}
             />
             <Metric
               label="Tirs cadrés moyens"
-              value={number(teamMetricAverage(data, team.id, 'Tirs cadrés'), 1)}
+              value={number(metrics[2].average, 1)}
+              note={documentedMatches(metrics[2].sample)}
             />
           </div>
           <div id="resultats">
             <SectionTitle title="Derniers résultats" />
           </div>
           <div className="segmented">
-            <button className={count === 5 ? 'active' : ''} onClick={() => setCount(5)}>
+            <button
+              aria-pressed={count === 5}
+              className={count === 5 ? 'active' : ''}
+              onClick={() => setCount(5)}
+            >
               5 matchs
             </button>
-            <button className={count === 10 ? 'active' : ''} onClick={() => setCount(10)}>
+            <button
+              aria-pressed={count === 10}
+              className={count === 10 ? 'active' : ''}
+              onClick={() => setCount(10)}
+            >
               10 matchs
             </button>
           </div>
@@ -163,7 +192,7 @@ export function TeamProfile({ data, team }: { data: Dataset; team: Team }) {
               .filter(
                 (m) => m.status === 'scheduled' && (m.homeId === team.id || m.awayId === team.id),
               )
-              .sort((a, b) => a.kickoff.localeCompare(b.kickoff))
+              .sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff))
               .slice(0, 10)}
             teams={data.teams}
             competitions={data.competitions}

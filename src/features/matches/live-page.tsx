@@ -31,6 +31,11 @@ export function LivePage({ data }: { data: Dataset }) {
   return (
     <div className="page">
       <SourceBanner data={data} />
+      <p className="data-note">
+        Cette page relit les données sauvegardées toutes les 30 secondes. La fréquence de réception
+        des scores dépend du fournisseur et du service de synchronisation ; elle n’est pas garantie
+        par ce rafraîchissement.
+      </p>
       <span className="eyebrow">AU RYTHME DU TERRAIN</span>
       <h1>Le football en direct.</h1>
       <p className="intro-text">

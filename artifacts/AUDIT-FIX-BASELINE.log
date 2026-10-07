@@ -1,0 +1,123 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> match-score@1.0.0 check
+> npm run typecheck && npm run lint && npm test && npm run build
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> match-score@1.0.0 typecheck
+> tsc --noEmit
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> match-score@1.0.0 lint
+> eslint .
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> match-score@1.0.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /workspace/scratch/c9d93a788bd6/current/proba-match
+
+
+ Test Files  44 passed (44)
+      Tests  277 passed (277)
+   Start at  19:40:31
+   Duration  2.82s (transform 2.33s, setup 0ms, import 5.44s, tests 5.72s, environment 4ms)
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> match-score@1.0.0 build
+> prisma generate && next build
+
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 144ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+
+▲ Next.js 16.3.8 (Turbopack)
+✓ Running next.config.ts took 22ms
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 466ms
+  Running TypeScript ...
+  Finished TypeScript in 2.1s ...
+  Collecting page data using 8 workers ...
+  Generating static pages using 8 workers (0/22) ...
+  Generating static pages using 8 workers (5/22) 
+  Generating static pages using 8 workers (10/22) 
+  Generating static pages using 8 workers (16/22) 
+✓ Generating static pages using 8 workers (22/22) in 320ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[legal]
+├ ƒ /a-propos
+├ ƒ /admin
+├ ƒ /admin/performance-modele
+├ ƒ /api/admin/mapping
+├ ƒ /api/admin/session
+├ ƒ /api/admin/sync
+├ ƒ /api/competitions/[id]
+├ ƒ /api/cron/fixtures
+├ ƒ /api/cron/live
+├ ƒ /api/cron/openfootball
+├ ƒ /api/cron/players
+├ ƒ /api/cron/standings
+├ ƒ /api/cron/sync
+├ ƒ /api/health
+├ ƒ /api/live
+├ ƒ /api/matches
+├ ƒ /api/matches/[id]
+├ ƒ /api/matches/today
+├ ƒ /api/search
+├ ƒ /api/teams/[id]
+├ ƒ /api/updates
+├ ƒ /api/vitals
+├ ○ /apple-icon.png
+├ ƒ /classements
+├ ƒ /comparateur/[kind]
+├ ƒ /competition/[slug]
+├ ƒ /competitions
+├ ƒ /comprendre-probabilites
+├ ƒ /contact
+├ ƒ /equipe/[slug]
+├ ƒ /equipes
+├ ƒ /favoris
+├ ○ /icon.png
+├ ƒ /joueur/[slug]
+├ ƒ /joueurs
+├ ƒ /lexique-football
+├ ƒ /live
+├ ○ /manifest.webmanifest
+├ ƒ /match/[id]
+├ ƒ /matchs
+├ ƒ /methodologie
+├ ○ /opengraph-image
+├ ƒ /parametres
+├ ƒ /recherche
+├ ○ /robots.txt
+├ ƒ /sitemap.xml
+└ ƒ /sources-donnees
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

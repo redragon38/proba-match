@@ -2,7 +2,9 @@ import { notFound } from 'next/navigation';
 import { getDataset } from '@/services/football';
 import { TeamProfile } from '@/features/profiles/team-profile';
 import { JsonLd } from '@/components/json-ld';
-import { seoMetadata, absoluteUrl } from '@/lib/seo';
+import { teamStructuredData } from '@/lib/sports-structured-data';
+import { teamFactSummary } from '@/lib/team-facts';
+import { seoMetadata } from '@/lib/seo';
 import { teamDataset } from '@/services/football/read-model';
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -12,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return seoMetadata(
     `/equipe/${slug}`,
     `${t.name} — résultats et statistiques`,
-    `Calendrier, résultats et forme récente de ${t.name}. Retrouvez les matchs, le classement et les statistiques disponibles sur Proba Match.`,
+    teamFactSummary(t, d),
     d.source !== 'demo' &&
       d.matches.filter((m) => m.homeId === t.id || m.awayId === t.id).length >= 5,
   );
@@ -24,19 +26,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   if (!team) notFound();
   return (
     <>
-      {data.source !== 'demo' && (
-        <JsonLd
-          value={{
-            '@context': 'https://schema.org',
-            '@type': 'SportsTeam',
-            name: team.name,
-            sport: 'Football',
-            url: absoluteUrl(`/equipe/${team.slug}`),
-            logo: team.logo ? absoluteUrl(team.logo) : undefined,
-          }}
-        />
-      )}
-      <TeamProfile data={teamDataset(data, [team.id])} team={team} />
+      {data.source !== 'demo' && <JsonLd value={teamStructuredData(team)} />}
+      <TeamProfile
+        data={teamDataset(data, [team.id])}
+        team={team}
+        summary={data.source !== 'demo' ? teamFactSummary(team, data) : undefined}
+      />
     </>
   );
 }

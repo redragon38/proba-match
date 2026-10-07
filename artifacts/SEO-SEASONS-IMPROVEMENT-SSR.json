@@ -1,0 +1,920 @@
+{
+  "generatedAt": "2026-10-05T20:15:36.153Z",
+  "scope": "Local HTTP rendered HTML, no browser and no production DB",
+  "pages": [
+    {
+      "path": "/",
+      "status": 200,
+      "title": "Proba Match — scores, calendrier et statistiques football",
+      "description": "Retrouvez les matchs du jour, les résultats, les classements et les analyses football de Proba Match. Sources identifiées et projections expliquées.",
+      "canonical": "http://localhost:3000",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 40930,
+      "responseMs": 58,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/matchs",
+      "status": 200,
+      "title": "Matchs de football — scores et calendrier | Proba Match",
+      "description": "Consultez le calendrier et les résultats des compétitions suivies. Parcourez les dates, les équipes et les détails de chaque rencontre.",
+      "canonical": "http://localhost:3000/matchs",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 38411,
+      "responseMs": 39,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/live",
+      "status": 200,
+      "title": "Scores de football en direct | Proba Match",
+      "description": "Suivez les rencontres en cours et les derniers scores disponibles. La source et la fraîcheur des données sont indiquées, sans simulation de direct.",
+      "canonical": "http://localhost:3000/live",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 29242,
+      "responseMs": 25,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/equipes",
+      "status": 200,
+      "title": "Équipes de football — résultats et statistiques | Proba Match",
+      "description": "Explorez les clubs du catalogue Proba Match : forme récente, résultats, calendrier et statistiques disponibles pour chaque équipe.",
+      "canonical": "http://localhost:3000/equipes",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 28621,
+      "responseMs": 25,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/joueurs",
+      "status": 200,
+      "title": "Joueurs — profils et performances individuelles | Proba Match",
+      "description": "Consultez les profils, les statistiques et les performances des joueurs disponibles dans le catalogue synchronisé Proba Match.",
+      "canonical": "http://localhost:3000/joueurs",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 28941,
+      "responseMs": 21,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/competitions",
+      "status": 200,
+      "title": "Compétitions de football — calendrier et classement | Proba Match",
+      "description": "Explorez les compétitions suivies par Proba Match, leurs équipes, leurs rencontres et leurs classements par saison.",
+      "canonical": "http://localhost:3000/competitions",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 28543,
+      "responseMs": 31,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/classements",
+      "status": 200,
+      "title": "Classements de football par compétition et saison | Proba Match",
+      "description": "Comparez points, buts et forme des équipes. Consultez les classements par saison, à domicile, à l’extérieur et sur les cinq derniers matchs.",
+      "canonical": "http://localhost:3000/classements",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 29156,
+      "responseMs": 29,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/a-propos",
+      "status": 200,
+      "title": "À propos de Proba Match | Proba Match",
+      "description": "Découvrez Proba Match, une plateforme gratuite de statistiques football : origine des données, transparence des analyses et limites des projections.",
+      "canonical": "http://localhost:3000/a-propos",
+      "robots": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "h1": 1,
+      "htmlBytes": 32378,
+      "responseMs": 30,
+      "jsonLdCount": 3
+    },
+    {
+      "path": "/methodologie",
+      "status": 200,
+      "title": "Méthodologie — sources et modèle Elo–Poisson | Proba Match",
+      "description": "Comprenez les sources OpenFootball, ESPN et API-Football, le modèle Elo–Poisson, les probabilités et les limites des analyses Proba Match.",
+      "canonical": "http://localhost:3000/methodologie",
+      "robots": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "h1": 1,
+      "htmlBytes": 51689,
+      "responseMs": 33,
+      "jsonLdCount": 3
+    },
+    {
+      "path": "/comprendre-probabilites",
+      "status": 200,
+      "title": "Comprendre les probabilités et statistiques football | Proba Match",
+      "description": "Probabilité 1N2, buts attendus, score le plus probable et confiance : des exemples simples pour lire les statistiques football sans fausse certitude.",
+      "canonical": "http://localhost:3000/comprendre-probabilites",
+      "robots": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "h1": 1,
+      "htmlBytes": 56261,
+      "responseMs": 30,
+      "jsonLdCount": 4
+    },
+    {
+      "path": "/lexique-football",
+      "status": 200,
+      "title": "Lexique football — probabilités, xG, Elo et statistiques | Proba Match",
+      "description": "Définitions simples de 24 termes football : 1N2, xG, Elo, clean sheet, calibration, Brier Score et statistiques. Méthodes de calcul et limites expliquées.",
+      "canonical": "http://localhost:3000/lexique-football",
+      "robots": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "h1": 1,
+      "htmlBytes": 81552,
+      "responseMs": 31,
+      "jsonLdCount": 3
+    },
+    {
+      "path": "/sources-donnees",
+      "status": 200,
+      "title": "Sources des données football et limites de couverture | Proba Match",
+      "description": "Origine des résultats et statistiques Proba Match : OpenFootball, ESPN et enrichissement API-Football. Synchronisation, données manquantes et limites.",
+      "canonical": "http://localhost:3000/sources-donnees",
+      "robots": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "h1": 1,
+      "htmlBytes": 45347,
+      "responseMs": 42,
+      "jsonLdCount": 3
+    },
+    {
+      "path": "/contact",
+      "status": 200,
+      "title": "Contact | Proba Match",
+      "description": "Contactez l’éditeur de Proba Match lorsque ses coordonnées sont disponibles et découvrez comment signaler une erreur dans les données football.",
+      "canonical": "http://localhost:3000/contact",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 27364,
+      "responseMs": 16,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/confidentialite",
+      "status": 200,
+      "title": "Confidentialité | Proba Match",
+      "description": "La version actuelle ne demande pas de compte visiteur. Les favoris et le thème sont conservés localement dans votre navigateur. Lors de la consultation des favoris, leurs identifiants sont envoyés à l’API du site pour récupérer les informations correspondantes ; aucune liste de favoris liée à un compte n’est enregistrée côté serveur. Le site ne contient aucun outil publicitaire ni mesure d’audience tiers.",
+      "canonical": "http://localhost:3000/confidentialite",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 31654,
+      "responseMs": 17,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/cookies",
+      "status": 200,
+      "title": "Cookies et stockage local | Proba Match",
+      "description": "matchscore-favorites conserve vos favoris ; matchscore-theme conserve le thème ; matchscore-density conserve la densité d’affichage ; matchscore-notifications conserve votre choix d’activation des alertes. Ces valeurs restent dans votre navigateur.",
+      "canonical": "http://localhost:3000/cookies",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 29487,
+      "responseMs": 13,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/mentions-legales",
+      "status": 200,
+      "title": "Mentions légales | Proba Match",
+      "description": "Les informations de publication effectivement fournies par l’éditeur sont présentées ci-dessous. Les champs manquants sont signalés explicitement ; ils nécessitent une validation par l’exploitant.",
+      "canonical": "http://localhost:3000/mentions-legales",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 32523,
+      "responseMs": 20,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/recherche",
+      "status": 200,
+      "title": "Recherche football | Proba Match",
+      "description": "Recherchez une équipe, un joueur, une compétition ou une rencontre dans le catalogue disponible de Proba Match.",
+      "canonical": "http://localhost:3000/recherche",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 29034,
+      "responseMs": 20,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/favoris",
+      "status": 200,
+      "title": "Mes favoris | Proba Match",
+      "description": "Retrouvez les équipes et matchs enregistrés dans ce navigateur, et gérez vos notifications locales sur Proba Match.",
+      "canonical": "http://localhost:3000/favoris",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 29545,
+      "responseMs": 17,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/parametres",
+      "status": 200,
+      "title": "Paramètres | Proba Match",
+      "description": "Personnalisez l’affichage, les compétitions suivies et les préférences locales de votre navigateur sur Proba Match.",
+      "canonical": "http://localhost:3000/parametres",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 27952,
+      "responseMs": 19,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/comparateur/equipes",
+      "status": 200,
+      "title": "Comparateur d’équipes football | Proba Match",
+      "description": "Comparez la forme, les résultats et les moyennes de buts des équipes disponibles, selon le lieu et la période.",
+      "canonical": "http://localhost:3000/comparateur/equipes",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 29520,
+      "responseMs": 16,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/comparateur/joueurs",
+      "status": 200,
+      "title": "Comparateur de joueurs football | Proba Match",
+      "description": "Comparez les minutes, les statistiques par 90 minutes et les performances descriptives des joueurs disponibles.",
+      "canonical": "http://localhost:3000/comparateur/joueurs",
+      "robots": "noindex, follow",
+      "h1": 1,
+      "htmlBytes": 29467,
+      "responseMs": 13,
+      "jsonLdCount": 1
+    },
+    {
+      "path": "/admin",
+      "status": 200,
+      "title": "Administration | Proba Match",
+      "description": "Matchs, statistiques, comparaisons et projections football. Une plateforme gratuite et transparente, en français.",
+      "robots": "noindex, nofollow",
+      "h1": 1,
+      "htmlBytes": 28226,
+      "responseMs": 54,
+      "jsonLdCount": 1
+    }
+  ],
+  "checks": [
+    {
+      "name": "sitemap",
+      "status": "PASS",
+      "detail": "Sitemap XML available"
+    },
+    {
+      "name": "sitemap-editorial",
+      "status": "PASS",
+      "detail": "/a-propos"
+    },
+    {
+      "name": "sitemap-editorial",
+      "status": "PASS",
+      "detail": "/methodologie"
+    },
+    {
+      "name": "sitemap-editorial",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites"
+    },
+    {
+      "name": "sitemap-editorial",
+      "status": "PASS",
+      "detail": "/lexique-football"
+    },
+    {
+      "name": "sitemap-editorial",
+      "status": "PASS",
+      "detail": "/sources-donnees"
+    },
+    {
+      "name": "robots",
+      "status": "PASS",
+      "detail": "Public content crawlable"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/matchs"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/matchs"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/matchs"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/matchs"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/matchs"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/live"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/live"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/live"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/live"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/live"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/equipes"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/equipes"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/equipes"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/equipes"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/equipes"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/joueurs"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/joueurs"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/joueurs"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/joueurs"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/joueurs"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/competitions"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/competitions"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/competitions"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/competitions"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/competitions"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/classements"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/classements"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/classements"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/classements"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/classements"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/a-propos"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/a-propos"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/a-propos"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/a-propos"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/a-propos"
+    },
+    {
+      "name": "editorial-indexable",
+      "status": "PASS",
+      "detail": "/a-propos"
+    },
+    {
+      "name": "social",
+      "status": "PASS",
+      "detail": "/a-propos"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/methodologie"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/methodologie"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/methodologie"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/methodologie"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/methodologie"
+    },
+    {
+      "name": "editorial-indexable",
+      "status": "PASS",
+      "detail": "/methodologie"
+    },
+    {
+      "name": "social",
+      "status": "PASS",
+      "detail": "/methodologie"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites"
+    },
+    {
+      "name": "editorial-indexable",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites"
+    },
+    {
+      "name": "social",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/lexique-football"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/lexique-football"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/lexique-football"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/lexique-football"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/lexique-football"
+    },
+    {
+      "name": "editorial-indexable",
+      "status": "PASS",
+      "detail": "/lexique-football"
+    },
+    {
+      "name": "social",
+      "status": "PASS",
+      "detail": "/lexique-football"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/sources-donnees"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/sources-donnees"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/sources-donnees"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/sources-donnees"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/sources-donnees"
+    },
+    {
+      "name": "editorial-indexable",
+      "status": "PASS",
+      "detail": "/sources-donnees"
+    },
+    {
+      "name": "social",
+      "status": "PASS",
+      "detail": "/sources-donnees"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/contact"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/contact"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/contact"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/contact"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/contact"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/confidentialite"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/confidentialite"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/confidentialite"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/confidentialite"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/confidentialite"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/cookies"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/cookies"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/cookies"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/cookies"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/cookies"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/mentions-legales"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/mentions-legales"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/mentions-legales"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/mentions-legales"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/mentions-legales"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/recherche"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/recherche"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/recherche"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/recherche"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/recherche"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/favoris"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/favoris"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/favoris"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/favoris"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/favoris"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/parametres"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/parametres"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/parametres"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/parametres"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/parametres"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/comparateur/equipes"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/comparateur/equipes"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/comparateur/equipes"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/comparateur/equipes"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/comparateur/equipes"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/comparateur/joueurs"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/comparateur/joueurs"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/comparateur/joueurs"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/comparateur/joueurs"
+    },
+    {
+      "name": "canonical",
+      "status": "PASS",
+      "detail": "/comparateur/joueurs"
+    },
+    {
+      "name": "http",
+      "status": "PASS",
+      "detail": "/admin"
+    },
+    {
+      "name": "h1",
+      "status": "PASS",
+      "detail": "/admin"
+    },
+    {
+      "name": "metadata",
+      "status": "PASS",
+      "detail": "/admin"
+    },
+    {
+      "name": "structured-data-json",
+      "status": "PASS",
+      "detail": "/admin"
+    },
+    {
+      "name": "unique-titles",
+      "status": "PASS",
+      "detail": "All sampled routes"
+    },
+    {
+      "name": "unique-descriptions",
+      "status": "PASS",
+      "detail": "All sampled routes"
+    },
+    {
+      "name": "unknown-match-404",
+      "status": "PASS",
+      "detail": "No invented fixture"
+    }
+  ],
+  "limitations": [
+    "Mobile layout, console, hydration and accessibility require a browser.",
+    "External indexing, structured data eligibility, GEO mentions and field Core Web Vitals are not measured."
+  ]
+}

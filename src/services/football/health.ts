@@ -58,8 +58,7 @@ export async function footballHealth(now = Date.now()) {
   // Hobby cron has a daily cadence and an hour of scheduling tolerance.
   const maxSourceAge = process.env.VERCEL ? 26 * 3600000 : 7 * 3600000;
   if (!snapshot) issues.push('DATASET_MISSING');
-  if (snapshot?.lateResults)
-    warnings.push('OPENFOOTBALL_RESULTS_LATE');
+  if (snapshot?.lateResults) warnings.push('OPENFOOTBALL_RESULTS_LATE');
   if (
     sources.filter((s) => s.id.startsWith('openfootball:')).length !== openScopes().length ||
     sources

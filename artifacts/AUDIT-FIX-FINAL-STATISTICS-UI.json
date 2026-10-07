@@ -1,0 +1,78 @@
+{
+  "generatedAt": "2026-10-06T17:37:24.519Z",
+  "scope": "Actual ProbabilitySummary and MatchStatistics components bundled locally, synthetic explicitly demo fixture. Not production DB or full routed application.",
+  "views": [
+    {
+      "width": 320,
+      "theme": "light",
+      "detailInteraction": true,
+      "helpInteractions": 2,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 320,
+      "theme": "dark",
+      "detailInteraction": true,
+      "helpInteractions": 2,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "detailInteraction": true,
+      "helpInteractions": 2,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "detailInteraction": true,
+      "helpInteractions": 2,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "detailInteraction": true,
+      "helpInteractions": 2,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "detailInteraction": true,
+      "helpInteractions": 2,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "detailInteraction": true,
+      "helpInteractions": 2,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "detailInteraction": true,
+      "helpInteractions": 2,
+      "overflow": false,
+      "pageErrors": [],
+      "accessibilityViolations": 0
+    }
+  ]
+}

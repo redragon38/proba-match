@@ -25,6 +25,8 @@ export function CompetitionProfile({ view }: { view: CompetitionView }) {
     table,
     metrics,
     source: data,
+    seasonFallback,
+    seasonInferredCount,
   } = view;
   function setMode(value: string) {
     const query = new URLSearchParams(params.toString());
@@ -58,6 +60,12 @@ export function CompetitionProfile({ view }: { view: CompetitionView }) {
         </div>
         <FavoriteButton id={`competition:${c.id}`} label={c.name} />
       </div>
+      {seasonFallback && (
+        <p className="warning" role="status">
+          La saison demandée n’est pas disponible. La saison {competitionSeason(c, c.season)} est
+          affichée.
+        </p>
+      )}
       <label className="season-picker">
         Saison
         <select
@@ -91,9 +99,22 @@ export function CompetitionProfile({ view }: { view: CompetitionView }) {
       <div className="metrics">
         <Metric label="Équipes dans le catalogue" value={teams.length} />
         <Metric label="Rencontres disponibles" value={metrics.matches} />
-        <Metric label="Matchs terminés" value={metrics.finished} />
+        <Metric label="Résultats exploitables" value={metrics.finished} />
         <Metric label="Buts recensés" value={metrics.goals ?? 'Non disponible'} />
       </div>
+      <p className="data-note">
+        Les totaux portent sur les rencontres de la saison affichée dont les scores terminés sont
+        exploitables. La couverture peut être partielle ; une statistique absente ne devient pas
+        zéro. Les classements individuels utilisent uniquement les compteurs valides dont la saison,
+        la compétition et l’équipe sont confirmées ; leur couverture peut être partielle.
+      </p>
+      {seasonInferredCount > 0 && (
+        <p className="data-note">
+          {seasonInferredCount} rencontre(s) sans saison explicite sont rattachées à la saison de
+          configuration. Elles ne sont pas réutilisées dans les saisons historiques ; cette
+          attribution ne confirme pas leur saison réelle.
+        </p>
+      )}
       <div id="classement">
         <SectionTitle title="Classement" />
       </div>

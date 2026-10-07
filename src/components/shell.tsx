@@ -222,6 +222,9 @@ export function Shell({
             <nav>
               <Link href="/a-propos">À propos</Link>
               <Link href="/methodologie">Méthodologie</Link>
+              <Link href="/comprendre-probabilites">Comprendre les probabilités</Link>
+              <Link href="/lexique-football">Lexique football</Link>
+              <Link href="/sources-donnees">Sources des données</Link>
               <Link href="/confidentialite">Confidentialité</Link>
               <Link href="/cookies">Cookies</Link>
               <Link href="/mentions-legales">Mentions légales</Link>

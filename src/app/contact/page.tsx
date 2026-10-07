@@ -1,5 +1,11 @@
 import { legalConfig } from '@/lib/legal';
-export const metadata = { title: 'Contact', robots: { index: false, follow: true } };
+import { seoMetadata } from '@/lib/seo';
+export const metadata = seoMetadata(
+  '/contact',
+  'Contact',
+  'Contactez l’éditeur de Proba Match lorsque ses coordonnées sont disponibles et découvrez comment signaler une erreur dans les données football.',
+  false,
+);
 export default function Page() {
   const email = legalConfig().contact;
   return (

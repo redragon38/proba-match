@@ -5,6 +5,14 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+model ResultObservation {
+  id String @id
+  matchId String
+  receivedAt DateTime
+  source String
+  payload Json
+  @@index([matchId, receivedAt])
+}
 model Country {
   id String @id
   name String

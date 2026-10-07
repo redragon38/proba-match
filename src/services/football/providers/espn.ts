@@ -87,6 +87,7 @@ const event = z.object({
         timeValid: z.boolean().optional(),
         venue: z.object({ fullName: z.string().optional() }).optional(),
         status: z.object({
+          period: z.number().optional(),
           type: z.object({ name: z.string(), completed: z.boolean(), state: z.string() }),
         }),
         competitors: z
@@ -175,6 +176,8 @@ export function parseEspnFixtures(input: unknown, league: ExpandedLeague, season
         kickoff: new Date(e.date).toISOString(),
         kickoffKnown: c.timeValid !== false,
         status,
+        resultPeriod: (s.completed && c.status.period === 2 ? 'regulation' : 'unknown') as
+          'regulation' | 'unknown',
         homeScore,
         awayScore,
         statistics: reportedStatistics(rawStatistics),

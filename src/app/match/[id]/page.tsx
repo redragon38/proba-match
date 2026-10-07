@@ -1,3 +1,4 @@
+import { matchStructuredData } from '@/lib/sports-structured-data';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { seoMetadata, matchIndexable } from '@/lib/seo';
 import { teamDataset } from '@/services/football/read-model';
@@ -6,18 +7,24 @@ import { getPredictions, getPredictionHistory } from '@/services/predictions';
 import { MatchDetail } from '@/features/matches/match-detail';
 import { informationQuality, predictionInsights } from '@/prediction-engine/insights';
 import { JsonLd } from '@/components/json-ld';
+import { matchFactSummary, matchDateLabel } from '@/lib/match-facts';
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const data = await getDataset();
   const m = data.matches.find((m) => m.slug === id || m.id === id);
   if (!m) notFound();
   const title = `${data.teams.find((t) => t.id === m.homeId)?.name} – ${data.teams.find((t) => t.id === m.awayId)?.name}`;
-  const date = new Date(m.kickoff).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' });
+  const date = matchDateLabel(m, false) ?? 'date à confirmer';
   return seoMetadata(
     `/match/${m.slug}`,
     `${title} — ${date}`,
-    `Résultat, forme des équipes et données disponibles pour ${title}, le ${date}. Consultez les statistiques et les projections Proba Match.`,
-    data.source !== 'demo' && matchIndexable(m),
+    matchFactSummary(
+      m,
+      data.teams.find((t) => t.id === m.homeId)?.name ?? 'Domicile',
+      data.teams.find((t) => t.id === m.awayId)?.name ?? 'Extérieur',
+      data.competitions.find((c) => c.id === m.competitionId)?.name ?? 'Football',
+    ),
+    data.source !== 'demo' && matchIndexable(m, data),
   );
 }
 export default async function Page({
@@ -34,6 +41,7 @@ export default async function Page({
     permanentRedirect(
       `/match/${m.slug}${q.onglet ? `?onglet=${encodeURIComponent(q.onglet)}` : ''}`,
     );
+  const structured = data.source !== 'demo' ? matchStructuredData(m, data) : null;
   const history = await getPredictionHistory(m.id, data.source);
   const prediction = data.source === 'demo' ? (await getPredictions(data))[m.id] : history.at(-1);
   const allowed = [
@@ -47,32 +55,7 @@ export default async function Page({
   ];
   return (
     <>
-      {data.source !== 'demo' && (
-        <JsonLd
-          value={{
-            '@context': 'https://schema.org',
-            '@type': 'SportsEvent',
-            name: `${data.teams.find((t) => t.id === m.homeId)?.name} – ${data.teams.find((t) => t.id === m.awayId)?.name}`,
-            startDate: m.kickoffKnown === false ? m.sourceDate : m.kickoff,
-            sport: 'Football',
-            eventStatus:
-              m.status === 'cancelled'
-                ? 'https://schema.org/EventCancelled'
-                : m.status === 'postponed'
-                  ? 'https://schema.org/EventPostponed'
-                  : 'https://schema.org/EventScheduled',
-            location: m.venue ? { '@type': 'Place', name: m.venue } : undefined,
-            homeTeam: {
-              '@type': 'SportsTeam',
-              name: data.teams.find((t) => t.id === m.homeId)?.name,
-            },
-            awayTeam: {
-              '@type': 'SportsTeam',
-              name: data.teams.find((t) => t.id === m.awayId)?.name,
-            },
-          }}
-        />
-      )}
+      {structured && <JsonLd value={structured} />}
       <MatchDetail
         data={teamDataset(data, [m.homeId, m.awayId])}
         match={m}

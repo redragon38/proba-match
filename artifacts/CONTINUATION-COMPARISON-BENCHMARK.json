@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-10-05T17:52:39.674Z",
+  "matches": 1298,
+  "teams": 29,
+  "identicalOutput": true,
+  "iterationsPerSeries": 20,
+  "series": 7,
+  "beforeMs": [
+    128.098875,
+    123.5581713,
+    129.1505229,
+    126.73695399999997,
+    127.65380024999995,
+    126.58548504999999,
+    121.10094745000006
+  ],
+  "afterMs": [
+    11.903525050000008,
+    11.673810000000003,
+    11.934656050000012,
+    12.194574099999954,
+    11.818128549999983,
+    11.813130600000022,
+    11.303198449999945
+  ],
+  "medianBeforeMs": 126.73695399999997,
+  "medianAfterMs": 11.818128549999983,
+  "limitation": "Local function microbenchmark using the same current statistics safeguards in both versions. Does not measure page latency or field Core Web Vitals."
+}

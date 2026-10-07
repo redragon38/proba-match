@@ -154,6 +154,15 @@ export function mapFixture(input: unknown, now = new Date()): FixtureBatch {
     competitionId: competition.id,
     kickoff: f.fixture.date,
     status,
+    season: f.league.season,
+    resultPeriod:
+      short === 'FT'
+        ? 'regulation'
+        : short === 'AET'
+          ? 'extra-time'
+          : short === 'PEN'
+            ? 'penalties'
+            : 'unknown',
     phase: short === 'HT' ? 'halftime' : status === 'live' ? 'playing' : undefined,
     minute: f.fixture.status.elapsed,
     extra: f.fixture.status.extra,
@@ -168,6 +177,12 @@ export function mapFixture(input: unknown, now = new Date()): FixtureBatch {
     events: [],
     lineups: [],
     statistics: [],
+    detailPresence: {
+      events: f.events !== undefined,
+      lineups: f.lineups !== undefined,
+      statistics: f.statistics !== undefined,
+      performances: Object.prototype.hasOwnProperty.call(input, 'players'),
+    },
   };
   match.events = (f.events ?? []).flatMap((e) => {
     const type =
@@ -372,6 +387,8 @@ export class ApiFootballProvider implements FootballDataProvider {
       }),
       statistics: z.array(
         z.object({
+          team: z.object({ id: z.number() }).optional(),
+          league: z.object({ id: z.number(), season: z.number() }).optional(),
           games: z.object({
             appearences: nullableNumber,
             lineups: nullableNumber,
@@ -393,13 +410,36 @@ export class ApiFootballProvider implements FootballDataProvider {
     });
     return rows.map((row) => {
       const r = schema.parse(row),
-        s = r.statistics[0];
+        scoped = r.statistics.filter(
+          (s) =>
+            String(s.team?.id) === teamId &&
+            s.league?.season === season &&
+            (!competitionId || String(s.league.id) === competitionId),
+        ),
+        s =
+          scoped.length === 1
+            ? scoped[0]
+            : r.statistics.length === 1 && !r.statistics[0].team && !r.statistics[0].league
+              ? r.statistics[0]
+              : undefined;
       return {
         id: String(r.player.id),
         slug: `${slugify(r.player.name)}-${r.player.id}`,
         name: r.player.name,
         updatedAt: new Date().toISOString(),
         teamId,
+        statsScope:
+          s?.team && s.league
+            ? {
+                competitionId: String(s.league.id),
+                teamId,
+                season: s.league.season,
+                source: 'api-football',
+                observedAt: new Date().toISOString(),
+                type: 'season' as const,
+                verified: true,
+              }
+            : undefined,
         position: mapPosition(s?.games.position),
         number: s?.games.number ?? null,
         nationality: r.player.nationality ?? undefined,

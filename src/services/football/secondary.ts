@@ -6,6 +6,7 @@ import { canonicalTeam } from './providers/openfootball';
 import { reserveQuota } from './quota';
 import { readLocalDataset, readLocalHistory } from './local-store';
 import { footballJob } from './jobs';
+import { mergeDetailRevisions } from './detail-revisions';
 import { persistDataset } from './persistence';
 import { persistPredictions } from '@/services/predictions';
 import { rebuildElo } from './rebuild-elo';
@@ -272,24 +273,14 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean }
                 playerId: playerIds.get(p.playerId)!,
                 teamId: team(p.teamId)!,
               })),
-            provenance: { schedule: 'openfootball', details: 'api-football' },
+            provenance: {
+              schedule: local.provenance?.schedule ?? local.source,
+              details: 'api-football',
+            },
           };
-          if (!merged.lineups.length) merged.lineups = local.lineups;
-          if (!merged.performances?.length) merged.performances = local.performances;
+          Object.assign(merged, mergeDetailRevisions(local, merged));
           addObservedPlayerProfiles(data, merged);
           for (const issue of matchQualityIssues(merged, data.players)) log(issue);
-          const received = ext.statistics.length ? ext.statistics : local.statistics;
-          merged.statistics = [
-            ...received,
-            ...local.statistics.filter((stat) => !received.some((row) => row.label === stat.label)),
-          ].map((stat) => {
-            const previous = local.statistics.find((s) => s.label === stat.label);
-            return {
-              ...stat,
-              home: stat.home ?? previous?.home ?? null,
-              away: stat.away ?? previous?.away ?? null,
-            };
-          });
           for (const external of batch.teams) {
             const internal = team(external.id);
             const index = data.teams.findIndex((t) => t.id === internal);
@@ -341,6 +332,9 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean }
               id,
               slug: old?.slug ?? `${p.slug}-${id.slice(0, 8)}`,
               teamId: t.id,
+              statsScope: p.statsScope
+                ? { ...p.statsScope, teamId: t.id, competitionId: competition.id }
+                : undefined,
               source: 'api-football' as const,
             };
             data.players = [...data.players.filter((p) => p.id !== id), value];

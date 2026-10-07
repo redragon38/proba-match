@@ -20,7 +20,7 @@ export async function readLocalDataset(): Promise<Dataset> {
   const entry = await db.cacheEntry.findUnique({ where: { key: 'football:dataset' } });
   if (!entry)
     return emptyDataset(
-      'Aucun import disponible. Lancez l’import OpenFootball depuis l’administration.',
+      'Les données football ne sont pas encore disponibles. Les guides et explications restent accessibles.',
     );
   const data = entry.payload as unknown as Dataset;
   if (data.source === 'demo') throw new Error('DEMO_NOT_ALLOWED_IN_REAL_STORE');

@@ -1,9 +1,18 @@
 import 'server-only';
+import type { Prisma } from '@prisma/client';
 import { db } from '@/database/client';
 import { predictionEngine, MODEL_VERSION, MODEL_PARAMETERS } from '@/prediction-engine';
 import type { Dataset, EvaluatedPrediction, Prediction } from '@/types/football';
+import { regulationResult } from '@/prediction-engine/result-period';
 import { metrics } from '@/prediction-engine/evaluation';
 import { recordTiming } from '@/services/telemetry';
+import { assertJobActive, fencePublication } from '@/services/football/lease-context';
+/** Full input packages stay in the immutable DB payload, not in client page props. */
+function publicPrediction(p: Prediction): Prediction {
+  const result = { ...p };
+  delete result.inputArchive;
+  return result;
+}
 export async function getPredictions(data: Dataset): Promise<Record<string, Prediction>> {
   if (data.source === 'demo')
     return Object.fromEntries(
@@ -15,7 +24,7 @@ export async function getPredictions(data: Dataset): Promise<Record<string, Pred
             data.matches,
             new Date(Math.min(Date.now(), new Date(m.kickoff).getTime() - 1000)).toISOString(),
           );
-          return p ? [[m.id, p]] : [];
+          return p ? [[m.id, publicPrediction(p)]] : [];
         }),
     );
   if (!process.env.DATABASE_URL) return {};
@@ -31,7 +40,7 @@ export async function getPredictions(data: Dataset): Promise<Record<string, Pred
     return Object.fromEntries(
       rows
         .filter((r) => ids.has(r.matchId))
-        .map((r) => [r.matchId, r.payload as unknown as Prediction]),
+        .map((r) => [r.matchId, publicPrediction(r.payload as unknown as Prediction)]),
     );
   } catch {
     return {};
@@ -44,13 +53,24 @@ export async function getPredictionHistory(
   if (source === 'demo' || !process.env.DATABASE_URL) return [];
   try {
     return (
-      await db.prediction.findMany({ where: { matchId }, orderBy: { createdAt: 'asc' }, take: 100 })
-    ).map((r) => r.payload as unknown as Prediction);
+      await db.prediction.findMany({
+        where: { matchId },
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        take: 100,
+      })
+    )
+      .reverse()
+      .map((r) => publicPrediction(r.payload as unknown as Prediction));
   } catch {
     return [];
   }
 }
-export async function persistPredictions(data: Dataset, now = new Date()) {
+async function persistPredictionTransaction(
+  db: Prisma.TransactionClient,
+  data: Dataset,
+  now: Date,
+) {
+  assertJobActive();
   if (data.source === 'demo') return;
   let contentChanged = false;
   await db.predictionVersion.upsert({
@@ -58,14 +78,12 @@ export async function persistPredictions(data: Dataset, now = new Date()) {
     create: {
       id: MODEL_VERSION,
       description:
-        'Elo, forme et Poisson indépendant ; rapport des buts attendus réduit à 0,8 après validation chronologique',
+        'Elo–Poisson 1.4 : révisions point-in-time, score réglementaire, terrain neutre confirmé, quantité effective et archive reproductible ; coefficients sportifs conservés',
       parameters: MODEL_PARAMETERS,
     },
     update: {},
   });
-  const finishedIds = data.matches
-    .filter((m) => m.status === 'finished' && m.homeScore !== null && m.awayScore !== null)
-    .map((m) => m.id);
+  const finishedIds = data.matches.filter((m) => regulationResult(m) !== null).map((m) => m.id);
   // One indexed read replaces a query for every historical result on every sync.
   const pending = finishedIds.length
     ? await db.prediction.findMany({
@@ -80,6 +98,7 @@ export async function persistPredictions(data: Dataset, now = new Date()) {
     pendingByMatch.set(row.matchId, rows);
   }
   for (const match of data.matches) {
+    assertJobActive();
     if (
       match.status === 'scheduled' &&
       match.kickoffKnown !== false &&
@@ -129,15 +148,16 @@ export async function persistPredictions(data: Dataset, now = new Date()) {
       });
       contentChanged = true;
     }
-    if (match.status === 'finished' && match.homeScore !== null && match.awayScore !== null) {
+    const final = regulationResult(match);
+    if (final) {
       const predictions = pendingByMatch.get(match.id) ?? [];
       for (const row of predictions) {
         const p = row.payload as unknown as Prediction;
         const score = metrics([
           {
             prediction: p,
-            homeScore: match.homeScore,
-            awayScore: match.awayScore,
+            homeScore: final.homeScore!,
+            awayScore: final.awayScore!,
             competitionId: match.competitionId,
             kickoff: match.kickoff,
           },
@@ -146,8 +166,8 @@ export async function persistPredictions(data: Dataset, now = new Date()) {
           data: {
             id: row.id,
             predictionId: row.id,
-            homeScore: match.homeScore,
-            awayScore: match.awayScore,
+            homeScore: final.homeScore!,
+            awayScore: final.awayScore!,
             brier: score.brier,
             logLoss: score.logLoss,
           },
@@ -169,15 +189,15 @@ export async function persistPredictions(data: Dataset, now = new Date()) {
         data: { updatedAt: new Date(Math.max(Date.now(), marker.updatedAt.getTime() + 1)) },
       });
   }
-  const evaluations = await getEvaluations();
+  const evaluations = await getEvaluations(db);
   const performance = metrics(evaluations.filter((r) => r.prediction.version === MODEL_VERSION));
   if (performance)
     await db.modelPerformance.upsert({
-      where: { versionId_period: { versionId: MODEL_VERSION, period: 'latest-10000' } },
+      where: { versionId_period: { versionId: MODEL_VERSION, period: 'all-published-regulation' } },
       create: {
-        id: `${MODEL_VERSION}-latest-10000`,
+        id: `${MODEL_VERSION}-all-published-regulation`,
         versionId: MODEL_VERSION,
-        period: 'latest-10000',
+        period: 'all-published-regulation',
         sample: performance.sample,
         accuracy: performance.accuracy,
         brier: performance.brier,
@@ -193,22 +213,44 @@ export async function persistPredictions(data: Dataset, now = new Date()) {
       },
     });
 }
-export async function getEvaluations(): Promise<EvaluatedPrediction[]> {
+export async function persistPredictions(data: Dataset, now = new Date()) {
+  assertJobActive();
+  if (data.source === 'demo') return;
+  await db.$transaction(
+    async (tx) => {
+      await persistPredictionTransaction(tx, data, now);
+      // Forecasts, evaluations and publication markers have the same lease fence.
+      await fencePublication(tx);
+    },
+    { maxWait: 10_000, timeout: 30 * 60_000 },
+  );
+}
+export async function getEvaluations(
+  client: Pick<Prisma.TransactionClient, 'prediction'> = db,
+): Promise<EvaluatedPrediction[]> {
   if (!process.env.DATABASE_URL) return [];
   try {
-    const rows = await db.prediction.findMany({
+    const rows = await client.prediction.findMany({
       where: { kind: 'initial', result: { isNot: null } },
       include: { result: true, match: { include: { season: true } } },
       orderBy: { createdAt: 'desc' },
-      take: 10000,
     });
-    return rows.map((r) => ({
-      prediction: r.payload as unknown as Prediction,
-      homeScore: r.result!.homeScore,
-      awayScore: r.result!.awayScore,
-      competitionId: r.match.season.competitionId,
-      kickoff: r.match.kickoff.toISOString(),
-    }));
+    // Re-evaluate immutable forecasts against the CURRENT confirmed result. A corrected
+    // final score must not leave the public performance report stuck on the first score.
+    return rows.flatMap((r) => {
+      const final = regulationResult(r.match.payload as unknown as Dataset['matches'][number]);
+      return final
+        ? [
+            {
+              prediction: publicPrediction(r.payload as unknown as Prediction),
+              homeScore: final.homeScore!,
+              awayScore: final.awayScore!,
+              competitionId: r.match.season.competitionId,
+              kickoff: r.match.kickoff.toISOString(),
+            },
+          ]
+        : [];
+    });
   } catch {
     return [];
   }

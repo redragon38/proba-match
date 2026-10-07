@@ -1,0 +1,4076 @@
+{
+  "generatedAt": "2026-10-05T19:04:18.234Z",
+  "inputSha256": "4bbae1f1e53af3d53b2c4736aab7078709f6ed87b28419d8b071ec55e1adfca6",
+  "warning": "Recherche seulement : correction Dixon-Coles sur les buts attendus existants, pas un réentraînement complet Dixon-Coles. Mode reconstruit non certifiant ; aucun changement du moteur actif. Corpus déjà exploré, non indépendant.",
+  "rhos": [
+    0,
+    -0.05,
+    -0.1,
+    0.03
+  ],
+  "source": "https://arxiv.org/pdf/2307.02139",
+  "availabilityMode": "reconstructed",
+  "objective": "logLoss",
+  "reference": "poisson-reference",
+  "commonSample": 1204,
+  "folds": [
+    {
+      "start": "2022-07-01T00:00:00.000Z",
+      "end": "2023-07-01T00:00:00.000Z",
+      "trainingSample": 0,
+      "testSample": 329,
+      "status": "INSUFFICIENT_DATA",
+      "selected": null
+    },
+    {
+      "start": "2023-07-01T00:00:00.000Z",
+      "end": "2024-07-01T00:00:00.000Z",
+      "trainingSample": 329,
+      "testSample": 278,
+      "status": "EVALUATED",
+      "selected": "dc-correction--0.05",
+      "training": [
+        {
+          "candidate": "dc-correction--0.05",
+          "metrics": {
+            "sample": 329,
+            "accuracy": 0.5379939209726444,
+            "brier": 0.5874694766367288,
+            "logLoss": 0.9850533044997708,
+            "goalSample": 329,
+            "homeGoalMae": 0.9492226228590689,
+            "awayGoalMae": 0.8176662362258473,
+            "totalGoalMae": 1.2836728364332632,
+            "scoreSample": 329,
+            "exactScoreAccuracy": 0.12158054711246201,
+            "calibrationByOutcome": [
+              [
+                {
+                  "bin": 0,
+                  "count": 6,
+                  "predicted": 0.08026158996670936,
+                  "actual": 0.3333333333333333
+                },
+                {
+                  "bin": 1,
+                  "count": 36,
+                  "predicted": 0.1515047028010433,
+                  "actual": 0.05555555555555555
+                },
+                {
+                  "bin": 2,
+                  "count": 58,
+                  "predicted": 0.2512348044844812,
+                  "actual": 0.27586206896551724
+                },
+                {
+                  "bin": 3,
+                  "count": 63,
+                  "predicted": 0.34894046993729216,
+                  "actual": 0.38095238095238093
+                },
+                {
+                  "bin": 4,
+                  "count": 58,
+                  "predicted": 0.4494928128772462,
+                  "actual": 0.5172413793103449
+                },
+                {
+                  "bin": 5,
+                  "count": 56,
+                  "predicted": 0.5518634748558088,
+                  "actual": 0.48214285714285715
+                },
+                {
+                  "bin": 6,
+                  "count": 35,
+                  "predicted": 0.6504094979751153,
+                  "actual": 0.7142857142857143
+                },
+                {
+                  "bin": 7,
+                  "count": 15,
+                  "predicted": 0.742676711128838,
+                  "actual": 0.9333333333333333
+                },
+                {
+                  "bin": 8,
+                  "count": 2,
+                  "predicted": 0.8352502346230772,
+                  "actual": 1
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 1,
+                  "predicted": 0.0881984631981598,
+                  "actual": 0
+                },
+                {
+                  "bin": 1,
+                  "count": 44,
+                  "predicted": 0.1747764863249407,
+                  "actual": 0.13636363636363635
+                },
+                {
+                  "bin": 2,
+                  "count": 270,
+                  "predicted": 0.24934912983071253,
+                  "actual": 0.26296296296296295
+                },
+                {
+                  "bin": 3,
+                  "count": 14,
+                  "predicted": 0.3134092369099637,
+                  "actual": 0.14285714285714285
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 15,
+                  "predicted": 0.07694512814691164,
+                  "actual": 0.06666666666666667
+                },
+                {
+                  "bin": 1,
+                  "count": 54,
+                  "predicted": 0.15559704740005753,
+                  "actual": 0.12962962962962962
+                },
+                {
+                  "bin": 2,
+                  "count": 76,
+                  "predicted": 0.24508149260197543,
+                  "actual": 0.25
+                },
+                {
+                  "bin": 3,
+                  "count": 66,
+                  "predicted": 0.3482369091006917,
+                  "actual": 0.30303030303030304
+                },
+                {
+                  "bin": 4,
+                  "count": 55,
+                  "predicted": 0.4495562157234277,
+                  "actual": 0.4727272727272727
+                },
+                {
+                  "bin": 5,
+                  "count": 30,
+                  "predicted": 0.5467686601603893,
+                  "actual": 0.5
+                },
+                {
+                  "bin": 6,
+                  "count": 25,
+                  "predicted": 0.6491059036746827,
+                  "actual": 0.68
+                },
+                {
+                  "bin": 7,
+                  "count": 8,
+                  "predicted": 0.7433208968627891,
+                  "actual": 0.375
+                }
+              ]
+            ],
+            "calibrationError": 0.03099356113626023,
+            "calibration": [
+              {
+                "bin": 0,
+                "count": 22,
+                "predicted": 0.07836113296373139,
+                "actual": 0.13636363636363635
+              },
+              {
+                "bin": 1,
+                "count": 134,
+                "predicted": 0.1607953377517765,
+                "actual": 0.11194029850746269
+              },
+              {
+                "bin": 2,
+                "count": 404,
+                "predicted": 0.24881702265381803,
+                "actual": 0.2623762376237624
+              },
+              {
+                "bin": 3,
+                "count": 143,
+                "predicted": 0.3451371672967452,
+                "actual": 0.32167832167832167
+              },
+              {
+                "bin": 4,
+                "count": 113,
+                "predicted": 0.44952367266963533,
+                "actual": 0.49557522123893805
+              },
+              {
+                "bin": 5,
+                "count": 86,
+                "predicted": 0.5500862139155462,
+                "actual": 0.4883720930232558
+              },
+              {
+                "bin": 6,
+                "count": 60,
+                "predicted": 0.6498663336832683,
+                "actual": 0.7
+              },
+              {
+                "bin": 7,
+                "count": 23,
+                "predicted": 0.7429007757319515,
+                "actual": 0.7391304347826086
+              },
+              {
+                "bin": 8,
+                "count": 2,
+                "predicted": 0.8352502346230772,
+                "actual": 1
+              }
+            ]
+          }
+        },
+        {
+          "candidate": "dc-correction--0.1",
+          "metrics": {
+            "sample": 329,
+            "accuracy": 0.5379939209726444,
+            "brier": 0.5876959252747966,
+            "logLoss": 0.9853687837385664,
+            "goalSample": 329,
+            "homeGoalMae": 0.9492226228590689,
+            "awayGoalMae": 0.8176662362258473,
+            "totalGoalMae": 1.2836728364332632,
+            "scoreSample": 329,
+            "exactScoreAccuracy": 0.11246200607902736,
+            "calibrationByOutcome": [
+              [
+                {
+                  "bin": 0,
+                  "count": 6,
+                  "predicted": 0.07651531485042683,
+                  "actual": 0.3333333333333333
+                },
+                {
+                  "bin": 1,
+                  "count": 39,
+                  "predicted": 0.1505569542155073,
+                  "actual": 0.07692307692307693
+                },
+                {
+                  "bin": 2,
+                  "count": 58,
+                  "predicted": 0.25074397453625463,
+                  "actual": 0.3103448275862069
+                },
+                {
+                  "bin": 3,
+                  "count": 62,
+                  "predicted": 0.3469839637653816,
+                  "actual": 0.3709677419354839
+                },
+                {
+                  "bin": 4,
+                  "count": 61,
+                  "predicted": 0.4495306685620325,
+                  "actual": 0.4918032786885246
+                },
+                {
+                  "bin": 5,
+                  "count": 52,
+                  "predicted": 0.5523103508802083,
+                  "actual": 0.4807692307692308
+                },
+                {
+                  "bin": 6,
+                  "count": 37,
+                  "predicted": 0.6514265641047802,
+                  "actual": 0.7567567567567568
+                },
+                {
+                  "bin": 7,
+                  "count": 12,
+                  "predicted": 0.7492327075824282,
+                  "actual": 0.9166666666666666
+                },
+                {
+                  "bin": 8,
+                  "count": 2,
+                  "predicted": 0.832961837434542,
+                  "actual": 1
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 1,
+                  "predicted": 0.091303236242995,
+                  "actual": 0
+                },
+                {
+                  "bin": 1,
+                  "count": 37,
+                  "predicted": 0.1780723451679596,
+                  "actual": 0.16216216216216217
+                },
+                {
+                  "bin": 2,
+                  "count": 260,
+                  "predicted": 0.25593413304463913,
+                  "actual": 0.25384615384615383
+                },
+                {
+                  "bin": 3,
+                  "count": 31,
+                  "predicted": 0.3152453407599161,
+                  "actual": 0.22580645161290322
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 15,
+                  "predicted": 0.07337614887108782,
+                  "actual": 0.06666666666666667
+                },
+                {
+                  "bin": 1,
+                  "count": 59,
+                  "predicted": 0.15468631841590808,
+                  "actual": 0.1694915254237288
+                },
+                {
+                  "bin": 2,
+                  "count": 77,
+                  "predicted": 0.24681655765413446,
+                  "actual": 0.23376623376623376
+                },
+                {
+                  "bin": 3,
+                  "count": 63,
+                  "predicted": 0.3491260255976746,
+                  "actual": 0.31746031746031744
+                },
+                {
+                  "bin": 4,
+                  "count": 54,
+                  "predicted": 0.4483375008768454,
+                  "actual": 0.46296296296296297
+                },
+                {
+                  "bin": 5,
+                  "count": 30,
+                  "predicted": 0.5480637923116087,
+                  "actual": 0.5333333333333333
+                },
+                {
+                  "bin": 6,
+                  "count": 23,
+                  "predicted": 0.6486968336937092,
+                  "actual": 0.6521739130434783
+                },
+                {
+                  "bin": 7,
+                  "count": 8,
+                  "predicted": 0.7396808535306729,
+                  "actual": 0.375
+                }
+              ]
+            ],
+            "calibrationError": 0.02216359277847213,
+            "calibration": [
+              {
+                "bin": 0,
+                "count": 22,
+                "predicted": 0.07504715265508513,
+                "actual": 0.13636363636363635
+              },
+              {
+                "bin": 1,
+                "count": 135,
+                "predicted": 0.15990289460857676,
+                "actual": 0.14074074074074075
+              },
+              {
+                "bin": 2,
+                "count": 395,
+                "predicted": 0.2533946836812083,
+                "actual": 0.2582278481012658
+              },
+              {
+                "bin": 3,
+                "count": 156,
+                "predicted": 0.34154199313887534,
+                "actual": 0.32051282051282054
+              },
+              {
+                "bin": 4,
+                "count": 115,
+                "predicted": 0.4489703985185531,
+                "actual": 0.4782608695652174
+              },
+              {
+                "bin": 5,
+                "count": 82,
+                "predicted": 0.550756731891696,
+                "actual": 0.5
+              },
+              {
+                "bin": 6,
+                "count": 60,
+                "predicted": 0.650380167447203,
+                "actual": 0.7166666666666667
+              },
+              {
+                "bin": 7,
+                "count": 20,
+                "predicted": 0.7454119659617262,
+                "actual": 0.7
+              },
+              {
+                "bin": 8,
+                "count": 2,
+                "predicted": 0.832961837434542,
+                "actual": 1
+              }
+            ]
+          }
+        },
+        {
+          "candidate": "poisson-reference",
+          "metrics": {
+            "sample": 329,
+            "accuracy": 0.5379939209726444,
+            "brier": 0.5875939152983397,
+            "logLoss": 0.9854005939459436,
+            "goalSample": 329,
+            "homeGoalMae": 0.9492226228590689,
+            "awayGoalMae": 0.8176662362258473,
+            "totalGoalMae": 1.2836728364332632,
+            "scoreSample": 329,
+            "exactScoreAccuracy": 0.1276595744680851,
+            "calibrationByOutcome": [
+              [
+                {
+                  "bin": 0,
+                  "count": 6,
+                  "predicted": 0.0840078650829919,
+                  "actual": 0.3333333333333333
+                },
+                {
+                  "bin": 1,
+                  "count": 34,
+                  "predicted": 0.15351486332485334,
+                  "actual": 0.058823529411764705
+                },
+                {
+                  "bin": 2,
+                  "count": 59,
+                  "predicted": 0.2543328754397495,
+                  "actual": 0.2711864406779661
+                },
+                {
+                  "bin": 3,
+                  "count": 60,
+                  "predicted": 0.35083231850094293,
+                  "actual": 0.38333333333333336
+                },
+                {
+                  "bin": 4,
+                  "count": 56,
+                  "predicted": 0.4465093399733799,
+                  "actual": 0.48214285714285715
+                },
+                {
+                  "bin": 5,
+                  "count": 61,
+                  "predicted": 0.5510481361094367,
+                  "actual": 0.4918032786885246
+                },
+                {
+                  "bin": 6,
+                  "count": 34,
+                  "predicted": 0.6505519814957624,
+                  "actual": 0.7352941176470589
+                },
+                {
+                  "bin": 7,
+                  "count": 17,
+                  "predicted": 0.7412731821022607,
+                  "actual": 0.8823529411764706
+                },
+                {
+                  "bin": 8,
+                  "count": 2,
+                  "predicted": 0.8375386318116125,
+                  "actual": 1
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 1,
+                  "predicted": 0.08509369015332464,
+                  "actual": 0
+                },
+                {
+                  "bin": 1,
+                  "count": 62,
+                  "predicted": 0.17582304011138525,
+                  "actual": 0.16129032258064516
+                },
+                {
+                  "bin": 2,
+                  "count": 260,
+                  "predicted": 0.24291068357563636,
+                  "actual": 0.26153846153846155
+                },
+                {
+                  "bin": 3,
+                  "count": 6,
+                  "predicted": 0.307059399284857,
+                  "actual": 0.16666666666666666
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 15,
+                  "predicted": 0.08051410742273542,
+                  "actual": 0.06666666666666667
+                },
+                {
+                  "bin": 1,
+                  "count": 51,
+                  "predicted": 0.1578256713292957,
+                  "actual": 0.09803921568627451
+                },
+                {
+                  "bin": 2,
+                  "count": 75,
+                  "predicted": 0.245858142742821,
+                  "actual": 0.26666666666666666
+                },
+                {
+                  "bin": 3,
+                  "count": 66,
+                  "predicted": 0.3483651899533008,
+                  "actual": 0.30303030303030304
+                },
+                {
+                  "bin": 4,
+                  "count": 56,
+                  "predicted": 0.4489898310710072,
+                  "actual": 0.4642857142857143
+                },
+                {
+                  "bin": 5,
+                  "count": 32,
+                  "predicted": 0.5460028884004655,
+                  "actual": 0.5
+                },
+                {
+                  "bin": 6,
+                  "count": 25,
+                  "predicted": 0.649642478108061,
+                  "actual": 0.64
+                },
+                {
+                  "bin": 7,
+                  "count": 9,
+                  "predicted": 0.7418661453735103,
+                  "actual": 0.4444444444444444
+                }
+              ]
+            ],
+            "calibrationError": 0.02921683739821481,
+            "calibration": [
+              {
+                "bin": 0,
+                "count": 22,
+                "predicted": 0.08167511327237763,
+                "actual": 0.13636363636363635
+              },
+              {
+                "bin": 1,
+                "count": 147,
+                "predicted": 0.1644193406649319,
+                "actual": 0.11564625850340136
+              },
+              {
+                "bin": 2,
+                "count": 394,
+                "predicted": 0.24518217788406693,
+                "actual": 0.2639593908629442
+              },
+              {
+                "bin": 3,
+                "count": 132,
+                "predicted": 0.34760907608093605,
+                "actual": 0.3333333333333333
+              },
+              {
+                "bin": 4,
+                "count": 112,
+                "predicted": 0.44774958552219374,
+                "actual": 0.4732142857142857
+              },
+              {
+                "bin": 5,
+                "count": 93,
+                "predicted": 0.5493121368977474,
+                "actual": 0.4946236559139785
+              },
+              {
+                "bin": 6,
+                "count": 59,
+                "predicted": 0.6501665987043637,
+                "actual": 0.6949152542372882
+              },
+              {
+                "bin": 7,
+                "count": 26,
+                "predicted": 0.7414784386192316,
+                "actual": 0.7307692307692307
+              },
+              {
+                "bin": 8,
+                "count": 2,
+                "predicted": 0.8375386318116125,
+                "actual": 1
+              }
+            ]
+          }
+        },
+        {
+          "candidate": "dc-correction-0.03",
+          "metrics": {
+            "sample": 329,
+            "accuracy": 0.5379939209726444,
+            "brier": 0.5878370043991533,
+            "logLoss": 0.9859417527716204,
+            "goalSample": 329,
+            "homeGoalMae": 0.9492226228590689,
+            "awayGoalMae": 0.8176662362258473,
+            "totalGoalMae": 1.2836728364332632,
+            "scoreSample": 329,
+            "exactScoreAccuracy": 0.11854103343465046,
+            "calibrationByOutcome": [
+              [
+                {
+                  "bin": 0,
+                  "count": 5,
+                  "predicted": 0.08340856231505846,
+                  "actual": 0.4
+                },
+                {
+                  "bin": 1,
+                  "count": 34,
+                  "predicted": 0.15332414721100152,
+                  "actual": 0.058823529411764705
+                },
+                {
+                  "bin": 2,
+                  "count": 55,
+                  "predicted": 0.25273840635236733,
+                  "actual": 0.2545454545454545
+                },
+                {
+                  "bin": 3,
+                  "count": 61,
+                  "predicted": 0.3470242469185764,
+                  "actual": 0.39344262295081966
+                },
+                {
+                  "bin": 4,
+                  "count": 58,
+                  "predicted": 0.4448940402773593,
+                  "actual": 0.4482758620689655
+                },
+                {
+                  "bin": 5,
+                  "count": 58,
+                  "predicted": 0.5483040893789448,
+                  "actual": 0.5172413793103449
+                },
+                {
+                  "bin": 6,
+                  "count": 38,
+                  "predicted": 0.6452886374647039,
+                  "actual": 0.6842105263157895
+                },
+                {
+                  "bin": 7,
+                  "count": 18,
+                  "predicted": 0.7411762023799324,
+                  "actual": 0.8888888888888888
+                },
+                {
+                  "bin": 8,
+                  "count": 2,
+                  "predicted": 0.8389116701247337,
+                  "actual": 1
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 1,
+                  "predicted": 0.08323082632642355,
+                  "actual": 0
+                },
+                {
+                  "bin": 1,
+                  "count": 73,
+                  "predicted": 0.17504778915912222,
+                  "actual": 0.1780821917808219
+                },
+                {
+                  "bin": 2,
+                  "count": 253,
+                  "predicted": 0.23876177417807776,
+                  "actual": 0.25691699604743085
+                },
+                {
+                  "bin": 3,
+                  "count": 2,
+                  "predicted": 0.30687342119083627,
+                  "actual": 0.5
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 13,
+                  "predicted": 0.07968785950199343,
+                  "actual": 0.07692307692307693
+                },
+                {
+                  "bin": 1,
+                  "count": 50,
+                  "predicted": 0.15585798749281482,
+                  "actual": 0.1
+                },
+                {
+                  "bin": 2,
+                  "count": 76,
+                  "predicted": 0.24588463563796265,
+                  "actual": 0.25
+                },
+                {
+                  "bin": 3,
+                  "count": 67,
+                  "predicted": 0.3497921786726258,
+                  "actual": 0.29850746268656714
+                },
+                {
+                  "bin": 4,
+                  "count": 54,
+                  "predicted": 0.4487180521968933,
+                  "actual": 0.48148148148148145
+                },
+                {
+                  "bin": 5,
+                  "count": 34,
+                  "predicted": 0.5435830138837724,
+                  "actual": 0.5
+                },
+                {
+                  "bin": 6,
+                  "count": 26,
+                  "predicted": 0.6504486234552189,
+                  "actual": 0.6153846153846154
+                },
+                {
+                  "bin": 7,
+                  "count": 9,
+                  "predicted": 0.7440870636014566,
+                  "actual": 0.4444444444444444
+                }
+              ]
+            ],
+            "calibrationError": 0.018893871803830543,
+            "calibration": [
+              {
+                "bin": 0,
+                "count": 19,
+                "predicted": 0.08085346375934897,
+                "actual": 0.15789473684210525
+              },
+              {
+                "bin": 1,
+                "count": 157,
+                "predicted": 0.16423190438490892,
+                "actual": 0.12738853503184713
+              },
+              {
+                "bin": 2,
+                "count": 384,
+                "predicted": 0.24217336855447658,
+                "actual": 0.2552083333333333
+              },
+              {
+                "bin": 3,
+                "count": 130,
+                "predicted": 0.34783309134985213,
+                "actual": 0.34615384615384615
+              },
+              {
+                "bin": 4,
+                "count": 112,
+                "predicted": 0.44673776030999196,
+                "actual": 0.4642857142857143
+              },
+              {
+                "bin": 5,
+                "count": 92,
+                "predicted": 0.5465593440872504,
+                "actual": 0.5108695652173914
+              },
+              {
+                "bin": 6,
+                "count": 64,
+                "predicted": 0.6473848817733509,
+                "actual": 0.65625
+              },
+              {
+                "bin": 7,
+                "count": 27,
+                "predicted": 0.7421464894537737,
+                "actual": 0.7407407407407407
+              },
+              {
+                "bin": 8,
+                "count": 2,
+                "predicted": 0.8389116701247337,
+                "actual": 1
+              }
+            ]
+          }
+        }
+      ],
+      "testMetrics": {
+        "sample": 278,
+        "accuracy": 0.4712230215827338,
+        "brier": 0.6194614584388572,
+        "logLoss": 1.0288612366337033,
+        "goalSample": 278,
+        "homeGoalMae": 0.9181938665019216,
+        "awayGoalMae": 0.9062033177287586,
+        "totalGoalMae": 1.3381861851693004,
+        "scoreSample": 278,
+        "exactScoreAccuracy": 0.10431654676258993,
+        "calibrationByOutcome": [
+          [
+            {
+              "bin": 0,
+              "count": 3,
+              "predicted": 0.09355909549843168,
+              "actual": 0
+            },
+            {
+              "bin": 1,
+              "count": 20,
+              "predicted": 0.1691760567424492,
+              "actual": 0.15
+            },
+            {
+              "bin": 2,
+              "count": 52,
+              "predicted": 0.2540983724228189,
+              "actual": 0.28846153846153844
+            },
+            {
+              "bin": 3,
+              "count": 59,
+              "predicted": 0.3517961822754626,
+              "actual": 0.4406779661016949
+            },
+            {
+              "bin": 4,
+              "count": 64,
+              "predicted": 0.4450813821467117,
+              "actual": 0.28125
+            },
+            {
+              "bin": 5,
+              "count": 45,
+              "predicted": 0.5512999445625659,
+              "actual": 0.5777777777777777
+            },
+            {
+              "bin": 6,
+              "count": 29,
+              "predicted": 0.6381324982731591,
+              "actual": 0.5862068965517241
+            },
+            {
+              "bin": 7,
+              "count": 6,
+              "predicted": 0.7508331924651634,
+              "actual": 0.6666666666666666
+            }
+          ],
+          [
+            {
+              "bin": 1,
+              "count": 19,
+              "predicted": 0.17651481444845754,
+              "actual": 0.2631578947368421
+            },
+            {
+              "bin": 2,
+              "count": 227,
+              "predicted": 0.2592451206550641,
+              "actual": 0.2599118942731278
+            },
+            {
+              "bin": 3,
+              "count": 32,
+              "predicted": 0.312951523087259,
+              "actual": 0.125
+            }
+          ],
+          [
+            {
+              "bin": 0,
+              "count": 4,
+              "predicted": 0.07836799790591796,
+              "actual": 0
+            },
+            {
+              "bin": 1,
+              "count": 53,
+              "predicted": 0.155008016891866,
+              "actual": 0.16981132075471697
+            },
+            {
+              "bin": 2,
+              "count": 71,
+              "predicted": 0.25316971650960074,
+              "actual": 0.352112676056338
+            },
+            {
+              "bin": 3,
+              "count": 64,
+              "predicted": 0.3433904974076739,
+              "actual": 0.359375
+            },
+            {
+              "bin": 4,
+              "count": 49,
+              "predicted": 0.4474319764521959,
+              "actual": 0.3877551020408163
+            },
+            {
+              "bin": 5,
+              "count": 26,
+              "predicted": 0.5415775655539383,
+              "actual": 0.6538461538461539
+            },
+            {
+              "bin": 6,
+              "count": 8,
+              "predicted": 0.6445259656277862,
+              "actual": 0.625
+            },
+            {
+              "bin": 7,
+              "count": 3,
+              "predicted": 0.7343204734130548,
+              "actual": 1
+            }
+          ]
+        ],
+        "calibrationError": 0.037567325555419535,
+        "calibration": [
+          {
+            "bin": 0,
+            "count": 7,
+            "predicted": 0.08487846830270955,
+            "actual": 0
+          },
+          {
+            "bin": 1,
+            "count": 92,
+            "predicted": 0.1625296467895498,
+            "actual": 0.18478260869565216
+          },
+          {
+            "bin": 2,
+            "count": 350,
+            "predicted": 0.25724802179105083,
+            "actual": 0.28285714285714286
+          },
+          {
+            "bin": 3,
+            "count": 155,
+            "predicted": 0.34030590533635946,
+            "actual": 0.3419354838709677
+          },
+          {
+            "bin": 4,
+            "count": 113,
+            "predicted": 0.44610066640307194,
+            "actual": 0.3274336283185841
+          },
+          {
+            "bin": 5,
+            "count": 71,
+            "predicted": 0.5477396367565895,
+            "actual": 0.6056338028169014
+          },
+          {
+            "bin": 6,
+            "count": 37,
+            "predicted": 0.6395148695930784,
+            "actual": 0.5945945945945946
+          },
+          {
+            "bin": 7,
+            "count": 9,
+            "predicted": 0.7453289527811273,
+            "actual": 0.7777777777777778
+          }
+        ]
+      },
+      "referenceMetrics": {
+        "sample": 278,
+        "accuracy": 0.4748201438848921,
+        "brier": 0.6190504199210577,
+        "logLoss": 1.0282553962610332,
+        "goalSample": 278,
+        "homeGoalMae": 0.9181938665019216,
+        "awayGoalMae": 0.9062033177287586,
+        "totalGoalMae": 1.3381861851693004,
+        "scoreSample": 278,
+        "exactScoreAccuracy": 0.10431654676258993,
+        "calibrationByOutcome": [
+          [
+            {
+              "bin": 0,
+              "count": 2,
+              "predicted": 0.09491432681504752,
+              "actual": 0
+            },
+            {
+              "bin": 1,
+              "count": 17,
+              "predicted": 0.1631373423072623,
+              "actual": 0.17647058823529413
+            },
+            {
+              "bin": 2,
+              "count": 52,
+              "predicted": 0.2525494035125264,
+              "actual": 0.23076923076923078
+            },
+            {
+              "bin": 3,
+              "count": 62,
+              "predicted": 0.35368960829470764,
+              "actual": 0.45161290322580644
+            },
+            {
+              "bin": 4,
+              "count": 62,
+              "predicted": 0.44777613592239224,
+              "actual": 0.27419354838709675
+            },
+            {
+              "bin": 5,
+              "count": 44,
+              "predicted": 0.549201283244939,
+              "actual": 0.6136363636363636
+            },
+            {
+              "bin": 6,
+              "count": 33,
+              "predicted": 0.6378705691307451,
+              "actual": 0.5454545454545454
+            },
+            {
+              "bin": 7,
+              "count": 6,
+              "predicted": 0.7544491759817796,
+              "actual": 0.6666666666666666
+            }
+          ],
+          [
+            {
+              "bin": 1,
+              "count": 24,
+              "predicted": 0.17417882257726833,
+              "actual": 0.2916666666666667
+            },
+            {
+              "bin": 2,
+              "count": 243,
+              "predicted": 0.2526367432657088,
+              "actual": 0.24691358024691357
+            },
+            {
+              "bin": 3,
+              "count": 11,
+              "predicted": 0.31506787915426704,
+              "actual": 0.09090909090909091
+            }
+          ],
+          [
+            {
+              "bin": 0,
+              "count": 4,
+              "predicted": 0.08175890099542864,
+              "actual": 0
+            },
+            {
+              "bin": 1,
+              "count": 51,
+              "predicted": 0.15833277789645522,
+              "actual": 0.1568627450980392
+            },
+            {
+              "bin": 2,
+              "count": 65,
+              "predicted": 0.2520871470028855,
+              "actual": 0.35384615384615387
+            },
+            {
+              "bin": 3,
+              "count": 70,
+              "predicted": 0.34272630370871504,
+              "actual": 0.35714285714285715
+            },
+            {
+              "bin": 4,
+              "count": 50,
+              "predicted": 0.4504631358348494,
+              "actual": 0.4
+            },
+            {
+              "bin": 5,
+              "count": 27,
+              "predicted": 0.5454452100142128,
+              "actual": 0.6296296296296297
+            },
+            {
+              "bin": 6,
+              "count": 8,
+              "predicted": 0.649001009895991,
+              "actual": 0.625
+            },
+            {
+              "bin": 7,
+              "count": 3,
+              "predicted": 0.7382151480470256,
+              "actual": 1
+            }
+          ]
+        ],
+        "calibrationError": 0.04087260992092353,
+        "calibration": [
+          {
+            "bin": 0,
+            "count": 6,
+            "predicted": 0.0861440429353016,
+            "actual": 0
+          },
+          {
+            "bin": 1,
+            "count": 92,
+            "predicted": 0.16335432862822943,
+            "actual": 0.1956521739130435
+          },
+          {
+            "bin": 2,
+            "count": 360,
+            "predicted": 0.252524894865017,
+            "actual": 0.2638888888888889
+          },
+          {
+            "bin": 3,
+            "count": 143,
+            "predicted": 0.3453520534585935,
+            "actual": 0.3776223776223776
+          },
+          {
+            "bin": 4,
+            "count": 112,
+            "predicted": 0.4489756894547394,
+            "actual": 0.33035714285714285
+          },
+          {
+            "bin": 5,
+            "count": 71,
+            "predicted": 0.5477729173684656,
+            "actual": 0.6197183098591549
+          },
+          {
+            "bin": 6,
+            "count": 41,
+            "predicted": 0.640042362450793,
+            "actual": 0.5609756097560976
+          },
+          {
+            "bin": 7,
+            "count": 9,
+            "predicted": 0.7490378333368617,
+            "actual": 0.7777777777777778
+          }
+        ]
+      }
+    },
+    {
+      "start": "2024-07-01T00:00:00.000Z",
+      "end": "2025-07-01T00:00:00.000Z",
+      "trainingSample": 607,
+      "testSample": 299,
+      "status": "EVALUATED",
+      "selected": "poisson-reference",
+      "training": [
+        {
+          "candidate": "poisson-reference",
+          "metrics": {
+            "sample": 607,
+            "accuracy": 0.5090609555189456,
+            "brier": 0.6020006834781015,
+            "logLoss": 1.0050276698002998,
+            "goalSample": 607,
+            "homeGoalMae": 0.9350117591567837,
+            "awayGoalMae": 0.8582153443935725,
+            "totalGoalMae": 1.30863941130743,
+            "scoreSample": 607,
+            "exactScoreAccuracy": 0.11696869851729819,
+            "calibrationByOutcome": [
+              [
+                {
+                  "bin": 0,
+                  "count": 8,
+                  "predicted": 0.08673448051600581,
+                  "actual": 0.25
+                },
+                {
+                  "bin": 1,
+                  "count": 51,
+                  "predicted": 0.15672235631898965,
+                  "actual": 0.09803921568627451
+                },
+                {
+                  "bin": 2,
+                  "count": 111,
+                  "predicted": 0.25349737507744685,
+                  "actual": 0.25225225225225223
+                },
+                {
+                  "bin": 3,
+                  "count": 122,
+                  "predicted": 0.3522843838059711,
+                  "actual": 0.4180327868852459
+                },
+                {
+                  "bin": 4,
+                  "count": 118,
+                  "predicted": 0.4471749446245559,
+                  "actual": 0.3728813559322034
+                },
+                {
+                  "bin": 5,
+                  "count": 105,
+                  "predicted": 0.5502742168138377,
+                  "actual": 0.5428571428571428
+                },
+                {
+                  "bin": 6,
+                  "count": 67,
+                  "predicted": 0.6443059127189629,
+                  "actual": 0.6417910447761194
+                },
+                {
+                  "bin": 7,
+                  "count": 23,
+                  "predicted": 0.7447103978969176,
+                  "actual": 0.8260869565217391
+                },
+                {
+                  "bin": 8,
+                  "count": 2,
+                  "predicted": 0.8375386318116125,
+                  "actual": 1
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 1,
+                  "predicted": 0.08509369015332464,
+                  "actual": 0
+                },
+                {
+                  "bin": 1,
+                  "count": 86,
+                  "predicted": 0.1753641887065154,
+                  "actual": 0.19767441860465115
+                },
+                {
+                  "bin": 2,
+                  "count": 503,
+                  "predicted": 0.24760935654718202,
+                  "actual": 0.2544731610337972
+                },
+                {
+                  "bin": 3,
+                  "count": 17,
+                  "predicted": 0.3122413568474164,
+                  "actual": 0.11764705882352941
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 19,
+                  "predicted": 0.08077616922751296,
+                  "actual": 0.05263157894736842
+                },
+                {
+                  "bin": 1,
+                  "count": 102,
+                  "predicted": 0.1580792246128755,
+                  "actual": 0.12745098039215685
+                },
+                {
+                  "bin": 2,
+                  "count": 140,
+                  "predicted": 0.2487501804349938,
+                  "actual": 0.30714285714285716
+                },
+                {
+                  "bin": 3,
+                  "count": 136,
+                  "predicted": 0.3454628220332934,
+                  "actual": 0.33088235294117646
+                },
+                {
+                  "bin": 4,
+                  "count": 106,
+                  "predicted": 0.44968478614829144,
+                  "actual": 0.4339622641509434
+                },
+                {
+                  "bin": 5,
+                  "count": 59,
+                  "predicted": 0.5457476796474348,
+                  "actual": 0.559322033898305
+                },
+                {
+                  "bin": 6,
+                  "count": 33,
+                  "predicted": 0.6494869706627105,
+                  "actual": 0.6363636363636364
+                },
+                {
+                  "bin": 7,
+                  "count": 12,
+                  "predicted": 0.7409533960418891,
+                  "actual": 0.5833333333333334
+                }
+              ]
+            ],
+            "calibrationError": 0.016752134208819672,
+            "calibration": [
+              {
+                "bin": 0,
+                "count": 28,
+                "predicted": 0.08263274105728992,
+                "actual": 0.10714285714285714
+              },
+              {
+                "bin": 1,
+                "count": 239,
+                "predicted": 0.1640093778725611,
+                "actual": 0.14644351464435146
+              },
+              {
+                "bin": 2,
+                "count": 754,
+                "predicted": 0.24868798440017023,
+                "actual": 0.2639257294429708
+              },
+              {
+                "bin": 3,
+                "count": 275,
+                "predicted": 0.34643542431731794,
+                "actual": 0.3563636363636364
+              },
+              {
+                "bin": 4,
+                "count": 224,
+                "predicted": 0.44836263748846644,
+                "actual": 0.4017857142857143
+              },
+              {
+                "bin": 5,
+                "count": 164,
+                "predicted": 0.5486457674673877,
+                "actual": 0.5487804878048781
+              },
+              {
+                "bin": 6,
+                "count": 100,
+                "predicted": 0.6460156618403999,
+                "actual": 0.64
+              },
+              {
+                "bin": 7,
+                "count": 35,
+                "predicted": 0.7434222829751935,
+                "actual": 0.7428571428571429
+              },
+              {
+                "bin": 8,
+                "count": 2,
+                "predicted": 0.8375386318116125,
+                "actual": 1
+              }
+            ]
+          }
+        },
+        {
+          "candidate": "dc-correction--0.05",
+          "metrics": {
+            "sample": 607,
+            "accuracy": 0.5074135090609555,
+            "brier": 0.6021214880716405,
+            "logLoss": 1.0051169043897765,
+            "goalSample": 607,
+            "homeGoalMae": 0.9350117591567837,
+            "awayGoalMae": 0.8582153443935725,
+            "totalGoalMae": 1.30863941130743,
+            "scoreSample": 607,
+            "exactScoreAccuracy": 0.11367380560131796,
+            "calibrationByOutcome": [
+              [
+                {
+                  "bin": 0,
+                  "count": 9,
+                  "predicted": 0.08469409181061681,
+                  "actual": 0.2222222222222222
+                },
+                {
+                  "bin": 1,
+                  "count": 56,
+                  "predicted": 0.1578159006372597,
+                  "actual": 0.08928571428571429
+                },
+                {
+                  "bin": 2,
+                  "count": 110,
+                  "predicted": 0.252588491146241,
+                  "actual": 0.2818181818181818
+                },
+                {
+                  "bin": 3,
+                  "count": 122,
+                  "predicted": 0.350321511150014,
+                  "actual": 0.4098360655737705
+                },
+                {
+                  "bin": 4,
+                  "count": 122,
+                  "predicted": 0.44717861970712963,
+                  "actual": 0.39344262295081966
+                },
+                {
+                  "bin": 5,
+                  "count": 101,
+                  "predicted": 0.5516123970023837,
+                  "actual": 0.5247524752475248
+                },
+                {
+                  "bin": 6,
+                  "count": 64,
+                  "predicted": 0.6448464824851663,
+                  "actual": 0.65625
+                },
+                {
+                  "bin": 7,
+                  "count": 21,
+                  "predicted": 0.7450071343677882,
+                  "actual": 0.8571428571428571
+                },
+                {
+                  "bin": 8,
+                  "count": 2,
+                  "predicted": 0.8352502346230772,
+                  "actual": 1
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 1,
+                  "predicted": 0.0881984631981598,
+                  "actual": 0
+                },
+                {
+                  "bin": 1,
+                  "count": 63,
+                  "predicted": 0.17530074401298548,
+                  "actual": 0.1746031746031746
+                },
+                {
+                  "bin": 2,
+                  "count": 497,
+                  "predicted": 0.25386902906034575,
+                  "actual": 0.26156941649899396
+                },
+                {
+                  "bin": 3,
+                  "count": 46,
+                  "predicted": 0.31309082729416904,
+                  "actual": 0.13043478260869565
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 19,
+                  "predicted": 0.0772446796751235,
+                  "actual": 0.05263157894736842
+                },
+                {
+                  "bin": 1,
+                  "count": 107,
+                  "predicted": 0.15530528462497195,
+                  "actual": 0.14953271028037382
+                },
+                {
+                  "bin": 2,
+                  "count": 147,
+                  "predicted": 0.2489880497274272,
+                  "actual": 0.29931972789115646
+                },
+                {
+                  "bin": 3,
+                  "count": 130,
+                  "predicted": 0.34585098334412906,
+                  "actual": 0.33076923076923076
+                },
+                {
+                  "bin": 4,
+                  "count": 104,
+                  "predicted": 0.4485553722206354,
+                  "actual": 0.4326923076923077
+                },
+                {
+                  "bin": 5,
+                  "count": 56,
+                  "predicted": 0.5443585090931087,
+                  "actual": 0.5714285714285714
+                },
+                {
+                  "bin": 6,
+                  "count": 33,
+                  "predicted": 0.6479956156633139,
+                  "actual": 0.6666666666666666
+                },
+                {
+                  "bin": 7,
+                  "count": 11,
+                  "predicted": 0.7408662359219526,
+                  "actual": 0.5454545454545454
+                }
+              ]
+            ],
+            "calibrationError": 0.018675246497108798,
+            "calibration": [
+              {
+                "bin": 0,
+                "count": 29,
+                "predicted": 0.07993428287313993,
+                "actual": 0.10344827586206896
+              },
+              {
+                "bin": 1,
+                "count": 226,
+                "predicted": 0.1615013396609585,
+                "actual": 0.1415929203539823
+              },
+              {
+                "bin": 2,
+                "count": 754,
+                "predicted": 0.2527306164177856,
+                "actual": 0.2718832891246684
+              },
+              {
+                "bin": 3,
+                "count": 298,
+                "predicted": 0.3426242625858063,
+                "actual": 0.33221476510067116
+              },
+              {
+                "bin": 4,
+                "count": 226,
+                "predicted": 0.44781216953635394,
+                "actual": 0.41150442477876104
+              },
+              {
+                "bin": 5,
+                "count": 157,
+                "predicted": 0.5490250229710499,
+                "actual": 0.5414012738853503
+              },
+              {
+                "bin": 6,
+                "count": 97,
+                "predicted": 0.6459178370715464,
+                "actual": 0.6597938144329897
+              },
+              {
+                "bin": 7,
+                "count": 32,
+                "predicted": 0.7435837005270322,
+                "actual": 0.75
+              },
+              {
+                "bin": 8,
+                "count": 2,
+                "predicted": 0.8352502346230772,
+                "actual": 1
+              }
+            ]
+          }
+        },
+        {
+          "candidate": "dc-correction-0.03",
+          "metrics": {
+            "sample": 607,
+            "accuracy": 0.5090609555189456,
+            "brier": 0.6021074374343529,
+            "logLoss": 1.0053163099990876,
+            "goalSample": 607,
+            "homeGoalMae": 0.9350117591567837,
+            "awayGoalMae": 0.8582153443935725,
+            "totalGoalMae": 1.30863941130743,
+            "scoreSample": 607,
+            "exactScoreAccuracy": 0.11202635914332784,
+            "calibrationByOutcome": [
+              [
+                {
+                  "bin": 0,
+                  "count": 7,
+                  "predicted": 0.08734118641192974,
+                  "actual": 0.2857142857142857
+                },
+                {
+                  "bin": 1,
+                  "count": 49,
+                  "predicted": 0.1558314383228813,
+                  "actual": 0.08163265306122448
+                },
+                {
+                  "bin": 2,
+                  "count": 109,
+                  "predicted": 0.2534062190900138,
+                  "actual": 0.24770642201834864
+                },
+                {
+                  "bin": 3,
+                  "count": 119,
+                  "predicted": 0.3505771483948413,
+                  "actual": 0.42016806722689076
+                },
+                {
+                  "bin": 4,
+                  "count": 124,
+                  "predicted": 0.4467755373865852,
+                  "actual": 0.3629032258064516
+                },
+                {
+                  "bin": 5,
+                  "count": 99,
+                  "predicted": 0.5486105674380233,
+                  "actual": 0.5555555555555556
+                },
+                {
+                  "bin": 6,
+                  "count": 73,
+                  "predicted": 0.6406379520883166,
+                  "actual": 0.6301369863013698
+                },
+                {
+                  "bin": 7,
+                  "count": 25,
+                  "predicted": 0.7432974618876586,
+                  "actual": 0.8
+                },
+                {
+                  "bin": 8,
+                  "count": 2,
+                  "predicted": 0.8389116701247337,
+                  "actual": 1
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 1,
+                  "predicted": 0.08323082632642355,
+                  "actual": 0
+                },
+                {
+                  "bin": 1,
+                  "count": 106,
+                  "predicted": 0.1756841621924735,
+                  "actual": 0.20754716981132076
+                },
+                {
+                  "bin": 2,
+                  "count": 490,
+                  "predicted": 0.24325189043252127,
+                  "actual": 0.2510204081632653
+                },
+                {
+                  "bin": 3,
+                  "count": 10,
+                  "predicted": 0.311172049429585,
+                  "actual": 0.2
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 17,
+                  "predicted": 0.0806538791130856,
+                  "actual": 0.058823529411764705
+                },
+                {
+                  "bin": 1,
+                  "count": 101,
+                  "predicted": 0.15862053912671198,
+                  "actual": 0.12871287128712872
+                },
+                {
+                  "bin": 2,
+                  "count": 138,
+                  "predicted": 0.24930402634295615,
+                  "actual": 0.2971014492753623
+                },
+                {
+                  "bin": 3,
+                  "count": 139,
+                  "predicted": 0.3466712212148933,
+                  "actual": 0.33093525179856115
+                },
+                {
+                  "bin": 4,
+                  "count": 104,
+                  "predicted": 0.4503290242138688,
+                  "actual": 0.4423076923076923
+                },
+                {
+                  "bin": 5,
+                  "count": 62,
+                  "predicted": 0.5451889422387394,
+                  "actual": 0.5483870967741935
+                },
+                {
+                  "bin": 6,
+                  "count": 34,
+                  "predicted": 0.6507397794556177,
+                  "actual": 0.6176470588235294
+                },
+                {
+                  "bin": 7,
+                  "count": 12,
+                  "predicted": 0.7432032859079444,
+                  "actual": 0.5833333333333334
+                }
+              ]
+            ],
+            "calibrationError": 0.0185677322989842,
+            "calibration": [
+              {
+                "bin": 0,
+                "count": 25,
+                "predicted": 0.08262940304529547,
+                "actual": 0.12
+              },
+              {
+                "bin": 1,
+                "count": 256,
+                "predicted": 0.16515209422664562,
+                "actual": 0.15234375
+              },
+              {
+                "bin": 2,
+                "count": 737,
+                "predicted": 0.2458869197124487,
+                "actual": 0.2591587516960651
+              },
+              {
+                "bin": 3,
+                "count": 268,
+                "predicted": 0.3470809735154931,
+                "actual": 0.3656716417910448
+              },
+              {
+                "bin": 4,
+                "count": 228,
+                "predicted": 0.4483964261148195,
+                "actual": 0.3991228070175439
+              },
+              {
+                "bin": 5,
+                "count": 161,
+                "predicted": 0.5472929229513425,
+                "actual": 0.5527950310559007
+              },
+              {
+                "bin": 6,
+                "count": 107,
+                "predicted": 0.643847878541478,
+                "actual": 0.6261682242990654
+              },
+              {
+                "bin": 7,
+                "count": 37,
+                "predicted": 0.7432669183266701,
+                "actual": 0.7297297297297297
+              },
+              {
+                "bin": 8,
+                "count": 2,
+                "predicted": 0.8389116701247337,
+                "actual": 1
+              }
+            ]
+          }
+        },
+        {
+          "candidate": "dc-correction--0.1",
+          "metrics": {
+            "sample": 607,
+            "accuracy": 0.5074135090609555,
+            "brier": 0.6026157024826259,
+            "logLoss": 1.0058880824862424,
+            "goalSample": 607,
+            "homeGoalMae": 0.9350117591567837,
+            "awayGoalMae": 0.8582153443935725,
+            "totalGoalMae": 1.30863941130743,
+            "scoreSample": 607,
+            "exactScoreAccuracy": 0.11367380560131796,
+            "calibrationByOutcome": [
+              [
+                {
+                  "bin": 0,
+                  "count": 9,
+                  "predicted": 0.08089835018843816,
+                  "actual": 0.2222222222222222
+                },
+                {
+                  "bin": 1,
+                  "count": 61,
+                  "predicted": 0.15647448855896962,
+                  "actual": 0.09836065573770492
+                },
+                {
+                  "bin": 2,
+                  "count": 110,
+                  "predicted": 0.2512841337498371,
+                  "actual": 0.3090909090909091
+                },
+                {
+                  "bin": 3,
+                  "count": 125,
+                  "predicted": 0.3495552418031421,
+                  "actual": 0.4
+                },
+                {
+                  "bin": 4,
+                  "count": 122,
+                  "predicted": 0.44778130793924165,
+                  "actual": 0.38524590163934425
+                },
+                {
+                  "bin": 5,
+                  "count": 94,
+                  "predicted": 0.5509093449553386,
+                  "actual": 0.5319148936170213
+                },
+                {
+                  "bin": 6,
+                  "count": 67,
+                  "predicted": 0.6443233516708845,
+                  "actual": 0.6865671641791045
+                },
+                {
+                  "bin": 7,
+                  "count": 17,
+                  "predicted": 0.7515697437665764,
+                  "actual": 0.8235294117647058
+                },
+                {
+                  "bin": 8,
+                  "count": 2,
+                  "predicted": 0.832961837434542,
+                  "actual": 1
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 1,
+                  "predicted": 0.091303236242995,
+                  "actual": 0
+                },
+                {
+                  "bin": 1,
+                  "count": 53,
+                  "predicted": 0.17880259646526772,
+                  "actual": 0.20754716981132076
+                },
+                {
+                  "bin": 2,
+                  "count": 462,
+                  "predicted": 0.25982049483490965,
+                  "actual": 0.24891774891774893
+                },
+                {
+                  "bin": 3,
+                  "count": 91,
+                  "predicted": 0.31634647118568293,
+                  "actual": 0.23076923076923078
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 19,
+                  "predicted": 0.07371319012273403,
+                  "actual": 0.05263157894736842
+                },
+                {
+                  "bin": 1,
+                  "count": 115,
+                  "predicted": 0.15363776482741426,
+                  "actual": 0.16521739130434782
+                },
+                {
+                  "bin": 2,
+                  "count": 152,
+                  "predicted": 0.2502369332927028,
+                  "actual": 0.2894736842105263
+                },
+                {
+                  "bin": 3,
+                  "count": 122,
+                  "predicted": 0.3466658260706674,
+                  "actual": 0.3524590163934426
+                },
+                {
+                  "bin": 4,
+                  "count": 102,
+                  "predicted": 0.4465101818921784,
+                  "actual": 0.4215686274509804
+                },
+                {
+                  "bin": 5,
+                  "count": 55,
+                  "predicted": 0.5432811883736646,
+                  "actual": 0.6
+                },
+                {
+                  "bin": 6,
+                  "count": 31,
+                  "predicted": 0.6464656305107085,
+                  "actual": 0.6451612903225806
+                },
+                {
+                  "bin": 7,
+                  "count": 11,
+                  "predicted": 0.7371567476893305,
+                  "actual": 0.5454545454545454
+                }
+              ]
+            ],
+            "calibrationError": 0.013754813008264012,
+            "calibration": [
+              {
+                "bin": 0,
+                "count": 29,
+                "predicted": 0.07654962069899604,
+                "actual": 0.10344827586206896
+              },
+              {
+                "bin": 1,
+                "count": 229,
+                "predicted": 0.1602175736677248,
+                "actual": 0.1572052401746725
+              },
+              {
+                "bin": 2,
+                "count": 724,
+                "predicted": 0.25651151545124473,
+                "actual": 0.26657458563535913
+              },
+              {
+                "bin": 3,
+                "count": 338,
+                "predicted": 0.33957149373938283,
+                "actual": 0.33727810650887574
+              },
+              {
+                "bin": 4,
+                "count": 224,
+                "predicted": 0.4472024916142397,
+                "actual": 0.4017857142857143
+              },
+              {
+                "bin": 5,
+                "count": 149,
+                "predicted": 0.5480935824587473,
+                "actual": 0.5570469798657718
+              },
+              {
+                "bin": 6,
+                "count": 98,
+                "predicted": 0.6450010113038901,
+                "actual": 0.673469387755102
+              },
+              {
+                "bin": 7,
+                "count": 28,
+                "predicted": 0.7459074953076584,
+                "actual": 0.7142857142857143
+              },
+              {
+                "bin": 8,
+                "count": 2,
+                "predicted": 0.832961837434542,
+                "actual": 1
+              }
+            ]
+          }
+        }
+      ],
+      "testMetrics": {
+        "sample": 299,
+        "accuracy": 0.5551839464882943,
+        "brier": 0.5766792291305316,
+        "logLoss": 0.9705571319425769,
+        "goalSample": 299,
+        "homeGoalMae": 0.9711722137521227,
+        "awayGoalMae": 0.9332654762887497,
+        "totalGoalMae": 1.3196076902141292,
+        "scoreSample": 299,
+        "exactScoreAccuracy": 0.10367892976588629,
+        "calibrationByOutcome": [
+          [
+            {
+              "bin": 0,
+              "count": 4,
+              "predicted": 0.08874358258690893,
+              "actual": 0
+            },
+            {
+              "bin": 1,
+              "count": 40,
+              "predicted": 0.1558282503346439,
+              "actual": 0.225
+            },
+            {
+              "bin": 2,
+              "count": 49,
+              "predicted": 0.2520555838073893,
+              "actual": 0.30612244897959184
+            },
+            {
+              "bin": 3,
+              "count": 52,
+              "predicted": 0.35549111269402717,
+              "actual": 0.38461538461538464
+            },
+            {
+              "bin": 4,
+              "count": 43,
+              "predicted": 0.4499748402860013,
+              "actual": 0.5116279069767442
+            },
+            {
+              "bin": 5,
+              "count": 49,
+              "predicted": 0.5529751587868241,
+              "actual": 0.5306122448979592
+            },
+            {
+              "bin": 6,
+              "count": 41,
+              "predicted": 0.6598244786119233,
+              "actual": 0.7317073170731707
+            },
+            {
+              "bin": 7,
+              "count": 19,
+              "predicted": 0.7344273157711871,
+              "actual": 0.7368421052631579
+            },
+            {
+              "bin": 8,
+              "count": 2,
+              "predicted": 0.8199857389087641,
+              "actual": 1
+            }
+          ],
+          [
+            {
+              "bin": 1,
+              "count": 80,
+              "predicted": 0.17235380123204666,
+              "actual": 0.1875
+            },
+            {
+              "bin": 2,
+              "count": 219,
+              "predicted": 0.23846168722754477,
+              "actual": 0.2146118721461187
+            }
+          ],
+          [
+            {
+              "bin": 0,
+              "count": 8,
+              "predicted": 0.08372070274249342,
+              "actual": 0
+            },
+            {
+              "bin": 1,
+              "count": 66,
+              "predicted": 0.14800795436896153,
+              "actual": 0.13636363636363635
+            },
+            {
+              "bin": 2,
+              "count": 55,
+              "predicted": 0.24453217844640557,
+              "actual": 0.18181818181818182
+            },
+            {
+              "bin": 3,
+              "count": 56,
+              "predicted": 0.3480436732653982,
+              "actual": 0.375
+            },
+            {
+              "bin": 4,
+              "count": 41,
+              "predicted": 0.44984632049801804,
+              "actual": 0.4878048780487805
+            },
+            {
+              "bin": 5,
+              "count": 30,
+              "predicted": 0.5425338917029183,
+              "actual": 0.5
+            },
+            {
+              "bin": 6,
+              "count": 34,
+              "predicted": 0.6367834814373264,
+              "actual": 0.5294117647058824
+            },
+            {
+              "bin": 7,
+              "count": 9,
+              "predicted": 0.7471405763029257,
+              "actual": 0.6666666666666666
+            }
+          ]
+        ],
+        "calibrationError": 0.024083541998245396,
+        "calibration": [
+          {
+            "bin": 0,
+            "count": 12,
+            "predicted": 0.08539499602396526,
+            "actual": 0
+          },
+          {
+            "bin": 1,
+            "count": 186,
+            "predicted": 0.16016107043172553,
+            "actual": 0.1774193548387097
+          },
+          {
+            "bin": 2,
+            "count": 323,
+            "predicted": 0.24155759419178566,
+            "actual": 0.22291021671826625
+          },
+          {
+            "bin": 3,
+            "count": 108,
+            "predicted": 0.35162947743473794,
+            "actual": 0.37962962962962965
+          },
+          {
+            "bin": 4,
+            "count": 84,
+            "predicted": 0.4499121103894857,
+            "actual": 0.5
+          },
+          {
+            "bin": 5,
+            "count": 79,
+            "predicted": 0.5490101206536951,
+            "actual": 0.5189873417721519
+          },
+          {
+            "bin": 6,
+            "count": 75,
+            "predicted": 0.6493792265594391,
+            "actual": 0.64
+          },
+          {
+            "bin": 7,
+            "count": 28,
+            "predicted": 0.7385137209421032,
+            "actual": 0.7142857142857143
+          },
+          {
+            "bin": 8,
+            "count": 2,
+            "predicted": 0.8199857389087641,
+            "actual": 1
+          }
+        ]
+      },
+      "referenceMetrics": {
+        "sample": 299,
+        "accuracy": 0.5551839464882943,
+        "brier": 0.5766792291305316,
+        "logLoss": 0.9705571319425769,
+        "goalSample": 299,
+        "homeGoalMae": 0.9711722137521227,
+        "awayGoalMae": 0.9332654762887497,
+        "totalGoalMae": 1.3196076902141292,
+        "scoreSample": 299,
+        "exactScoreAccuracy": 0.10367892976588629,
+        "calibrationByOutcome": [
+          [
+            {
+              "bin": 0,
+              "count": 4,
+              "predicted": 0.08874358258690893,
+              "actual": 0
+            },
+            {
+              "bin": 1,
+              "count": 40,
+              "predicted": 0.1558282503346439,
+              "actual": 0.225
+            },
+            {
+              "bin": 2,
+              "count": 49,
+              "predicted": 0.2520555838073893,
+              "actual": 0.30612244897959184
+            },
+            {
+              "bin": 3,
+              "count": 52,
+              "predicted": 0.35549111269402717,
+              "actual": 0.38461538461538464
+            },
+            {
+              "bin": 4,
+              "count": 43,
+              "predicted": 0.4499748402860013,
+              "actual": 0.5116279069767442
+            },
+            {
+              "bin": 5,
+              "count": 49,
+              "predicted": 0.5529751587868241,
+              "actual": 0.5306122448979592
+            },
+            {
+              "bin": 6,
+              "count": 41,
+              "predicted": 0.6598244786119233,
+              "actual": 0.7317073170731707
+            },
+            {
+              "bin": 7,
+              "count": 19,
+              "predicted": 0.7344273157711871,
+              "actual": 0.7368421052631579
+            },
+            {
+              "bin": 8,
+              "count": 2,
+              "predicted": 0.8199857389087641,
+              "actual": 1
+            }
+          ],
+          [
+            {
+              "bin": 1,
+              "count": 80,
+              "predicted": 0.17235380123204666,
+              "actual": 0.1875
+            },
+            {
+              "bin": 2,
+              "count": 219,
+              "predicted": 0.23846168722754477,
+              "actual": 0.2146118721461187
+            }
+          ],
+          [
+            {
+              "bin": 0,
+              "count": 8,
+              "predicted": 0.08372070274249342,
+              "actual": 0
+            },
+            {
+              "bin": 1,
+              "count": 66,
+              "predicted": 0.14800795436896153,
+              "actual": 0.13636363636363635
+            },
+            {
+              "bin": 2,
+              "count": 55,
+              "predicted": 0.24453217844640557,
+              "actual": 0.18181818181818182
+            },
+            {
+              "bin": 3,
+              "count": 56,
+              "predicted": 0.3480436732653982,
+              "actual": 0.375
+            },
+            {
+              "bin": 4,
+              "count": 41,
+              "predicted": 0.44984632049801804,
+              "actual": 0.4878048780487805
+            },
+            {
+              "bin": 5,
+              "count": 30,
+              "predicted": 0.5425338917029183,
+              "actual": 0.5
+            },
+            {
+              "bin": 6,
+              "count": 34,
+              "predicted": 0.6367834814373264,
+              "actual": 0.5294117647058824
+            },
+            {
+              "bin": 7,
+              "count": 9,
+              "predicted": 0.7471405763029257,
+              "actual": 0.6666666666666666
+            }
+          ]
+        ],
+        "calibrationError": 0.024083541998245396,
+        "calibration": [
+          {
+            "bin": 0,
+            "count": 12,
+            "predicted": 0.08539499602396526,
+            "actual": 0
+          },
+          {
+            "bin": 1,
+            "count": 186,
+            "predicted": 0.16016107043172553,
+            "actual": 0.1774193548387097
+          },
+          {
+            "bin": 2,
+            "count": 323,
+            "predicted": 0.24155759419178566,
+            "actual": 0.22291021671826625
+          },
+          {
+            "bin": 3,
+            "count": 108,
+            "predicted": 0.35162947743473794,
+            "actual": 0.37962962962962965
+          },
+          {
+            "bin": 4,
+            "count": 84,
+            "predicted": 0.4499121103894857,
+            "actual": 0.5
+          },
+          {
+            "bin": 5,
+            "count": 79,
+            "predicted": 0.5490101206536951,
+            "actual": 0.5189873417721519
+          },
+          {
+            "bin": 6,
+            "count": 75,
+            "predicted": 0.6493792265594391,
+            "actual": 0.64
+          },
+          {
+            "bin": 7,
+            "count": 28,
+            "predicted": 0.7385137209421032,
+            "actual": 0.7142857142857143
+          },
+          {
+            "bin": 8,
+            "count": 2,
+            "predicted": 0.8199857389087641,
+            "actual": 1
+          }
+        ]
+      }
+    },
+    {
+      "start": "2025-07-01T00:00:00.000Z",
+      "end": "2026-07-01T00:00:00.000Z",
+      "trainingSample": 906,
+      "testSample": 298,
+      "status": "EVALUATED",
+      "selected": "poisson-reference",
+      "training": [
+        {
+          "candidate": "poisson-reference",
+          "metrics": {
+            "sample": 906,
+            "accuracy": 0.5242825607064018,
+            "brier": 0.5936440445709015,
+            "logLoss": 0.9936516313682261,
+            "goalSample": 906,
+            "homeGoalMae": 0.9469455074172765,
+            "awayGoalMae": 0.8829835446547843,
+            "totalGoalMae": 1.312259185472002,
+            "scoreSample": 906,
+            "exactScoreAccuracy": 0.11258278145695365,
+            "calibrationByOutcome": [
+              [
+                {
+                  "bin": 0,
+                  "count": 12,
+                  "predicted": 0.08740418120630684,
+                  "actual": 0.16666666666666666
+                },
+                {
+                  "bin": 1,
+                  "count": 91,
+                  "predicted": 0.15632934269949703,
+                  "actual": 0.15384615384615385
+                },
+                {
+                  "bin": 2,
+                  "count": 160,
+                  "predicted": 0.2530558265009917,
+                  "actual": 0.26875
+                },
+                {
+                  "bin": 3,
+                  "count": 174,
+                  "predicted": 0.3532427165771143,
+                  "actual": 0.40804597701149425
+                },
+                {
+                  "bin": 4,
+                  "count": 161,
+                  "predicted": 0.44792274284469363,
+                  "actual": 0.40993788819875776
+                },
+                {
+                  "bin": 5,
+                  "count": 154,
+                  "predicted": 0.5511336074416062,
+                  "actual": 0.538961038961039
+                },
+                {
+                  "bin": 6,
+                  "count": 108,
+                  "predicted": 0.6501972201412902,
+                  "actual": 0.6759259259259259
+                },
+                {
+                  "bin": 7,
+                  "count": 42,
+                  "predicted": 0.7400585274114682,
+                  "actual": 0.7857142857142857
+                },
+                {
+                  "bin": 8,
+                  "count": 4,
+                  "predicted": 0.8287621853601883,
+                  "actual": 1
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 1,
+                  "predicted": 0.08509369015332464,
+                  "actual": 0
+                },
+                {
+                  "bin": 1,
+                  "count": 166,
+                  "predicted": 0.17391339956219315,
+                  "actual": 0.1927710843373494
+                },
+                {
+                  "bin": 2,
+                  "count": 722,
+                  "predicted": 0.24483464798623944,
+                  "actual": 0.24238227146814403
+                },
+                {
+                  "bin": 3,
+                  "count": 17,
+                  "predicted": 0.3122413568474164,
+                  "actual": 0.11764705882352941
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 27,
+                  "predicted": 0.08164862360232197,
+                  "actual": 0.037037037037037035
+                },
+                {
+                  "bin": 1,
+                  "count": 168,
+                  "predicted": 0.15412265415990922,
+                  "actual": 0.13095238095238096
+                },
+                {
+                  "bin": 2,
+                  "count": 195,
+                  "predicted": 0.24756048756641766,
+                  "actual": 0.2717948717948718
+                },
+                {
+                  "bin": 3,
+                  "count": 192,
+                  "predicted": 0.34621557030932393,
+                  "actual": 0.34375
+                },
+                {
+                  "bin": 4,
+                  "count": 147,
+                  "predicted": 0.4497298399465145,
+                  "actual": 0.4489795918367347
+                },
+                {
+                  "bin": 5,
+                  "count": 89,
+                  "predicted": 0.5446643803402945,
+                  "actual": 0.5393258426966292
+                },
+                {
+                  "bin": 6,
+                  "count": 67,
+                  "predicted": 0.6430404238916201,
+                  "actual": 0.582089552238806
+                },
+                {
+                  "bin": 7,
+                  "count": 21,
+                  "predicted": 0.7436050447251906,
+                  "actual": 0.6190476190476191
+                }
+              ]
+            ],
+            "calibrationError": 0.008760399445673327,
+            "calibration": [
+              {
+                "bin": 0,
+                "count": 40,
+                "predicted": 0.0834614175472925,
+                "actual": 0.075
+              },
+              {
+                "bin": 1,
+                "count": 425,
+                "predicted": 0.16232517743963057,
+                "actual": 0.16
+              },
+              {
+                "bin": 2,
+                "count": 1077,
+                "predicted": 0.24654952939802693,
+                "actual": 0.25162488393686167
+              },
+              {
+                "bin": 3,
+                "count": 383,
+                "predicted": 0.3479000659274521,
+                "actual": 0.3629242819843342
+              },
+              {
+                "bin": 4,
+                "count": 308,
+                "predicted": 0.44878522100692614,
+                "actual": 0.42857142857142855
+              },
+              {
+                "bin": 5,
+                "count": 243,
+                "predicted": 0.5487642197378333,
+                "actual": 0.5390946502057613
+              },
+              {
+                "bin": 6,
+                "count": 175,
+                "predicted": 0.6474571895771308,
+                "actual": 0.64
+              },
+              {
+                "bin": 7,
+                "count": 63,
+                "predicted": 0.7412406998493757,
+                "actual": 0.7301587301587301
+              },
+              {
+                "bin": 8,
+                "count": 4,
+                "predicted": 0.8287621853601883,
+                "actual": 1
+              }
+            ]
+          }
+        },
+        {
+          "candidate": "dc-correction-0.03",
+          "metrics": {
+            "sample": 906,
+            "accuracy": 0.5242825607064018,
+            "brier": 0.5936355307295437,
+            "logLoss": 0.993715162659472,
+            "goalSample": 906,
+            "homeGoalMae": 0.9469455074172765,
+            "awayGoalMae": 0.8829835446547843,
+            "totalGoalMae": 1.312259185472002,
+            "scoreSample": 906,
+            "exactScoreAccuracy": 0.10706401766004416,
+            "calibrationByOutcome": [
+              [
+                {
+                  "bin": 0,
+                  "count": 10,
+                  "predicted": 0.0871960726653095,
+                  "actual": 0.2
+                },
+                {
+                  "bin": 1,
+                  "count": 89,
+                  "predicted": 0.15595674696427372,
+                  "actual": 0.1348314606741573
+                },
+                {
+                  "bin": 2,
+                  "count": 158,
+                  "predicted": 0.2533190329408794,
+                  "actual": 0.26582278481012656
+                },
+                {
+                  "bin": 3,
+                  "count": 172,
+                  "predicted": 0.35285270762691456,
+                  "actual": 0.4127906976744186
+                },
+                {
+                  "bin": 4,
+                  "count": 166,
+                  "predicted": 0.4481487771910559,
+                  "actual": 0.39759036144578314
+                },
+                {
+                  "bin": 5,
+                  "count": 148,
+                  "predicted": 0.5504275988621548,
+                  "actual": 0.5472972972972973
+                },
+                {
+                  "bin": 6,
+                  "count": 115,
+                  "predicted": 0.6480962236355184,
+                  "actual": 0.6695652173913044
+                },
+                {
+                  "bin": 7,
+                  "count": 44,
+                  "predicted": 0.740350574187245,
+                  "actual": 0.7727272727272727
+                },
+                {
+                  "bin": 8,
+                  "count": 4,
+                  "predicted": 0.8302311065973933,
+                  "actual": 1
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 1,
+                  "predicted": 0.08323082632642355,
+                  "actual": 0
+                },
+                {
+                  "bin": 1,
+                  "count": 196,
+                  "predicted": 0.17357130727400474,
+                  "actual": 0.1989795918367347
+                },
+                {
+                  "bin": 2,
+                  "count": 699,
+                  "predicted": 0.2403307656981778,
+                  "actual": 0.24034334763948498
+                },
+                {
+                  "bin": 3,
+                  "count": 10,
+                  "predicted": 0.311172049429585,
+                  "actual": 0.2
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 24,
+                  "predicted": 0.08142285578155196,
+                  "actual": 0.041666666666666664
+                },
+                {
+                  "bin": 1,
+                  "count": 166,
+                  "predicted": 0.15460224617468543,
+                  "actual": 0.13253012048192772
+                },
+                {
+                  "bin": 2,
+                  "count": 194,
+                  "predicted": 0.2481099814975318,
+                  "actual": 0.26288659793814434
+                },
+                {
+                  "bin": 3,
+                  "count": 195,
+                  "predicted": 0.3475522818721632,
+                  "actual": 0.3435897435897436
+                },
+                {
+                  "bin": 4,
+                  "count": 143,
+                  "predicted": 0.4497646959939599,
+                  "actual": 0.4405594405594406
+                },
+                {
+                  "bin": 5,
+                  "count": 95,
+                  "predicted": 0.5439447482725865,
+                  "actual": 0.5473684210526316
+                },
+                {
+                  "bin": 6,
+                  "count": 66,
+                  "predicted": 0.643416635289873,
+                  "actual": 0.5606060606060606
+                },
+                {
+                  "bin": 7,
+                  "count": 23,
+                  "predicted": 0.7418492492237587,
+                  "actual": 0.6521739130434783
+                }
+              ]
+            ],
+            "calibrationError": 0.010335324115136511,
+            "calibration": [
+              {
+                "bin": 0,
+                "count": 35,
+                "predicted": 0.08312400262105042,
+                "actual": 0.08571428571428572
+              },
+              {
+                "bin": 1,
+                "count": 451,
+                "predicted": 0.1631133028171243,
+                "actual": 0.16186252771618626
+              },
+              {
+                "bin": 2,
+                "count": 1051,
+                "predicted": 0.24371926625899734,
+                "actual": 0.2483349191246432
+              },
+              {
+                "bin": 3,
+                "count": 377,
+                "predicted": 0.3490055203480029,
+                "actual": 0.3713527851458886
+              },
+              {
+                "bin": 4,
+                "count": 309,
+                "predicted": 0.4488965972195842,
+                "actual": 0.4174757281553398
+              },
+              {
+                "bin": 5,
+                "count": 243,
+                "predicted": 0.5478931511008011,
+                "actual": 0.5473251028806584
+              },
+              {
+                "bin": 6,
+                "count": 181,
+                "predicted": 0.6463898544045096,
+                "actual": 0.6298342541436464
+              },
+              {
+                "bin": 7,
+                "count": 67,
+                "predicted": 0.7408650447221673,
+                "actual": 0.7313432835820896
+              },
+              {
+                "bin": 8,
+                "count": 4,
+                "predicted": 0.8302311065973933,
+                "actual": 1
+              }
+            ]
+          }
+        },
+        {
+          "candidate": "dc-correction--0.05",
+          "metrics": {
+            "sample": 906,
+            "accuracy": 0.5231788079470199,
+            "brier": 0.593942400866659,
+            "logLoss": 0.9940904114624896,
+            "goalSample": 906,
+            "homeGoalMae": 0.9469455074172765,
+            "awayGoalMae": 0.8829835446547843,
+            "totalGoalMae": 1.312259185472002,
+            "scoreSample": 906,
+            "exactScoreAccuracy": 0.10706401766004416,
+            "calibrationByOutcome": [
+              [
+                {
+                  "bin": 0,
+                  "count": 13,
+                  "predicted": 0.08503930466887431,
+                  "actual": 0.15384615384615385
+                },
+                {
+                  "bin": 1,
+                  "count": 98,
+                  "predicted": 0.15593762749721984,
+                  "actual": 0.16326530612244897
+                },
+                {
+                  "bin": 2,
+                  "count": 157,
+                  "predicted": 0.25149602700167994,
+                  "actual": 0.2802547770700637
+                },
+                {
+                  "bin": 3,
+                  "count": 176,
+                  "predicted": 0.3506060783816449,
+                  "actual": 0.3977272727272727
+                },
+                {
+                  "bin": 4,
+                  "count": 165,
+                  "predicted": 0.4476540525981717,
+                  "actual": 0.42424242424242425
+                },
+                {
+                  "bin": 5,
+                  "count": 148,
+                  "predicted": 0.5510765485742954,
+                  "actual": 0.5337837837837838
+                },
+                {
+                  "bin": 6,
+                  "count": 107,
+                  "predicted": 0.6498574490776924,
+                  "actual": 0.6822429906542056
+                },
+                {
+                  "bin": 7,
+                  "count": 38,
+                  "predicted": 0.7405170251089267,
+                  "actual": 0.8157894736842105
+                },
+                {
+                  "bin": 8,
+                  "count": 4,
+                  "predicted": 0.8263139832981807,
+                  "actual": 1
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 1,
+                  "predicted": 0.0881984631981598,
+                  "actual": 0
+                },
+                {
+                  "bin": 1,
+                  "count": 125,
+                  "predicted": 0.17405404999268181,
+                  "actual": 0.184
+                },
+                {
+                  "bin": 2,
+                  "count": 731,
+                  "predicted": 0.2511350261584752,
+                  "actual": 0.24623803009575923
+                },
+                {
+                  "bin": 3,
+                  "count": 49,
+                  "predicted": 0.3126724836083968,
+                  "actual": 0.12244897959183673
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 27,
+                  "predicted": 0.07820336183068895,
+                  "actual": 0.037037037037037035
+                },
+                {
+                  "bin": 1,
+                  "count": 174,
+                  "predicted": 0.15109471961586615,
+                  "actual": 0.14367816091954022
+                },
+                {
+                  "bin": 2,
+                  "count": 203,
+                  "predicted": 0.24705154244464558,
+                  "actual": 0.270935960591133
+                },
+                {
+                  "bin": 3,
+                  "count": 184,
+                  "predicted": 0.34526771709440146,
+                  "actual": 0.3423913043478261
+                },
+                {
+                  "bin": 4,
+                  "count": 145,
+                  "predicted": 0.4472944748004556,
+                  "actual": 0.4482758620689655
+                },
+                {
+                  "bin": 5,
+                  "count": 90,
+                  "predicted": 0.5444384905230848,
+                  "actual": 0.5444444444444444
+                },
+                {
+                  "bin": 6,
+                  "count": 63,
+                  "predicted": 0.6426842949313095,
+                  "actual": 0.6031746031746031
+                },
+                {
+                  "bin": 7,
+                  "count": 20,
+                  "predicted": 0.7422289277413026,
+                  "actual": 0.6
+                }
+              ]
+            ],
+            "calibrationError": 0.005990796535327925,
+            "calibration": [
+              {
+                "bin": 0,
+                "count": 41,
+                "predicted": 0.0806146388615153,
+                "actual": 0.07317073170731707
+              },
+              {
+                "bin": 1,
+                "count": 397,
+                "predicted": 0.15951920644073922,
+                "actual": 0.16120906801007556
+              },
+              {
+                "bin": 2,
+                "count": 1091,
+                "predicted": 0.2504271709233477,
+                "actual": 0.25572868927589365
+              },
+              {
+                "bin": 3,
+                "count": 409,
+                "predicted": 0.34365985681503874,
+                "actual": 0.33985330073349634
+              },
+              {
+                "bin": 4,
+                "count": 310,
+                "predicted": 0.4474858629831109,
+                "actual": 0.43548387096774194
+              },
+              {
+                "bin": 5,
+                "count": 238,
+                "predicted": 0.5485663585549302,
+                "actual": 0.5378151260504201
+              },
+              {
+                "bin": 6,
+                "count": 170,
+                "predicted": 0.647199162541092,
+                "actual": 0.6529411764705882
+              },
+              {
+                "bin": 7,
+                "count": 58,
+                "predicted": 0.74110733636147,
+                "actual": 0.7413793103448276
+              },
+              {
+                "bin": 8,
+                "count": 4,
+                "predicted": 0.8263139832981807,
+                "actual": 1
+              }
+            ]
+          }
+        },
+        {
+          "candidate": "dc-correction--0.1",
+          "metrics": {
+            "sample": 906,
+            "accuracy": 0.5231788079470199,
+            "brier": 0.5945959653626159,
+            "logLoss": 0.9951808509279357,
+            "goalSample": 906,
+            "homeGoalMae": 0.9469455074172765,
+            "awayGoalMae": 0.8829835446547843,
+            "totalGoalMae": 1.312259185472002,
+            "scoreSample": 906,
+            "exactScoreAccuracy": 0.10596026490066225,
+            "calibrationByOutcome": [
+              [
+                {
+                  "bin": 0,
+                  "count": 15,
+                  "predicted": 0.08383197210108544,
+                  "actual": 0.2
+                },
+                {
+                  "bin": 1,
+                  "count": 102,
+                  "predicted": 0.15487429441209755,
+                  "actual": 0.1568627450980392
+                },
+                {
+                  "bin": 2,
+                  "count": 158,
+                  "predicted": 0.24990613356501581,
+                  "actual": 0.3037974683544304
+                },
+                {
+                  "bin": 3,
+                  "count": 178,
+                  "predicted": 0.34913416833185146,
+                  "actual": 0.38764044943820225
+                },
+                {
+                  "bin": 4,
+                  "count": 164,
+                  "predicted": 0.4469589479396425,
+                  "actual": 0.42073170731707316
+                },
+                {
+                  "bin": 5,
+                  "count": 144,
+                  "predicted": 0.5498267321391446,
+                  "actual": 0.5486111111111112
+                },
+                {
+                  "bin": 6,
+                  "count": 107,
+                  "predicted": 0.6490957765670008,
+                  "actual": 0.6915887850467289
+                },
+                {
+                  "bin": 7,
+                  "count": 34,
+                  "predicted": 0.7415887855898543,
+                  "actual": 0.7941176470588235
+                },
+                {
+                  "bin": 8,
+                  "count": 4,
+                  "predicted": 0.8238657812361727,
+                  "actual": 1
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 1,
+                  "predicted": 0.091303236242995,
+                  "actual": 0
+                },
+                {
+                  "bin": 1,
+                  "count": 102,
+                  "predicted": 0.17629928563893954,
+                  "actual": 0.21568627450980393
+                },
+                {
+                  "bin": 2,
+                  "count": 704,
+                  "predicted": 0.25726105226060403,
+                  "actual": 0.234375
+                },
+                {
+                  "bin": 3,
+                  "count": 99,
+                  "predicted": 0.3158805350409327,
+                  "actual": 0.2222222222222222
+                }
+              ],
+              [
+                {
+                  "bin": 0,
+                  "count": 29,
+                  "predicted": 0.07638294964796702,
+                  "actual": 0.034482758620689655
+                },
+                {
+                  "bin": 1,
+                  "count": 186,
+                  "predicted": 0.15068098301991276,
+                  "actual": 0.16666666666666666
+                },
+                {
+                  "bin": 2,
+                  "count": 206,
+                  "predicted": 0.24900309642196253,
+                  "actual": 0.2621359223300971
+                },
+                {
+                  "bin": 3,
+                  "count": 175,
+                  "predicted": 0.34595488196096075,
+                  "actual": 0.35428571428571426
+                },
+                {
+                  "bin": 4,
+                  "count": 143,
+                  "predicted": 0.44630070158189905,
+                  "actual": 0.4405594405594406
+                },
+                {
+                  "bin": 5,
+                  "count": 92,
+                  "predicted": 0.5470068905746416,
+                  "actual": 0.5434782608695652
+                },
+                {
+                  "bin": 6,
+                  "count": 56,
+                  "predicted": 0.6449404413612176,
+                  "actual": 0.625
+                },
+                {
+                  "bin": 7,
+                  "count": 19,
+                  "predicted": 0.7408763583933954,
+                  "actual": 0.631578947368421
+                }
+              ]
+            ],
+            "calibrationError": 0.008656635542088629,
+            "calibration": [
+              {
+                "bin": 0,
+                "count": 45,
+                "predicted": 0.0791975190566738,
+                "actual": 0.08888888888888889
+              },
+              {
+                "bin": 1,
+                "count": 390,
+                "predicted": 0.15847786668438352,
+                "actual": 0.17692307692307693
+              },
+              {
+                "bin": 2,
+                "count": 1068,
+                "predicted": 0.25458013834987114,
+                "actual": 0.25
+              },
+              {
+                "bin": 3,
+                "count": 452,
+                "predicted": 0.3406198214055089,
+                "actual": 0.33849557522123896
+              },
+              {
+                "bin": 4,
+                "count": 307,
+                "predicted": 0.44665233807268057,
+                "actual": 0.42996742671009774
+              },
+              {
+                "bin": 5,
+                "count": 236,
+                "predicted": 0.5487274718682368,
+                "actual": 0.5466101694915254
+              },
+              {
+                "bin": 6,
+                "count": 163,
+                "predicted": 0.647668176741701,
+                "actual": 0.6687116564417178
+              },
+              {
+                "bin": 7,
+                "count": 53,
+                "predicted": 0.7413333871609348,
+                "actual": 0.7358490566037735
+              },
+              {
+                "bin": 8,
+                "count": 4,
+                "predicted": 0.8238657812361727,
+                "actual": 1
+              }
+            ]
+          }
+        }
+      ],
+      "testMetrics": {
+        "sample": 298,
+        "accuracy": 0.4798657718120805,
+        "brier": 0.612824025900168,
+        "logLoss": 1.021199070197217,
+        "goalSample": 298,
+        "homeGoalMae": 1.0637561535026554,
+        "awayGoalMae": 1.0259938351782742,
+        "totalGoalMae": 1.4892607706202496,
+        "scoreSample": 298,
+        "exactScoreAccuracy": 0.087248322147651,
+        "calibrationByOutcome": [
+          [
+            {
+              "bin": 0,
+              "count": 1,
+              "predicted": 0.0909340386462146,
+              "actual": 1
+            },
+            {
+              "bin": 1,
+              "count": 34,
+              "predicted": 0.15765062753658585,
+              "actual": 0.20588235294117646
+            },
+            {
+              "bin": 2,
+              "count": 51,
+              "predicted": 0.25456204737424215,
+              "actual": 0.4117647058823529
+            },
+            {
+              "bin": 3,
+              "count": 59,
+              "predicted": 0.34992833965944015,
+              "actual": 0.3559322033898305
+            },
+            {
+              "bin": 4,
+              "count": 38,
+              "predicted": 0.45148806416311227,
+              "actual": 0.5263157894736842
+            },
+            {
+              "bin": 5,
+              "count": 51,
+              "predicted": 0.5462698853123475,
+              "actual": 0.43137254901960786
+            },
+            {
+              "bin": 6,
+              "count": 51,
+              "predicted": 0.6546748734002971,
+              "actual": 0.7058823529411765
+            },
+            {
+              "bin": 7,
+              "count": 12,
+              "predicted": 0.7338038984971084,
+              "actual": 0.6666666666666666
+            },
+            {
+              "bin": 8,
+              "count": 1,
+              "predicted": 0.8010544588784857,
+              "actual": 1
+            }
+          ],
+          [
+            {
+              "bin": 1,
+              "count": 65,
+              "predicted": 0.1784541843907819,
+              "actual": 0.15384615384615385
+            },
+            {
+              "bin": 2,
+              "count": 228,
+              "predicted": 0.23936480841138436,
+              "actual": 0.2675438596491228
+            },
+            {
+              "bin": 3,
+              "count": 5,
+              "predicted": 0.315657202996625,
+              "actual": 0.6
+            }
+          ],
+          [
+            {
+              "bin": 0,
+              "count": 8,
+              "predicted": 0.09097367970163504,
+              "actual": 0.125
+            },
+            {
+              "bin": 1,
+              "count": 66,
+              "predicted": 0.1518376555323474,
+              "actual": 0.13636363636363635
+            },
+            {
+              "bin": 2,
+              "count": 64,
+              "predicted": 0.24677156295674701,
+              "actual": 0.203125
+            },
+            {
+              "bin": 3,
+              "count": 45,
+              "predicted": 0.3562126846261258,
+              "actual": 0.37777777777777777
+            },
+            {
+              "bin": 4,
+              "count": 54,
+              "predicted": 0.44659663102848346,
+              "actual": 0.3333333333333333
+            },
+            {
+              "bin": 5,
+              "count": 35,
+              "predicted": 0.5476632591728476,
+              "actual": 0.34285714285714286
+            },
+            {
+              "bin": 6,
+              "count": 20,
+              "predicted": 0.6489593595723315,
+              "actual": 0.7
+            },
+            {
+              "bin": 7,
+              "count": 6,
+              "predicted": 0.7200747665600344,
+              "actual": 0.5
+            }
+          ]
+        ],
+        "calibrationError": 0.04341782260362619,
+        "calibration": [
+          {
+            "bin": 0,
+            "count": 9,
+            "predicted": 0.09096927513992166,
+            "actual": 0.2222222222222222
+          },
+          {
+            "bin": 1,
+            "count": 165,
+            "predicted": 0.16352077931381614,
+            "actual": 0.15757575757575756
+          },
+          {
+            "bin": 2,
+            "count": 343,
+            "predicted": 0.24300647452802857,
+            "actual": 0.27696793002915454
+          },
+          {
+            "bin": 3,
+            "count": 109,
+            "predicted": 0.3509507235143647,
+            "actual": 0.3761467889908257
+          },
+          {
+            "bin": 4,
+            "count": 92,
+            "predicted": 0.44861700558409107,
+            "actual": 0.41304347826086957
+          },
+          {
+            "bin": 5,
+            "count": 86,
+            "predicted": 0.5468369560695276,
+            "actual": 0.3953488372093023
+          },
+          {
+            "bin": 6,
+            "count": 71,
+            "predicted": 0.6530648695050956,
+            "actual": 0.704225352112676
+          },
+          {
+            "bin": 7,
+            "count": 18,
+            "predicted": 0.7292275211847503,
+            "actual": 0.6111111111111112
+          },
+          {
+            "bin": 8,
+            "count": 1,
+            "predicted": 0.8010544588784857,
+            "actual": 1
+          }
+        ]
+      },
+      "referenceMetrics": {
+        "sample": 298,
+        "accuracy": 0.4798657718120805,
+        "brier": 0.612824025900168,
+        "logLoss": 1.021199070197217,
+        "goalSample": 298,
+        "homeGoalMae": 1.0637561535026554,
+        "awayGoalMae": 1.0259938351782742,
+        "totalGoalMae": 1.4892607706202496,
+        "scoreSample": 298,
+        "exactScoreAccuracy": 0.087248322147651,
+        "calibrationByOutcome": [
+          [
+            {
+              "bin": 0,
+              "count": 1,
+              "predicted": 0.0909340386462146,
+              "actual": 1
+            },
+            {
+              "bin": 1,
+              "count": 34,
+              "predicted": 0.15765062753658585,
+              "actual": 0.20588235294117646
+            },
+            {
+              "bin": 2,
+              "count": 51,
+              "predicted": 0.25456204737424215,
+              "actual": 0.4117647058823529
+            },
+            {
+              "bin": 3,
+              "count": 59,
+              "predicted": 0.34992833965944015,
+              "actual": 0.3559322033898305
+            },
+            {
+              "bin": 4,
+              "count": 38,
+              "predicted": 0.45148806416311227,
+              "actual": 0.5263157894736842
+            },
+            {
+              "bin": 5,
+              "count": 51,
+              "predicted": 0.5462698853123475,
+              "actual": 0.43137254901960786
+            },
+            {
+              "bin": 6,
+              "count": 51,
+              "predicted": 0.6546748734002971,
+              "actual": 0.7058823529411765
+            },
+            {
+              "bin": 7,
+              "count": 12,
+              "predicted": 0.7338038984971084,
+              "actual": 0.6666666666666666
+            },
+            {
+              "bin": 8,
+              "count": 1,
+              "predicted": 0.8010544588784857,
+              "actual": 1
+            }
+          ],
+          [
+            {
+              "bin": 1,
+              "count": 65,
+              "predicted": 0.1784541843907819,
+              "actual": 0.15384615384615385
+            },
+            {
+              "bin": 2,
+              "count": 228,
+              "predicted": 0.23936480841138436,
+              "actual": 0.2675438596491228
+            },
+            {
+              "bin": 3,
+              "count": 5,
+              "predicted": 0.315657202996625,
+              "actual": 0.6
+            }
+          ],
+          [
+            {
+              "bin": 0,
+              "count": 8,
+              "predicted": 0.09097367970163504,
+              "actual": 0.125
+            },
+            {
+              "bin": 1,
+              "count": 66,
+              "predicted": 0.1518376555323474,
+              "actual": 0.13636363636363635
+            },
+            {
+              "bin": 2,
+              "count": 64,
+              "predicted": 0.24677156295674701,
+              "actual": 0.203125
+            },
+            {
+              "bin": 3,
+              "count": 45,
+              "predicted": 0.3562126846261258,
+              "actual": 0.37777777777777777
+            },
+            {
+              "bin": 4,
+              "count": 54,
+              "predicted": 0.44659663102848346,
+              "actual": 0.3333333333333333
+            },
+            {
+              "bin": 5,
+              "count": 35,
+              "predicted": 0.5476632591728476,
+              "actual": 0.34285714285714286
+            },
+            {
+              "bin": 6,
+              "count": 20,
+              "predicted": 0.6489593595723315,
+              "actual": 0.7
+            },
+            {
+              "bin": 7,
+              "count": 6,
+              "predicted": 0.7200747665600344,
+              "actual": 0.5
+            }
+          ]
+        ],
+        "calibrationError": 0.04341782260362619,
+        "calibration": [
+          {
+            "bin": 0,
+            "count": 9,
+            "predicted": 0.09096927513992166,
+            "actual": 0.2222222222222222
+          },
+          {
+            "bin": 1,
+            "count": 165,
+            "predicted": 0.16352077931381614,
+            "actual": 0.15757575757575756
+          },
+          {
+            "bin": 2,
+            "count": 343,
+            "predicted": 0.24300647452802857,
+            "actual": 0.27696793002915454
+          },
+          {
+            "bin": 3,
+            "count": 109,
+            "predicted": 0.3509507235143647,
+            "actual": 0.3761467889908257
+          },
+          {
+            "bin": 4,
+            "count": 92,
+            "predicted": 0.44861700558409107,
+            "actual": 0.41304347826086957
+          },
+          {
+            "bin": 5,
+            "count": 86,
+            "predicted": 0.5468369560695276,
+            "actual": 0.3953488372093023
+          },
+          {
+            "bin": 6,
+            "count": 71,
+            "predicted": 0.6530648695050956,
+            "actual": 0.704225352112676
+          },
+          {
+            "bin": 7,
+            "count": 18,
+            "predicted": 0.7292275211847503,
+            "actual": 0.6111111111111112
+          },
+          {
+            "bin": 8,
+            "count": 1,
+            "predicted": 0.8010544588784857,
+            "actual": 1
+          }
+        ]
+      }
+    },
+    {
+      "start": "2026-07-01T00:00:00.000Z",
+      "end": "2027-07-01T00:00:00.000Z",
+      "trainingSample": 1204,
+      "testSample": 0,
+      "status": "INSUFFICIENT_DATA",
+      "selected": null
+    }
+  ],
+  "selectedMetrics": {
+    "sample": 875,
+    "accuracy": 0.5028571428571429,
+    "brier": 0.60258163962775,
+    "logLoss": 1.006328376175736,
+    "goalSample": 875,
+    "homeGoalMae": 0.985871680620811,
+    "awayGoalMae": 0.9562480715680656,
+    "totalGoalMae": 1.3832893354239124,
+    "scoreSample": 875,
+    "exactScoreAccuracy": 0.09828571428571428,
+    "calibrationByOutcome": [
+      [
+        {
+          "bin": 0,
+          "count": 8,
+          "predicted": 0.09082320693614317,
+          "actual": 0.125
+        },
+        {
+          "bin": 1,
+          "count": 94,
+          "predicted": 0.15932736685615595,
+          "actual": 0.20212765957446807
+        },
+        {
+          "bin": 2,
+          "count": 152,
+          "predicted": 0.2535954170304934,
+          "actual": 0.3355263157894737
+        },
+        {
+          "bin": 3,
+          "count": 170,
+          "predicted": 0.3522781450249922,
+          "actual": 0.3941176470588235
+        },
+        {
+          "bin": 4,
+          "count": 145,
+          "predicted": 0.4482115381233508,
+          "actual": 0.41379310344827586
+        },
+        {
+          "bin": 5,
+          "count": 145,
+          "predicted": 0.5500968581848243,
+          "actual": 0.5103448275862069
+        },
+        {
+          "bin": 6,
+          "count": 121,
+          "predicted": 0.652455079474592,
+          "actual": 0.6859504132231405
+        },
+        {
+          "bin": 7,
+          "count": 37,
+          "predicted": 0.7368855388218606,
+          "actual": 0.7027027027027027
+        },
+        {
+          "bin": 8,
+          "count": 3,
+          "predicted": 0.8136753122320046,
+          "actual": 1
+        }
+      ],
+      [
+        {
+          "bin": 1,
+          "count": 164,
+          "predicted": 0.17525370462491002,
+          "actual": 0.18292682926829268
+        },
+        {
+          "bin": 2,
+          "count": 674,
+          "predicted": 0.24576695580018923,
+          "actual": 0.24777448071216618
+        },
+        {
+          "bin": 3,
+          "count": 37,
+          "predicted": 0.3133171555074436,
+          "actual": 0.1891891891891892
+        }
+      ],
+      [
+        {
+          "bin": 0,
+          "count": 20,
+          "predicted": 0.08555135255883498,
+          "actual": 0.05
+        },
+        {
+          "bin": 1,
+          "count": 185,
+          "predicted": 0.15137964945273125,
+          "actual": 0.14594594594594595
+        },
+        {
+          "bin": 2,
+          "count": 190,
+          "predicted": 0.24851420903139898,
+          "actual": 0.25263157894736843
+        },
+        {
+          "bin": 3,
+          "count": 165,
+          "predicted": 0.34846671724320666,
+          "actual": 0.3696969696969697
+        },
+        {
+          "bin": 4,
+          "count": 144,
+          "predicted": 0.4478061393202392,
+          "actual": 0.3958333333333333
+        },
+        {
+          "bin": 5,
+          "count": 91,
+          "predicted": 0.5442334893026332,
+          "actual": 0.4835164835164835
+        },
+        {
+          "bin": 6,
+          "count": 62,
+          "predicted": 0.6417102142796456,
+          "actual": 0.5967741935483871
+        },
+        {
+          "bin": 7,
+          "count": 18,
+          "predicted": 0.7359819559069836,
+          "actual": 0.6666666666666666
+        }
+      ]
+    ],
+    "calibrationError": 0.02035360144970663,
+    "calibration": [
+      {
+        "bin": 0,
+        "count": 28,
+        "predicted": 0.08705759666663734,
+        "actual": 0.07142857142857142
+      },
+      {
+        "bin": 1,
+        "count": 443,
+        "predicted": 0.1619043232318716,
+        "actual": 0.17155756207674944
+      },
+      {
+        "bin": 2,
+        "count": 1016,
+        "predicted": 0.24745190089953567,
+        "actual": 0.2618110236220472
+      },
+      {
+        "bin": 3,
+        "count": 372,
+        "predicted": 0.3467124401966481,
+        "actual": 0.3629032258064516
+      },
+      {
+        "bin": 4,
+        "count": 289,
+        "predicted": 0.4480095401038076,
+        "actual": 0.40484429065743943
+      },
+      {
+        "bin": 5,
+        "count": 236,
+        "predicted": 0.5478359828955052,
+        "actual": 0.5
+      },
+      {
+        "bin": 6,
+        "count": 183,
+        "predicted": 0.6488147426325882,
+        "actual": 0.6557377049180327
+      },
+      {
+        "bin": 7,
+        "count": 55,
+        "predicted": 0.7365898207769919,
+        "actual": 0.6909090909090909
+      },
+      {
+        "bin": 8,
+        "count": 3,
+        "predicted": 0.8136753122320046,
+        "actual": 1
+      }
+    ]
+  },
+  "referenceMetrics": {
+    "sample": 875,
+    "accuracy": 0.504,
+    "brier": 0.6024510468186662,
+    "logLoss": 1.0061358920344763,
+    "goalSample": 875,
+    "homeGoalMae": 0.985871680620811,
+    "awayGoalMae": 0.9562480715680656,
+    "totalGoalMae": 1.3832893354239124,
+    "scoreSample": 875,
+    "exactScoreAccuracy": 0.09828571428571428,
+    "calibrationByOutcome": [
+      [
+        {
+          "bin": 0,
+          "count": 7,
+          "predicted": 0.09081957466056363,
+          "actual": 0.14285714285714285
+        },
+        {
+          "bin": 1,
+          "count": 91,
+          "predicted": 0.15787457328410037,
+          "actual": 0.2087912087912088
+        },
+        {
+          "bin": 2,
+          "count": 152,
+          "predicted": 0.2530655066138144,
+          "actual": 0.3157894736842105
+        },
+        {
+          "bin": 3,
+          "count": 173,
+          "predicted": 0.35294835615183967,
+          "actual": 0.3988439306358382
+        },
+        {
+          "bin": 4,
+          "count": 143,
+          "predicted": 0.44942367131247996,
+          "actual": 0.4125874125874126
+        },
+        {
+          "bin": 5,
+          "count": 144,
+          "predicted": 0.5494472457934818,
+          "actual": 0.5208333333333334
+        },
+        {
+          "bin": 6,
+          "count": 125,
+          "predicted": 0.6519276075825489,
+          "actual": 0.672
+        },
+        {
+          "bin": 7,
+          "count": 37,
+          "predicted": 0.7374719145272578,
+          "actual": 0.7027027027027027
+        },
+        {
+          "bin": 8,
+          "count": 3,
+          "predicted": 0.8136753122320046,
+          "actual": 1
+        }
+      ],
+      [
+        {
+          "bin": 1,
+          "count": 169,
+          "predicted": 0.17495927707585204,
+          "actual": 0.1893491124260355
+        },
+        {
+          "bin": 2,
+          "count": 690,
+          "predicted": 0.24375219483216695,
+          "actual": 0.24347826086956523
+        },
+        {
+          "bin": 3,
+          "count": 16,
+          "predicted": 0.3152520428550039,
+          "actual": 0.25
+        }
+      ],
+      [
+        {
+          "bin": 0,
+          "count": 20,
+          "predicted": 0.08622953317673712,
+          "actual": 0.05
+        },
+        {
+          "bin": 1,
+          "count": 183,
+          "predicted": 0.15226656790276283,
+          "actual": 0.14207650273224043
+        },
+        {
+          "bin": 2,
+          "count": 184,
+          "predicted": 0.24797996955962878,
+          "actual": 0.25
+        },
+        {
+          "bin": 3,
+          "count": 171,
+          "predicted": 0.34801671210905283,
+          "actual": 0.3684210526315789
+        },
+        {
+          "bin": 4,
+          "count": 145,
+          "predicted": 0.44884878625999514,
+          "actual": 0.4
+        },
+        {
+          "bin": 5,
+          "count": 92,
+          "predicted": 0.5453396901360975,
+          "actual": 0.4782608695652174
+        },
+        {
+          "bin": 6,
+          "count": 62,
+          "predicted": 0.6422876393465107,
+          "actual": 0.5967741935483871
+        },
+        {
+          "bin": 7,
+          "count": 18,
+          "predicted": 0.7366310683459786,
+          "actual": 0.6666666666666666
+        }
+      ]
+    ],
+    "calibrationError": 0.01970380665399124,
+    "calibration": [
+      {
+        "bin": 0,
+        "count": 27,
+        "predicted": 0.08741954393180326,
+        "actual": 0.07407407407407407
+      },
+      {
+        "bin": 1,
+        "count": 443,
+        "predicted": 0.16207558898617982,
+        "actual": 0.17381489841986456
+      },
+      {
+        "bin": 2,
+        "count": 1026,
+        "predicted": 0.24589014214275498,
+        "actual": 0.2553606237816764
+      },
+      {
+        "bin": 3,
+        "count": 360,
+        "predicted": 0.3489304335294341,
+        "actual": 0.37777777777777777
+      },
+      {
+        "bin": 4,
+        "count": 288,
+        "predicted": 0.44913423265758357,
+        "actual": 0.40625
+      },
+      {
+        "bin": 5,
+        "count": 236,
+        "predicted": 0.5478459952829763,
+        "actual": 0.5042372881355932
+      },
+      {
+        "bin": 6,
+        "count": 187,
+        "predicted": 0.6487314683812955,
+        "actual": 0.6470588235294118
+      },
+      {
+        "bin": 7,
+        "count": 55,
+        "predicted": 0.7371967285042936,
+        "actual": 0.6909090909090909
+      },
+      {
+        "bin": 8,
+        "count": 3,
+        "predicted": 0.8136753122320046,
+        "actual": 1
+      }
+    ]
+  }
+}

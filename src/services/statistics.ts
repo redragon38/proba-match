@@ -1,4 +1,6 @@
 import type { Dataset, Match } from '@/types/football';
+import { validResult } from '@/prediction-engine/availability';
+import { sanitizeMatchStatistics } from '@/lib/statistic-values';
 
 /** A missing result cannot contribute zero goals to a historical summary. */
 export function recordedGoals(matches: Pick<Match, 'homeScore' | 'awayScore'>[]) {
@@ -22,18 +24,13 @@ export function homeFormLeaders(data: Dataset, cutoff = new Date().toISOString()
   type Result = { kickoff: string; gf: number; ga: number };
   const byTeam = new Map<string, Result[]>();
   for (const match of data.matches) {
-    if (
-      match.status !== 'finished' ||
-      match.homeScore === null ||
-      match.awayScore === null ||
-      match.kickoff >= cutoff
-    ) continue;
+    if (!validResult(match) || Date.parse(match.kickoff) >= Date.parse(cutoff)) continue;
     for (const [teamId, gf, ga] of [
       [match.homeId, match.homeScore, match.awayScore],
       [match.awayId, match.awayScore, match.homeScore],
     ] as const) {
       const rows = byTeam.get(teamId) ?? [];
-      rows.push({ kickoff: match.kickoff, gf, ga });
+      rows.push({ kickoff: match.kickoff, gf: gf!, ga: ga! });
       byTeam.set(teamId, rows);
     }
   }
@@ -41,26 +38,75 @@ export function homeFormLeaders(data: Dataset, cutoff = new Date().toISOString()
     .flatMap((team) => {
       const rows = byTeam.get(team.id);
       if (!rows || rows.length < 5) return [];
-      const recent = rows.sort((a, b) => b.kickoff.localeCompare(a.kickoff)).slice(0, 5);
-      return [{
-        team,
-        form: recent.map((row) => row.gf > row.ga ? 'V' : row.gf === row.ga ? 'N' : 'D'),
-        points: recent.reduce((sum, row) => sum + (row.gf > row.ga ? 3 : row.gf === row.ga ? 1 : 0), 0),
-        goals: recent.reduce((sum, row) => sum + row.gf, 0),
-      }];
+      const recent = rows.sort((a, b) => Date.parse(b.kickoff) - Date.parse(a.kickoff)).slice(0, 5);
+      return [
+        {
+          team,
+          form: recent.map((row) => (row.gf > row.ga ? 'V' : row.gf === row.ga ? 'N' : 'D')),
+          points: recent.reduce(
+            (sum, row) => sum + (row.gf > row.ga ? 3 : row.gf === row.ga ? 1 : 0),
+            0,
+          ),
+          goals: recent.reduce((sum, row) => sum + row.gf, 0),
+        },
+      ];
     })
     .sort((a, b) => b.points - a.points || b.goals - a.goals)
     .slice(0, 6);
 }
-export function teamMetricAverage(data: Dataset, teamId: string, label: string): number | null {
-  const values = data.matches
-    .filter((m) => m.status === 'finished' && (m.homeId === teamId || m.awayId === teamId))
+/** Valid observed match statistics; the sample counts only matches supplying this metric. */
+export function teamMetricSummary(
+  data: Dataset,
+  teamId: string,
+  label: string,
+  venue: 'all' | 'home' | 'away' = 'all',
+  cutoff = new Date().toISOString(),
+) {
+  const observations = data.matches
+    .filter(
+      (m) =>
+        validResult(m) &&
+        Date.parse(m.kickoff) < Date.parse(cutoff) &&
+        (venue === 'home'
+          ? m.homeId === teamId
+          : venue === 'away'
+            ? m.awayId === teamId
+            : m.homeId === teamId || m.awayId === teamId),
+    )
     .map((m) => {
-      const s = m.statistics.find((s) => s.label === label);
-      return m.homeId === teamId ? s?.home : s?.away;
+      const s = sanitizeMatchStatistics(m.statistics).find((s) => s.label === label);
+      return { value: m.homeId === teamId ? s?.home : s?.away, match: m };
     })
-    .filter((n): n is number => n !== null && n !== undefined);
-  return values.length ? values.reduce((s, n) => s + n, 0) / values.length : null;
+    .filter(
+      ({ value: n }) =>
+        typeof n === 'number' &&
+        Number.isFinite(n) &&
+        n >= 0 &&
+        (label !== 'Possession' || n <= 100) &&
+        (!['Tirs', 'Tirs cadrés'].includes(label) || Number.isSafeInteger(n)),
+    );
+  const values = observations.map((o) => o.value as number);
+  const dates = observations.map((o) => o.match.kickoff).sort();
+  return {
+    average: values.length ? values.reduce((s, n) => s + n, 0) / values.length : null,
+    sample: values.length,
+    sources: [
+      ...new Set(
+        observations.map(
+          (o) =>
+            o.match.detailSource?.statistics ??
+            (o.match.detailFallback?.includes('statistics')
+              ? 'non confirmée'
+              : (o.match.provenance?.details ?? o.match.source)),
+        ),
+      ),
+    ].sort(),
+    from: dates.at(0),
+    to: dates.at(-1),
+  };
+}
+export function teamMetricAverage(data: Dataset, teamId: string, label: string): number | null {
+  return teamMetricSummary(data, teamId, label).average;
 }
 export function teamSummary(
   data: Dataset,
@@ -71,17 +117,15 @@ export function teamSummary(
   const matches = data.matches
     .filter(
       (m) =>
-        m.status === 'finished' &&
-        m.homeScore !== null &&
-        m.awayScore !== null &&
-        m.kickoff < cutoff &&
+        validResult(m) &&
+        Date.parse(m.kickoff) < Date.parse(cutoff) &&
         (venue === 'home'
           ? m.homeId === teamId
           : venue === 'away'
             ? m.awayId === teamId
             : m.homeId === teamId || m.awayId === teamId),
     )
-    .sort((a, b) => b.kickoff.localeCompare(a.kickoff));
+    .sort((a, b) => Date.parse(b.kickoff) - Date.parse(a.kickoff));
   const results = matches.map((m) => ({
     gf: m.homeId === teamId ? m.homeScore! : m.awayScore!,
     ga: m.homeId === teamId ? m.awayScore! : m.homeScore!,

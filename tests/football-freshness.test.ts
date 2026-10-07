@@ -75,11 +75,11 @@ describe('Source results freshness', () => {
       expect(hasLateOpenResults(dataset({ status }), now + 86400000)).toBe(false);
     },
   );
-  it('does not warn for a future match or a secondary-provider schedule', () => {
+  it('does not warn for a future match and also monitors secondary-provider schedules', () => {
     expect(
       hasLateOpenResults(dataset({ kickoff: new Date(now + 3600000).toISOString() }), now),
     ).toBe(false);
-    expect(hasLateOpenResults(dataset({ source: 'api-football' }), now + 86400000)).toBe(false);
+    expect(hasLateOpenResults(dataset({ source: 'api-football' }), now + 86400000)).toBe(true);
   });
   it('preserves existing warnings and degradation, without duplicating its message', () => {
     const data = { ...dataset(), warning: 'Dernières données sauvegardées.', degraded: true };

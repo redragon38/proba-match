@@ -82,12 +82,13 @@ export function Standings({ data, seasons, tables }: ReturnType<typeof standings
           </button>
         ))}
       </div>
-      {scope !== 'all' && (
+      {
         <p className="data-note">
-          Calcul Proba Match sur les rencontres synchronisées de la compétition. Ce sous-classement
-          peut être partiel et ne reprend pas les sanctions ou départages officiels.
+          {data.source === 'api-football' && scope === 'all' && Number(season) === selected?.season
+            ? 'Classement transmis par API-Football ; couverture et date de vérification à contrôler auprès de la source.'
+            : 'Classement calculé à partir des résultats disponibles ; peut différer du classement officiel. La couverture peut être partielle ; sanctions administratives et départages officiels ne sont pas garantis.'}
         </p>
-      )}
+      }
       {selected ? (
         <StandingTable
           rows={tables[`${selected.id}:${season}:${scope === 'all' ? 'general' : scope}`] ?? []}

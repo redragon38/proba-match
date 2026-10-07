@@ -1,0 +1,78 @@
+{
+  "generatedAt": "2026-10-05T19:51:00.470Z",
+  "scope": "Production local application, no production database; automated WCAG checks are not a full accessibility certification.",
+  "views": [
+    {
+      "route": "/lexique-football",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "route": "/sources-donnees",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "route": "/lexique-football",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "route": "/sources-donnees",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "route": "/lexique-football",
+      "width": 1440,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "route": "/sources-donnees",
+      "width": 1440,
+      "theme": "dark",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "route": "/lexique-football",
+      "width": 1440,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "accessibilityViolations": 0
+    },
+    {
+      "route": "/sources-donnees",
+      "width": 1440,
+      "theme": "light",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "accessibilityViolations": 0
+    }
+  ]
+}

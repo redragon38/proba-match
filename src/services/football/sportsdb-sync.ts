@@ -144,14 +144,16 @@ export async function syncSportsDbPlayers(limit = 30) {
           continue;
         }
         const knownPlayers = new Map(
-          (await db.footballIdentity.findMany({
-            where: {
-              provider: 'thesportsdb',
-              kind: 'player',
-              externalId: { in: valid.map((row) => row.idPlayer) },
-            },
-            select: { externalId: true, entityId: true },
-          })).map((row) => [row.externalId, row.entityId]),
+          (
+            await db.footballIdentity.findMany({
+              where: {
+                provider: 'thesportsdb',
+                kind: 'player',
+                externalId: { in: valid.map((row) => row.idPlayer) },
+              },
+              select: { externalId: true, entityId: true },
+            })
+          ).map((row) => [row.externalId, row.entityId]),
         );
         const newPlayerIdentities: {
           provider: string;
@@ -200,46 +202,54 @@ export async function syncSportsDbPlayers(limit = 30) {
         if (newPlayerIdentities.length)
           await db.footballIdentity.createMany({ data: newPlayerIdentities, skipDuplicates: true });
         for (let offset = 0; offset < next.length; offset += 12)
-          await Promise.all(next.slice(offset, offset + 12).map((player) => db.player.upsert({
-            where: { id: player.id },
-            create: {
-              id: player.id,
-              slug: player.slug,
-              name: player.name,
-              teamId: team.id,
-              position: player.position,
-              number: player.number,
-              nationality: player.nationality,
-              photo: player.photo,
-              birthDate: player.birthDate ? new Date(player.birthDate) : null,
-            },
-            update: {
-              name: player.name,
-              teamId: team.id,
-              position: player.position,
-              number: player.number,
-              nationality: player.nationality,
-              photo: player.photo,
-              birthDate: player.birthDate ? new Date(player.birthDate) : null,
-            },
-          })));
+          await Promise.all(
+            next.slice(offset, offset + 12).map((player) =>
+              db.player.upsert({
+                where: { id: player.id },
+                create: {
+                  id: player.id,
+                  slug: player.slug,
+                  name: player.name,
+                  teamId: team.id,
+                  position: player.position,
+                  number: player.number,
+                  nationality: player.nationality,
+                  photo: player.photo,
+                  birthDate: player.birthDate ? new Date(player.birthDate) : null,
+                },
+                update: {
+                  name: player.name,
+                  teamId: team.id,
+                  position: player.position,
+                  number: player.number,
+                  nationality: player.nationality,
+                  photo: player.photo,
+                  birthDate: player.birthDate ? new Date(player.birthDate) : null,
+                },
+              }),
+            ),
+          );
         for (let offset = 0; offset < next.length; offset += 12)
-          await Promise.all(next.slice(offset, offset + 12).map((player) => db.searchIndex.upsert({
-            where: { id: `player:${player.id}` },
-            create: {
-              id: `player:${player.id}`,
-              entityType: 'player',
-              entityId: player.id,
-              title: player.name,
-              normalized: slugify(player.name),
-              href: `/joueur/${player.slug}`,
-            },
-            update: {
-              title: player.name,
-              normalized: slugify(player.name),
-              href: `/joueur/${player.slug}`,
-            },
-          })));
+          await Promise.all(
+            next.slice(offset, offset + 12).map((player) =>
+              db.searchIndex.upsert({
+                where: { id: `player:${player.id}` },
+                create: {
+                  id: `player:${player.id}`,
+                  entityType: 'player',
+                  entityId: player.id,
+                  title: player.name,
+                  normalized: slugify(player.name),
+                  href: `/joueur/${player.slug}`,
+                },
+                update: {
+                  title: player.name,
+                  normalized: slugify(player.name),
+                  href: `/joueur/${player.slug}`,
+                },
+              }),
+            ),
+          );
         const removed = data.players.filter(
           (player) =>
             player.teamId === team.id &&

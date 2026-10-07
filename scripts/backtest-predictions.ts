@@ -21,7 +21,13 @@ const finished = source
   )
   .sort((a, b) => a.kickoff.localeCompare(b.kickoff) || a.id.localeCompare(b.id));
 
-const engine = new PredictionEngine(60, 60, 1, 'elo-poisson-1.1.0');
+const engine = new PredictionEngine(
+  60,
+  60,
+  1,
+  'reconstructed-elo-poisson-1.3.0-unshrunk',
+  'reconstructed',
+);
 const rows: EvaluatedPrediction[] = [];
 const history: Match[] = [];
 let available = 0;
@@ -87,10 +93,12 @@ function evaluate(subset: EvaluatedPrediction[], strength: number) {
   const base = metrics(changed);
   if (!base) return null;
   const n = changed.length;
-  const calibrationError = base.calibration.reduce(
-    (sum, bucket) => sum + bucket.count * Math.abs(bucket.predicted - bucket.actual),
-    0,
-  ) / (3 * n);
+  const calibrationError =
+    base.calibration.reduce(
+      (sum, bucket) => sum + bucket.count * Math.abs(bucket.predicted - bucket.actual),
+      0,
+    ) /
+    (3 * n);
   return {
     ...base,
     calibrationError,
@@ -101,17 +109,13 @@ function evaluate(subset: EvaluatedPrediction[], strength: number) {
       changed.reduce((sum, row) => sum + Math.abs(row.prediction.expectedAway - row.awayScore), 0) /
       n,
     exactScoreAccuracy:
-      changed.filter(
-        (row) =>
-          row.prediction.likelyScore === `${row.homeScore}–${row.awayScore}`,
-      ).length / n,
+      changed.filter((row) => row.prediction.likelyScore === `${row.homeScore}–${row.awayScore}`)
+        .length / n,
   };
 }
 
 const train = rows.filter((row) => row.kickoff < '2025-01-01');
-const validation = rows.filter(
-  (row) => row.kickoff >= '2025-01-01' && row.kickoff < '2026-01-01',
-);
+const validation = rows.filter((row) => row.kickoff >= '2025-01-01' && row.kickoff < '2026-01-01');
 const test = rows.filter((row) => row.kickoff >= '2026-01-01');
 const candidates = [0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 1];
 const grid = candidates.map((strength) => ({ strength, train: evaluate(train, strength) }));
@@ -119,8 +123,7 @@ const selected = grid.reduce((best, candidate) =>
   candidate.train &&
   (!best.train ||
     candidate.train.brier < best.train.brier ||
-    (candidate.train.brier === best.train.brier &&
-      candidate.train.logLoss < best.train.logLoss))
+    (candidate.train.brier === best.train.brier && candidate.train.logLoss < best.train.logLoss))
     ? candidate
     : best,
 );

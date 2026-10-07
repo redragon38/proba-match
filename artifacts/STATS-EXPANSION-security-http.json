@@ -1,0 +1,92 @@
+{
+  "at": "2026-10-05T19:25:48.772Z",
+  "base": "http://127.0.0.1:3000",
+  "baseline": false,
+  "checks": [
+    {
+      "path": "/admin",
+      "method": "GET",
+      "status": 200,
+      "errors": []
+    },
+    {
+      "path": "/api/cron/sync",
+      "method": "GET",
+      "status": 401,
+      "errors": []
+    },
+    {
+      "path": "/api/cron/live",
+      "method": "GET",
+      "status": 401,
+      "errors": []
+    },
+    {
+      "path": "/api/cron/fixtures",
+      "method": "GET",
+      "status": 401,
+      "errors": []
+    },
+    {
+      "path": "/api/cron/openfootball",
+      "method": "GET",
+      "status": 401,
+      "errors": []
+    },
+    {
+      "path": "/api/cron/standings",
+      "method": "GET",
+      "status": 401,
+      "errors": []
+    },
+    {
+      "path": "/api/health",
+      "method": "GET",
+      "status": 401,
+      "errors": []
+    },
+    {
+      "path": "/api/admin/sync",
+      "method": "POST",
+      "status": 401,
+      "errors": []
+    },
+    {
+      "path": "/api/admin/mapping",
+      "method": "POST",
+      "status": 401,
+      "errors": []
+    },
+    {
+      "path": "/api/admin/session",
+      "method": "POST",
+      "status": 403,
+      "errors": []
+    },
+    {
+      "path": "/api/admin/session",
+      "method": "DELETE",
+      "status": 403,
+      "errors": []
+    },
+    {
+      "path": "/api/matches?date=2026-02-30",
+      "method": "GET",
+      "status": 400,
+      "errors": []
+    },
+    {
+      "path": "/api/search?q=%3Cscript%3Ealert(1)%3C%2Fscript%3E",
+      "method": "GET",
+      "status": 200,
+      "errors": []
+    },
+    {
+      "path": "/api/search?q=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "method": "GET",
+      "status": 200,
+      "errors": []
+    }
+  ],
+  "failures": 0
+}

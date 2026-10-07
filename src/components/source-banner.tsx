@@ -8,8 +8,6 @@ export function SourceBanner({
 }) {
   const warning = data.warning
     ?.replace('Source OpenFootball. Statistiques avancées indisponibles sans enrichissement.', '')
-    .replace('Classements calculés sur les résultats disponibles.', '')
-    .replace('Les classements sont calculés à partir des résultats disponibles.', '')
     .replace(lateResultsWarning, 'Certains résultats sont encore en attente de confirmation.')
     .trim();
   return (
@@ -27,7 +25,7 @@ export function SourceBanner({
             <strong>Données football</strong>
             <span>
               {data.updatedAt
-                ? `Synchronisé le ${new Date(data.updatedAt).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}`
+                ? `Catalogue publié le ${new Date(data.updatedAt).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })} ; chaque donnée peut avoir une date de vérification différente.`
                 : 'En attente de synchronisation'}
             </span>
           </>

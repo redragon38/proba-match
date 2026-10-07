@@ -1,0 +1,162 @@
+[
+  {
+    "path": "/comprendre-probabilites",
+    "width": 320,
+    "theme": "dark",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-comprendre-probabilites-320-dark.png"
+  },
+  {
+    "path": "/methodologie",
+    "width": 320,
+    "theme": "dark",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-methodologie-320-dark.png"
+  },
+  {
+    "path": "/comprendre-probabilites",
+    "width": 320,
+    "theme": "light",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-comprendre-probabilites-320-light.png"
+  },
+  {
+    "path": "/methodologie",
+    "width": 320,
+    "theme": "light",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-methodologie-320-light.png"
+  },
+  {
+    "path": "/comprendre-probabilites",
+    "width": 390,
+    "theme": "dark",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-comprendre-probabilites-390-dark.png"
+  },
+  {
+    "path": "/methodologie",
+    "width": 390,
+    "theme": "dark",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-methodologie-390-dark.png"
+  },
+  {
+    "path": "/comprendre-probabilites",
+    "width": 390,
+    "theme": "light",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-comprendre-probabilites-390-light.png"
+  },
+  {
+    "path": "/methodologie",
+    "width": 390,
+    "theme": "light",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-methodologie-390-light.png"
+  },
+  {
+    "path": "/comprendre-probabilites",
+    "width": 768,
+    "theme": "dark",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-comprendre-probabilites-768-dark.png"
+  },
+  {
+    "path": "/methodologie",
+    "width": 768,
+    "theme": "dark",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-methodologie-768-dark.png"
+  },
+  {
+    "path": "/comprendre-probabilites",
+    "width": 768,
+    "theme": "light",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-comprendre-probabilites-768-light.png"
+  },
+  {
+    "path": "/methodologie",
+    "width": 768,
+    "theme": "light",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-methodologie-768-light.png"
+  },
+  {
+    "path": "/comprendre-probabilites",
+    "width": 1440,
+    "theme": "dark",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-comprendre-probabilites-1440-dark.png"
+  },
+  {
+    "path": "/methodologie",
+    "width": 1440,
+    "theme": "dark",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-methodologie-1440-dark.png"
+  },
+  {
+    "path": "/comprendre-probabilites",
+    "width": 1440,
+    "theme": "light",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-comprendre-probabilites-1440-light.png"
+  },
+  {
+    "path": "/methodologie",
+    "width": 1440,
+    "theme": "light",
+    "status": 200,
+    "overflow": false,
+    "errors": [],
+    "violations": [],
+    "screenshot": "proba-match/artifacts/reading-methodologie-1440-light.png"
+  }
+]

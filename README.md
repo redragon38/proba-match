@@ -1,6 +1,37 @@
-# MatchScore
+# Proba Match
 
 Plateforme française gratuite d’information football : scores, statistiques, profils, classements, comparaisons et projections. Aucun pari, paiement, bookmaker ou conseil de mise.
+
+## Améliorations du 5 octobre 2026
+
+Les rapports de cette version sont `artifacts/IMPROVEMENTS-2026-10-05.md` et `artifacts/CONTINUATION-2026-10-05.md` ainsi que `artifacts/STATS-EXPANSION-2026-10-05.md`. Les rapports plus anciens dans `artifacts/` sont des preuves historiques, pas une validation de cette version.
+
+- Guide public `/comprendre-probabilites`, explications factuelles de matchs, liens internes et métadonnées différenciées, y compris pour les pages hors index.
+- Pages explicatives indexables indépendamment de la base, previews toujours noindex et pages sportives vides hors index. Les résultats documentés par un historique suffisant deviennent éligibles au sitemap ; les pages pauvres restent exclues.
+- Moteur `elo-poisson-1.3.0` : coefficients sportifs de 1.2 conservés ; disponibilité des résultats horodatée à l’ingestion, corrections de score redatées, refus des historiques périmés et des heures inconnues en mode strict.
+- Mesures de buts, score exact et calibration par issue dans l’administration. Les performances utilisent le résultat actuellement confirmé, sans modifier les prévisions archivées.
+
+Le backtest est strict par défaut. Un corpus importé sans `resultObservedAt` ne permet pas de mesurer une performance historique certifiée. Le mode exploratoire est explicite :
+
+```sh
+npm run backtest -- matches.json
+npm run backtest -- matches.json --reconstructed
+```
+
+La commande suivante compare trois valeurs prédéfinies de `goalStrength` (0,8, 0,6 et 1) : sélection par Log Loss sur les résultats disponibles avant chaque 1er juillet, puis évaluation sur la période suivante. Elle utilise un support commun, exige au moins 200 prévisions passées évaluables et ne modifie jamais le moteur actif.
+
+```sh
+npm run models:validate -- matches.json
+npm run models:validate -- matches.json --reconstructed --output=artifacts/model-validation.json
+```
+
+Un corpus sans heures de publication réelles ne produit aucune métrique en mode strict. Sur le corpus Ligue 1 fourni, la reconstruction conserve le coefficient 0,8 sur les trois périodes évaluables : aucun gain d’exactitude n’est démontré. Les statistiques joueurs invalides sont refusées ; les moyennes de fiche équipe indiquent leur échantillon et respectent le filtre domicile/extérieur.
+
+Vérification ciblée de la fiche équipe après un build : `node scripts/verify-team-statistics.mjs` (Chromium Playwright installé). Elle utilise une fixture explicitement fictive, le composant réel et les styles compilés ; elle ne remplace pas un test du site avec PostgreSQL. Microbenchmark reproductible du comparateur : `node --import tsx scripts/benchmark-comparison.ts artifacts/IMPROVEMENT-HISTORICAL-CORPUS.json`.
+
+Le premier import de cette version attribue aux anciens résultats leur date de réception actuelle : il ne fabrique pas d’horodatage historique. Cela permet les prédictions futures après synchronisation, sans valider rétroactivement les matchs passés. Un mode de reconstruction ne doit pas être présenté comme la performance de prévisions réellement publiées.
+
+Contrôle HTTP complémentaire : `node scripts/verify-ssr.mjs` contre le serveur de production local. Ce contrôle ne remplace pas `npm run test:seo`, les tests navigateur ni la vérification d’une vraie base.
 
 ## Démarrer le projet
 
@@ -232,4 +263,45 @@ node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/fo
 
 Dans ce cloud, préfixer les commandes réseau avec `NODE_USE_ENV_PROXY=1`. Exécuter les lots joueurs jusqu’à `remaining: 0`. Les effectifs actuels sont rafraîchis après 24 heures ; les saisons historiques sont revalidées après 30 jours. Les saisons du Brésil et de MLS suivent l’année civile, les trois autres démarrent en été. Les statistiques absentes restent nulles, une liste d’effectif ne confirme pas la participation à un match et la synchronisation périodique ne constitue pas un direct. Les matchs de playoffs sont conservés mais exclus des classements de ligue calculés (en MLS, tableau global sans conférences, ni sanctions/départages officiels).
 
-L’administration propose les trois opérations. Le worker existant et les crons `/api/cron/openfootball` et `/api/cron/players` les intègrent ; les endpoints restent protégés par les contrôles administrateur/cron existants. Domaines nécessaires : `site.api.espn.com`, `a.espncdn.com` (écussons), `media.api-sports.io` (logos des championnats). La base de données ne se transfère pas par Git. Sur Vercel, le hook `postbuild` initialise automatiquement les saisons et effectifs manquants lorsque `VERCEL_ENV=production`, à partir de `DATABASE_URL` déjà configuré. Un corpus complet est conservé sans réimport. Cette première initialisation rallonge le build ; les erreurs empêchent sa validation et permettent une reprise au build suivant. Les previews/CI/builds locaux sautent ce hook. Hors Vercel, exécuter les commandes ci-dessus sur la base hébergée.
+L’administration propose les trois opérations. Le worker existant et les crons `/api/cron/openfootball` et `/api/cron/players` les intègrent ; les endpoints restent protégés par les contrôles administrateur/cron existants. Domaines nécessaires : `site.api.espn.com`, `a.espncdn.com` (écussons), `media.api-sports.io` (logos des championnats). La base de données ne se transfère pas par Git. Le build Vercel configuré exécute seulement `npm run build` : il ne lance aucun import automatique. Après migration et avec `DATABASE_URL` configuré dans l’environnement ciblé, initialiser explicitement avec `npm run football:initialize`, ou les commandes d’import ci-dessus. Mesurer durée, volume, quotas et reprise dans une base isolée avant l’initialisation hébergée ; ne pas confondre un build réussi avec une base remplie.
+
+## Statistiques enrichies et vérification
+
+Les détails de match affichent les distributions de buts par équipe, les totaux d’au moins 2/3/4 buts, les écarts de victoire par équipe et une matrice de 25 groupes de scores (4+ regroupe la queue de distribution). Les trois scores les plus probables sont directement visibles. Une plage de buts contenant au moins 80 % de masse du modèle illustre l’incertitude ; elle ne représente ni une confiance dans les données ni une garantie.
+
+Les ratios de tirs cadrés, passes réussies et duels gagnés utilisent uniquement des compteurs observés cohérents et un dénominateur positif. Les doublons contradictoires et les valeurs impossibles sont indisponibles. Les statistiques de match ne sont pas affichées comme des observations avant le coup d’envoi.
+
+```sh
+node --import tsx scripts/compare-score-models.ts matches.json --reconstructed --output=artifacts/score-models.json
+node --import tsx scripts/evaluate-derived-events.ts matches.json --reconstructed --from=2023-07-01 --to=2026-07-01 --output=artifacts/derived-events.json
+node scripts/verify-expanded-statistics.mjs
+```
+
+Sans `--reconstructed`, les évaluations exigent les timestamps de disponibilité. La comparaison teste une correction Dixon-Coles sur les buts attendus existants, sans réentraînement complet ; elle ne modifie pas le moteur actif. Les événements dérivés sont évalués séparément avec Brier binaire, Log Loss et calibration par tranche. Sur le corpus fourni, la correction étudiée dégrade légèrement les mesures hors échantillon : le Poisson actuel reste actif. Ce corpus déjà exploré n’est pas un jeu de test indépendant.
+
+La vérification navigateur monte les composants réels avec les styles du build, sur une fixture explicitement fictive ; elle ne remplace pas les parcours du site avec PostgreSQL.
+
+### SEO et visibilité dans les réponses IA
+
+Les explications sont rendues côté serveur et reliées aux pages `/methodologie`, `/comprendre-probabilites`, `/lexique-football` et `/sources-donnees`. Les réponses FAQ et les 24 définitions structurées doivent correspondre au contenu visible ; l’audit SEO vérifie ce contrat sans JavaScript. Les nouveaux guides conservent le noindex des environnements de prévisualisation.
+
+Les jetons propriétaires facultatifs `GOOGLE_SITE_VERIFICATION` et `BING_SITE_VERIFICATION` permettent la validation HTML lorsqu’ils sont réellement fournis. Voir [les procédures de mesure et de publication](docs/seo-geo-operations.md) et [le rapport de cette passe](artifacts/SEO-GEO-2026-10-05.md). Aucun gain de classement, d’indexation ou de citation IA n’est déduit des contrôles locaux.
+
+Les pages sportives réutilisent des identifiants JSON-LD communs pour les équipes, les joueurs et les matchs. Les dates impossibles et les heures non confirmées restent indisponibles ; les âges sont calculés à la date des données, par anniversaires. Les profils joueurs sans correspondance avec une équipe sortent du sitemap. Voir [le contrôle des faits et des identités sportives](artifacts/SEO-ENTITIES-2026-10-05.md).
+
+Les totaux de compétition respectent la saison sélectionnée et excluent les scores invalides. Une saison non renseignée reste signalée comme une attribution de configuration. Les recherches répétées, les URLs filtrées et les redirections avec filtres sont couvertes par des tests de régression. Voir [le rapport sur les saisons et les URLs](artifacts/SEO-SEASONS-2026-10-06.md). La vérification isolée de la fiche compétition se lance avec `node scripts/verify-competition-seasons.mjs` après compilation.
+
+## Corrections de l’audit du 6 octobre 2026
+
+Le moteur actif est désormais `elo-poisson-1.4.0`. Cette version conserve les coefficients sportifs et améliore les contrats de réception, le score réglementaire, le traitement d’Elo lors des arrivées tardives, la quantité effective d’historique et l’archive des entrées. Les anciens rapports décrivent leurs versions respectives. Aucune amélioration de précision réelle n’est revendiquée : les métriques sont identiques sur le support historique reconstruit commun et le corpus strict observé reste vide.
+
+Voir [le registre des 31 constats et les preuves](artifacts/AUDIT-FIX-2026-10-06.md) et [les migrations, le replay et les limites d’exploitation](docs/audit-fixes-operations.md). Le comparateur expose les dénominateurs, dates et sources et propose une période commune. Les dépendances `sharp` et `source-map-js` sont corrigées et verrouillées.
+
+```sh
+node --import tsx scripts/compare-audit-models.ts matches.json
+node --import tsx scripts/compare-audit-models.ts matches.json --reconstructed
+node --import tsx scripts/measure-prediction-footprint.ts matches.json
+node scripts/verify-comparison-periods.mjs
+```
+
+Le dernier contrôle de composant utilise une fixture explicitement fictive avec l’interface et les styles réels ; il ne certifie pas les routes sportives reliées à PostgreSQL. Aucune écriture distante ni mise en production n’a été effectuée.

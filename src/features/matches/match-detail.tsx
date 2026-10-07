@@ -19,6 +19,7 @@ import { Breadcrumbs } from '@/components/breadcrumbs';
 import { MatchOverview } from './match-overview';
 import { ProbabilitySummary } from './probability-summary';
 import { MatchStatistics } from './match-statistics';
+import { matchFactSummary } from '@/lib/match-facts';
 const tabs = [
   ['apercu', 'Aperçu'],
   ['prediction', 'Prédiction'],
@@ -155,6 +156,15 @@ export function MatchDetail({
         </nav>
       </section>
       <ShareButton path={`/match/${match.slug}`} title={`${home.name} – ${away.name}`} />
+      <p className="match-fact-summary">
+        {matchFactSummary(match, home.name, away.name, comp.name)}{' '}
+        {prediction
+          ? data.source === 'demo'
+            ? 'Les probabilités illustrent un scénario fictif de démonstration.'
+            : 'Les probabilités ci-dessous sont une estimation archivée avant le coup d’envoi.'
+          : 'Aucune probabilité pré-match archivée n’est affichée sans données suffisantes.'}{' '}
+        <Link href="/comprendre-probabilites">Comprendre les statistiques et leurs limites</Link>.
+      </p>
       {match.source !== 'demo' && (
         <p className="data-note">
           Calendrier / résultats :{' '}
@@ -266,6 +276,10 @@ export function MatchDetail({
       {tab === 'prediction' && (
         <details className="card advanced-panel prediction-history">
           <summary>Historique des probabilités</summary>
+          <p className="data-note">
+            Affichage des 100 snapshots les plus récents au maximum ; les plus anciens peuvent ne
+            pas figurer dans cette liste.
+          </p>
           {history.length ? (
             <ol>
               {history.map((p) => (

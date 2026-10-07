@@ -1,4 +1,5 @@
 import type { Match, Standing } from '@/types/football';
+import { validResult } from '@/prediction-engine/availability';
 export type StandingMatch = Pick<
   Match,
   | 'countsForStandings'
@@ -19,14 +20,9 @@ export function derivedStandings(
   const rows = new Map<string, Standing>();
   const finished = matches
     .filter(
-      (m) =>
-        m.competitionId === competitionId &&
-        m.countsForStandings !== false &&
-        m.status === 'finished' &&
-        m.homeScore !== null &&
-        m.awayScore !== null,
+      (m) => m.competitionId === competitionId && m.countsForStandings !== false && validResult(m),
     )
-    .sort((a, b) => b.kickoff.localeCompare(a.kickoff));
+    .sort((a, b) => Date.parse(b.kickoff) - Date.parse(a.kickoff));
   for (const m of finished)
     for (const [id, home] of [
       [m.homeId, true],

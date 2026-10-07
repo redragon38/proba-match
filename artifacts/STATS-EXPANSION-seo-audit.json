@@ -1,0 +1,3363 @@
+{
+  "generatedAt": "2026-10-05T19:25:34.338Z",
+  "base": "http://127.0.0.1:3000",
+  "pages": [
+    {
+      "path": "/",
+      "status": 200,
+      "htmlBytes": 39959,
+      "title": "Proba Match — scores, calendrier et statistiques football",
+      "description": "Retrouvez les matchs du jour, les résultats, les classements et les analyses football de Proba Match. Sources identifiées et projections expliquées.",
+      "canonical": "http://localhost:3000/",
+      "robots": "noindex, follow",
+      "h1": [
+        "Le football, aujourd’hui."
+      ],
+      "visibleText": 1782,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Le football, aujourd’hui."
+        },
+        {
+          "level": 2,
+          "text": "Les matchs du jour"
+        },
+        {
+          "level": 2,
+          "text": "Aucune rencontre pour cette sélection"
+        },
+        {
+          "level": 2,
+          "text": "À ne pas manquer"
+        },
+        {
+          "level": 2,
+          "text": "Données insuffisantes"
+        },
+        {
+          "level": 2,
+          "text": "Les équipes à explorer"
+        },
+        {
+          "level": 2,
+          "text": "Le regard du modèle"
+        },
+        {
+          "level": 2,
+          "text": "Données insuffisantes"
+        },
+        {
+          "level": 2,
+          "text": "Joueurs à suivre"
+        },
+        {
+          "level": 2,
+          "text": "Données insuffisantes"
+        },
+        {
+          "level": 2,
+          "text": "Les équipes en forme"
+        },
+        {
+          "level": 2,
+          "text": "L’analyse avant le coup d’envoi"
+        },
+        {
+          "level": 2,
+          "text": "Les probabilités, en clair"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Proba Match — scores, calendrier et statistiques football",
+        "description": "Retrouvez les matchs du jour, les résultats, les classements et les analyses football de Proba Match. Sources identifiées et projections expliquées.",
+        "url": "http://localhost:3000",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/methodologie",
+        "/matchs?statut=scheduled",
+        "/comparateur/equipes",
+        "/joueurs",
+        "/equipes",
+        "/comprendre-probabilites",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/matchs",
+      "status": 200,
+      "htmlBytes": 37440,
+      "title": "Matchs de football — scores et calendrier | Proba Match",
+      "description": "Consultez le calendrier et les résultats des compétitions suivies. Parcourez les dates, les équipes et les détails de chaque rencontre.",
+      "canonical": "http://localhost:3000/matchs",
+      "robots": "noindex, follow",
+      "h1": [
+        "Tous les matchs"
+      ],
+      "visibleText": 1427,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Tous les matchs"
+        },
+        {
+          "level": 2,
+          "text": "Le calendrier et les résultats"
+        },
+        {
+          "level": 2,
+          "text": "Aucune rencontre pour cette sélection"
+        },
+        {
+          "level": 2,
+          "text": "À ne pas manquer"
+        },
+        {
+          "level": 2,
+          "text": "Données insuffisantes"
+        },
+        {
+          "level": 2,
+          "text": "Les équipes à explorer"
+        },
+        {
+          "level": 2,
+          "text": "Le regard du modèle"
+        },
+        {
+          "level": 2,
+          "text": "Données insuffisantes"
+        },
+        {
+          "level": 2,
+          "text": "Joueurs à suivre"
+        },
+        {
+          "level": 2,
+          "text": "Données insuffisantes"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Matchs de football — scores et calendrier",
+        "description": "Consultez le calendrier et les résultats des compétitions suivies. Parcourez les dates, les équipes et les détails de chaque rencontre.",
+        "url": "http://localhost:3000/matchs",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/methodologie",
+        "/matchs?statut=scheduled",
+        "/comparateur/equipes",
+        "/joueurs",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/live",
+      "status": 200,
+      "htmlBytes": 28271,
+      "title": "Scores de football en direct | Proba Match",
+      "description": "Suivez les rencontres en cours et les derniers scores disponibles. La source et la fraîcheur des données sont indiquées, sans simulation de direct.",
+      "canonical": "http://localhost:3000/live",
+      "robots": "noindex, follow",
+      "h1": [
+        "Le football en direct."
+      ],
+      "visibleText": 801,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Le football en direct."
+        },
+        {
+          "level": 2,
+          "text": "Aucun match en direct"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Scores de football en direct",
+        "description": "Suivez les rencontres en cours et les derniers scores disponibles. La source et la fraîcheur des données sont indiquées, sans simulation de direct.",
+        "url": "http://localhost:3000/live",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/matchs",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/equipes",
+      "status": 200,
+      "htmlBytes": 27650,
+      "title": "Équipes de football — résultats et statistiques | Proba Match",
+      "description": "Explorez les clubs du catalogue Proba Match : forme récente, résultats, calendrier et statistiques disponibles pour chaque équipe.",
+      "canonical": "http://localhost:3000/equipes",
+      "robots": "noindex, follow",
+      "h1": [
+        "Les clubs qui font le football."
+      ],
+      "visibleText": 547,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Les clubs qui font le football."
+        },
+        {
+          "level": 2,
+          "text": "Aucun résultat"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Équipes de football — résultats et statistiques",
+        "description": "Explorez les clubs du catalogue Proba Match : forme récente, résultats, calendrier et statistiques disponibles pour chaque équipe.",
+        "url": "http://localhost:3000/equipes",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/joueurs",
+      "status": 200,
+      "htmlBytes": 27970,
+      "title": "Joueurs — profils et performances individuelles | Proba Match",
+      "description": "Consultez les profils, les statistiques et les performances des joueurs disponibles dans le catalogue synchronisé Proba Match.",
+      "canonical": "http://localhost:3000/joueurs",
+      "robots": "noindex, follow",
+      "h1": [
+        "Les acteurs du jeu."
+      ],
+      "visibleText": 684,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Les acteurs du jeu."
+        },
+        {
+          "level": 2,
+          "text": "Les données des joueurs ne sont pas disponibles pour le moment."
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Joueurs — profils et performances individuelles",
+        "description": "Consultez les profils, les statistiques et les performances des joueurs disponibles dans le catalogue synchronisé Proba Match.",
+        "url": "http://localhost:3000/joueurs",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/equipes",
+        "/matchs",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/competitions",
+      "status": 200,
+      "htmlBytes": 27572,
+      "title": "Compétitions de football — calendrier et classement | Proba Match",
+      "description": "Explorez les compétitions suivies par Proba Match, leurs équipes, leurs rencontres et leurs classements par saison.",
+      "canonical": "http://localhost:3000/competitions",
+      "robots": "noindex, follow",
+      "h1": [
+        "Toutes les compétitions."
+      ],
+      "visibleText": 545,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Toutes les compétitions."
+        },
+        {
+          "level": 2,
+          "text": "Aucun résultat"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Compétitions de football — calendrier et classement",
+        "description": "Explorez les compétitions suivies par Proba Match, leurs équipes, leurs rencontres et leurs classements par saison.",
+        "url": "http://localhost:3000/competitions",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/classements",
+      "status": 200,
+      "htmlBytes": 28185,
+      "title": "Classements de football par compétition et saison | Proba Match",
+      "description": "Comparez points, buts et forme des équipes. Consultez les classements par saison, à domicile, à l’extérieur et sur les cinq derniers matchs.",
+      "canonical": "http://localhost:3000/classements",
+      "robots": "noindex, follow",
+      "h1": [
+        "Classements"
+      ],
+      "visibleText": 721,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Classements"
+        },
+        {
+          "level": 2,
+          "text": "Données insuffisantes"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Classements de football par compétition et saison",
+        "description": "Comparez points, buts et forme des équipes. Consultez les classements par saison, à domicile, à l’extérieur et sur les cinq derniers matchs.",
+        "url": "http://localhost:3000/classements",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/a-propos",
+      "status": 200,
+      "htmlBytes": 27086,
+      "title": "À propos de Proba Match | Proba Match",
+      "description": "Découvrez Proba Match, une plateforme gratuite de statistiques football : origine des données, transparence des analyses et limites des projections.",
+      "canonical": "http://localhost:3000/a-propos",
+      "robots": "index, follow",
+      "h1": [
+        "Le jeu mérite du contexte."
+      ],
+      "visibleText": 838,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Le jeu mérite du contexte."
+        },
+        {
+          "level": 2,
+          "text": "Des chiffres dont on connaît l’origine"
+        },
+        {
+          "level": 2,
+          "text": "Un modèle qui rend des comptes"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "À propos de Proba Match",
+        "description": "Découvrez Proba Match, une plateforme gratuite de statistiques football : origine des données, transparence des analyses et limites des projections.",
+        "url": "http://localhost:3000/a-propos",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/methodologie",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/methodologie",
+      "status": 200,
+      "htmlBytes": 46017,
+      "title": "Méthodologie — sources et modèle Elo–Poisson | Proba Match",
+      "description": "Comprenez les sources OpenFootball, ESPN et API-Football, le modèle Elo–Poisson, les probabilités et les limites des analyses Proba Match.",
+      "canonical": "http://localhost:3000/methodologie",
+      "robots": "index, follow",
+      "h1": [
+        "Des chiffres. Une méthode.Aucune certitude."
+      ],
+      "visibleText": 8535,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Des chiffres. Une méthode.Aucune certitude."
+        },
+        {
+          "level": 2,
+          "text": "Comment Proba Match calcule-t-il une probabilité ?"
+        },
+        {
+          "level": 2,
+          "text": "01 — Des sources clairement identifiées"
+        },
+        {
+          "level": 2,
+          "text": "02 — Elo : le niveau relatif"
+        },
+        {
+          "level": 2,
+          "text": "03 — Forme, adversaires et récence"
+        },
+        {
+          "level": 2,
+          "text": "04 — Poisson : des buts aux probabilités"
+        },
+        {
+          "level": 2,
+          "text": "05 — La confiance décrit les informations"
+        },
+        {
+          "level": 2,
+          "text": "06 — Les joueurs : une évaluation adaptée au poste"
+        },
+        {
+          "level": 2,
+          "text": "07 — Un historique qui ne réécrit pas le passé"
+        },
+        {
+          "level": 2,
+          "text": "08 — Limites à garder en tête"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Méthodologie — sources et modèle Elo–Poisson",
+        "description": "Comprenez les sources OpenFootball, ESPN et API-Football, le modèle Elo–Poisson, les probabilités et les limites des analyses Proba Match.",
+        "url": "http://localhost:3000/methodologie",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "https://github.com/openfootball/football.json",
+        "https://www.espn.com/soccer/",
+        "https://www.api-football.com/documentation-v3",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/comprendre-probabilites",
+      "status": 200,
+      "htmlBytes": 42619,
+      "title": "Comprendre les probabilités et statistiques football | Proba Match",
+      "description": "Probabilité 1N2, buts attendus, score le plus probable et confiance : des exemples simples pour lire les statistiques football sans fausse certitude.",
+      "canonical": "http://localhost:3000/comprendre-probabilites",
+      "robots": "index, follow",
+      "h1": [
+        "Comprendre les probabilités football"
+      ],
+      "visibleText": 5152,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Comprendre les probabilités football"
+        },
+        {
+          "level": 2,
+          "text": "Que signifie une probabilité de victoire de 60 % ?"
+        },
+        {
+          "level": 2,
+          "text": "Lire les trois probabilités du résultat"
+        },
+        {
+          "level": 2,
+          "text": "Le score le plus probable reste incertain"
+        },
+        {
+          "level": 2,
+          "text": "Probabilité et qualité des données : deux lectures différentes"
+        },
+        {
+          "level": 3,
+          "text": "Probabilité de l’événement"
+        },
+        {
+          "level": 3,
+          "text": "Qualité des informations"
+        },
+        {
+          "level": 2,
+          "text": "Lexique des statistiques football"
+        },
+        {
+          "level": 2,
+          "text": "Comment vérifier l’exactitude d’un modèle ?"
+        },
+        {
+          "level": 2,
+          "text": "D’où viennent les données et les calculs ?"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Comprendre les probabilités et statistiques football",
+        "description": "Probabilité 1N2, buts attendus, score le plus probable et confiance : des exemples simples pour lire les statistiques football sans fausse certitude.",
+        "url": "http://localhost:3000/comprendre-probabilites",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/",
+        "/comprendre-probabilites",
+        "#resultat",
+        "#scores",
+        "#qualite",
+        "#lexique",
+        "#evaluation",
+        "#sources",
+        "/matchs",
+        "/methodologie",
+        "https://github.com/openfootball/football.json",
+        "https://www.espn.com/soccer/",
+        "https://www.api-football.com/documentation-v3",
+        "/a-propos",
+        "/competitions",
+        "/contact",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Accueil",
+              "item": "http://localhost:3000/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Comprendre les probabilités",
+              "item": "http://localhost:3000/comprendre-probabilites"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/contact",
+      "status": 200,
+      "htmlBytes": 26393,
+      "title": "Contact | Proba Match",
+      "description": "Contactez l’éditeur de Proba Match lorsque ses coordonnées sont disponibles et découvrez comment signaler une erreur dans les données football.",
+      "canonical": "http://localhost:3000/contact",
+      "robots": "noindex, follow",
+      "h1": [
+        "Une question sur Proba Match ?"
+      ],
+      "visibleText": 664,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Une question sur Proba Match ?"
+        },
+        {
+          "level": 2,
+          "text": "Signaler une donnée incorrecte"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Contact",
+        "description": "Contactez l’éditeur de Proba Match lorsque ses coordonnées sont disponibles et découvrez comment signaler une erreur dans les données football.",
+        "url": "http://localhost:3000/contact",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/confidentialite",
+      "status": 200,
+      "htmlBytes": 30642,
+      "title": "Confidentialité | Proba Match",
+      "description": "La version actuelle ne demande pas de compte visiteur. Les favoris et le thème sont conservés localement dans votre navigateur. Lors de la consultation des favoris, leurs identifiants sont envoyés à l’API du site pour récupérer les informations correspondantes ; aucune liste de favoris liée à un compte n’est enregistrée côté serveur. Le site ne contient aucun outil publicitaire ni mesure d’audience tiers.",
+      "canonical": "http://localhost:3000/confidentialite",
+      "robots": "noindex, follow",
+      "h1": [
+        "Confidentialité"
+      ],
+      "visibleText": 1433,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Confidentialité"
+        },
+        {
+          "level": 2,
+          "text": "Vos données, au minimum"
+        },
+        {
+          "level": 2,
+          "text": "Notifications"
+        },
+        {
+          "level": 2,
+          "text": "Données techniques"
+        },
+        {
+          "level": 2,
+          "text": "Effacer les préférences"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Confidentialité",
+        "description": "La version actuelle ne demande pas de compte visiteur. Les favoris et le thème sont conservés localement dans votre navigateur. Lors de la consultation des favoris, leurs identifiants sont envoyés à l’API du site pour récupérer les informations correspondantes ; aucune liste de favoris liée à un compte n’est enregistrée côté serveur. Le site ne contient aucun outil publicitaire ni mesure d’audience tiers.",
+        "url": "http://localhost:3000/confidentialite",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/cookies",
+      "status": 200,
+      "htmlBytes": 28475,
+      "title": "Cookies et stockage local | Proba Match",
+      "description": "matchscore-favorites conserve vos favoris ; matchscore-theme conserve le thème ; matchscore-density conserve la densité d’affichage ; matchscore-notifications conserve votre choix d’activation des alertes. Ces valeurs restent dans votre navigateur.",
+      "canonical": "http://localhost:3000/cookies",
+      "robots": "noindex, follow",
+      "h1": [
+        "Cookies et stockage local"
+      ],
+      "visibleText": 977,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Cookies et stockage local"
+        },
+        {
+          "level": 2,
+          "text": "Stockage fonctionnel"
+        },
+        {
+          "level": 2,
+          "text": "Administration"
+        },
+        {
+          "level": 2,
+          "text": "Services tiers"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Cookies et stockage local",
+        "description": "matchscore-favorites conserve vos favoris ; matchscore-theme conserve le thème ; matchscore-density conserve la densité d’affichage ; matchscore-notifications conserve votre choix d’activation des alertes. Ces valeurs restent dans votre navigateur.",
+        "url": "http://localhost:3000/cookies",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/mentions-legales",
+      "status": 200,
+      "htmlBytes": 31511,
+      "title": "Mentions légales | Proba Match",
+      "description": "Les informations de publication effectivement fournies par l’éditeur sont présentées ci-dessous. Les champs manquants sont signalés explicitement ; ils nécessitent une validation par l’exploitant.",
+      "canonical": "http://localhost:3000/mentions-legales",
+      "robots": "noindex, follow",
+      "h1": [
+        "Mentions légales"
+      ],
+      "visibleText": 1786,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Mentions légales"
+        },
+        {
+          "level": 2,
+          "text": "État de publication"
+        },
+        {
+          "level": 2,
+          "text": "Hébergement"
+        },
+        {
+          "level": 2,
+          "text": "Sources et droits"
+        },
+        {
+          "level": 2,
+          "text": "Objet du site"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Mentions légales",
+        "description": "Les informations de publication effectivement fournies par l’éditeur sont présentées ci-dessous. Les champs manquants sont signalés explicitement ; ils nécessitent une validation par l’exploitant.",
+        "url": "http://localhost:3000/mentions-legales",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/recherche",
+      "status": 200,
+      "htmlBytes": 28063,
+      "title": "Recherche football | Proba Match",
+      "description": "Recherchez une équipe, un joueur, une compétition ou une rencontre dans le catalogue disponible de Proba Match.",
+      "canonical": "http://localhost:3000/recherche",
+      "robots": "noindex, follow",
+      "h1": [
+        "Rechercher une équipe, un joueur ou un match"
+      ],
+      "visibleText": 634,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Rechercher une équipe, un joueur ou un match"
+        },
+        {
+          "level": 2,
+          "text": "Aucun résultat"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Recherche football",
+        "description": "Recherchez une équipe, un joueur, une compétition ou une rencontre dans le catalogue disponible de Proba Match.",
+        "url": "http://localhost:3000/recherche",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/favoris",
+      "status": 200,
+      "htmlBytes": 28574,
+      "title": "Mes favoris | Proba Match",
+      "description": "Retrouvez les équipes et matchs enregistrés dans ce navigateur, et gérez vos notifications locales sur Proba Match.",
+      "canonical": "http://localhost:3000/favoris",
+      "robots": "noindex, follow",
+      "h1": [
+        "Mes favoris"
+      ],
+      "visibleText": 960,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Mes favoris"
+        },
+        {
+          "level": 2,
+          "text": "Votre sélection commence ici"
+        },
+        {
+          "level": 2,
+          "text": "Notifications de vos matchs"
+        },
+        {
+          "level": 3,
+          "text": "Restez au contact du match"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Mes favoris",
+        "description": "Retrouvez les équipes et matchs enregistrés dans ce navigateur, et gérez vos notifications locales sur Proba Match.",
+        "url": "http://localhost:3000/favoris",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/parametres",
+      "status": 200,
+      "htmlBytes": 26981,
+      "title": "Paramètres | Proba Match",
+      "description": "Personnalisez l’affichage, les compétitions suivies et les préférences locales de votre navigateur sur Proba Match.",
+      "canonical": "http://localhost:3000/parametres",
+      "robots": "noindex, follow",
+      "h1": [
+        "Paramètres"
+      ],
+      "visibleText": 917,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Paramètres"
+        },
+        {
+          "level": 2,
+          "text": "Apparence"
+        },
+        {
+          "level": 2,
+          "text": "Vos compétitions"
+        },
+        {
+          "level": 2,
+          "text": "Notifications"
+        },
+        {
+          "level": 3,
+          "text": "Restez au contact du match"
+        },
+        {
+          "level": 2,
+          "text": "Langue et horaires"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Paramètres",
+        "description": "Personnalisez l’affichage, les compétitions suivies et les préférences locales de votre navigateur sur Proba Match.",
+        "url": "http://localhost:3000/parametres",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/favoris",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/comparateur/equipes",
+      "status": 200,
+      "htmlBytes": 28549,
+      "title": "Comparateur d’équipes football | Proba Match",
+      "description": "Comparez la forme, les résultats et les moyennes de buts des équipes disponibles, selon le lieu et la période.",
+      "canonical": "http://localhost:3000/comparateur/equipes",
+      "robots": "noindex, follow",
+      "h1": [
+        "Comparer deux équipes"
+      ],
+      "visibleText": 739,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Comparer deux équipes"
+        },
+        {
+          "level": 2,
+          "text": "Données insuffisantes"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Comparateur d’équipes football",
+        "description": "Comparez la forme, les résultats et les moyennes de buts des équipes disponibles, selon le lieu et la période.",
+        "url": "http://localhost:3000/comparateur/equipes",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/comparateur/equipes",
+        "/comparateur/joueurs",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/comparateur/joueurs",
+      "status": 200,
+      "htmlBytes": 28496,
+      "title": "Comparateur de joueurs football | Proba Match",
+      "description": "Comparez les minutes, les statistiques par 90 minutes et les performances descriptives des joueurs disponibles.",
+      "canonical": "http://localhost:3000/comparateur/joueurs",
+      "robots": "noindex, follow",
+      "h1": [
+        "Comparer deux joueurs"
+      ],
+      "visibleText": 738,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Comparer deux joueurs"
+        },
+        {
+          "level": 2,
+          "text": "Données insuffisantes"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Comparateur de joueurs football",
+        "description": "Comparez les minutes, les statistiques par 90 minutes et les performances descriptives des joueurs disponibles.",
+        "url": "http://localhost:3000/comparateur/joueurs",
+        "image": "http://localhost:3000/opengraph-image",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/comparateur/equipes",
+        "/comparateur/joueurs",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    },
+    {
+      "path": "/admin",
+      "status": 200,
+      "htmlBytes": 27255,
+      "title": "Administration | Proba Match",
+      "description": "Matchs, statistiques, comparaisons et projections football. Une plateforme gratuite et transparente, en français.",
+      "canonical": "",
+      "robots": "noindex, nofollow",
+      "h1": [
+        "Administration"
+      ],
+      "visibleText": 310,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Administration"
+        }
+      ],
+      "lang": "fr",
+      "viewport": "width=device-width, initial-scale=1",
+      "og": {
+        "title": "Administration | Proba Match",
+        "description": "Matchs, statistiques, comparaisons et projections football. Une plateforme gratuite et transparente, en français.",
+        "url": "",
+        "image": "http://localhost:3000/opengraph-image?410214f84e6bb17c",
+        "twitter": "summary_large_image"
+      },
+      "links": [
+        "#main",
+        "/",
+        "/matchs",
+        "/competitions",
+        "/methodologie",
+        "/equipes",
+        "/joueurs",
+        "/competitions",
+        "/favoris",
+        "/",
+        "/matchs",
+        "/live",
+        "/competitions",
+        "/classements",
+        "/equipes",
+        "/joueurs",
+        "/comparateur/equipes",
+        "/favoris",
+        "/competitions",
+        "/methodologie",
+        "/parametres",
+        "/methodologie",
+        "/a-propos",
+        "/methodologie",
+        "/comprendre-probabilites",
+        "/confidentialite",
+        "/cookies",
+        "/mentions-legales",
+        "/contact",
+        "/",
+        "/matchs",
+        "/live",
+        "/recherche"
+      ],
+      "images": [
+        {
+          "alt": "Proba Match",
+          "width": "676",
+          "height": "128",
+          "src": "/brand/proba-match-logo-dark.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "558",
+          "height": "134",
+          "src": "/brand/proba-match-logo-light.webp"
+        },
+        {
+          "alt": "Proba Match",
+          "width": "48",
+          "height": "48",
+          "src": "/brand/proba-match-icon-192.png"
+        }
+      ],
+      "jsonLd": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Proba Match",
+          "url": "http://localhost:3000",
+          "inLanguage": "fr"
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "category": "robots",
+      "status": "PASS",
+      "detail": "Public routes and rendering resources are not blocked"
+    },
+    {
+      "category": "robots",
+      "status": "PASS",
+      "detail": "Crawlers can read noindex on private/search pages"
+    },
+    {
+      "category": "sitemap",
+      "status": "PASS",
+      "detail": "Valid sitemap XML"
+    },
+    {
+      "category": "sitemap",
+      "status": "PASS",
+      "detail": "Unique sitemap URLs"
+    },
+    {
+      "category": "sitemap",
+      "status": "PASS",
+      "detail": "Sitemap remains below the URL limit"
+    },
+    {
+      "category": "HTTPS",
+      "status": "WARNING",
+      "detail": "Public HTTPS origin required at launch"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/ HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/: HTML 39959 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/matchs HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/matchs: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/matchs: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/matchs: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/matchs: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/matchs: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/matchs: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/matchs: HTML 37440 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/live HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/live: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/live: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/live: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/live: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/live: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/live: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/live: HTML 28271 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/equipes HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/equipes: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/equipes: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/equipes: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/equipes: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/equipes: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/equipes: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/equipes: HTML 27650 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/joueurs HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/joueurs: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/joueurs: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/joueurs: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/joueurs: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/joueurs: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/joueurs: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/joueurs: HTML 27970 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/competitions HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/competitions: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/competitions: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/competitions: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/competitions: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/competitions: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/competitions: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/competitions: HTML 27572 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/classements HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/classements: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/classements: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/classements: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/classements: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/classements: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/classements: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/classements: HTML 28185 bytes (local payload budget)"
+    },
+    {
+      "category": "sitemap",
+      "status": "PASS",
+      "detail": "/a-propos: sitemap URL does not redirect"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/a-propos HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/a-propos: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/a-propos: title and description"
+    },
+    {
+      "category": "canonical",
+      "status": "PASS",
+      "detail": "/a-propos: self canonical"
+    },
+    {
+      "category": "indexation",
+      "status": "PASS",
+      "detail": "/a-propos: no accidental noindex HTTP header"
+    },
+    {
+      "category": "Open Graph",
+      "status": "PASS",
+      "detail": "/a-propos: social metadata"
+    },
+    {
+      "category": "sitemap",
+      "status": "PASS",
+      "detail": "/a-propos: indexable route included in sitemap"
+    },
+    {
+      "category": "indexation",
+      "status": "PASS",
+      "detail": "/a-propos: sitemap target is indexable"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/a-propos: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/a-propos: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/a-propos: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/a-propos: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/a-propos: HTML 27086 bytes (local payload budget)"
+    },
+    {
+      "category": "sitemap",
+      "status": "PASS",
+      "detail": "/methodologie: sitemap URL does not redirect"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/methodologie HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/methodologie: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/methodologie: title and description"
+    },
+    {
+      "category": "canonical",
+      "status": "PASS",
+      "detail": "/methodologie: self canonical"
+    },
+    {
+      "category": "indexation",
+      "status": "PASS",
+      "detail": "/methodologie: no accidental noindex HTTP header"
+    },
+    {
+      "category": "Open Graph",
+      "status": "PASS",
+      "detail": "/methodologie: social metadata"
+    },
+    {
+      "category": "sitemap",
+      "status": "PASS",
+      "detail": "/methodologie: indexable route included in sitemap"
+    },
+    {
+      "category": "indexation",
+      "status": "PASS",
+      "detail": "/methodologie: sitemap target is indexable"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/methodologie: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/methodologie: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/methodologie: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/methodologie: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/methodologie: HTML 46017 bytes (local payload budget)"
+    },
+    {
+      "category": "sitemap",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites: sitemap URL does not redirect"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites: title and description"
+    },
+    {
+      "category": "canonical",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites: self canonical"
+    },
+    {
+      "category": "indexation",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites: no accidental noindex HTTP header"
+    },
+    {
+      "category": "Open Graph",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites: social metadata"
+    },
+    {
+      "category": "sitemap",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites: indexable route included in sitemap"
+    },
+    {
+      "category": "indexation",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites: sitemap target is indexable"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/comprendre-probabilites: HTML 42619 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/contact HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/contact: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/contact: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/contact: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/contact: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/contact: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/contact: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/contact: HTML 26393 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/confidentialite HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/confidentialite: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/confidentialite: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/confidentialite: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/confidentialite: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/confidentialite: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/confidentialite: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/confidentialite: HTML 30642 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/cookies HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/cookies: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/cookies: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/cookies: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/cookies: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/cookies: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/cookies: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/cookies: HTML 28475 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/mentions-legales HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/mentions-legales: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/mentions-legales: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/mentions-legales: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/mentions-legales: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/mentions-legales: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/mentions-legales: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/mentions-legales: HTML 31511 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/recherche HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/recherche: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/recherche: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/recherche: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/recherche: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/recherche: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/recherche: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/recherche: HTML 28063 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/favoris HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/favoris: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/favoris: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/favoris: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/favoris: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/favoris: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/favoris: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/favoris: HTML 28574 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/parametres HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/parametres: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/parametres: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/parametres: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/parametres: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/parametres: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/parametres: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/parametres: HTML 26981 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/comparateur/equipes HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/comparateur/equipes: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/comparateur/equipes: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/comparateur/equipes: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/comparateur/equipes: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/comparateur/equipes: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/comparateur/equipes: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/comparateur/equipes: HTML 28549 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/comparateur/joueurs HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/comparateur/joueurs: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/comparateur/joueurs: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/comparateur/joueurs: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/comparateur/joueurs: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/comparateur/joueurs: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/comparateur/joueurs: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/comparateur/joueurs: HTML 28496 bytes (local payload budget)"
+    },
+    {
+      "category": "routes",
+      "status": "PASS",
+      "detail": "/admin HTTP 200"
+    },
+    {
+      "category": "SSR",
+      "status": "PASS",
+      "detail": "/admin: one H1 and main content without JavaScript"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "/admin: title and description"
+    },
+    {
+      "category": "mobile",
+      "status": "PASS",
+      "detail": "/admin: lang and viewport"
+    },
+    {
+      "category": "images",
+      "status": "PASS",
+      "detail": "/admin: alt and dimensions"
+    },
+    {
+      "category": "structured data",
+      "status": "PASS",
+      "detail": "/admin: JSON-LD syntax and type"
+    },
+    {
+      "category": "headings",
+      "status": "PASS",
+      "detail": "/admin: heading hierarchy"
+    },
+    {
+      "category": "performance",
+      "status": "PASS",
+      "detail": "/admin: HTML 27255 bytes (local payload budget)"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "Unique title: no duplicates"
+    },
+    {
+      "category": "metadata",
+      "status": "PASS",
+      "detail": "Unique description: no duplicates"
+    },
+    {
+      "category": "internal links",
+      "status": "PASS",
+      "detail": "All discovered internal links resolve directly"
+    },
+    {
+      "category": "internal links",
+      "status": "PASS",
+      "detail": "Every sitemap page has an incoming crawlable link"
+    },
+    {
+      "category": "404",
+      "status": "PASS",
+      "detail": "/seo-does-not-exist: HTTP 404"
+    },
+    {
+      "category": "404",
+      "status": "PASS",
+      "detail": "/match/seo-does-not-exist: HTTP 404"
+    },
+    {
+      "category": "404",
+      "status": "PASS",
+      "detail": "/equipe/seo-does-not-exist: HTTP 404"
+    },
+    {
+      "category": "404",
+      "status": "PASS",
+      "detail": "/joueur/seo-does-not-exist: HTTP 404"
+    },
+    {
+      "category": "404",
+      "status": "PASS",
+      "detail": "/competition/seo-does-not-exist: HTTP 404"
+    },
+    {
+      "category": "404",
+      "status": "PASS",
+      "detail": "/comparateur/unknown: HTTP 404"
+    },
+    {
+      "category": "404",
+      "status": "PASS",
+      "detail": "/equipes?page=999999: HTTP 404"
+    },
+    {
+      "category": "redirects",
+      "status": "PASS",
+      "detail": "Trailing slash has a direct permanent redirect"
+    },
+    {
+      "category": "duplication",
+      "status": "PASS",
+      "detail": "/?statut=finished: filter/query canonical"
+    },
+    {
+      "category": "duplication",
+      "status": "PASS",
+      "detail": "/matchs?date=2024-01-01: filter/query canonical"
+    },
+    {
+      "category": "duplication",
+      "status": "PASS",
+      "detail": "/equipes?page=1: filter/query canonical"
+    },
+    {
+      "category": "Open Graph",
+      "status": "PASS",
+      "detail": "Social image responds"
+    },
+    {
+      "category": "Open Graph",
+      "status": "PASS",
+      "detail": "Social image responds"
+    },
+    {
+      "category": "browser",
+      "status": "PASS",
+      "detail": "/ @390: no browser error or horizontal overflow"
+    },
+    {
+      "category": "accessibility",
+      "status": "PASS",
+      "detail": "/ @390: axe WCAG A/AA"
+    },
+    {
+      "category": "browser",
+      "status": "PASS",
+      "detail": "/equipes @390: no browser error or horizontal overflow"
+    },
+    {
+      "category": "accessibility",
+      "status": "PASS",
+      "detail": "/equipes @390: axe WCAG A/AA"
+    },
+    {
+      "category": "browser",
+      "status": "PASS",
+      "detail": "/classements @390: no browser error or horizontal overflow"
+    },
+    {
+      "category": "accessibility",
+      "status": "PASS",
+      "detail": "/classements @390: axe WCAG A/AA"
+    },
+    {
+      "category": "browser",
+      "status": "PASS",
+      "detail": "/parametres @390: no browser error or horizontal overflow"
+    },
+    {
+      "category": "accessibility",
+      "status": "PASS",
+      "detail": "/parametres @390: axe WCAG A/AA"
+    },
+    {
+      "category": "browser",
+      "status": "PASS",
+      "detail": "/ @1440: no browser error or horizontal overflow"
+    },
+    {
+      "category": "accessibility",
+      "status": "PASS",
+      "detail": "/ @1440: axe WCAG A/AA"
+    },
+    {
+      "category": "browser",
+      "status": "PASS",
+      "detail": "/equipes @1440: no browser error or horizontal overflow"
+    },
+    {
+      "category": "accessibility",
+      "status": "PASS",
+      "detail": "/equipes @1440: axe WCAG A/AA"
+    },
+    {
+      "category": "browser",
+      "status": "PASS",
+      "detail": "/classements @1440: no browser error or horizontal overflow"
+    },
+    {
+      "category": "accessibility",
+      "status": "PASS",
+      "detail": "/classements @1440: axe WCAG A/AA"
+    },
+    {
+      "category": "browser",
+      "status": "PASS",
+      "detail": "/parametres @1440: no browser error or horizontal overflow"
+    },
+    {
+      "category": "accessibility",
+      "status": "PASS",
+      "detail": "/parametres @1440: axe WCAG A/AA"
+    }
+  ],
+  "browser": [
+    {
+      "width": 390,
+      "path": "/",
+      "errors": [],
+      "lcp": 188,
+      "cls": 0,
+      "overflow": false,
+      "resources": 26,
+      "jsBytes": 258245,
+      "violations": []
+    },
+    {
+      "width": 390,
+      "path": "/equipes",
+      "errors": [],
+      "lcp": 68,
+      "cls": 0,
+      "overflow": false,
+      "resources": 36,
+      "jsBytes": 162800,
+      "violations": []
+    },
+    {
+      "width": 390,
+      "path": "/classements",
+      "errors": [],
+      "lcp": 52,
+      "cls": 0,
+      "overflow": false,
+      "resources": 36,
+      "jsBytes": 162214,
+      "violations": []
+    },
+    {
+      "width": 390,
+      "path": "/parametres",
+      "errors": [],
+      "lcp": 52,
+      "cls": 0,
+      "overflow": false,
+      "resources": 24,
+      "jsBytes": 161892,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "path": "/",
+      "errors": [],
+      "lcp": 232,
+      "cls": 0,
+      "overflow": false,
+      "resources": 36,
+      "jsBytes": 258245,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "path": "/equipes",
+      "errors": [],
+      "lcp": 80,
+      "cls": 0,
+      "overflow": false,
+      "resources": 47,
+      "jsBytes": 162800,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "path": "/classements",
+      "errors": [],
+      "lcp": 100,
+      "cls": 0,
+      "overflow": false,
+      "resources": 47,
+      "jsBytes": 162214,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "path": "/parametres",
+      "errors": [],
+      "lcp": 80,
+      "cls": 0,
+      "overflow": false,
+      "resources": 35,
+      "jsBytes": 161892,
+      "violations": []
+    }
+  ],
+  "links": {
+    "discovered": 20,
+    "additionalChecked": 1,
+    "broken": [],
+    "redirects": []
+  },
+  "external": "NON VÉRIFIÉ EXTERNEMENT: Search Console, PageSpeed Insights, CrUX, Rich Results Test, public TLS and redirects"
+}

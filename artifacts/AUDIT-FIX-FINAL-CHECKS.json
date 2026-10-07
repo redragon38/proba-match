@@ -1,0 +1,42 @@
+[
+  {
+    "name": "ssr",
+    "exitCode": 0
+  },
+  {
+    "name": "seo",
+    "exitCode": 0
+  },
+  {
+    "name": "security",
+    "exitCode": 0
+  },
+  {
+    "name": "reading-e2e",
+    "exitCode": 0
+  },
+  {
+    "name": "responsive",
+    "exitCode": 0
+  },
+  {
+    "name": "competition-fixture",
+    "exitCode": 0
+  },
+  {
+    "name": "team-fixture",
+    "exitCode": 0
+  },
+  {
+    "name": "statistics-fixture",
+    "exitCode": 0
+  },
+  {
+    "name": "comparison-fixture",
+    "exitCode": 0
+  },
+  {
+    "name": "full-e2e",
+    "exitCode": 1
+  }
+]
