@@ -7,6 +7,7 @@ import { regulationResult } from '@/prediction-engine/result-period';
 import { metrics } from '@/prediction-engine/evaluation';
 import { recordTiming } from '@/services/telemetry';
 import { assertJobActive, fencePublication } from '@/services/football/lease-context';
+import { latestPublicPredictionsSql } from './prediction-read-sql';
 /** Full input packages stay in the immutable DB payload, not in client page props. */
 function publicPrediction(p: Prediction): Prediction {
   const result = { ...p };
@@ -30,13 +31,12 @@ export async function getPredictions(data: Dataset): Promise<Record<string, Pred
   if (!process.env.DATABASE_URL) return {};
   try {
     const ids = new Set(data.matches.map((m) => m.id));
-    // For a full historical dataset, sending thousands of IDs to PostgreSQL costs
-    // more than reading the much smaller prediction table and filtering locally.
-    const rows = await db.prediction.findMany({
-      where: ids.size <= 1000 ? { matchId: { in: [...ids] } } : undefined,
-      orderBy: { createdAt: 'asc' },
-      select: { matchId: true, payload: true },
-    });
+    if (!ids.size) return {};
+    // Only the latest public forecast crosses the connection. Full input archives
+    // remain stored unchanged for reproducibility and objective evaluation.
+    const rows = await db.$queryRaw<{ matchId: string; payload: unknown }[]>(
+      latestPublicPredictionsSql([...ids]),
+    );
     return Object.fromEntries(
       rows
         .filter((r) => ids.has(r.matchId))

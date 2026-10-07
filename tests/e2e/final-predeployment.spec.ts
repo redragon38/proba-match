@@ -57,7 +57,7 @@ test('real match tabs, pagination, upcoming cards and public cleanup', async ({
   if (await page.locator('.catalog-item').count()) {
     await expect(page.locator('main a[href^="/joueur/"]').first()).toBeVisible();
     await expect(page.locator('.source-banner')).toContainText('Données football');
-    await expect(page.locator('.source-banner')).toContainText('Synchronisé le');
+    await expect(page.locator('.source-banner')).toContainText('Catalogue publié le');
   } else {
     await expect(
       page.getByText('Les données des joueurs ne sont pas disponibles pour le moment.', {

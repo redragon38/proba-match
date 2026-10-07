@@ -13,7 +13,12 @@ export function log(event: string, fields: LogFields = {}) {
 
 /** Never serialize an exception, its message, URL, metadata or query parameters. */
 export function databaseErrorFields(error: unknown) {
-  const value = error as { name?: unknown; code?: unknown; errorCode?: unknown; message?: unknown } | null;
+  const value = error as {
+    name?: unknown;
+    code?: unknown;
+    errorCode?: unknown;
+    message?: unknown;
+  } | null;
   const names = [
     'PrismaClientInitializationError',
     'PrismaClientKnownRequestError',

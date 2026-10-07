@@ -36,7 +36,6 @@ export default async function Home({
         </section>
       </main>
     );
-  const predictions = await getPredictions(data);
   const date =
     query.date &&
     /^\d{4}-\d{2}-\d{2}$/.test(query.date) &&
@@ -45,7 +44,12 @@ export default async function Home({
       : closestMatchDate(data, query.statut);
   const view = dashboardDataset(data, date);
   const upcomingMatches = upcomingSelection(data);
-  const visibleIds = new Set([...view.matches, ...upcomingMatches].map((match) => match.id));
+  const insightMatches = upcomingSelection(data, undefined, data.matches.length);
+  const visibleIds = new Set([...view.matches, ...insightMatches].map((match) => match.id));
+  const predictions = await getPredictions({
+    ...data,
+    matches: data.matches.filter((match) => visibleIds.has(match.id)),
+  });
   const dashboardPredictions = Object.fromEntries(
     Object.entries(predictions).filter(([id]) => visibleIds.has(id)),
   );

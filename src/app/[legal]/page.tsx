@@ -64,12 +64,12 @@ const content: Record<string, { title: string; sections: { title: string; text: 
 };
 export async function generateMetadata({ params }: { params: Promise<{ legal: string }> }) {
   const { legal } = await params;
-  if (!content[legal]) notFound();
+  if (!Object.hasOwn(content, legal)) notFound();
   return seoMetadata(`/${legal}`, content[legal].title, content[legal].sections[0].text, false);
 }
 export default async function Page({ params }: { params: Promise<{ legal: string }> }) {
   const { legal } = await params;
-  const page = content[legal];
+  const page = Object.hasOwn(content, legal) ? content[legal] : undefined;
   if (!page) notFound();
   const config = legalConfig();
   const fields = [

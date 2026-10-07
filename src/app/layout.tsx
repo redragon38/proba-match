@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Shell } from '@/components/shell';
-import { getDataset } from '@/services/football';
+import { getShellData } from '@/services/football/shell';
 import { DataUpdates } from '@/components/data-updates';
 import { siteOrigin, absoluteUrl, searchVerification } from '@/lib/seo';
 import { isPreviewDeployment } from '@/lib/deployment';
@@ -18,7 +18,7 @@ import './match-insights.css';
 import './reading.css';
 export const dynamic = 'force-dynamic';
 export async function generateMetadata(): Promise<Metadata> {
-  const data = await getDataset();
+  const data = await getShellData();
   return {
     metadataBase: new URL(siteOrigin()),
     verification: searchVerification(),
@@ -31,13 +31,13 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: { locale: 'fr_FR', type: 'website', siteName: 'Proba Match' },
     twitter: { card: 'summary_large_image' },
     robots: {
-      index: data.source !== 'demo' && data.matches.length > 0 && !isPreviewDeployment(),
+      index: data.indexable && !isPreviewDeployment(),
       follow: !isPreviewDeployment(),
     },
   };
 }
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const data = await getDataset();
+  const data = await getShellData();
   return (
     <html lang="fr" data-theme="dark" suppressHydrationWarning>
       <body>
@@ -67,14 +67,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         />
         <DataUpdates revision={data.revision} />
         <Shell
-          liveCount={data.degraded ? 0 : data.matches.filter((m) => m.status === 'live').length}
+          liveCount={data.liveCount}
           year={new Date().getFullYear()}
-          leagues={data.competitions.map(({ flag, name, slug, logo }) => ({
-            flag,
-            name,
-            slug,
-            logo,
-          }))}
+          leagues={data.leagues}
         >
           {children}
         </Shell>

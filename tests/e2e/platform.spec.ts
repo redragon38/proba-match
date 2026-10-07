@@ -67,7 +67,7 @@ test('comparateur et classements ne dépendent pas de données fictives', async 
   await page.goto('/classements');
   await page.getByRole('button', { name: '5 derniers matchs', exact: true }).click();
   await expect(
-    page.getByText('Calcul Proba Match sur les rencontres synchronisées', { exact: false }),
+    page.getByText('Classement calculé à partir des résultats disponibles', { exact: false }),
   ).toBeVisible();
 });
 test('protection admin et véritables erreurs HTTP 404', async ({ page, request }) => {

@@ -14,6 +14,9 @@ try {
   for (const m of data.matches) {
     m.source = 'api-football';
     m.kickoffKnown = true;
+    // Synthetic fixture scores are explicitly regulation-time scores. Production
+    // ingestion still requires actual provider confirmation of this period.
+    if (m.status === 'finished') m.resultPeriod = 'regulation';
     if (m.status === 'finished' && Date.parse(m.kickoff) > Date.now())
       m.kickoff = new Date(Date.now() - 14400000).toISOString();
   }
