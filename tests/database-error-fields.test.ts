@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { databaseErrorFields } from '@/lib/logger';
 
 describe('Database failure diagnostics', () => {
+  it('classifies initialization failures without exposing their messages', () => {
+    expect(databaseErrorFields({ name: 'PrismaClientInitializationError', message: 'Prisma Client could not locate the Query Engine at /private/secret' })).toEqual({ errorType: 'PrismaClientInitializationError', code: 'UNCLASSIFIED', reason: 'ENGINE_NOT_FOUND' });
+  });
   it('keeps only a known exception type and code', () => {
     expect(
       databaseErrorFields({
