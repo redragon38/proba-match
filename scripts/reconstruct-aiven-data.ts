@@ -189,8 +189,12 @@ async function main() {
         });
       }
 
-      for (const [competitionId, rows] of Object.entries(dataset.standings)) {
-        const competition = dataset.competitions.find((item) => item.id === competitionId);
+      for (const [competitionId, rows] of Object.entries(dataset.standings) as Array<
+        [string, Array<{ teamId: string; position: number; points: number }>]
+      >) {
+        const competition = dataset.competitions.find(
+          (item: { id: string; season: number }) => item.id === competitionId,
+        );
         if (!competition) continue;
         const sid = seasonId(competitionId, competition.season);
         for (const row of rows) {
