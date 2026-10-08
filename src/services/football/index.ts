@@ -3,6 +3,7 @@ import { cache as requestCache } from 'react';
 import { cache, datasetCache } from '@/services/cache';
 import { createDemoDataset } from './providers/mock';
 import { readLocalDataset, emptyDataset } from './local-store';
+import { createPublicOpenFootballFallback, hasPublicFallbackData } from './public-fallback';
 import { log } from '@/lib/logger';
 import type { Dataset } from '@/types/football';
 import { db } from '@/database/client';
@@ -58,7 +59,14 @@ export const getDataset = requestCache(async function getDataset(): Promise<Data
             .filter(Boolean)
             .join(' '),
         })
-      : emptyDataset(unavailableWarning);
+      : cache
+          .get('openfootball-public-fallback', createPublicOpenFootballFallback, 6 * 3600_000, 0)
+          .then((data) =>
+            hasPublicFallbackData(data)
+              ? withSourceFreshness(data)
+              : emptyDataset(unavailableWarning),
+          )
+          .catch(() => emptyDataset(unavailableWarning));
   }
 });
 let lastDataset: Dataset | undefined;
