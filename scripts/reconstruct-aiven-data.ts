@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { createHash } from 'node:crypto';
 import { slugify } from '../src/lib/format';
 import { createPublicOpenFootballFallback } from '../src/services/football/public-fallback';
@@ -64,6 +64,10 @@ function matchSeasonYear(kickoff: string, fallback: number) {
   const date = new Date(kickoff);
   if (Number.isNaN(date.getTime())) return fallback;
   return date.getUTCMonth() >= 6 ? date.getUTCFullYear() : date.getUTCFullYear() - 1;
+}
+
+function json(value: unknown): Prisma.InputJsonValue {
+  return JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
 }
 
 async function main() {
@@ -157,7 +161,7 @@ async function main() {
       }
 
       for (const match of dataset.matches) {
-        const year = matchSeasonYear(match.kickoff, match.season);
+        const year = matchSeasonYear(match.kickoff, match.season ?? new Date().getUTCFullYear());
         const sid = seasonId(match.competitionId, year);
         await tx.match.upsert({
           where: { id: match.id },
@@ -172,7 +176,7 @@ async function main() {
             homeScore: match.homeScore,
             awayScore: match.awayScore,
             source: match.source,
-            payload: match,
+            payload: json(match),
           },
           update: {
             slug: match.slug,
@@ -184,7 +188,7 @@ async function main() {
             homeScore: match.homeScore,
             awayScore: match.awayScore,
             source: match.source,
-            payload: match,
+            payload: json(match),
           },
         });
       }
@@ -213,12 +217,12 @@ async function main() {
               group: 'general',
               position: row.position,
               points: row.points,
-              payload: row,
+              payload: json(row),
             },
             update: {
               position: row.position,
               points: row.points,
-              payload: row,
+              payload: json(row),
             },
           });
         }
@@ -266,12 +270,12 @@ async function main() {
         where: { key: 'football:dataset' },
         create: {
           key: 'football:dataset',
-          payload: { ...dataset, warning, degraded: true },
+          payload: json({ ...dataset, warning, degraded: true }),
           expiresAt: new Date(now.getTime() + 6 * 60 * 60 * 1000),
           staleUntil: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000),
         },
         update: {
-          payload: { ...dataset, warning, degraded: true },
+          payload: json({ ...dataset, warning, degraded: true }),
           expiresAt: new Date(now.getTime() + 6 * 60 * 60 * 1000),
           staleUntil: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000),
         },
