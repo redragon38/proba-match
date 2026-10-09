@@ -3,7 +3,11 @@ import { notFound, permanentRedirect } from 'next/navigation';
 import { seoMetadata, matchIndexable } from '@/lib/seo';
 import { teamDataset } from '@/services/football/read-model';
 import { getDataset } from '@/services/football';
-import { getPredictions, getPredictionHistory } from '@/services/predictions';
+import {
+  computeDisplayPrediction,
+  getPredictionHistory,
+  getPredictions,
+} from '@/services/predictions';
 import { MatchDetail } from '@/features/matches/match-detail';
 import { informationQuality, predictionInsights } from '@/prediction-engine/insights';
 import { JsonLd } from '@/components/json-ld';
@@ -43,7 +47,10 @@ export default async function Page({
     );
   const structured = data.source !== 'demo' ? matchStructuredData(m, data) : null;
   const history = await getPredictionHistory(m.id, data.source);
-  const prediction = data.source === 'demo' ? (await getPredictions(data))[m.id] : history.at(-1);
+  const archivedPrediction = history.at(-1);
+  const computedPrediction =
+    data.source === 'demo' ? (await getPredictions(data))[m.id] : computeDisplayPrediction(m, data);
+  const prediction = archivedPrediction ?? computedPrediction;
   const allowed = [
     'apercu',
     'prediction',
@@ -61,6 +68,7 @@ export default async function Page({
         match={m}
         history={history}
         prediction={prediction}
+        predictionArchived={Boolean(archivedPrediction)}
         analysis={prediction ? predictionInsights(prediction) : undefined}
         quality={prediction ? informationQuality(prediction, data.degraded) : undefined}
         tab={q.onglet && allowed.includes(q.onglet) ? q.onglet : 'apercu'}
