@@ -1,11 +1,21 @@
 import { randomUUID } from 'node:crypto';
+import { PrismaClient } from '@prisma/client';
 import { db } from '@/database/client';
+import { runtimeDatabaseUrl, selectedDatabaseUrl } from '@/database/connection';
 import { cache } from '@/services/cache';
 import { log } from '@/lib/logger';
 import { footballLease, assertJobActive } from './lease-context';
 /** All writers share the same lease, so OpenFootball cannot overwrite an enrichment snapshot. */
 export async function footballJob<T>(provider: string, work: () => Promise<T>) {
   if (!process.env.DATABASE_URL) throw new Error('DATABASE_NOT_CONFIGURED');
+  // Long persistence transactions can occupy the single Vercel pool connection.
+  // Keep lease renewal independent so a successful import is not marked lost.
+  const heartbeatDb = process.env.VERCEL
+    ? new PrismaClient({
+        datasourceUrl: runtimeDatabaseUrl(selectedDatabaseUrl(), true),
+        log: [],
+      })
+    : db;
   const token = randomUUID(),
     expiresAt = new Date(Date.now() + 30 * 60_000);
   const acquired = await db.$queryRaw<
@@ -14,7 +24,7 @@ export async function footballJob<T>(provider: string, work: () => Promise<T>) {
   if (!acquired.length) throw new Error('SYNC_ALREADY_RUNNING');
   const lease = { token, lost: false };
   const heartbeat = setInterval(() => {
-    void db.syncLock
+    void heartbeatDb.syncLock
       .updateMany({
         where: { key: 'football', token },
         data: { expiresAt: new Date(Date.now() + 30 * 60_000) },
@@ -74,5 +84,6 @@ export async function footballJob<T>(provider: string, work: () => Promise<T>) {
   } finally {
     clearInterval(heartbeat);
     await db.syncLock.deleteMany({ where: { key: 'football', token } });
+    if (heartbeatDb !== db) await heartbeatDb.$disconnect();
   }
 }
