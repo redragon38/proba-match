@@ -36,6 +36,8 @@ La cible Neon a été ajoutée temporairement à Preview pour cette comparaison,
 
 Action externe nécessaire : dans Aiven Console, se connecter via GitHub au projet correspondant au service `pg-29e0de3f-project-6d77`, réinitialiser ou recopier le mot de passe de service du rôle `avnadmin`, puis remplacer `AIVEN_DATABASE_URL` dans Vercel. Le diagnostic pourra alors vérifier tables, migrations et volumes avant toute bascule Production.
 
+Le mot de passe fourni a aussi été testé temporairement, sans écriture, comme mot de passe du rôle PostgreSQL `avnadmin` : Aiven retourne encore `28P01`. Le parcours Aiven redirige vers GitHub OAuth ; la tentative de connexion GitHub avec ces mêmes identifiants retourne explicitement « Incorrect username or password ». La variable sensible temporaire `AIVEN_CANDIDATE_PASSWORD` a ensuite été supprimée de Vercel Preview. Il n'est pas possible de réinitialiser le mot de passe PostgreSQL sans une session Aiven authentifiée.
+
 Réautoriser l'application Vercel pour le projet proba-match et l'équipe redragon38s-projects, comme demandé explicitement par l'erreur Vercel. Ensuite lire le diagnostic via l'accès Vercel authentifié. Le jeton peut être remplacé et le diagnostic redéployé si la session qui le détient est terminée.
 
 Ne basculer la connexion Production qu'après vérification des tables, migrations, données et historique de prédictions. Si Aiven est vide, préserver Neon et préparer une restauration ou une reconstruction séparée explicitement documentée avant la bascule. Reprendre ensuite les imports joueurs corrigés et vérifier les données dans la vraie UI. Supprimer les variables et déploiements temporaires après le diagnostic ; la disponibilité des opérations de suppression n'est pas établie avec cette connexion.
