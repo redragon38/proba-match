@@ -23,7 +23,12 @@ const upsert = <T extends { id: string }>(old: T[], fresh: T[]) => [
 ];
 
 export async function syncExpandedFootball(
-  options: { history?: boolean; force?: boolean; leagues?: ExpandedLeague[] } = {},
+  options: {
+    history?: boolean;
+    force?: boolean;
+    leagues?: ExpandedLeague[];
+    predictions?: boolean;
+  } = {},
 ) {
   return footballJob('espn', async () => {
     const data = await readLocalDataset();
@@ -233,7 +238,7 @@ export async function syncExpandedFootball(
       data.matches.sort((a, b) => b.kickoff.localeCompare(a.kickoff));
       await persistDataset(data, new Set(), { profiles: false });
       await rebuildElo(data.matches);
-      await persistPredictions(data);
+      if (options.predictions !== false) await persistPredictions(data);
     }
     return {
       status: failures ? 'partial' : 'success',

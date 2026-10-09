@@ -1,5 +1,5 @@
 import { verifySecret } from '@/lib/auth';
-export function cronHandler(work: () => Promise<unknown>) {
+export function cronHandler(work: (request: Request) => Promise<unknown>) {
   return async (request: Request) => {
     if (
       !verifySecret(
@@ -9,7 +9,7 @@ export function cronHandler(work: () => Promise<unknown>) {
     )
       return Response.json({ error: 'Non autorisé' }, { status: 401 });
     try {
-      return Response.json(await work());
+      return Response.json(await work(request));
     } catch {
       return Response.json(
         { error: 'Synchronisation indisponible. Consultez le journal.' },
