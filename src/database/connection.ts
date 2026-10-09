@@ -1,4 +1,11 @@
 /** Prisma v6's pool is per process, not shared across Vercel instances. */
+export function selectedDatabaseUrl(
+  environment: Record<string, string | undefined> = process.env,
+) {
+  if (environment.USE_AIVEN_DATABASE === 'true') return environment.AIVEN_DATABASE_URL;
+  return environment.DATABASE_URL;
+}
+
 export function runtimeDatabaseUrl(value: string | undefined, vercel: boolean) {
   if (!value || !vercel) return value;
   try {

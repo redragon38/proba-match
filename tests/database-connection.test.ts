@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { runtimeDatabaseUrl } from '@/database/connection';
+import { runtimeDatabaseUrl, selectedDatabaseUrl } from '@/database/connection';
 describe('Prisma runtime connection limits', () => {
   it('limits each Vercel PostgreSQL pool without changing identity or SSL', () => {
     const input =
@@ -25,5 +25,29 @@ describe('Prisma runtime connection limits', () => {
     }
     expect(runtimeDatabaseUrl('prisma://fixture', true)).toBe('prisma://fixture');
     expect(runtimeDatabaseUrl('test', true)).toBe('test');
+  });
+});
+
+describe('selectedDatabaseUrl', () => {
+  it('uses DATABASE_URL by default', () => {
+    expect(selectedDatabaseUrl({ DATABASE_URL: 'postgresql://neon/db' })).toBe(
+      'postgresql://neon/db',
+    );
+  });
+
+  it('uses Aiven only behind the explicit switch', () => {
+    expect(
+      selectedDatabaseUrl({
+        DATABASE_URL: 'postgresql://neon/db',
+        AIVEN_DATABASE_URL: 'postgresql://aiven/db',
+        USE_AIVEN_DATABASE: 'true',
+      }),
+    ).toBe('postgresql://aiven/db');
+  });
+
+  it('does not silently fall back when the selected Aiven URL is absent', () => {
+    expect(
+      selectedDatabaseUrl({ DATABASE_URL: 'postgresql://neon/db', USE_AIVEN_DATABASE: 'true' }),
+    ).toBeUndefined();
   });
 });
