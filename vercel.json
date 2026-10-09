@@ -7,7 +7,7 @@
     },
     {
       "path": "/api/cron/match-window",
-      "schedule": "20 6-23/2 * * *"
+      "schedule": "45 6 * * *"
     },
     {
       "path": "/api/cron/live",
