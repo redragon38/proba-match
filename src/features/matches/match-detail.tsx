@@ -33,6 +33,7 @@ export function MatchDetail({
   data,
   match: initialMatch,
   prediction,
+  predictionArchived = false,
   tab,
   history = [],
   analysis,
@@ -41,6 +42,7 @@ export function MatchDetail({
   data: Dataset;
   match: Match;
   prediction?: Prediction;
+  predictionArchived?: boolean;
   tab: string;
   history?: Prediction[];
   analysis?: ReturnType<typeof predictionInsights>;
@@ -74,6 +76,7 @@ export function MatchDetail({
   const reportedInjuries = data.injuries.filter((injury) =>
     [home.id, away.id].includes(injury.teamId),
   );
+  const hasObservedMatchStats = match.statistics.some((s) => s.home != null || s.away != null);
   return (
     <div className="page">
       <SourceBanner data={data} />
@@ -161,7 +164,9 @@ export function MatchDetail({
         {prediction
           ? data.source === 'demo'
             ? 'Les probabilités illustrent un scénario fictif de démonstration.'
-            : 'Les probabilités ci-dessous sont une estimation archivée avant le coup d’envoi.'
+            : predictionArchived
+              ? 'Les probabilités ci-dessous sont une estimation archivée avant le coup d’envoi.'
+              : 'Les probabilités ci-dessous sont calculées maintenant avec les données disponibles ; ce n’est pas un instantané historique archivé.'
           : 'Aucune probabilité pré-match archivée n’est affichée sans données suffisantes.'}{' '}
         <Link href="/comprendre-probabilites">Comprendre les statistiques et leurs limites</Link>.
       </p>
@@ -304,20 +309,24 @@ export function MatchDetail({
         <>
           <SectionTitle title="Le match en chiffres" />
           <MatchStatistics match={match} home={home} away={away} />
-          {!match.statistics.some((s) => s.home != null || s.away != null) &&
-            match.status !== 'scheduled' && (
-              <>
-                <SectionTitle title="Historique avant cette rencontre" />
-                <div className="metrics three">
-                  <Metric label={`Matchs · ${home.short}`} value={homeSummary.played} />
-                  <Metric label={`Buts marqués · ${home.short}`} value={homeSummary.scored} />
-                  <Metric label={`Buts encaissés · ${home.short}`} value={homeSummary.conceded} />
-                  <Metric label={`Matchs · ${away.short}`} value={awaySummary.played} />
-                  <Metric label={`Buts marqués · ${away.short}`} value={awaySummary.scored} />
-                  <Metric label={`Buts encaissés · ${away.short}`} value={awaySummary.conceded} />
-                </div>
-              </>
-            )}
+          {!hasObservedMatchStats && (
+            <>
+              <SectionTitle title="Historique disponible avant cette rencontre" />
+              <p className="data-note">
+                Ces chiffres viennent uniquement des matchs déjà joués avant ce coup d’envoi. Ils
+                remplacent les statistiques observées du match lorsque la source ne les fournit pas
+                encore.
+              </p>
+              <div className="metrics three">
+                <Metric label={`Matchs · ${home.short}`} value={homeSummary.played} />
+                <Metric label={`Buts marqués · ${home.short}`} value={homeSummary.scored} />
+                <Metric label={`Buts encaissés · ${home.short}`} value={homeSummary.conceded} />
+                <Metric label={`Matchs · ${away.short}`} value={awaySummary.played} />
+                <Metric label={`Buts marqués · ${away.short}`} value={awaySummary.scored} />
+                <Metric label={`Buts encaissés · ${away.short}`} value={awaySummary.conceded} />
+              </div>
+            </>
+          )}
         </>
       )}
       {tab === 'compositions' && (
