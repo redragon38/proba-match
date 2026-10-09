@@ -79,7 +79,7 @@ async function mapTeam(data: Dataset, externalId: string, name: string, competit
   log('TEAM_MAPPING_REQUIRED', { code: candidates.length ? 'AMBIGUOUS_TEAM' : 'UNKNOWN_TEAM' });
   return null;
 }
-export async function syncSecondary(options: { date?: string; enrich?: boolean } = {}) {
+export async function syncSecondary(options: { date?: string; enrich?: boolean; forceWindow?: boolean } = {}) {
   if (!process.env.FOOTBALL_API_KEY) return { status: 'disabled', matches: 0, requests: 0 };
   return footballJob('api-football', async () => {
     const data = await readLocalDataset();
@@ -93,9 +93,16 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean }
     })!;
     const now = Date.now();
     const relevant = data.matches
-      .filter(
-        (m) => secondaryDue(m, now) && (!options.date || m.kickoff.slice(0, 10) === options.date),
-      )
+      .filter((m) => {
+        const sameDate = !options.date || m.kickoff.slice(0, 10) === options.date;
+        if (!sameDate) return false;
+        if (!options.forceWindow) return secondaryDue(m, now);
+        if (m.status === 'live') return true;
+        if (m.status === 'finished') return now - Date.parse(m.kickoff) <= 8 * 86400000;
+        if (m.status === 'scheduled' && m.kickoffKnown !== false)
+          return Date.parse(m.kickoff) - now <= 36 * 3600000;
+        return false;
+      })
       .sort(
         (a, b) =>
           Number(b.status === 'live') - Number(a.status === 'live') ||
@@ -127,8 +134,9 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean }
           matched.set(alias.externalId, m.id);
           continue;
         }
-        // Discover only missing external IDs near kickoff, never complete historical schedules.
-        if (Date.parse(m.kickoff) < now - 86400000) continue;
+        // Discover only missing external IDs near kickoff; the explicit match-window cron may look back one week.
+        if (!options.forceWindow && Date.parse(m.kickoff) < now - 86400000) continue;
+        if (options.forceWindow && Date.parse(m.kickoff) < now - 8 * 86400000) continue;
         const league = await db.footballIdentity.findFirst({
           where: { provider: 'api-football', kind: 'competition', entityId: m.competitionId },
         });
