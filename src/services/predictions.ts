@@ -2,33 +2,49 @@ import 'server-only';
 import type { Prisma } from '@prisma/client';
 import { db } from '@/database/client';
 import { predictionEngine, MODEL_VERSION, MODEL_PARAMETERS } from '@/prediction-engine';
-import type { Dataset, EvaluatedPrediction, Prediction } from '@/types/football';
+import type { Dataset, EvaluatedPrediction, Match, Prediction } from '@/types/football';
 import { regulationResult } from '@/prediction-engine/result-period';
 import { metrics } from '@/prediction-engine/evaluation';
 import { recordTiming } from '@/services/telemetry';
 import { assertJobActive, fencePublication } from '@/services/football/lease-context';
 import { latestPublicPredictionsSql } from './prediction-read-sql';
 /** Full input packages stay in the immutable DB payload, not in client page props. */
-function publicPrediction(p: Prediction): Prediction {
+export function publicPrediction(p: Prediction): Prediction {
   const result = { ...p };
   delete result.inputArchive;
   return result;
 }
+
+export function computeDisplayPrediction(
+  match: Match,
+  data: Dataset,
+  now = new Date(),
+): Prediction | undefined {
+  if (match.status !== 'scheduled') return undefined;
+  if (match.kickoffKnown === false) return undefined;
+  const kickoff = new Date(match.kickoff).getTime();
+  if (!Number.isFinite(kickoff) || kickoff <= now.getTime()) return undefined;
+  const cutoff = new Date(Math.min(now.getTime(), kickoff - 1000)).toISOString();
+  const prediction = predictionEngine.predict(match, data.matches, cutoff);
+  return prediction ? publicPrediction(prediction) : undefined;
+}
+
+function computedDisplayPredictions(data: Dataset, now = new Date()) {
+  return Object.fromEntries(
+    data.matches.flatMap((match) => {
+      const prediction = computeDisplayPrediction(match, data, now);
+      return prediction ? [[match.id, prediction]] : [];
+    }),
+  );
+}
+
 export async function getPredictions(data: Dataset): Promise<Record<string, Prediction>> {
   if (data.source === 'demo')
-    return Object.fromEntries(
-      data.matches
-        .filter((m) => !m.id.startsWith('history'))
-        .flatMap((m) => {
-          const p = predictionEngine.predict(
-            m,
-            data.matches,
-            new Date(Math.min(Date.now(), new Date(m.kickoff).getTime() - 1000)).toISOString(),
-          );
-          return p ? [[m.id, publicPrediction(p)]] : [];
-        }),
-    );
-  if (!process.env.DATABASE_URL) return {};
+    return computedDisplayPredictions({
+      ...data,
+      matches: data.matches.filter((m) => !m.id.startsWith('history')),
+    });
+  if (!process.env.DATABASE_URL) return computedDisplayPredictions(data);
   try {
     const ids = new Set(data.matches.map((m) => m.id));
     if (!ids.size) return {};
@@ -37,13 +53,17 @@ export async function getPredictions(data: Dataset): Promise<Record<string, Pred
     const rows = await db.$queryRaw<{ matchId: string; payload: unknown }[]>(
       latestPublicPredictionsSql([...ids]),
     );
-    return Object.fromEntries(
+    const predictions = Object.fromEntries(
       rows
         .filter((r) => ids.has(r.matchId))
         .map((r) => [r.matchId, publicPrediction(r.payload as unknown as Prediction)]),
     );
+    for (const [matchId, prediction] of Object.entries(computedDisplayPredictions(data))) {
+      if (!predictions[matchId]) predictions[matchId] = prediction;
+    }
+    return predictions;
   } catch {
-    return {};
+    return computedDisplayPredictions(data);
   }
 }
 export async function getPredictionHistory(
