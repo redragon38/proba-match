@@ -57,6 +57,19 @@ const groups: { title: string; labels: string[] }[] = [
     ],
   },
   { title: 'Discipline', labels: ['Fautes', 'Cartons jaunes', 'Cartons rouges'] },
+  {
+    title: 'Statistiques avancées',
+    labels: [
+      'xGOT',
+      'xA',
+      'PPDA',
+      'Field tilt',
+      'xT',
+      'Passes progressives',
+      'Touches dans la surface',
+      'Actions créant un tir',
+    ],
+  },
   { title: 'Autres données fournies', labels: [] },
 ];
 const explanations: Record<string, string> = {
@@ -108,6 +121,13 @@ const explanations: Record<string, string> = {
 
   xG: 'Somme des probabilités de but des occasions, estimées par le fournisseur. Ce chiffre décrit les tirs observés ; il est distinct des buts attendus avant-match de Proba Match.',
   xGOT: 'Qualité estimée des tirs cadrés selon leur placement.',
+  xA: 'Qualité estimée des occasions créées par les passes selon le modèle du fournisseur.',
+  xT: 'Menace offensive attendue associée à la progression du ballon, selon le modèle du fournisseur.',
+  'Passes progressives':
+    'Passes rapprochant le ballon du but adverse selon les seuils du fournisseur.',
+  'Touches dans la surface': 'Touches de balle recensées dans la surface adverse.',
+  'Actions créant un tir':
+    'Actions offensives conduisant à un tir selon la définition du fournisseur.',
   'Tirs cadrés': 'Tirs qui auraient fini dans le but sans intervention du gardien.',
   'Précision des passes': 'Pourcentage de passes réussies.',
   PPDA: 'Passes adverses par action défensive dans une zone définie par le fournisseur. Une valeur plus faible peut indiquer un pressing plus intense ; les définitions varient.',

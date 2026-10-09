@@ -14,6 +14,28 @@ const fixture = {
   goals: { home: null, away: null },
 };
 describe('API-Football', () => {
+  it('maps supplied advanced statistics and preserves missing opponents without inventing zero', () => {
+    const match = mapFixture({
+      ...fixture,
+      statistics: [
+        {
+          team: { id: 1 },
+          statistics: [
+            { type: 'expected_goals_on_target', value: 0 },
+            { type: 'expected_assists', value: '1.25' },
+            { type: 'PPDA', value: 10.5 },
+            { type: 'Total passes', value: ' ' },
+          ],
+        },
+      ],
+    }).matches[0];
+    expect(match.statistics).toEqual([
+      { label: 'xGOT', home: 0, away: null, unit: undefined },
+      { label: 'xA', home: 1.25, away: null, unit: undefined },
+      { label: 'PPDA', home: 10.5, away: null, unit: undefined },
+    ]);
+    expect(match.statistics.some((row) => row.label === 'xG')).toBe(false);
+  });
   it('keeps the extra-time final separate from the regulation result', () => {
     const m = mapFixture({
       ...fixture,

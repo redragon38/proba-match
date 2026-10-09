@@ -107,9 +107,22 @@ const statLabels: Record<string, string> = {
   'Duels won': 'Duels gagnés',
   expected_goals: 'xG',
   'Expected Goals': 'xG',
+  expected_goals_on_target: 'xGOT',
+  'Expected Goals on Target': 'xGOT',
+  expected_assists: 'xA',
+  'Expected Assists': 'xA',
+  PPDA: 'PPDA',
+  'Field Tilt': 'Field tilt',
+  'Expected Threat': 'xT',
+  'Progressive Passes': 'Passes progressives',
+  'Touches in Opposition Box': 'Touches dans la surface',
+  'Shot Creating Actions': 'Actions créant un tir',
+  'Long Passes': 'Passes longues',
+  'Final Third Passes': 'Passes dans le dernier tiers',
+  Crosses: 'Centres',
 };
 const numeric = (value: unknown): number | null => {
-  if (value == null || value === '') return null;
+  if (value == null || (typeof value === 'string' && !value.trim())) return null;
   const n = typeof value === 'string' ? Number(value.replace('%', '')) : Number(value);
   return Number.isFinite(n) ? n : null;
 };

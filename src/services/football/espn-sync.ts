@@ -264,6 +264,13 @@ export async function syncExpandedPlayers(limit = 30) {
     }[] = [];
     const eligible: { team: Team; externalId: string; league: ExpandedLeague; season: number }[] =
       [];
+    const rosterSources = await db.dataSource.findMany({
+      where: { id: { startsWith: 'espn:roster:' } },
+      select: { id: true, lastSyncedAt: true },
+    });
+    const rosterDates = new Map(
+      rosterSources.map((row) => [row.id, row.lastSyncedAt?.getTime() ?? 0]),
+    );
     for (const league of Object.keys(EXPANDED_LEAGUES) as ExpandedLeague[]) {
       const competition = await db.footballIdentity.findUnique({
         where: {
@@ -284,16 +291,21 @@ export async function syncExpandedPlayers(limit = 30) {
       for (const identity of identities) {
         const t = data.teams.find((t) => t.id === identity.entityId);
         if (!t) continue;
-        const prior = await db.dataSource.findUnique({
-          where: { id: `espn:roster:${t.id}:${c.season}` },
-        });
-        if (!prior?.lastSyncedAt || Date.now() - prior.lastSyncedAt.getTime() > 86400_000)
+        const lastSynced = rosterDates.get(`espn:roster:${t.id}:${c.season}`) ?? 0;
+        if (!lastSynced || Date.now() - lastSynced > 86400_000)
           eligible.push({ team: t, externalId: identity.externalId, league, season: c.season });
       }
     }
     // Fair coverage of all five leagues before filling the remaining teams.
     const groups = new Map<ExpandedLeague, typeof eligible>();
     for (const row of eligible) groups.set(row.league, [...(groups.get(row.league) ?? []), row]);
+    // A daily cron must fill missing squads before refreshing yesterday's first batch.
+    for (const rows of groups.values())
+      rows.sort(
+        (a, b) =>
+          (rosterDates.get(`espn:roster:${a.team.id}:${a.season}`) ?? 0) -
+          (rosterDates.get(`espn:roster:${b.team.id}:${b.season}`) ?? 0),
+      );
     const selected: typeof eligible = [];
     while (selected.length < limit && [...groups.values()].some((g) => g.length))
       for (const g of groups.values()) {
@@ -317,9 +329,19 @@ export async function syncExpandedPlayers(limit = 30) {
             position: row.position,
             number: row.number,
             nationality: row.nationality,
+            photo: row.photo ?? old?.photo,
             birthDate: row.birthDate,
             height: row.height,
             stats: row.stats,
+            statsScope: {
+              competitionId: team.competitionId,
+              teamId: team.id,
+              season,
+              source: 'espn',
+              observedAt: new Date().toISOString(),
+              type: 'season',
+              verified: true,
+            },
             source: 'espn',
             updatedAt: new Date().toISOString(),
           });

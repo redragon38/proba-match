@@ -28,6 +28,9 @@ const counts = new Set([
   'Attaques dangereuses',
   'Grosses occasions',
   'Grosses occasions manquées',
+  'Passes progressives',
+  'Touches dans la surface',
+  'Actions créant un tir',
 ]);
 export function statisticValue(label: string, value: number | null | undefined, unit?: string) {
   if (

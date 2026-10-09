@@ -79,7 +79,9 @@ async function mapTeam(data: Dataset, externalId: string, name: string, competit
   log('TEAM_MAPPING_REQUIRED', { code: candidates.length ? 'AMBIGUOUS_TEAM' : 'UNKNOWN_TEAM' });
   return null;
 }
-export async function syncSecondary(options: { date?: string; enrich?: boolean; forceWindow?: boolean } = {}) {
+export async function syncSecondary(
+  options: { date?: string; enrich?: boolean; forceWindow?: boolean } = {},
+) {
   if (!process.env.FOOTBALL_API_KEY) return { status: 'disabled', matches: 0, requests: 0 };
   return footballJob('api-football', async () => {
     const data = await readLocalDataset();
@@ -109,6 +111,11 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean; 
           b.kickoff.localeCompare(a.kickoff),
       );
     const changed = new Set<string>();
+    const profileIds = new Set<string>();
+    const enrichmentCaches: {
+      key: string;
+      fields: { payload: Record<string, never>; expiresAt: Date; staleUntil: Date };
+    }[] = [];
     const resultCompetitions = new Set<string>();
     let predictionChanged = false;
     const injuryTeamIds = new Set<string>();
@@ -288,6 +295,13 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean; 
           };
           Object.assign(merged, mergeDetailRevisions(local, merged));
           addObservedPlayerProfiles(data, merged);
+          for (const player of [
+            ...merged.lineups
+              .flatMap((lineup) => [...lineup.starters, ...lineup.substitutes])
+              .map((row) => row.id),
+            ...(merged.performances ?? []).map((row) => row.playerId),
+          ])
+            profileIds.add(player);
           for (const issue of matchQualityIssues(merged, data.players)) log(issue);
           for (const external of batch.teams) {
             const internal = team(external.id);
@@ -346,17 +360,14 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean; 
               source: 'api-football' as const,
             };
             data.players = [...data.players.filter((p) => p.id !== id), value];
+            profileIds.add(id);
           }
           const fields = {
             payload: {},
             expiresAt: new Date(now + 6 * 3600000),
             staleUntil: new Date(now + 86400000),
           };
-          await db.cacheEntry.upsert({
-            where: { key },
-            create: { key, ...fields },
-            update: fields,
-          });
+          enrichmentCaches.push({ key, fields });
         }
         for (const c of data.competitions) {
           const alias = await db.footballIdentity.findFirst({
@@ -389,11 +400,7 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean; 
             expiresAt: new Date(now + 6 * 3600000),
             staleUntil: new Date(now + 86400000),
           };
-          await db.cacheEntry.upsert({
-            where: { key },
-            create: { key, ...fields },
-            update: fields,
-          });
+          enrichmentCaches.push({ key, fields });
         }
       }
     } catch {
@@ -413,7 +420,10 @@ export async function syncSecondary(options: { date?: string; enrich?: boolean; 
           'general',
         );
     }
-    await persistDataset(data, changed, { injuryTeamIds: [...injuryTeamIds] });
+    await persistDataset(data, changed, { profileIds, injuryTeamIds: [...injuryTeamIds] });
+    // Source freshness follows publication: a failed DB write must remain retryable.
+    for (const { key, fields } of enrichmentCaches)
+      await db.cacheEntry.upsert({ where: { key }, create: { key, ...fields }, update: fields });
     // A failed persistence must leave this fixture eligible for the next enrichment run.
     if (detailCache && changed.has(matched.get(detailCache.externalId)!)) {
       const { key, fields } = detailCache;

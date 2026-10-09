@@ -1,0 +1,21 @@
+{
+  "base": "http://localhost:3000",
+  "generatedAt": "2026-10-09T10:44:25.927Z",
+  "pages": 597,
+  "checks": 8955,
+  "browserViews": 18,
+  "links": {
+    "discovered": 2886,
+    "additionalChecked": 2290,
+    "broken": [],
+    "redirects": []
+  },
+  "failures": [],
+  "warnings": [
+    {
+      "category": "HTTPS",
+      "status": "WARNING",
+      "detail": "Public HTTPS origin required at launch"
+    }
+  ]
+}

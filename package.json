@@ -27,6 +27,7 @@
     "football:expanded-import": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts expanded-import",
     "football:sync": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts sync",
     "football:players": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts players",
+    "football:expanded-players": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts expanded-players",
     "football:rebuild-elo": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts elo",
     "football:validate": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts validate",
     "football:worker": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football-worker.ts",

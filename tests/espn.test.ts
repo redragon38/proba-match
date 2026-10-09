@@ -50,7 +50,7 @@ describe('Expanded leagues: real feed normalization', () => {
       2026,
     );
     expect(rows[0].kickoff).toBe('2026-03-15T23:30:00.000Z');
-    expect(rows[0].statistics).toEqual([{ label: 'Possession', home: 60, away: 40 }]);
+    expect(rows[0].statistics).toEqual([{ label: 'Possession', home: 60, away: 40, unit: '%' }]);
     expect(rows[1].externalId).not.toBe(rows[0].externalId);
     expect(rows[1].countsForStandings).toBe(false);
     const table = derivedStandings(
@@ -59,6 +59,14 @@ describe('Expanded leagues: real feed normalization', () => {
       'general',
     );
     expect(table.find((t) => t.teamId === 'h')?.played).toBe(1);
+  });
+  it('retains a missing opposing value and reads numeric provider values', () => {
+    const payload = event();
+    payload.competitions[0].competitors[0].statistics = [{ name: 'totalShots', value: 0 }] as never;
+    payload.competitions[0].competitors[1].statistics = [];
+    expect(parseEspnFixtures({ events: [payload] }, 'usa.1', 2026)[0].statistics).toEqual([
+      { label: 'Tirs', home: 0, away: null },
+    ]);
   });
   it('does not include another season or the all-star exhibition', () => {
     expect(parseEspnFixtures({ events: [event('1', 'all-star-game')] }, 'usa.1', 2026)).toEqual([]);

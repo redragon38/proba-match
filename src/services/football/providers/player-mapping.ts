@@ -56,6 +56,32 @@ export function mapMatchPlayers(input: unknown): MatchPlayerPerformance[] {
     t.players.flatMap((p) => {
       const s = p.statistics[0];
       if (!s) return [];
+      // API-Football's numeric passes.accuracy is a successful-pass COUNT.
+      // Only an explicitly suffixed percentage can be read directly as a rate.
+      const accuracy = s.passes?.accuracy;
+      const percentage = typeof accuracy === 'string' && accuracy.trim().endsWith('%');
+      const rawAccuracy =
+        accuracy == null || String(accuracy).trim() === ''
+          ? null
+          : Number(String(accuracy).replace('%', ''));
+      const passesCompleted =
+        !percentage &&
+        rawAccuracy != null &&
+        Number.isSafeInteger(rawAccuracy) &&
+        rawAccuracy >= 0 &&
+        (s.passes?.total == null || rawAccuracy <= s.passes.total)
+          ? rawAccuracy
+          : null;
+      const passAccuracy = percentage
+        ? rawAccuracy != null &&
+          Number.isFinite(rawAccuracy) &&
+          rawAccuracy >= 0 &&
+          rawAccuracy <= 100
+          ? rawAccuracy
+          : null
+        : passesCompleted != null && s.passes?.total != null && s.passes.total > 0
+          ? (passesCompleted / s.passes.total) * 100
+          : null;
       const stats: PlayerStats = {
         appearances: s.games.minutes == null ? null : s.games.minutes > 0 ? 1 : 0,
         starts: s.games.substitute == null ? null : s.games.substitute ? 0 : 1,
@@ -72,12 +98,8 @@ export function mapMatchPlayers(input: unknown): MatchPlayerPerformance[] {
         shotsOnTarget: s.shots?.on ?? null,
         keyPasses: s.passes?.key ?? null,
         passes: s.passes?.total ?? null,
-        passAccuracy:
-          s.passes?.accuracy == null
-            ? null
-            : Number.isFinite(Number(String(s.passes.accuracy).replace('%', '')))
-              ? Number(String(s.passes.accuracy).replace('%', ''))
-              : null,
+        passesCompleted,
+        passAccuracy,
         tackles: s.tackles?.total ?? null,
         interceptions: s.tackles?.interceptions ?? null,
         blocks: s.tackles?.blocks ?? null,

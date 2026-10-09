@@ -57,3 +57,36 @@ test('joueurs et statistiques restent lisibles aux six largeurs', async ({ page,
     }
   }
 });
+
+test('le profil ouvert depuis un match terminé sépare ses statistiques de match de la saison', async ({
+  page,
+  request,
+}) => {
+  const { matches } = (await (
+    await request.get('/api/matches?status=finished&limit=12')
+  ).json()) as { matches: Match[] };
+  let selected: Match | undefined;
+  for (const match of matches) {
+    const details = (await (await request.get(`/api/matches/${match.id}`)).json()) as Match;
+    if (details.performances?.some((row) => row.stats.minutes != null)) {
+      selected = details;
+      break;
+    }
+  }
+  expect(
+    selected,
+    'Le corpus de test doit contenir une performance de match terminé',
+  ).toBeDefined();
+  await page.goto(`/match/${selected!.slug}?onglet=joueurs`);
+  await expect(page.getByRole('heading', { name: /Titulaires/ }).first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Remplaçants/ }).first()).toBeVisible();
+  await page.locator('.match-player-row a[href^="/joueur/"]').first().click();
+  const matchStats = page.getByRole('region', { name: 'Statistiques du joueur dans ce match' });
+  await expect(matchStats).toBeVisible();
+  await expect(matchStats).toContainText('Minutes');
+  await expect(matchStats).toContainText('distinctes du relevé saisonnier');
+  await expect(matchStats).not.toContainText(/NaN|undefined/);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+    await page.evaluate(() => innerWidth),
+  );
+});

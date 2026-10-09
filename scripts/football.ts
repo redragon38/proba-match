@@ -38,7 +38,10 @@ try {
         force: process.argv.includes('--force'),
       }),
     );
-  } else throw new Error('Use import, sync, players, elo or validate');
+  } else
+    throw new Error(
+      'Use import, sync, players, expanded-players, expanded-import, elo or validate',
+    );
 } catch (error) {
   console.error(
     error instanceof Error && /^[A-Z_0-9 ]+$/.test(error.message)

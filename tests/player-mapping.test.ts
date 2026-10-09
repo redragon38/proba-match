@@ -32,6 +32,34 @@ describe('Statistiques individuelles par match', () => {
     expect(rows[0].stats.fouls).toBe(0);
     expect(playerPerformance(rows[0].stats, rows[0].position)).toBeGreaterThan(0);
   });
+  it.each([
+    [30, 40, 30, 75],
+    ['30', 40, 30, 75],
+    [0, 40, 0, 0],
+    [0, 0, 0, null],
+    [41, 40, null, null],
+    ['', 40, null, null],
+    [null, 40, null, null],
+    ['75%', 40, null, 75],
+    ['101%', 40, null, null],
+  ])(
+    'distinguishes completed passes from percentages (%s / %s)',
+    (accuracy, total, completed, rate) => {
+      const rows = mapMatchPlayers([
+        {
+          team: { id: 1 },
+          players: [
+            {
+              player: { id: 9, name: 'Player' },
+              statistics: [{ games: { minutes: 90 }, passes: { total, accuracy } }],
+            },
+          ],
+        },
+      ]);
+      expect(rows[0].stats.passesCompleted).toBe(completed);
+      expect(rows[0].stats.passAccuracy).toBe(rate);
+    },
+  );
   it('n’assigne pas arbitrairement un poste en cas d’absence', () => {
     expect(mapPosition(null)).toBe('Non disponible');
     expect(mapMatchPlayers(undefined)).toEqual([]);

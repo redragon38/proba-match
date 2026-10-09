@@ -1,0 +1,237 @@
+{
+  "at": "2026-10-09T10:39:39.089367+00:00",
+  "round": 1,
+  "checks": [
+    {
+      "host": "proba-match.com",
+      "path": "/",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.com",
+      "path": "/matchs",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/matchs",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.com",
+      "path": "/live",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/live",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.com",
+      "path": "/equipes",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/equipes",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.com",
+      "path": "/joueurs",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/joueurs",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.com",
+      "path": "/competitions",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/competitions",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.com",
+      "path": "/classements",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/classements",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.com",
+      "path": "/recherche",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/recherche",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.com",
+      "path": "/api/updates",
+      "status": 503
+    },
+    {
+      "host": "www.proba-match.com",
+      "path": "/",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "www.proba-match.com",
+      "path": "/matchs",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/matchs",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "www.proba-match.com",
+      "path": "/live",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/live",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "www.proba-match.com",
+      "path": "/equipes",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/equipes",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "www.proba-match.com",
+      "path": "/joueurs",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/joueurs",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "www.proba-match.com",
+      "path": "/competitions",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/competitions",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "www.proba-match.com",
+      "path": "/classements",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/classements",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "www.proba-match.com",
+      "path": "/recherche",
+      "status": 200,
+      "finalUrl": "https://www.proba-match.com/recherche",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "www.proba-match.com",
+      "path": "/api/updates",
+      "status": 503
+    },
+    {
+      "host": "proba-match.vercel.app",
+      "path": "/",
+      "status": 200,
+      "finalUrl": "https://proba-match.vercel.app/",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.vercel.app",
+      "path": "/matchs",
+      "status": 200,
+      "finalUrl": "https://proba-match.vercel.app/matchs",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.vercel.app",
+      "path": "/live",
+      "status": 200,
+      "finalUrl": "https://proba-match.vercel.app/live",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.vercel.app",
+      "path": "/equipes",
+      "status": 200,
+      "finalUrl": "https://proba-match.vercel.app/equipes",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.vercel.app",
+      "path": "/joueurs",
+      "status": 200,
+      "finalUrl": "https://proba-match.vercel.app/joueurs",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.vercel.app",
+      "path": "/competitions",
+      "status": 200,
+      "finalUrl": "https://proba-match.vercel.app/competitions",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.vercel.app",
+      "path": "/classements",
+      "status": 200,
+      "finalUrl": "https://proba-match.vercel.app/classements",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.vercel.app",
+      "path": "/recherche",
+      "status": 200,
+      "finalUrl": "https://proba-match.vercel.app/recherche",
+      "loadError": false,
+      "playerLinks": 0,
+      "fallback": true
+    },
+    {
+      "host": "proba-match.vercel.app",
+      "path": "/api/updates",
+      "status": 503
+    }
+  ]
+}

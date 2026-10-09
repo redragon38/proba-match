@@ -1,12 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createDemoDataset } from '@/services/football/providers/mock';
 import { predictionEngine } from '@/prediction-engine';
+import type { Prisma } from '@prisma/client';
 const mocks = vi.hoisted(() => ({ forecasts: vi.fn(), playerRows: vi.fn() }));
 vi.mock('server-only', () => ({}));
 vi.mock('@/database/client', () => ({
   db: {
     prediction: { findMany: mocks.forecasts },
-    playerStatistics: { findMany: mocks.playerRows },
+    $queryRaw: mocks.playerRows,
   },
 }));
 import { getPredictionHistory, getEvaluations } from '@/services/predictions';
@@ -90,19 +91,25 @@ describe('Large histories through services with an isolated query adapter', () =
       ),
       make('previous', 2025, new Date('2025-06-01T00:00:00Z'), 3),
     ];
-    mocks.playerRows.mockImplementation(
-      async (query: { take?: number; where: { asOf?: { lte: Date } } }) => {
-        const known = records.filter((r) => !query.where.asOf || r.asOf <= query.where.asOf.lte);
-        return query.take ? known.slice(0, query.take) : known;
-      },
-    );
+    mocks.playerRows.mockImplementation(async (query: Prisma.Sql) => {
+      const cutoff = query.values.find((value): value is Date => value instanceof Date);
+      const latest = new Map<number, (typeof records)[number]>();
+      for (const row of records.filter((row) => !cutoff || row.asOf <= cutoff))
+        if (!latest.has(row.season.year)) latest.set(row.season.year, row);
+      return [...latest.values()].map((row) => ({
+        season: row.season.year,
+        competition: row.season.competition.name,
+        asOf: row.asOf,
+        payload: row.payload,
+      }));
+    });
     const result = await playerHistory('player', '2026-10-06T00:00:00Z');
     expect(result.map((r) => r.season)).toEqual([2026, 2025]);
     expect(result.map((r) => r.stats.goals)).toEqual([7, 3]);
-    expect(mocks.playerRows.mock.calls[0][0].where.payload).toEqual({
-      path: ['scope', 'verified'],
-      equals: true,
-    });
-    expect(mocks.playerRows.mock.calls[0][0].distinct).toEqual(['seasonId']);
+    const query = mocks.playerRows.mock.calls[0][0] as Prisma.Sql;
+    expect(query.text).toContain('DISTINCT ON');
+    expect(query.text).toContain("ps.\"payload\"->'scope'->>'verified' = 'true'");
+    expect(query.values).toContain('player');
+    expect(query.values).toContainEqual(new Date('2026-10-06T00:00:00Z'));
   });
 });

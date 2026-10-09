@@ -125,6 +125,7 @@ export interface PlayerStats {
   duels?: number | null;
   dribbles?: number | null;
   passes?: number | null;
+  passesCompleted?: number | null;
   passAccuracy?: number | null;
   blocks?: number | null;
   duelsTotal?: number | null;

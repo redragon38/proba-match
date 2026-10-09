@@ -1,0 +1,32 @@
+{
+  "isolatedDatabase": true,
+  "realProvider": "espn",
+  "before": 0,
+  "after": 87,
+  "withTeam": 87,
+  "withStats": 79,
+  "playerStatistics": 79,
+  "checks": [
+    {
+      "team": "Braga",
+      "player": "Bernardo",
+      "playerSlug": "bernardo-10601e1a",
+      "teamPlayers": 29,
+      "status": "PASS"
+    },
+    {
+      "team": "FC Famalicao",
+      "player": "Lazar Carevic",
+      "playerSlug": "lazar-carevic-c9f8e2ce",
+      "teamPlayers": 26,
+      "status": "PASS"
+    },
+    {
+      "team": "Gil Vicente",
+      "player": "Lucão",
+      "playerSlug": "lucao-1a007909",
+      "teamPlayers": 32,
+      "status": "PASS"
+    }
+  ]
+}

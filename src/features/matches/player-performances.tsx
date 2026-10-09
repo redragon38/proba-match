@@ -11,7 +11,7 @@ type Entry = {
   performance?: MatchPlayerPerformance;
 };
 
-const statGroups: {
+export const playerStatGroups: {
   title: string;
   fields: { key: keyof PlayerStats; label: string; digits?: number }[];
 }[] = [
@@ -31,8 +31,10 @@ const statGroups: {
       { key: 'shotsOnTarget', label: 'Tirs cadrés' },
       { key: 'xg', label: 'xG', digits: 2 },
       { key: 'passes', label: 'Passes' },
+      { key: 'passesCompleted', label: 'Passes réussies' },
       { key: 'keyPasses', label: 'Passes clés' },
-      { key: 'passAccuracy', label: 'Précision passes (%)' },
+      { key: 'passAccuracy', label: 'Précision passes (%)', digits: 1 },
+      { key: 'xa', label: 'xA', digits: 2 },
     ],
   },
   {
@@ -78,7 +80,7 @@ function PlayerRow({
   matchSlug: string;
 }) {
   const stats = entry.performance?.stats;
-  const facts = statGroups
+  const facts = playerStatGroups
     .flatMap((group) => group.fields)
     .filter(({ key }) => key !== 'minutes' && stats?.[key] != null)
     .slice(0, 3);
@@ -245,10 +247,14 @@ export function PlayerPerformances({ match, data }: { match: Match; data: Datase
               </h3>
               {lineup && (
                 <p className="data-note">
+                  {lineup.formation !== 'Non disponible' ? `${lineup.formation} · ` : ''}
                   {lineup.confirmed
                     ? 'Composition officielle transmise'
                     : 'Composition transmise, statut ou contenu incomplet'}
                 </p>
+              )}
+              {!lineup && (
+                <p className="data-note">Aucune composition transmise pour cette équipe.</p>
               )}
               <PlayerGroup
                 title="Titulaires"
@@ -326,7 +332,7 @@ export function PlayerPerformances({ match, data }: { match: Match; data: Datase
                       row.name
                     )}
                   </h4>
-                  {statGroups.map((group) => {
+                  {playerStatGroups.map((group) => {
                     const fields = group.fields.filter(({ key }) => row.stats[key] != null);
                     return fields.length ? (
                       <div key={group.title}>

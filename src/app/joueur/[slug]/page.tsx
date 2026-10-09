@@ -15,6 +15,7 @@ import { JsonLd } from '@/components/json-ld';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { TrendChart } from '@/components/charts';
 import { seoMetadata, playerIndexable } from '@/lib/seo';
+import { playerStatGroups } from '@/features/matches/player-performances';
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const d = await getDataset();
@@ -63,6 +64,9 @@ export default async function Page({
           match.performances?.some((row) => row.playerId === p.id)),
     );
   const history = p.source === 'thesportsdb' ? [] : await playerHistory(p.id, data.updatedAt);
+  const matchPerformance = fromMatch
+    ? fromMatch.performances?.find((row) => row.playerId === p.id)
+    : undefined;
   const t = data.teams.find((t) => t.id === p.teamId);
   if (!t) notFound();
   const score = playerPerformance(p.stats, p.position);
@@ -109,6 +113,8 @@ export default async function Page({
     ['xG', p.stats.xg],
     ['xA', p.stats.xa],
     ['Passes', p.stats.passes],
+    ['Passes réussies', p.stats.passesCompleted],
+    ['Précision des passes (%)', p.stats.passAccuracy],
     ['Passes clés', p.stats.keyPasses],
     ['Dribbles', p.stats.dribbles],
     ['Duels', p.stats.duels],
@@ -136,6 +142,41 @@ export default async function Page({
         <Link className="text-link" href={`/match/${fromMatch.slug}?onglet=joueurs`}>
           ← Retour au match
         </Link>
+      )}
+      {fromMatch && (
+        <section className="card padded" aria-label="Statistiques du joueur dans ce match">
+          <h2>Statistiques dans ce match</h2>
+          {matchPerformance ? (
+            <>
+              <p className="data-note">
+                {matchPerformance.stats.starts === 1
+                  ? 'Titulaire'
+                  : matchPerformance.stats.starts === 0
+                    ? 'Remplaçant'
+                    : 'Rôle non disponible'}
+                {' · '}
+                Données de cette rencontre, distinctes du relevé saisonnier.
+              </p>
+              <div className="metrics three">
+                {playerStatGroups
+                  .flatMap((group) => group.fields)
+                  .filter(({ key }) => matchPerformance.stats[key] != null)
+                  .map(({ key, label, digits }) => (
+                    <Metric
+                      key={key}
+                      label={label}
+                      value={number(matchPerformance.stats[key], digits)}
+                    />
+                  ))}
+              </div>
+            </>
+          ) : (
+            <p className="data-note">
+              Aucune statistique individuelle transmise pour cette rencontre. La présence d’un
+              profil dans l’effectif ne confirme pas sa participation.
+            </p>
+          )}
+        </section>
       )}
       {p.source === 'espn' && (
         <p className="data-note">

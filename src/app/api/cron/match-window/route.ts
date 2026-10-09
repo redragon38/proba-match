@@ -2,6 +2,8 @@ import { cronHandler } from '@/services/football/cron';
 import { syncOpenFootball } from '@/services/football/openfootball-sync';
 import { syncSecondary } from '@/services/football/secondary';
 
+export const maxDuration = 300;
+
 function parisDate(offsetDays: number) {
   const base = new Date();
   base.setUTCDate(base.getUTCDate() + offsetDays);
@@ -19,11 +21,15 @@ export const GET = cronHandler(async () => {
   const secondary = [];
 
   for (const date of dates) {
-    secondary.push({ date, result: await syncSecondary({ date, enrich: true, forceWindow: true }) });
+    secondary.push({ date, result: await syncSecondary({ date, forceWindow: true }) });
   }
 
   return {
-    status: 'success',
+    status:
+      openfootball.status === 'success' &&
+      secondary.every((row) => ['success', 'disabled'].includes(row.result.status))
+        ? 'success'
+        : 'partial',
     window: { from: dates[0], to: dates[dates.length - 1], timezone: 'Europe/Paris' },
     openfootball,
     secondary,

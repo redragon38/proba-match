@@ -164,9 +164,13 @@ export function parseEspnFixtures(input: unknown, league: ExpandedLeague, season
       const rawStatistics: MatchStat[] =
         status === 'finished'
           ? Object.entries(labels).flatMap(([key, label]) => {
-              const hv = number(h.statistics?.find((s) => s.name === key)?.displayValue),
-                av = number(a.statistics?.find((s) => s.name === key)?.displayValue);
-              return hv != null && av != null ? [{ label, home: hv, away: av }] : [];
+              const hs = h.statistics?.find((s) => s.name === key),
+                as = a.statistics?.find((s) => s.name === key);
+              const hv = number(hs?.value ?? hs?.displayValue),
+                av = number(as?.value ?? as?.displayValue);
+              return hv != null || av != null
+                ? [{ label, home: hv, away: av, ...(key === 'possessionPct' ? { unit: '%' } : {}) }]
+                : [];
             })
           : [];
       return {
@@ -195,6 +199,7 @@ const athlete = z.object({
   dateOfBirth: z.string().optional(),
   citizenship: z.string().optional(),
   height: z.number().optional(),
+  headshot: z.object({ href: z.string().url() }).nullish(),
   position: z.object({ abbreviation: z.string(), name: z.string() }).optional(),
   statistics: z
     .object({ splits: z.object({ categories: z.array(z.object({ stats: z.array(stat) })) }) })
@@ -251,6 +256,7 @@ export function parseEspnRoster(input: unknown, teamId: string, season: number) 
     return {
       externalId: a.id,
       name: a.displayName,
+      photo: a.headshot?.href,
       position: positions[a.position?.abbreviation ?? ''] ?? 'Non disponible',
       number: /^\d{1,2}$/.test(a.jersey ?? '') ? Number(a.jersey) : null,
       nationality: a.citizenship,
