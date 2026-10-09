@@ -1,8 +1,21 @@
 {
   "buildCommand": "npm run build",
   "crons": [
-    { "path": "/api/cron/openfootball", "schedule": "15 5 * * *" },
-    { "path": "/api/cron/live", "schedule": "15 7 * * *" },
-    { "path": "/api/cron/players", "schedule": "15 10 * * *" }
+    {
+      "path": "/api/cron/openfootball",
+      "schedule": "15 5 * * *"
+    },
+    {
+      "path": "/api/cron/match-window",
+      "schedule": "20 6-23/2 * * *"
+    },
+    {
+      "path": "/api/cron/live",
+      "schedule": "15 7 * * *"
+    },
+    {
+      "path": "/api/cron/players",
+      "schedule": "15 10 * * *"
+    }
   ]
 }
