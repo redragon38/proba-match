@@ -28,6 +28,7 @@ export async function syncExpandedFootball(
     force?: boolean;
     leagues?: ExpandedLeague[];
     predictions?: boolean;
+    currentOnly?: boolean;
   } = {},
 ) {
   return footballJob('espn', async () => {
@@ -37,7 +38,7 @@ export async function syncExpandedFootball(
     let imported = 0,
       failures = 0,
       skippedSources = 0;
-    for (const { league, season } of expandedScopes(true)
+    for (const { league, season } of expandedScopes(!options.currentOnly)
       .filter(
         (scope) =>
           options.history ||

@@ -11,5 +11,6 @@ export const GET = cronHandler(async (request?: Request) => {
     leagues: [requested as ExpandedLeague],
     force: true,
     predictions: false,
+    currentOnly: true,
   });
 });
