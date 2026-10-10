@@ -13,7 +13,7 @@ import {
 import { resolveIdentity, bindIdentity } from './identities';
 import { footballJob } from './jobs';
 import { readLocalDataset, readLocalHistory } from './local-store';
-import { persistDataset } from './persistence';
+import { persistDataset, persistPlayerProfiles } from './persistence';
 import { derivedStandings } from '@/services/derived-standings';
 import { rebuildElo } from './rebuild-elo';
 import { persistPredictions } from '@/services/predictions';
@@ -387,7 +387,7 @@ export async function syncExpandedPlayers(limit = 30) {
     }
     if (imported) {
       data.updatedAt = new Date().toISOString();
-      await persistDataset(data, new Set(), { profileIds });
+      await persistPlayerProfiles(data, profileIds);
       for (const { key, value } of completed)
         await db.dataSource.upsert({
           where: { id: key },

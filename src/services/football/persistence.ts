@@ -407,3 +407,98 @@ export async function persistDataset(
   });
   Object.assign(data, working); // Do not expose the new generation before its commit.
 }
+
+/** Publish roster profiles without rewriting the complete fixture dataset. */
+export async function persistPlayerProfiles(data: Dataset, profileIds: Set<string>) {
+  assertJobActive();
+  const working = structuredClone(data);
+  const players = working.players.filter((player) => profileIds.has(player.id));
+  const observedAt = new Date().toISOString();
+
+  await database.$transaction(
+    async (tx) => {
+      await inBatches(players, async (player) => {
+        await tx.player.upsert({
+          where: { id: player.id },
+          create: {
+            id: player.id,
+            slug: player.slug,
+            name: player.name,
+            teamId: player.teamId,
+            position: player.position,
+            number: player.number,
+            nationality: player.nationality,
+            photo: player.photo,
+            birthDate: player.birthDate ? new Date(player.birthDate) : null,
+          },
+          update: {
+            slug: player.slug,
+            name: player.name,
+            teamId: player.teamId,
+            position: player.position,
+            number: player.number,
+            nationality: player.nationality,
+            photo: player.photo,
+            birthDate: player.birthDate ? new Date(player.birthDate) : null,
+          },
+        });
+
+        const team = working.teams.find((row) => row.id === player.teamId);
+        const competition = working.competitions.find((row) => row.id === team?.competitionId);
+        const asOf = player.updatedAt ?? working.updatedAt;
+        if (
+          competition &&
+          player.statsScope?.verified === true &&
+          player.statsScope.teamId === player.teamId &&
+          player.statsScope.competitionId === competition.id &&
+          player.statsScope.season === competition.season &&
+          Object.values(player.stats).some((value) => value != null)
+        )
+          await tx.playerStatistics.upsert({
+            where: { id: `${player.id}-${competition.id}-${competition.season}-${asOf}` },
+            create: {
+              id: `${player.id}-${competition.id}-${competition.season}-${asOf}`,
+              playerId: player.id,
+              seasonId: `${competition.id}-${competition.season}`,
+              asOf: new Date(asOf),
+              payload: json({ ...player.stats, scope: player.statsScope }),
+            },
+            update: { payload: json({ ...player.stats, scope: player.statsScope }) },
+          });
+
+        const searchRow = {
+          id: `player:${player.id}`,
+          entityType: 'player',
+          entityId: player.id,
+          title: player.name,
+          normalized: slugify(player.name),
+          href: `/joueur/${player.slug}`,
+        };
+        await tx.searchIndex.upsert({
+          where: { id: searchRow.id },
+          create: searchRow,
+          update: searchRow,
+        });
+      });
+
+      working.verifiedAt = { ...working.verifiedAt, players: observedAt };
+      await fencePublication(tx);
+      await tx.cacheEntry.upsert({
+        where: { key: 'football:dataset' },
+        create: {
+          key: 'football:dataset',
+          payload: json(working),
+          expiresAt: new Date(Date.now() + 7 * 3600_000),
+          staleUntil: new Date(Date.now() + 7 * 86400_000),
+        },
+        update: {
+          payload: json(working),
+          expiresAt: new Date(Date.now() + 7 * 3600_000),
+          staleUntil: new Date(Date.now() + 7 * 86400_000),
+        },
+      });
+    },
+    { maxWait: 10_000, timeout: 5 * 60_000 },
+  );
+  Object.assign(data, working);
+}
