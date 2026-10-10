@@ -111,7 +111,8 @@ export async function syncFotmobLive(now = new Date()) {
         next.status !== match.status ||
         next.homeScore !== match.homeScore ||
         next.awayScore !== match.awayScore ||
-        next.minute !== match.minute
+        next.minute !== match.minute ||
+        next.phase !== match.phase
       ) {
         data.matches[data.matches.indexOf(match)] = next;
         changed.add(match.id);
