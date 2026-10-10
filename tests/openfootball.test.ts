@@ -115,6 +115,22 @@ describe('OpenFootball : normalisation, identité et priorités', () => {
       source: 'api-football',
     });
   });
+  it('préserve aussi un direct confirmé par FotMob sur une source calendrier OpenFootball', () => {
+    const live: Match = {
+      ...match,
+      status: 'live',
+      source: 'openfootball',
+      minute: 71,
+      homeScore: 2,
+      awayScore: 1,
+    };
+    expect(mergeOpenMatch(live, match)).toMatchObject({
+      status: 'live',
+      minute: 71,
+      homeScore: 2,
+      awayScore: 1,
+    });
+  });
   it('met à jour les résultats OpenFootball corrigés', () => {
     expect(
       mergeOpenMatch(

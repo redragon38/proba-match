@@ -34,7 +34,7 @@ jobs:
     needs: scores
     if: always() && (github.event_name == 'workflow_dispatch' || github.event.schedule == '17 * * * *')
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 4
     permissions:
       id-token: write
       contents: read
@@ -46,6 +46,6 @@ jobs:
             "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=proba-match-realtime")
           oidc_token=$(printf '%s' "$oidc_response" | jq -r .value)
           test -n "$oidc_token"
-          curl --fail --silent --show-error --retry 2 --max-time 300 \
+          curl --fail --silent --show-error --retry 4 --retry-delay 10 --retry-all-errors --max-time 180 \
             -H "Authorization: Bearer $oidc_token" \
-            https://proba-match.vercel.app/api/cron/match-window
+            https://proba-match.vercel.app/api/cron/calendar

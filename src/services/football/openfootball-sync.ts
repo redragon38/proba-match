@@ -32,12 +32,13 @@ export function openScopes(history = false) {
 /** Preserve confirmed secondary fields; a static source must never demote live data. */
 export function mergeOpenMatch(previous: Match | undefined, incoming: Match): Match {
   if (!previous) return incoming;
-  const secondary = previous.source === 'api-football';
-  const confirmed = previous.status === 'live' || previous.status === 'finished';
+  const confirmed =
+    previous.status === 'live' ||
+    (previous.status === 'finished' && previous.source === 'api-football');
   return {
     ...previous,
     ...incoming,
-    ...(secondary && confirmed
+    ...(confirmed
       ? {
           kickoff: previous.kickoff,
           kickoffKnown: previous.kickoffKnown,
