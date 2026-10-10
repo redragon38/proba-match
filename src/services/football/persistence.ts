@@ -502,3 +502,115 @@ export async function persistPlayerProfiles(data: Dataset, profileIds: Set<strin
   );
   Object.assign(data, working);
 }
+
+/** Publish a small set of match details without scanning or rewriting every fixture. */
+export async function persistMatchDetails(
+  data: Dataset,
+  matchIds: Set<string>,
+  profileIds: Set<string>,
+) {
+  assertJobActive();
+  const working = structuredClone(data);
+  const matches = working.matches.filter((match) => matchIds.has(match.id));
+  const players = working.players.filter((player) => profileIds.has(player.id));
+  await database.$transaction(
+    async (tx) => {
+      for (const player of players) {
+        await tx.player.upsert({
+          where: { id: player.id },
+          create: {
+            id: player.id,
+            slug: player.slug,
+            name: player.name,
+            teamId: player.teamId,
+            position: player.position,
+            number: player.number,
+            nationality: player.nationality,
+            photo: player.photo,
+            birthDate: player.birthDate ? new Date(player.birthDate) : null,
+          },
+          update: {
+            name: player.name,
+            teamId: player.teamId,
+            position: player.position,
+            number: player.number,
+            photo: player.photo,
+          },
+        });
+        const search = {
+          id: `player:${player.id}`,
+          entityType: 'player',
+          entityId: player.id,
+          title: player.name,
+          normalized: slugify(player.name),
+          href: `/joueur/${player.slug}`,
+        };
+        await tx.searchIndex.upsert({ where: { id: search.id }, create: search, update: search });
+      }
+      for (const match of matches) {
+        await tx.match.update({
+          where: { id: match.id },
+          data: { payload: json(match), source: match.source, status: match.status },
+        });
+        await tx.matchEvent.deleteMany({ where: { matchId: match.id } });
+        if (match.events.length)
+          await tx.matchEvent.createMany({
+            data: match.events.map((event, index) => ({
+              id: `${match.id}-event-${index}`,
+              matchId: match.id,
+              teamId: event.teamId,
+              minute: event.minute,
+              extra: event.extra,
+              type: event.type,
+              payload: json(event),
+            })),
+          });
+        await tx.matchLineup.deleteMany({ where: { matchId: match.id } });
+        for (const lineup of match.lineups)
+          await tx.matchLineup.create({
+            data: {
+              id: `${match.id}-${lineup.teamId}`,
+              matchId: match.id,
+              teamId: lineup.teamId,
+              formation: lineup.formation,
+              confirmed: lineup.confirmed,
+              publishedAt: new Date(
+                match.detailObservedAt?.lineups ?? match.detailsUpdatedAt ?? match.updatedAt,
+              ),
+              payload: json(lineup),
+            },
+          });
+        await tx.matchPlayer.deleteMany({ where: { matchId: match.id } });
+        for (const performance of match.performances ?? [])
+          await tx.matchPlayer.create({
+            data: {
+              id: `${match.id}-${performance.playerId}`,
+              matchId: match.id,
+              playerId: performance.playerId,
+              minutes: performance.stats.minutes,
+              score: playerPerformance(performance.stats, performance.position),
+              statistics: json(performance.stats),
+            },
+          });
+      }
+      working.verifiedAt = { ...working.verifiedAt, details: new Date().toISOString() };
+      await fencePublication(tx);
+      await tx.cacheEntry.upsert({
+        where: { key: 'football:dataset' },
+        create: {
+          key: 'football:dataset',
+          payload: json(working),
+          expiresAt: new Date(Date.now() + 7 * 3600_000),
+          staleUntil: new Date(Date.now() + 7 * 86400_000),
+        },
+        update: {
+          payload: json(working),
+          expiresAt: new Date(Date.now() + 7 * 3600_000),
+          staleUntil: new Date(Date.now() + 7 * 86400_000),
+        },
+      });
+    },
+    { maxWait: 10_000, timeout: 5 * 60_000 },
+  );
+  Object.assign(data, working);
+}

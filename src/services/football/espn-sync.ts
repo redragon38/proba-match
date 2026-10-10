@@ -13,11 +13,12 @@ import {
 import { resolveIdentity, bindIdentity } from './identities';
 import { footballJob } from './jobs';
 import { readLocalDataset, readLocalHistory } from './local-store';
-import { persistDataset, persistPlayerProfiles } from './persistence';
+import { persistDataset, persistMatchDetails, persistPlayerProfiles } from './persistence';
 import { derivedStandings } from '@/services/derived-standings';
 import { rebuildElo } from './rebuild-elo';
 import { persistPredictions } from '@/services/predictions';
 import { stableEntityId } from './stable-identity';
+import { addObservedPlayerProfiles } from './match-profiles';
 const upsert = <T extends { id: string }>(old: T[], fresh: T[]) => [
   ...new Map([...old, ...fresh].map((x) => [x.id, x])).values(),
 ];
@@ -400,6 +401,143 @@ export async function syncExpandedPlayers(limit = 30) {
       players: imported,
       teams: selected.length,
       remaining: Math.max(0, eligible.length - selected.length),
+      requests: provider.requests,
+      failures,
+    };
+  });
+}
+
+export async function syncExpandedMatchDetails(limit = 3) {
+  if (!Number.isInteger(limit) || limit < 1 || limit > 5) throw new Error('INVALID_BATCH_LIMIT');
+  return footballJob('espn-details', async () => {
+    const data = await readLocalDataset();
+    const provider = new EspnProvider();
+    const matchIdentities = await db.footballIdentity.findMany({
+      where: { provider: 'espn', kind: 'match' },
+      select: { externalId: true, entityId: true },
+    });
+    const externalByMatch = new Map(
+      matchIdentities.map((identity) => [identity.entityId, identity.externalId]),
+    );
+    const competitionIdentities = await db.footballIdentity.findMany({
+      where: { provider: 'espn', kind: 'competition' },
+      select: { externalId: true, entityId: true },
+    });
+    const leagueByCompetition = new Map(
+      competitionIdentities.map((identity) => [identity.entityId, identity.externalId]),
+    );
+    const selected = data.matches
+      .filter(
+        (match) =>
+          match.status === 'finished' &&
+          !match.lineups.length &&
+          externalByMatch.has(match.id) &&
+          leagueByCompetition.has(match.competitionId),
+      )
+      .sort((a, b) => b.kickoff.localeCompare(a.kickoff))
+      .slice(0, limit);
+    const changed = new Set<string>();
+    const profileIds = new Set<string>();
+    let failures = 0;
+    for (const match of selected) {
+      try {
+        const league = leagueByCompetition.get(match.competitionId) as ExpandedLeague;
+        if (!(league in EXPANDED_LEAGUES)) throw new Error('ESPN_UNKNOWN_LEAGUE');
+        const externalMatchId = externalByMatch.get(match.id)!;
+        const summary = await provider.summary(league, externalMatchId);
+        const teamIdentities = await db.footballIdentity.findMany({
+          where: {
+            provider: 'espn',
+            kind: 'team',
+            entityId: { in: [match.homeId, match.awayId] },
+          },
+          select: { externalId: true, entityId: true },
+        });
+        const teamByExternal = new Map(
+          teamIdentities.map((identity) => [identity.externalId, identity.entityId]),
+        );
+        const playerByExternal = new Map<string, string>();
+        for (const row of summary.performances)
+          if (!playerByExternal.has(row.playerId))
+            playerByExternal.set(
+              row.playerId,
+              await resolveIdentity('espn', 'player', row.playerId, row.name, []),
+            );
+        const lineups = summary.lineups.flatMap((lineup) => {
+          const teamId = teamByExternal.get(lineup.externalTeamId);
+          if (!teamId) return [];
+          return [
+            {
+              ...lineup,
+              teamId,
+              starters: lineup.starters.map((player) => ({
+                ...player,
+                id: playerByExternal.get(player.id)!,
+              })),
+              substitutes: lineup.substitutes.map((player) => ({
+                ...player,
+                id: playerByExternal.get(player.id)!,
+              })),
+            },
+          ];
+        });
+        const performances = summary.performances.flatMap((performance) => {
+          const teamId = teamByExternal.get(performance.externalTeamId);
+          const playerId = playerByExternal.get(performance.playerId);
+          return teamId && playerId ? [{ ...performance, teamId, playerId }] : [];
+        });
+        if (lineups.length !== 2 || performances.length < 22)
+          throw new Error('ESPN_INCOMPLETE_MATCH_DETAILS');
+        const observedAt = new Date().toISOString();
+        const merged: Match = {
+          ...match,
+          statistics: summary.statistics.length ? summary.statistics : match.statistics,
+          lineups,
+          performances,
+          detailsUpdatedAt: observedAt,
+          provenance: { schedule: match.provenance?.schedule ?? match.source, details: 'espn' },
+          detailSource: {
+            ...match.detailSource,
+            statistics: 'espn',
+            lineups: 'espn',
+            performances: 'espn',
+          },
+          detailPresence: {
+            ...match.detailPresence,
+            statistics: summary.statistics.length > 0,
+            lineups: true,
+            performances: true,
+          },
+          detailObservedAt: {
+            ...match.detailObservedAt,
+            statistics: observedAt,
+            lineups: observedAt,
+            performances: observedAt,
+          },
+        };
+        data.matches[data.matches.indexOf(match)] = merged;
+        addObservedPlayerProfiles(data, merged);
+        performances.forEach((performance) => profileIds.add(performance.playerId));
+        changed.add(match.id);
+      } catch (error) {
+        failures++;
+        log('ESPN_DETAILS_FAILED', {
+          code:
+            error instanceof Error && /^[A-Z_0-9]+$/.test(error.message)
+              ? error.message
+              : 'INVALID_SOURCE_DATA',
+        });
+      }
+    }
+    if (changed.size) {
+      data.updatedAt = new Date().toISOString();
+      await persistMatchDetails(data, changed, profileIds);
+    }
+    return {
+      status: failures ? 'partial' : 'success',
+      matches: changed.size,
+      selected: selected.length,
+      players: profileIds.size,
       requests: provider.requests,
       failures,
     };

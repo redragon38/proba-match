@@ -1,7 +1,14 @@
 import { reportedStatistics } from '../reported-statistics';
 import { timed } from '@/services/telemetry';
 import { z } from 'zod';
-import type { MatchStat, MatchStatus, PlayerStats, Position } from '@/types/football';
+import type {
+  Lineup,
+  MatchPlayerPerformance,
+  MatchStat,
+  MatchStatus,
+  PlayerStats,
+  Position,
+} from '@/types/football';
 
 export const EXPANDED_LEAGUES = {
   'por.1': {
@@ -269,6 +276,155 @@ export function parseEspnRoster(input: unknown, teamId: string, season: number) 
     };
   });
 }
+const summaryStat = z.object({
+  name: z.string(),
+  value: z.number().nullish(),
+  displayValue: z.string().nullish(),
+});
+const summaryPlayer = z.object({
+  active: z.boolean().optional(),
+  starter: z.boolean(),
+  jersey: z.string().nullish(),
+  athlete: z.object({ id, displayName: z.string().trim().min(1) }),
+  position: z.object({ abbreviation: z.string(), name: z.string() }).optional(),
+  stats: z.array(summaryStat).optional(),
+});
+
+/** Provider-reported match details. Missing metrics stay null rather than becoming zero. */
+export function parseEspnSummary(input: unknown) {
+  const root = z
+    .object({
+      boxscore: z.object({
+        teams: z.array(
+          z.object({
+            team: z.object({ id }),
+            homeAway: z.enum(['home', 'away']),
+            statistics: z.array(summaryStat),
+          }),
+        ),
+      }),
+      rosters: z.array(
+        z.object({
+          team: z.object({ id }),
+          formation: z.string().nullish(),
+          roster: z.array(summaryPlayer).max(100),
+        }),
+      ),
+    })
+    .parse(input);
+  const labels: Record<string, { label: string; unit?: string; scale?: boolean }> = {
+    possessionPct: { label: 'Possession', unit: '%' },
+    totalShots: { label: 'Tirs' },
+    shotsOnTarget: { label: 'Tirs cadrés' },
+    blockedShots: { label: 'Tirs bloqués' },
+    wonCorners: { label: 'Corners' },
+    foulsCommitted: { label: 'Fautes' },
+    offsides: { label: 'Hors-jeu' },
+    yellowCards: { label: 'Cartons jaunes' },
+    redCards: { label: 'Cartons rouges' },
+    saves: { label: 'Arrêts' },
+    totalPasses: { label: 'Passes' },
+    accuratePasses: { label: 'Passes réussies' },
+    passPct: { label: 'Précision des passes', unit: '%', scale: true },
+    totalCrosses: { label: 'Centres' },
+    totalLongBalls: { label: 'Passes longues' },
+    totalTackles: { label: 'Tacles' },
+    interceptions: { label: 'Interceptions' },
+    totalClearance: { label: 'Dégagements' },
+  };
+  const teamStats = new Map(
+    root.boxscore.teams.map((team) => [
+      team.homeAway,
+      new Map(
+        team.statistics.map((stat) => [
+          stat.name,
+          number(stat.value ?? stat.displayValue ?? undefined),
+        ]),
+      ),
+    ]),
+  );
+  const statistics: MatchStat[] = Object.entries(labels).flatMap(([name, config]) => {
+    let home = teamStats.get('home')?.get(name) ?? null;
+    let away = teamStats.get('away')?.get(name) ?? null;
+    if (config.scale) {
+      if (home != null && home <= 1) home *= 100;
+      if (away != null && away <= 1) away *= 100;
+    }
+    return home == null && away == null
+      ? []
+      : [{ label: config.label, home, away, ...(config.unit ? { unit: config.unit } : {}) }];
+  });
+  const value = (stats: z.infer<typeof summaryStat>[], name: string) => {
+    const stat = stats.find((row) => row.name === name);
+    return number(stat?.value ?? stat?.displayValue ?? undefined);
+  };
+  const position = (row: z.infer<typeof summaryPlayer>): Position => {
+    const label = `${row.position?.abbreviation ?? ''} ${row.position?.name ?? ''}`;
+    if (/^G|goalkeeper/i.test(label)) return 'Gardien';
+    if (/^D|defender/i.test(label)) return 'Défenseur';
+    if (/^M|midfield/i.test(label)) return 'Milieu';
+    if (/^F|forward|striker|wing/i.test(label)) return 'Attaquant';
+    return 'Non disponible';
+  };
+  const lineups: (Lineup & { externalTeamId: string })[] = [];
+  const performances: (MatchPlayerPerformance & { externalTeamId: string })[] = [];
+  for (const roster of root.rosters) {
+    const active = roster.roster.filter((row) => row.active !== false);
+    const numberOf = (row: z.infer<typeof summaryPlayer>) =>
+      /^\d{1,3}$/.test(row.jersey ?? '') ? Number(row.jersey) : null;
+    lineups.push({
+      externalTeamId: roster.team.id,
+      teamId: roster.team.id,
+      formation: roster.formation ?? 'Non disponible',
+      confirmed: true,
+      starters: active
+        .filter((row) => row.starter)
+        .map((row, index) => ({
+          id: row.athlete.id,
+          name: row.athlete.displayName,
+          number: numberOf(row),
+          row: index === 0 ? 1 : Math.min(5, 2 + Math.floor((index - 1) / 4)),
+          column: index === 0 ? 1 : ((index - 1) % 4) + 1,
+        })),
+      substitutes: active
+        .filter((row) => !row.starter)
+        .map((row) => ({
+          id: row.athlete.id,
+          name: row.athlete.displayName,
+          number: numberOf(row),
+        })),
+    });
+    for (const row of active) {
+      const stats = row.stats ?? [];
+      performances.push({
+        externalTeamId: roster.team.id,
+        playerId: row.athlete.id,
+        name: row.athlete.displayName,
+        teamId: roster.team.id,
+        position: position(row),
+        number: numberOf(row),
+        stats: {
+          appearances: value(stats, 'appearances'),
+          starts: row.starter ? 1 : 0,
+          minutes: value(stats, 'minutesPlayed'),
+          goals: value(stats, 'totalGoals'),
+          assists: value(stats, 'goalAssists'),
+          rating: null,
+          shots: value(stats, 'totalShots'),
+          shotsOnTarget: value(stats, 'shotsOnTarget'),
+          saves: value(stats, 'saves'),
+          conceded: value(stats, 'goalsConceded'),
+          yellow: value(stats, 'yellowCards'),
+          red: value(stats, 'redCards'),
+          fouls: value(stats, 'foulsCommitted'),
+          keyPasses: value(stats, 'shotAssists'),
+        },
+      });
+    }
+  }
+  return { statistics: reportedStatistics(statistics), lineups, performances };
+}
+
 export class EspnProvider {
   requests = 0;
   private lastRequest = 0;
@@ -307,5 +463,8 @@ export class EspnProvider {
       team,
       year,
     );
+  }
+  async summary(league: ExpandedLeague, event: string) {
+    return parseEspnSummary(await this.get(`${league}/summary?event=${event}`));
   }
 }

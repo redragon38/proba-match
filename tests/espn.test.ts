@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import {
   parseEspnFixtures,
   parseEspnRoster,
+  parseEspnSummary,
   expandedScopes,
   espnTeamCountry,
   EspnProvider,
@@ -152,6 +153,55 @@ describe('Expanded leagues: real feed normalization', () => {
     });
     expect(() => parseEspnRoster(payload, '99', 2026)).toThrow('ESPN_ROSTER_SCOPE_MISMATCH');
     expect(() => parseEspnRoster(payload, '10', 2025)).toThrow('ESPN_ROSTER_SCOPE_MISMATCH');
+  });
+  it('maps provider-reported formations, player stats and extended team statistics', () => {
+    const player = (id: string, starter: boolean) => ({
+      active: true,
+      starter,
+      jersey: '9',
+      athlete: { id, displayName: `Player ${id}` },
+      position: { abbreviation: 'F', name: 'Forward' },
+      stats: [
+        { name: 'appearances', value: 1 },
+        { name: 'totalGoals', value: id === '1' ? 1 : 0 },
+      ],
+    });
+    const summary = parseEspnSummary({
+      boxscore: {
+        teams: [
+          {
+            team: { id: '10' },
+            homeAway: 'home',
+            statistics: [
+              { name: 'totalPasses', displayValue: '500' },
+              { name: 'passPct', displayValue: '0.8' },
+              { name: 'totalTackles', displayValue: '12' },
+            ],
+          },
+          {
+            team: { id: '20' },
+            homeAway: 'away',
+            statistics: [
+              { name: 'totalPasses', displayValue: '300' },
+              { name: 'passPct', displayValue: '0.7' },
+              { name: 'totalTackles', displayValue: '18' },
+            ],
+          },
+        ],
+      },
+      rosters: [
+        { team: { id: '10' }, formation: '4-3-3', roster: [player('1', true)] },
+        { team: { id: '20' }, formation: '4-4-2', roster: [player('2', false)] },
+      ],
+    });
+    expect(summary.statistics).toEqual([
+      { label: 'Passes', home: 500, away: 300 },
+      { label: 'Précision des passes', home: 80, away: 70, unit: '%' },
+      { label: 'Tacles', home: 12, away: 18 },
+    ]);
+    expect(summary.lineups[0]).toMatchObject({ formation: '4-3-3', confirmed: true });
+    expect(summary.performances[0]).toMatchObject({ playerId: '1', stats: { goals: 1 } });
+    expect(summary.performances[1].stats.minutes).toBeNull();
   });
   it('merges two calendar responses by stable event id for split-year leagues', async () => {
     const transport = vi
