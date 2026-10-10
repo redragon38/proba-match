@@ -1,12 +1,17 @@
 import { verifySecret } from '@/lib/auth';
 import { verifyGithubActionsOidc } from '@/services/github-oidc';
-export function cronHandler(work: (request: Request) => Promise<unknown>) {
+type CronAuthorization = { liveSecret?: boolean; githubOidc?: boolean };
+
+export function cronHandler(
+  work: (request: Request) => Promise<unknown>,
+  authorization: CronAuthorization = {},
+) {
   return async (request: Request) => {
     const supplied = request.headers.get('authorization')?.replace(/^Bearer /, '') ?? '';
     if (
       !verifySecret(supplied, process.env.CRON_SECRET) &&
-      !verifySecret(supplied, process.env.LIVE_SYNC_SECRET) &&
-      !(await verifyGithubActionsOidc(supplied))
+      !(authorization.liveSecret && verifySecret(supplied, process.env.LIVE_SYNC_SECRET)) &&
+      !(authorization.githubOidc && (await verifyGithubActionsOidc(supplied)))
     )
       return Response.json({ error: 'Non autorisé' }, { status: 401 });
     try {

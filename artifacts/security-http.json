@@ -1,6 +1,6 @@
 {
-  "at": "2026-10-06T17:36:44.106Z",
-  "base": "http://127.0.0.1:3000",
+  "at": "2026-10-10T20:42:03.201Z",
+  "base": "http://localhost:3000",
   "baseline": false,
   "checks": [
     {
@@ -53,6 +53,30 @@
     },
     {
       "path": "/api/admin/mapping",
+      "method": "POST",
+      "status": 401,
+      "errors": []
+    },
+    {
+      "path": "/api/admin/reconstruct-aiven",
+      "method": "GET",
+      "status": 405,
+      "errors": []
+    },
+    {
+      "path": "/api/admin/reconstruct-aiven?token=query-secrets-are-never-accepted",
+      "method": "POST",
+      "status": 401,
+      "errors": []
+    },
+    {
+      "path": "/api/admin/reconstruct-aiven-direct",
+      "method": "GET",
+      "status": 405,
+      "errors": []
+    },
+    {
+      "path": "/api/admin/reconstruct-aiven-direct?token=query-secrets-are-never-accepted",
       "method": "POST",
       "status": 401,
       "errors": []

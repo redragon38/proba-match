@@ -33,6 +33,9 @@ describe('Security and canonical host configuration', () => {
     expect(csp).not.toContain('unsafe-eval');
     expect(headers).toContainEqual({ key: 'X-Content-Type-Options', value: 'nosniff' });
     expect(headers).toContainEqual({ key: 'X-Frame-Options', value: 'DENY' });
+    expect(headers).toContainEqual({ key: 'Cross-Origin-Opener-Policy', value: 'same-origin' });
+    expect(headers).toContainEqual({ key: 'Cross-Origin-Resource-Policy', value: 'same-origin' });
+    expect(headers).toContainEqual({ key: 'X-DNS-Prefetch-Control', value: 'off' });
     expect(headers).toContainEqual({ key: 'Strict-Transport-Security', value: 'max-age=31536000' });
   });
   it('adds global noindex to preview without blocking production', async () => {

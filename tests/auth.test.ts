@@ -18,6 +18,7 @@ describe('Administration', () => {
     expect(verifyAdminSession(token, 'other-secret-at-least-32-characters', 1001)).toBe(false);
   });
   it('refuse un POST depuis une origine externe', () => {
+    vi.stubEnv('NEXT_PUBLIC_SITE_URL', 'http://localhost:3000');
     expect(
       sameOrigin(
         new Request('http://localhost:3000/api/admin/sync', {
@@ -39,5 +40,16 @@ describe('Administration', () => {
       expect(
         sameOrigin(new Request('http://localhost:3000/api/admin/session', { headers: { origin } })),
       ).toBe(false);
+  });
+  it('échoue fermé en production lorsque l’origine publique manque', () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('NEXT_PUBLIC_SITE_URL', '');
+    expect(
+      sameOrigin(
+        new Request('https://example.test/api/admin/session', {
+          headers: { origin: 'https://example.test' },
+        }),
+      ),
+    ).toBe(false);
   });
 });

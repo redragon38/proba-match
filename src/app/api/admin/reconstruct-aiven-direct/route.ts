@@ -4,6 +4,8 @@ import { createHash } from 'node:crypto';
 import { verifySecret } from '@/lib/auth';
 import { slugify } from '@/lib/format';
 import { createPublicOpenFootballFallback } from '@/services/football/public-fallback';
+import { readJsonBody } from '@/lib/request-body';
+import { z } from 'zod';
 
 export const maxDuration = 300;
 export const dynamic = 'force-dynamic';
@@ -17,6 +19,7 @@ type CountRow = {
   predictions: bigint;
   cache_entries: bigint;
 };
+const reconstructionRequest = z.object({ allowNonEmpty: z.boolean().default(false) }).strict();
 
 function bearer(request: Request) {
   return request.headers.get('authorization')?.replace(/^Bearer /, '') ?? '';
@@ -302,12 +305,8 @@ async function reconstruct(prisma: PrismaClient) {
   };
 }
 
-export async function GET(request: Request) {
-  const queryToken = new URL(request.url).searchParams.get('token') ?? '';
-  if (
-    !verifySecret(bearer(request), process.env.MIGRATION_BOOTSTRAP_TOKEN) &&
-    !verifySecret(queryToken, process.env.MIGRATION_BOOTSTRAP_TOKEN)
-  )
+export async function POST(request: Request) {
+  if (!verifySecret(bearer(request), process.env.MIGRATION_BOOTSTRAP_TOKEN))
     return Response.json({ error: 'Non autorisé' }, { status: 401 });
 
   if (!allowedEnvironment())
@@ -316,7 +315,11 @@ export async function GET(request: Request) {
   const target = targetUrl();
   if (!target.ok) return Response.json({ error: target.error }, { status: 409 });
 
-  const allowNonEmpty = new URL(request.url).searchParams.get('allow_non_empty') === 'true';
+  const input = await readJsonBody(request, 512);
+  if (!input.ok) return input.response;
+  const parsed = reconstructionRequest.safeParse(input.value);
+  if (!parsed.success) return Response.json({ error: 'INVALID_REQUEST' }, { status: 400 });
+  const { allowNonEmpty } = parsed.data;
   const prisma = new PrismaClient({ datasources: { db: { url: target.value } } });
 
   try {

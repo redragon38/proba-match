@@ -23,8 +23,14 @@ vi.mock('@/services/football/espn-sync', () => ({
 }));
 vi.mock('@/services/football/sync', () => ({ syncFootball: state.sync }));
 vi.mock('@/services/football/openfootball-sync', () => ({ syncOpenFootball: state.open }));
+vi.mock('@/services/football/sportsdb-sync', () => ({ syncSportsDbPlayers: state.open }));
+vi.mock('@/services/football/public-fallback', () => ({
+  createPublicOpenFootballFallback: state.open,
+}));
 import { POST as login, DELETE as logout } from '@/app/api/admin/session/route';
 import { POST as sync } from '@/app/api/admin/sync/route';
+import { POST as reconstruct } from '@/app/api/admin/reconstruct-aiven/route';
+import { POST as reconstructDirect } from '@/app/api/admin/reconstruct-aiven-direct/route';
 import { cronHandler } from '@/services/football/cron';
 
 const secret = 'test-only-admin-secret-at-least-32-characters';
@@ -42,6 +48,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   vi.stubEnv('ADMIN_SECRET', secret);
   vi.stubEnv('CRON_SECRET', secret);
+  vi.stubEnv('NEXT_PUBLIC_SITE_URL', 'https://example.test');
   vi.stubEnv('NODE_ENV', 'production');
   state.token = undefined;
   state.allow.mockResolvedValue(true);
@@ -138,5 +145,30 @@ describe('Admin and cron boundary', () => {
       ).status,
     ).toBe(200);
     expect(work).toHaveBeenCalledTimes(1);
+  });
+  it('does not grant full cron access to the lower-privilege live secret', async () => {
+    const work = vi.fn().mockResolvedValue({ status: 'ok' });
+    vi.stubEnv('LIVE_SYNC_SECRET', 'live-only-secret-with-at-least-32-characters');
+    const request = new Request('https://example.test/api/cron/openfootball', {
+      headers: { authorization: 'Bearer live-only-secret-with-at-least-32-characters' },
+    });
+    expect((await cronHandler(work)(request)).status).toBe(401);
+    expect(work).not.toHaveBeenCalled();
+    expect((await cronHandler(work, { liveSecret: true })(request)).status).toBe(200);
+  });
+  it('never accepts migration secrets from a query string', async () => {
+    const migrationSecret = 'migration-secret-with-at-least-32-characters';
+    vi.stubEnv('MIGRATION_BOOTSTRAP_TOKEN', migrationSecret);
+    vi.stubEnv('ALLOW_AIVEN_RECONSTRUCTION', 'true');
+    const request = new Request(
+      `https://example.test/api/admin/reconstruct-aiven?token=${migrationSecret}`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: '{}',
+      },
+    );
+    expect((await reconstruct(request.clone())).status).toBe(401);
+    expect((await reconstructDirect(request)).status).toBe(401);
   });
 });

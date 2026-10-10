@@ -3,10 +3,18 @@ import { verifySecret } from '@/lib/auth';
 import { syncExpandedFootball, syncExpandedPlayers } from '@/services/football/espn-sync';
 import { syncOpenFootball } from '@/services/football/openfootball-sync';
 import { syncSportsDbPlayers } from '@/services/football/sportsdb-sync';
+import { readJsonBody } from '@/lib/request-body';
+import { z } from 'zod';
 
 export const maxDuration = 300;
 
 type Step = 'openfootball' | 'expanded' | 'players' | 'all';
+const reconstructionRequest = z
+  .object({
+    step: z.enum(['openfootball', 'expanded', 'players', 'all']).default('openfootball'),
+    allowNonEmpty: z.boolean().default(false),
+  })
+  .strict();
 
 function databaseTarget() {
   const value = process.env.DATABASE_URL;
@@ -66,13 +74,8 @@ async function assertEmptyUnlessAllowed(allowNonEmpty: boolean) {
   return { ok: true as const, before };
 }
 
-export async function GET(request: Request) {
-  const url = new URL(request.url);
-  const queryToken = url.searchParams.get('token') ?? '';
-  if (
-    !verifySecret(bearer(request), process.env.MIGRATION_BOOTSTRAP_TOKEN) &&
-    !verifySecret(queryToken, process.env.MIGRATION_BOOTSTRAP_TOKEN)
-  )
+export async function POST(request: Request) {
+  if (!verifySecret(bearer(request), process.env.MIGRATION_BOOTSTRAP_TOKEN))
     return Response.json({ error: 'Non autorisé' }, { status: 401 });
 
   if (!allowedEnvironment())
@@ -88,11 +91,11 @@ export async function GET(request: Request) {
   const target = databaseTarget();
   if (!target.ok) return Response.json({ error: target.error }, { status: 409 });
 
-  const step = (url.searchParams.get('step') ?? 'openfootball') as Step;
-  if (!['openfootball', 'expanded', 'players', 'all'].includes(step))
-    return Response.json({ error: 'INVALID_STEP' }, { status: 400 });
-
-  const allowNonEmpty = url.searchParams.get('allow_non_empty') === 'true';
+  const input = await readJsonBody(request, 1024);
+  if (!input.ok) return input.response;
+  const parsed = reconstructionRequest.safeParse(input.value);
+  if (!parsed.success) return Response.json({ error: 'INVALID_REQUEST' }, { status: 400 });
+  const { step, allowNonEmpty } = parsed.data as { step: Step; allowNonEmpty: boolean };
   const empty = await assertEmptyUnlessAllowed(allowNonEmpty);
   if (!empty.ok)
     return Response.json(

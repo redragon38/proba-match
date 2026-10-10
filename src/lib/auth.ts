@@ -27,12 +27,11 @@ export function verifyAdminSession(
 export function sameOrigin(request: Request) {
   const origin = request.headers.get('origin');
   if (!origin || origin === 'null') return false;
-  if (origin === new URL(request.url).origin) return true;
   try {
-    return (
-      !!process.env.NEXT_PUBLIC_SITE_URL &&
-      origin === new URL(process.env.NEXT_PUBLIC_SITE_URL).origin
-    );
+    const configured = process.env.NEXT_PUBLIC_SITE_URL;
+    if (configured) return origin === new URL(configured).origin;
+    // Local development has no public origin; production fails closed when it is missing.
+    return process.env.NODE_ENV !== 'production' && origin === new URL(request.url).origin;
   } catch {
     return false;
   }

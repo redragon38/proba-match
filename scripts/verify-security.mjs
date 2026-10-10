@@ -50,6 +50,14 @@ for (const path of ['sync', 'mapping'])
     headers: { origin, 'content-type': 'application/json' },
     body: '{}',
   });
+for (const path of ['reconstruct-aiven', 'reconstruct-aiven-direct']) {
+  await check(`/api/admin/${path}`, 405);
+  await check(`/api/admin/${path}?token=query-secrets-are-never-accepted`, 401, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: '{}',
+  });
+}
 for (const method of ['POST', 'DELETE'])
   await check('/api/admin/session', 403, {
     method,

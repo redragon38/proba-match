@@ -24,7 +24,7 @@ async function get(request: Request) {
 
 /** Read-only lookup: local favourite identifiers never appear in a shared cache or URL. */
 export async function POST(request: Request) {
-  const body = await readJsonBody(request, 1_000_000);
+  const body = await readJsonBody(request, 64_000);
   if (!body.ok) return body.response;
   const input = body.value;
   if (
@@ -32,6 +32,7 @@ export async function POST(request: Request) {
     typeof input !== 'object' ||
     !('ids' in input) ||
     !Array.isArray(input.ids) ||
+    input.ids.length > 200 ||
     input.ids.some((id: unknown) => typeof id !== 'string' || id.length > 200)
   ) {
     return Response.json({ error: 'Favoris invalides.' }, { status: 400 });

@@ -1,27 +1,29 @@
 import { z } from 'zod';
 
-const headerSchema = z.object({ alg: z.literal('RS256'), kid: z.string().min(1) });
+const headerSchema = z.object({ alg: z.literal('RS256'), kid: z.string().min(1).max(256) });
 const claimsSchema = z.object({
   iss: z.literal('https://token.actions.githubusercontent.com'),
-  aud: z.union([z.string(), z.array(z.string())]),
-  exp: z.number(),
-  nbf: z.number().optional(),
+  aud: z.union([z.string().max(512), z.array(z.string().max(512)).max(10)]),
+  exp: z.number().int(),
+  nbf: z.number().int().optional(),
   repository: z.literal('redragon38/proba-match'),
-  ref: z.string(),
+  ref: z.string().max(512),
   event_name: z.enum(['schedule', 'workflow_dispatch']),
-  workflow_ref: z.string(),
+  workflow_ref: z.string().max(1024),
 });
 const jwksSchema = z.object({
-  keys: z.array(
-    z.object({
-      kty: z.literal('RSA'),
-      kid: z.string(),
-      n: z.string(),
-      e: z.string(),
-      alg: z.string().optional(),
-      use: z.string().optional(),
-    }),
-  ),
+  keys: z
+    .array(
+      z.object({
+        kty: z.literal('RSA'),
+        kid: z.string().max(256),
+        n: z.string().max(4096),
+        e: z.string().max(64),
+        alg: z.string().optional(),
+        use: z.string().optional(),
+      }),
+    )
+    .max(100),
 });
 
 const decode = (part: string) => {
@@ -32,6 +34,7 @@ const decode = (part: string) => {
 /** Verify a short-lived GitHub Actions OIDC token; no deploy secret is stored in the repository. */
 export async function verifyGithubActionsOidc(token: string) {
   try {
+    if (token.length < 100 || token.length > 16_384) return false;
     const parts = token.split('.');
     if (parts.length !== 3) return false;
     const header = headerSchema.parse(JSON.parse(decode(parts[0]).toString('utf8')));
