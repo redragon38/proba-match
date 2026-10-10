@@ -17,17 +17,18 @@ export async function footballJob<T>(provider: string, work: () => Promise<T>) {
       })
     : db;
   const token = randomUUID(),
-    expiresAt = new Date(Date.now() + 30 * 60_000);
+    expiresAt = new Date(Date.now() + 2 * 60_000),
+    obsoleteLease = new Date(Date.now() + 5 * 60_000);
   const acquired = await db.$queryRaw<
     { key: string }[]
-  >`INSERT INTO "SyncLock" ("key","token","expiresAt") VALUES ('football',${token},${expiresAt}::timestamptz AT TIME ZONE 'UTC') ON CONFLICT ("key") DO UPDATE SET "token"=${token},"expiresAt"=${expiresAt}::timestamptz AT TIME ZONE 'UTC' WHERE "SyncLock"."expiresAt"<(NOW() AT TIME ZONE 'UTC') RETURNING "key"`;
+  >`INSERT INTO "SyncLock" ("key","token","expiresAt") VALUES ('football',${token},${expiresAt}::timestamptz AT TIME ZONE 'UTC') ON CONFLICT ("key") DO UPDATE SET "token"=${token},"expiresAt"=${expiresAt}::timestamptz AT TIME ZONE 'UTC' WHERE "SyncLock"."expiresAt"<(NOW() AT TIME ZONE 'UTC') OR "SyncLock"."expiresAt">${obsoleteLease}::timestamptz AT TIME ZONE 'UTC' RETURNING "key"`;
   if (!acquired.length) throw new Error('SYNC_ALREADY_RUNNING');
   const lease = { token, lost: false };
   const heartbeat = setInterval(() => {
     void heartbeatDb.syncLock
       .updateMany({
         where: { key: 'football', token },
-        data: { expiresAt: new Date(Date.now() + 30 * 60_000) },
+        data: { expiresAt: new Date(Date.now() + 2 * 60_000) },
       })
       .then((result) => {
         if (result.count !== 1) lease.lost = true;
@@ -35,7 +36,7 @@ export async function footballJob<T>(provider: string, work: () => Promise<T>) {
       .catch(() => {
         lease.lost = true;
       });
-  }, 60_000);
+  }, 30_000);
   let run: { id: string } | undefined;
   try {
     run = await db.syncRun.create({ data: { provider, status: 'running' } });
