@@ -68,6 +68,16 @@ export default function Page() {
           </p>
         </div>
         <div className="reading-answer">
+          <h3>StatsBomb Open Data : événements avancés</h3>
+          <p>
+            <a href="https://github.com/statsbomb/open-data">StatsBomb Open Data</a> fournit des
+            événements détaillés pour les compétitions et saisons publiées dans son catalogue. Proba
+            Match calcule PPDA, field tilt et xT uniquement pour un match identifié par sa date, ses
+            deux équipes et son score. StatsBomb est cité comme source conformément aux conditions
+            du jeu de données ouvert ; la couverture reste partielle.
+          </p>
+        </div>
+        <div className="reading-answer">
           <h3>TheSportsDB et Wikimedia : profils et images</h3>
           <p>
             Le complément communautaire{' '}
@@ -100,6 +110,12 @@ export default function Page() {
           <li>
             Ratios descriptifs à partir de compteurs observés cohérents, par exemple les tirs cadrés
             rapportés aux tirs.
+          </li>
+          <li>
+            PPDA à partir des passes adverses et actions défensives, field tilt à partir des passes
+            réussies dans le dernier tiers, et xT des progressions réussies avec la grille ouverte
+            12 × 8 de Karun Singh. Ces métriques ne sont publiées que lorsque les événements
+            StatsBomb correspondants existent.
           </li>
         </ul>
         <p>

@@ -180,7 +180,7 @@ export function MatchDetail({
               : 'API-Football'}
           .{' '}
           {match.detailSource?.statistics || match.provenance?.details
-            ? `Statistiques : ${(match.detailSource?.statistics ?? match.provenance?.details) === 'espn' ? 'ESPN' : (match.detailSource?.statistics ?? match.provenance?.details) === 'fotmob' ? 'FotMob' : 'API-Football'}.`
+            ? `Statistiques : ${(match.detailSource?.statistics ?? match.provenance?.details) === 'espn' ? 'ESPN' : (match.detailSource?.statistics ?? match.provenance?.details) === 'fotmob' ? 'FotMob' : (match.detailSource?.statistics ?? match.provenance?.details) === 'statsbomb' ? 'StatsBomb Open Data' : 'API-Football'}.`
             : 'Statistiques avancées indisponibles sans enrichissement.'}
         </p>
       )}
