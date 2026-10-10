@@ -1,11 +1,12 @@
 import { verifySecret } from '@/lib/auth';
+import { verifyGithubActionsOidc } from '@/services/github-oidc';
 export function cronHandler(work: (request: Request) => Promise<unknown>) {
   return async (request: Request) => {
+    const supplied = request.headers.get('authorization')?.replace(/^Bearer /, '') ?? '';
     if (
-      !verifySecret(
-        request.headers.get('authorization')?.replace(/^Bearer /, '') ?? '',
-        process.env.CRON_SECRET,
-      )
+      !verifySecret(supplied, process.env.CRON_SECRET) &&
+      !verifySecret(supplied, process.env.LIVE_SYNC_SECRET) &&
+      !(await verifyGithubActionsOidc(supplied))
     )
       return Response.json({ error: 'Non autorisé' }, { status: 401 });
     try {

@@ -9,7 +9,15 @@ const listedMatch = z.object({
   id: z.number().int().positive(),
   home: team.extend({ score: z.number().int().nonnegative().nullish() }),
   away: team.extend({ score: z.number().int().nonnegative().nullish() }),
-  status: z.object({ utcTime: z.string(), finished: z.boolean().optional() }),
+  status: z.object({
+    utcTime: z.string(),
+    finished: z.boolean().optional(),
+    started: z.boolean().optional(),
+    ongoing: z.boolean().optional(),
+    cancelled: z.boolean().optional(),
+    liveTime: z.object({ short: z.union([z.string(), z.number()]).optional() }).nullish(),
+    reason: z.object({ short: z.string().optional() }).nullish(),
+  }),
 });
 
 export type FotmobListedMatch = z.infer<typeof listedMatch>;
@@ -48,6 +56,22 @@ export function identifyFotmobMatch(
       Math.abs(Date.parse(row.status.utcTime) - kickoff) <= 15 * 60_000 &&
       row.home.score === expected.homeScore &&
       row.away.score === expected.awayScore &&
+      compactName(row.home.name) === compactName(expected.homeName) &&
+      compactName(row.away.name) === compactName(expected.awayName),
+  );
+  return candidates.length === 1 ? candidates[0] : null;
+}
+
+/** A future/live fixture is bound only when kickoff and both normalized team names agree uniquely. */
+export function identifyFotmobFixture(
+  rows: FotmobListedMatch[],
+  expected: { kickoff: string; homeName: string; awayName: string },
+) {
+  const kickoff = Date.parse(expected.kickoff);
+  const candidates = rows.filter(
+    (row) =>
+      Number.isFinite(kickoff) &&
+      Math.abs(Date.parse(row.status.utcTime) - kickoff) <= 15 * 60_000 &&
       compactName(row.home.name) === compactName(expected.homeName) &&
       compactName(row.away.name) === compactName(expected.awayName),
   );

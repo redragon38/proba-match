@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   identifyFotmobMatch,
+  identifyFotmobFixture,
   parseFotmobDetails,
   parseFotmobMatches,
 } from '@/services/football/providers/fotmob';
@@ -41,6 +42,18 @@ describe('FotMob advanced statistics', () => {
         awayScore: 2,
       }),
     ).toBeNull();
+  });
+
+  it('identifies a live fixture without requiring a final score', () => {
+    const live = structuredClone(listing);
+    live.leagues[0].matches[0].status.finished = false;
+    expect(
+      identifyFotmobFixture(parseFotmobMatches(live), {
+        kickoff: '2026-09-20T19:30:00.000Z',
+        homeName: 'Porto',
+        awayName: 'Benfica',
+      })?.id,
+    ).toBe(5887641);
   });
 
   it('keeps reported xG/xGOT and sums only available player xA by team', () => {

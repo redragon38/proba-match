@@ -1,0 +1,50 @@
+name: Football temps réel
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: football-realtime
+  cancel-in-progress: false
+
+jobs:
+  scores:
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '*/5 * * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Actualiser les scores ciblés
+        run: |
+          oidc_response=$(curl --fail --silent --show-error \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=proba-match-realtime")
+          oidc_token=$(printf '%s' "$oidc_response" | jq -r .value)
+          test -n "$oidc_token"
+          curl --fail --silent --show-error --retry 2 --max-time 90 \
+            -H "Authorization: Bearer $oidc_token" \
+            https://proba-match.vercel.app/api/cron/realtime
+
+  fixtures:
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '17 * * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Actualiser le calendrier
+        run: |
+          oidc_response=$(curl --fail --silent --show-error \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=proba-match-realtime")
+          oidc_token=$(printf '%s' "$oidc_response" | jq -r .value)
+          test -n "$oidc_token"
+          curl --fail --silent --show-error --retry 2 --max-time 300 \
+            -H "Authorization: Bearer $oidc_token" \
+            https://proba-match.vercel.app/api/cron/match-window

@@ -550,7 +550,15 @@ export async function persistMatchDetails(
       for (const match of matches) {
         await tx.match.update({
           where: { id: match.id },
-          data: { payload: json(match), source: match.source, status: match.status },
+          data: {
+            payload: json(match),
+            source: match.source,
+            kickoff: new Date(match.kickoff),
+            status: match.status,
+            homeScore: match.homeScore,
+            awayScore: match.awayScore,
+            minute: match.minute ?? null,
+          },
         });
         await tx.matchEvent.deleteMany({ where: { matchId: match.id } });
         if (match.events.length)
