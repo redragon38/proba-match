@@ -1,5 +1,5 @@
 import { isoDate, isoDateTime, playerBirthDate } from './factual-dates';
-import type { Dataset, Match, Player, Team } from '@/types/football';
+import type { Competition, Dataset, Match, Player, Team } from '@/types/football';
 import { absoluteUrl } from './seo';
 import { matchFactSummary } from './match-facts';
 
@@ -20,7 +20,7 @@ export function structuredImage(value: string | undefined) {
     return undefined;
   }
 }
-export function teamStructuredData(team: Team) {
+export function teamStructuredData(team: Team, competition?: Competition) {
   return {
     '@context': 'https://schema.org',
     '@type': 'SportsTeam',
@@ -29,6 +29,17 @@ export function teamStructuredData(team: Team) {
     sport: 'Football',
     url: absoluteUrl(`/equipe/${team.slug}`),
     mainEntityOfPage: absoluteUrl(`/equipe/${team.slug}`),
+    ...(team.country ? { location: { '@type': 'Country', name: team.country } } : {}),
+    ...(competition
+      ? {
+          memberOf: {
+            '@type': 'SportsOrganization',
+            '@id': absoluteUrl(`/competition/${competition.slug}#competition`),
+            name: competition.name,
+            url: absoluteUrl(`/competition/${competition.slug}`),
+          },
+        }
+      : {}),
     ...(structuredImage(team.logo) ? { logo: structuredImage(team.logo) } : {}),
   };
 }
@@ -42,6 +53,7 @@ export function playerStructuredData(player: Player, team: Team | undefined) {
     url: absoluteUrl(`/joueur/${player.slug}`),
     mainEntityOfPage: absoluteUrl(`/joueur/${player.slug}`),
     name: player.name,
+    ...(player.position !== 'Non disponible' ? { jobTitle: player.position } : {}),
     ...(birthDate ? { birthDate } : {}),
     ...(image ? { image } : {}),
     ...(player.nationality
@@ -74,9 +86,9 @@ export function matchStructuredData(match: Match, data: Pick<Dataset, 'teams' | 
       ? 'https://schema.org/EventCancelled'
       : match.status === 'postponed'
         ? 'https://schema.org/EventPostponed'
-        : match.status === 'abandoned'
-          ? undefined
-          : 'https://schema.org/EventScheduled';
+        : match.status === 'scheduled'
+          ? 'https://schema.org/EventScheduled'
+          : undefined;
   const entity = (team: Team) => ({
     '@type': 'SportsTeam',
     '@id': absoluteUrl(`/equipe/${team.slug}#team`),
@@ -94,6 +106,16 @@ export function matchStructuredData(match: Match, data: Pick<Dataset, 'teams' | 
     sport: 'Football',
     ...(startDate ? { startDate } : {}),
     ...(eventStatus ? { eventStatus } : {}),
+    ...(competition
+      ? {
+          isPartOf: {
+            '@type': 'SportsOrganization',
+            '@id': absoluteUrl(`/competition/${competition.slug}#competition`),
+            name: competition.name,
+            url: absoluteUrl(`/competition/${competition.slug}`),
+          },
+        }
+      : {}),
     ...(match.venue ? { location: { '@type': 'Place', name: match.venue } } : {}),
     homeTeam: entity(home),
     awayTeam: entity(away),

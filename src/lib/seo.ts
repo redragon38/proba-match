@@ -127,7 +127,7 @@ export const publicPages: Record<string, [string, string]> = {
   ],
   '/lexique-football': [
     'Lexique football — probabilités, xG, Elo et statistiques',
-    'Définitions simples de 24 termes football : 1N2, xG, Elo, clean sheet, calibration, Brier Score et statistiques. Méthodes de calcul et limites expliquées.',
+    'Définitions simples de 28 termes football : 1N2, xG, xGOT, xA, PPDA, field tilt, xT et Elo. Méthodes de calcul et limites expliquées.',
   ],
   '/sources-donnees': [
     'Sources des données football et limites de couverture',

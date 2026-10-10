@@ -12,8 +12,8 @@ export default function Page() {
       <span className="eyebrow">LES MOTS DERRIÈRE LES CHIFFRES</span>
       <h1>Lexique des probabilités et statistiques football</h1>
       <p className="intro-text">
-        24 définitions pour comprendre un résultat, une estimation et ses limites. Chaque terme
-        indique ce qu’il mesure et les précautions nécessaires pour le lire.
+        {footballTerms.length} définitions pour comprendre un résultat, une estimation et ses
+        limites. Chaque terme indique ce qu’il mesure et les précautions nécessaires pour le lire.
       </p>
       <EditorialContext />
       <nav className="reading-toc" aria-label="Termes du lexique">

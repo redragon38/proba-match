@@ -28,6 +28,8 @@ describe('Security and canonical host configuration', () => {
       "frame-ancestors 'none'",
     ])
       expect(csp).toContain(directive);
+    expect(csp).toContain('https://www.googletagmanager.com');
+    expect(csp).toContain('https://*.google-analytics.com');
     expect(csp).not.toContain('unsafe-eval');
     expect(headers).toContainEqual({ key: 'X-Content-Type-Options', value: 'nosniff' });
     expect(headers).toContainEqual({ key: 'X-Frame-Options', value: 'DENY' });
@@ -50,12 +52,19 @@ describe('Security and canonical host configuration', () => {
       (await globalHeaders()).some((header) => header.key === 'Strict-Transport-Security'),
     ).toBe(false);
   });
-  it('permanently redirects only the www hostname directly to its HTTPS canonical host', async () => {
-    expect(await config.redirects!()).toContainEqual({
-      source: '/:path*',
-      has: [{ type: 'host', value: 'www.probamatch.com' }],
-      destination: 'https://proba-match.vercel.app/:path*',
-      permanent: true,
-    });
+  it('permanently redirects every alternate hostname directly to its HTTPS canonical host', async () => {
+    const redirects = await config.redirects!();
+    for (const host of [
+      'probamatch.com',
+      'www.probamatch.com',
+      'proba-match.com',
+      'www.proba-match.com',
+    ])
+      expect(redirects).toContainEqual({
+        source: '/:path*',
+        has: [{ type: 'host', value: host }],
+        destination: 'https://proba-match.vercel.app/:path*',
+        permanent: true,
+      });
   });
 });

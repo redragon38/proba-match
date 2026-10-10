@@ -21,8 +21,8 @@ describe('Editorial SEO and machine-readable honesty', () => {
       /<script[\s\S]*?<\/script>/g,
       '',
     );
-    expect(footballTerms).toHaveLength(24);
-    expect(new Set(footballTerms.map((t) => t.id)).size).toBe(24);
+    expect(footballTerms).toHaveLength(28);
+    expect(new Set(footballTerms.map((t) => t.id)).size).toBe(28);
     const terms = glossaryData().hasDefinedTerm;
     for (const term of terms) {
       const anchor = new URL(term.url).hash.slice(1);

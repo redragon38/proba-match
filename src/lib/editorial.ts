@@ -139,6 +139,38 @@ export const footballTerms = [
       'Les xG observés après un match ne peuvent pas alimenter une prédiction pré-match de ce même match.',
   },
   {
+    id: 'xgot',
+    name: 'xGOT — expected goals on target',
+    definition:
+      'Qualité estimée des tirs cadrés selon leur placement dans le but, après que le joueur a tiré. La mesure complète les xG, qui décrivent la qualité de l’occasion avant le tir.',
+    caution:
+      'Le modèle et son échelle dépendent du fournisseur. Un tir non cadré ne reçoit généralement pas de xGOT.',
+  },
+  {
+    id: 'xa',
+    name: 'xA — expected assists',
+    definition:
+      'Probabilité qu’une passe devienne une passe décisive, estimée à partir de la qualité du tir qu’elle crée selon la méthode du fournisseur.',
+    caution:
+      'Les xA peuvent différer fortement selon la définition des passes clés et le modèle de tirs utilisé.',
+  },
+  {
+    id: 'field-tilt',
+    name: 'Field tilt',
+    definition:
+      'Part du contrôle territorial dans le dernier tiers adverse, calculée à partir des passes ou des touches dans cette zone selon le fournisseur.',
+    caution:
+      'Cette part mesure la présence territoriale, pas directement la qualité des occasions ni la domination du score.',
+  },
+  {
+    id: 'xt',
+    name: 'xT — expected threat',
+    definition:
+      'Valeur estimée du danger créé lorsqu’une action fait progresser le ballon vers une zone depuis laquelle une équipe a davantage de chances de marquer.',
+    caution:
+      'La grille, les actions retenues et l’horizon de calcul varient selon les modèles ; les valeurs de sources différentes ne sont pas toujours comparables.',
+  },
+  {
     id: 'possession',
     name: 'Possession',
     definition:

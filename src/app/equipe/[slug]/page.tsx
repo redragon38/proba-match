@@ -24,9 +24,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const data = await getDataset();
   const team = data.teams.find((t) => t.slug === slug);
   if (!team) notFound();
+  const competition = data.competitions.find((c) => c.id === team.competitionId);
   return (
     <>
-      {data.source !== 'demo' && <JsonLd value={teamStructuredData(team)} />}
+      {data.source !== 'demo' && <JsonLd value={teamStructuredData(team, competition)} />}
       <TeamProfile
         data={teamDataset(data, [team.id])}
         team={team}

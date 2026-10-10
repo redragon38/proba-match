@@ -16,13 +16,16 @@ const team = data.teams.find((t) => t.id === match.homeId)!;
 const player = data.players[0];
 describe('Factual sports identities and dates', () => {
   it('links event participants and player membership to the same canonical team identity', () => {
-    const entity = teamStructuredData(team);
+    const competition = data.competitions.find((c) => c.id === team.competitionId)!;
+    const entity = teamStructuredData(team, competition);
     const event = matchStructuredData(match, data)!;
     const athlete = playerStructuredData(player, team);
     expect(event.homeTeam['@id']).toBe(entity['@id']);
     expect(athlete.memberOf?.['@id']).toBe(entity['@id']);
     expect(event.homeTeam.url).toBe(entity.url);
     expect(event.mainEntityOfPage).toBe(event.url);
+    expect(entity.memberOf?.['@id']).toBe(event.isPartOf?.['@id']);
+    expect(athlete.jobTitle).toBe(player.position);
   });
   it('does not fabricate a time from the internal placeholder for an unknown kickoff', () => {
     const unknown = {
@@ -58,6 +61,15 @@ describe('Factual sports identities and dates', () => {
     expect(matchStructuredData(match, { ...data, teams: [] })).toBeNull();
     expect(matchStructuredData({ ...match, status: 'abandoned' }, data)).not.toHaveProperty(
       'eventStatus',
+    );
+    expect(matchStructuredData({ ...match, status: 'finished' }, data)).not.toHaveProperty(
+      'eventStatus',
+    );
+    expect(matchStructuredData({ ...match, status: 'live' }, data)).not.toHaveProperty(
+      'eventStatus',
+    );
+    expect(matchStructuredData({ ...match, status: 'scheduled' }, data)?.eventStatus).toMatch(
+      /EventScheduled$/,
     );
     expect(matchStructuredData({ ...match, status: 'postponed' }, data)?.eventStatus).toMatch(
       /EventPostponed$/,

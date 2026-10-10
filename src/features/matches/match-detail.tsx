@@ -83,7 +83,7 @@ export function MatchDetail({
       <Breadcrumbs
         items={[
           { name: 'Matchs', href: '/matchs' },
-          { name: `${home.short} – ${away.short}`, href: `/match/${match.slug}` },
+          { name: `${home.name} – ${away.name}`, href: `/match/${match.slug}` },
         ]}
         real={data.source !== 'demo'}
       />
