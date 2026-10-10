@@ -31,7 +31,8 @@ jobs:
             https://proba-match.vercel.app/api/cron/realtime
 
   fixtures:
-    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '17 * * * *'
+    needs: scores
+    if: always() && (github.event_name == 'workflow_dispatch' || github.event.schedule == '17 * * * *')
     runs-on: ubuntu-latest
     timeout-minutes: 8
     permissions:

@@ -7,7 +7,7 @@ const claimsSchema = z.object({
   exp: z.number(),
   nbf: z.number().optional(),
   repository: z.literal('redragon38/proba-match'),
-  ref: z.literal('refs/heads/master'),
+  ref: z.string(),
   event_name: z.enum(['schedule', 'workflow_dispatch']),
   workflow_ref: z.string(),
 });
@@ -43,8 +43,9 @@ export async function verifyGithubActionsOidc(token: string) {
       claims.exp <= now ||
       claims.exp > now + 600 ||
       (claims.nbf != null && claims.nbf > now + 30) ||
-      claims.workflow_ref !==
-        'redragon38/proba-match/.github/workflows/football-realtime.yml@refs/heads/master'
+      claims.ref !== 'refs/heads/master' ||
+      !claims.workflow_ref.startsWith('redragon38/proba-match/.github/workflows/') ||
+      !claims.workflow_ref.endsWith('@refs/heads/master')
     )
       return false;
     const response = await fetch('https://token.actions.githubusercontent.com/.well-known/jwks', {
