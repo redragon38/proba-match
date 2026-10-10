@@ -22,6 +22,12 @@ function liveMinute(row: FotmobListedMatch) {
   return match ? Math.min(Number(match[0]), 130) : null;
 }
 
+function livePhase(row: FotmobListedMatch) {
+  return /^(HT|HALF)/i.test(String(row.status.liveTime?.short ?? ''))
+    ? ('halftime' as const)
+    : ('playing' as const);
+}
+
 /** Refresh only fixtures around the current match window: one listing request per UTC date. */
 export async function syncFotmobLive(now = new Date()) {
   return footballJob('fotmob-live', async () => {
@@ -95,7 +101,7 @@ export async function syncFotmobLive(now = new Date()) {
           homeScore: scored ? (row.home.score ?? null) : null,
           awayScore: scored ? (row.away.score ?? null) : null,
           minute: nextStatus === 'live' ? liveMinute(row) : null,
-          phase: nextStatus === 'live' ? 'playing' : undefined,
+          phase: nextStatus === 'live' ? livePhase(row) : undefined,
           updatedAt: observedAt,
         },
         match,
