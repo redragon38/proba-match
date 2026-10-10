@@ -1,6 +1,6 @@
 export type MatchStatus =
   'scheduled' | 'live' | 'finished' | 'postponed' | 'cancelled' | 'abandoned';
-export type FootballSource = 'demo' | 'api-football' | 'openfootball' | 'espn';
+export type FootballSource = 'demo' | 'api-football' | 'openfootball' | 'espn' | 'fotmob';
 export type Position = 'Gardien' | 'Défenseur' | 'Milieu' | 'Attaquant' | 'Non disponible';
 export interface MatchPlayerPerformance {
   playerId: string;
@@ -119,6 +119,7 @@ export interface PlayerStats {
   cleanSheets?: number | null;
   errors?: number | null;
   xg?: number | null;
+  xgot?: number | null;
   xa?: number | null;
   yellow?: number | null;
   red?: number | null;

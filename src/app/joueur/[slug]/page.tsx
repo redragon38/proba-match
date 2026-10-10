@@ -111,6 +111,7 @@ export default async function Page({
     ['Tirs', p.stats.shots],
     ['Tirs cadrés', p.stats.shotsOnTarget],
     ['xG', p.stats.xg],
+    ['xGOT', p.stats.xgot],
     ['xA', p.stats.xa],
     ['Passes', p.stats.passes],
     ['Passes réussies', p.stats.passesCompleted],

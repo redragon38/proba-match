@@ -30,6 +30,7 @@ export const playerStatGroups: {
       { key: 'shots', label: 'Tirs' },
       { key: 'shotsOnTarget', label: 'Tirs cadrés' },
       { key: 'xg', label: 'xG', digits: 2 },
+      { key: 'xgot', label: 'xGOT', digits: 2 },
       { key: 'passes', label: 'Passes' },
       { key: 'passesCompleted', label: 'Passes réussies' },
       { key: 'keyPasses', label: 'Passes clés' },

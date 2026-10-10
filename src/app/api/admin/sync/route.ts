@@ -3,12 +3,13 @@ import { sameOrigin, verifyAdminSession } from '@/lib/auth';
 import { syncFootball } from '@/services/football/sync';
 import { syncExpandedFootball, syncExpandedPlayers } from '@/services/football/espn-sync';
 import { syncOpenFootball } from '@/services/football/openfootball-sync';
+import { syncFotmobAdvancedDetails } from '@/services/football/fotmob-sync';
 import { readJsonBody } from '@/lib/request-body';
 import { z } from 'zod';
 export const maxDuration = 300;
 const syncRequest = z
   .object({
-    provider: z.enum(['openfootball', 'api-football', 'espn', 'espn-players']).optional(),
+    provider: z.enum(['openfootball', 'api-football', 'espn', 'espn-players', 'fotmob']).optional(),
     date: z.iso.date().optional(),
     history: z.boolean().optional(),
     enrich: z.boolean().optional(),
@@ -27,6 +28,7 @@ export async function POST(request: Request) {
     if (body.provider === 'espn')
       return Response.json(await syncExpandedFootball({ history: body.history === true }));
     if (body.provider === 'espn-players') return Response.json(await syncExpandedPlayers());
+    if (body.provider === 'fotmob') return Response.json(await syncFotmobAdvancedDetails());
     if (body.provider === 'openfootball')
       return Response.json(await syncOpenFootball({ history: body.history === true }));
     return Response.json(await syncFootball({ date: body.date, enrich: body.enrich === true }));

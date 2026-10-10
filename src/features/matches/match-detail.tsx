@@ -179,8 +179,8 @@ export function MatchDetail({
               ? 'OpenFootball'
               : 'API-Football'}
           .{' '}
-          {match.provenance?.details
-            ? `Statistiques : ${match.provenance.details === 'espn' ? 'ESPN' : 'API-Football'}.`
+          {match.detailSource?.statistics || match.provenance?.details
+            ? `Statistiques : ${(match.detailSource?.statistics ?? match.provenance?.details) === 'espn' ? 'ESPN' : (match.detailSource?.statistics ?? match.provenance?.details) === 'fotmob' ? 'FotMob' : 'API-Football'}.`
             : 'Statistiques avancées indisponibles sans enrichissement.'}
         </p>
       )}
