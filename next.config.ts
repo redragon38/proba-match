@@ -7,31 +7,45 @@ const config: NextConfig = {
     remotePatterns: [{ protocol: 'https', hostname: 'media.api-sports.io' }],
     formats: ['image/avif', 'image/webp'],
   },
+  async redirects() {
+    return ['probamatch.com', 'www.probamatch.com'].map((host) => ({
+      source: '/:path*',
+      has: [{ type: 'host' as const, value: host }],
+      destination: 'https://proba-match.com/:path*',
+      permanent: true,
+    }));
+  },
   async headers() {
     const publicHttps =
       process.env.NODE_ENV === 'production' &&
       process.env.VERCEL_ENV === 'production' &&
       !isPreviewDeployment() &&
       !!process.env.NEXT_PUBLIC_SITE_URL?.startsWith('https://');
+    const cdn = (seconds: number, stale = seconds * 4) => [
+      {
+        key: 'Vercel-CDN-Cache-Control',
+        value: `public, s-maxage=${seconds}, stale-while-revalidate=${stale}`,
+      },
+    ];
     return [
-      {
-        source: '/',
-        headers: [
-          {
-            key: 'Vercel-CDN-Cache-Control',
-            value: 'public, s-maxage=10, stale-while-revalidate=30',
-          },
-        ],
-      },
-      {
-        source: '/:path((?!api(?:/|$)|admin(?:/|$)|live(?:/|$)).+)',
-        headers: [
-          {
-            key: 'Vercel-CDN-Cache-Control',
-            value: 'public, s-maxage=10, stale-while-revalidate=30',
-          },
-        ],
-      },
+      { source: '/', headers: cdn(30, 120) },
+      { source: '/matchs', headers: cdn(15, 60) },
+      { source: '/match/:path*', headers: cdn(10, 30) },
+      { source: '/live', headers: cdn(5, 10) },
+      { source: '/joueurs', headers: cdn(300, 1800) },
+      { source: '/joueur/:path*', headers: cdn(300, 1800) },
+      { source: '/equipes', headers: cdn(300, 1800) },
+      { source: '/equipe/:path*', headers: cdn(300, 1800) },
+      { source: '/competitions', headers: cdn(300, 1800) },
+      { source: '/competition/:path*', headers: cdn(300, 1800) },
+      { source: '/classements', headers: cdn(300, 1800) },
+      { source: '/comparateur/:path*', headers: cdn(300, 1800) },
+      { source: '/a-propos', headers: cdn(86400, 604800) },
+      { source: '/methodologie', headers: cdn(86400, 604800) },
+      { source: '/comprendre-probabilites', headers: cdn(86400, 604800) },
+      { source: '/lexique-football', headers: cdn(86400, 604800) },
+      { source: '/sources-donnees', headers: cdn(86400, 604800) },
+      { source: '/contact', headers: cdn(86400, 604800) },
       { source: '/api/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
       {
         source: '/api/admin/:path*',

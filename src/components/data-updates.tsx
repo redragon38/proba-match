@@ -7,6 +7,24 @@ export function DataUpdates({ revision }: { revision?: string }) {
   const router = useRouter();
   const pathname = usePathname();
   useEffect(() => {
+    const realtime =
+      pathname === '/' ||
+      pathname === '/live' ||
+      pathname === '/matchs' ||
+      pathname.startsWith('/match/');
+    const catalogue = [
+      '/joueurs',
+      '/joueur/',
+      '/equipes',
+      '/equipe/',
+      '/competitions',
+      '/competition/',
+      '/classements',
+    ].some((path) => pathname === path || pathname.startsWith(path));
+    // Editorial pages have no football payload to refresh. Catalogue data changes
+    // far less often than scores, so avoid a full RSC render every 30 seconds there.
+    if (pathname !== '/admin' && !realtime && !catalogue) return;
+    const interval = realtime || pathname === '/admin' ? 30_000 : 300_000;
     let stopped = false,
       busy = false;
     let timer: ReturnType<typeof setTimeout>;
@@ -14,7 +32,7 @@ export function DataUpdates({ revision }: { revision?: string }) {
     async function check() {
       if (stopped || busy) return;
       if (document.visibilityState !== 'visible') {
-        timer = setTimeout(check, 30000);
+        timer = setTimeout(check, interval);
         return;
       }
       busy = true;
@@ -40,7 +58,7 @@ export function DataUpdates({ revision }: { revision?: string }) {
       } finally {
         busy = false;
         clearTimeout(timeout);
-        if (!stopped) timer = setTimeout(check, 30000);
+        if (!stopped) timer = setTimeout(check, interval);
       }
     }
     const resume = () => {
@@ -49,7 +67,7 @@ export function DataUpdates({ revision }: { revision?: string }) {
         void check();
       }
     };
-    timer = setTimeout(check, 30000);
+    timer = setTimeout(check, interval);
     document.addEventListener('visibilitychange', resume);
     return () => {
       stopped = true;
