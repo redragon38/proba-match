@@ -54,6 +54,7 @@ export function Shell({
   const sidebar = useRef<HTMLElement>(null);
   const [theme, setTheme] = usePreference('matchscore-theme', 'dark');
   const [density] = usePreference('matchscore-density', 'comfortable');
+  const matchesActive = pathname === '/matchs' || pathname.startsWith('/match/');
   useEffect(() => {
     if (pathname.startsWith('/match/')) emitAnalytics('match_opened');
     else if (pathname.startsWith('/equipe/')) emitAnalytics('team_opened');
@@ -79,6 +80,22 @@ export function Shell({
       if (event.key === 'Escape') {
         setMenu(false);
         menuButton.current?.focus();
+        return;
+      }
+      if (event.key === 'Tab') {
+        const focusable = sidebar.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled])',
+        );
+        if (!focusable?.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     };
     window.addEventListener('keydown', onKey);
@@ -250,19 +267,35 @@ export function Shell({
         </main>
       </div>
       <nav className="mobile-bottom" aria-label="Navigation mobile">
-        <Link href="/" aria-current={pathname === '/' ? 'page' : undefined}>
+        <Link
+          href="/"
+          onClick={() => setMenu(false)}
+          aria-current={pathname === '/' ? 'page' : undefined}
+        >
           <Globe2 size={20} />
           Accueil
         </Link>
-        <Link href="/matchs" aria-current={pathname === '/matchs' ? 'page' : undefined}>
+        <Link
+          href="/matchs"
+          onClick={() => setMenu(false)}
+          aria-current={matchesActive ? 'page' : undefined}
+        >
           <CircleDot size={20} />
           Matchs
         </Link>
-        <Link href="/live" aria-current={pathname === '/live' ? 'page' : undefined}>
+        <Link
+          href="/live"
+          onClick={() => setMenu(false)}
+          aria-current={pathname === '/live' ? 'page' : undefined}
+        >
           <Activity size={20} />
           Direct {liveCount > 0 && <span className="mobile-live-count">{liveCount}</span>}
         </Link>
-        <Link href="/recherche" aria-current={pathname === '/recherche' ? 'page' : undefined}>
+        <Link
+          href="/recherche"
+          onClick={() => setMenu(false)}
+          aria-current={pathname === '/recherche' ? 'page' : undefined}
+        >
           <Search size={20} />
           Recherche
         </Link>
@@ -272,7 +305,7 @@ export function Shell({
           aria-controls="site-sidebar"
           aria-label={menu ? 'Fermer le menu' : 'Ouvrir le menu'}
         >
-          <Menu size={20} />
+          {menu ? <X size={20} /> : <Menu size={20} />}
           Plus
         </button>
       </nav>
