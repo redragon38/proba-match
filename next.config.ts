@@ -7,16 +7,6 @@ const config: NextConfig = {
     remotePatterns: [{ protocol: 'https', hostname: 'media.api-sports.io' }],
     formats: ['image/avif', 'image/webp'],
   },
-  async redirects() {
-    return ['probamatch.com', 'www.probamatch.com', 'proba-match.com', 'www.proba-match.com'].map(
-      (host) => ({
-        source: '/:path*',
-        has: [{ type: 'host' as const, value: host }],
-        destination: 'https://proba-match.vercel.app/:path*',
-        permanent: true,
-      }),
-    );
-  },
   async headers() {
     const publicHttps =
       process.env.NODE_ENV === 'production' &&
