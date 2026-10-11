@@ -81,10 +81,11 @@ export function MatchList({
                       <div className="match-row" key={m.id}>
                         <div className={`match-clock ${m.status === 'live' ? 'is-live' : ''}`}>
                           {showDate && (
-                            <small>
+                            <small className="match-date">
                               <LocalTime
                                 iso={m.kickoff}
                                 date
+                                compactDate
                                 known={m.kickoffKnown}
                                 sourceDate={m.sourceDate}
                               />

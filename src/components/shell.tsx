@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Activity,
   ArrowLeftRight,
@@ -50,6 +50,8 @@ export function Shell({
 }) {
   const pathname = usePathname();
   const [menu, setMenu] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const sidebar = useRef<HTMLElement>(null);
   const [theme, setTheme] = usePreference('matchscore-theme', 'dark');
   const [density] = usePreference('matchscore-density', 'comfortable');
   useEffect(() => {
@@ -70,11 +72,20 @@ export function Shell({
   }, [theme, density]);
   useEffect(() => {
     if (!menu) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    sidebar.current?.querySelector<HTMLAnchorElement>('a')?.focus();
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setMenu(false);
+      if (event.key === 'Escape') {
+        setMenu(false);
+        menuButton.current?.focus();
+      }
     };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
   }, [menu]);
   function toggleTheme() {
     const value = document.documentElement.dataset.theme !== 'dark';
@@ -131,6 +142,7 @@ export function Shell({
             <Star size={19} />
           </Link>
           <button
+            ref={menuButton}
             className="icon-button mobile-menu"
             onClick={() => setMenu(!menu)}
             aria-label={menu ? 'Fermer le menu' : 'Ouvrir le menu'}
@@ -149,7 +161,7 @@ export function Shell({
             onClick={() => setMenu(false)}
           />
         )}
-        <aside id="site-sidebar" className={`sidebar ${menu ? 'is-open' : ''}`}>
+        <aside ref={sidebar} id="site-sidebar" className={`sidebar ${menu ? 'is-open' : ''}`}>
           <div className="sidebar-label">LE TERRAIN DE JEU</div>
           <nav aria-label="Navigation secondaire">
             {navigation.map((item) => (
@@ -254,7 +266,12 @@ export function Shell({
           <Search size={20} />
           Recherche
         </Link>
-        <button onClick={() => setMenu(!menu)} aria-expanded={menu}>
+        <button
+          onClick={() => setMenu(!menu)}
+          aria-expanded={menu}
+          aria-controls="site-sidebar"
+          aria-label={menu ? 'Fermer le menu' : 'Ouvrir le menu'}
+        >
           <Menu size={20} />
           Plus
         </button>

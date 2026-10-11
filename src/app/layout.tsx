@@ -18,6 +18,7 @@ import './product.css';
 import './probabilities.css';
 import './match-insights.css';
 import './reading.css';
+import './mobile.css';
 
 export const dynamic = 'force-dynamic';
 

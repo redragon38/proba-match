@@ -1,0 +1,241 @@
+/* Mobile interaction and reading layer. Loaded last to resolve legacy responsive overrides. */
+@media (max-width: 850px) {
+  html {
+    scroll-padding-top: 76px;
+  }
+
+  body {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
+    -webkit-tap-highlight-color: color-mix(in srgb, var(--green) 20%, transparent);
+  }
+
+  .topbar {
+    padding-right: max(10px, env(safe-area-inset-right));
+    padding-left: max(10px, env(safe-area-inset-left));
+  }
+
+  .brand,
+  .brand-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .header-actions .icon-button,
+  .header-actions .search-trigger {
+    width: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+  }
+
+  .page {
+    padding: 20px max(14px, env(safe-area-inset-right)) 16px max(14px, env(safe-area-inset-left));
+  }
+
+  h1 {
+    font-size: clamp(25px, 7.5vw, 31px);
+    line-height: 1.15;
+  }
+
+  .section-title {
+    align-items: flex-start;
+  }
+
+  .section-title .text-link {
+    min-height: 44px;
+    align-items: center;
+  }
+
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  .mobile-bottom {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    padding: 5px max(4px, env(safe-area-inset-right)) max(5px, env(safe-area-inset-bottom))
+      max(4px, env(safe-area-inset-left));
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .mobile-bottom a,
+  .mobile-bottom button {
+    width: 100%;
+    min-width: 0;
+    min-height: 52px;
+    gap: 3px;
+  }
+
+  .sidebar.is-open {
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    overscroll-behavior: contain;
+  }
+
+  .detail-tabs,
+  .profile-tabs,
+  .match-filters,
+  .segmented,
+  .reading-toc {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .date-controls {
+    width: 100%;
+    max-width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .date-controls::-webkit-scrollbar {
+    display: none;
+  }
+
+  .date-controls > button,
+  .date-controls .calendar-picker,
+  .match-filters .filter-toggle {
+    flex: 0 0 auto;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .detail-tabs::-webkit-scrollbar,
+  .profile-tabs::-webkit-scrollbar,
+  .match-filters::-webkit-scrollbar,
+  .segmented::-webkit-scrollbar,
+  .reading-toc::-webkit-scrollbar {
+    display: none;
+  }
+
+  .detail-tabs a,
+  .profile-tabs a,
+  .match-filters button,
+  .segmented button,
+  .reading-toc a {
+    min-height: 44px;
+    flex: 0 0 auto;
+  }
+
+  .data-table {
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .match-group,
+  .catalog-item,
+  .reading-term {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 180px;
+  }
+
+  .source-banner a,
+  .list-note a,
+  .player-see-all,
+  footer nav a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  footer nav {
+    gap: 0 16px;
+  }
+
+  footer {
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 500px) {
+  .match-row {
+    grid-template-columns: 56px minmax(0, 1fr) 28px 44px;
+    column-gap: 8px;
+  }
+
+  .match-row > .match-clock {
+    width: 56px;
+    min-width: 56px;
+    line-height: 1.25;
+  }
+
+  .match-clock .match-date,
+  .match-clock .match-date time {
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .match-row > .favorite-button {
+    width: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .match-teams .team-badge {
+    width: 22px !important;
+    height: 25px !important;
+  }
+
+  .match-teams > span {
+    min-height: 32px;
+    font-size: 13px;
+  }
+
+  .live-strip .sport-card-grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(278px, 86vw);
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+
+  .live-strip .sport-card-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .live-strip .sport-match-card {
+    scroll-snap-align: start;
+  }
+
+  .profile-header {
+    align-items: flex-start;
+  }
+
+  .profile-header > div {
+    min-width: 0;
+  }
+
+  .profile-header h1,
+  .catalog-item h2,
+  .search-result h2 {
+    overflow-wrap: anywhere;
+  }
+
+  .prose {
+    padding-inline: 14px;
+  }
+
+  .prose p,
+  .intro-text {
+    font-size: 15px;
+    line-height: 1.75;
+  }
+}
