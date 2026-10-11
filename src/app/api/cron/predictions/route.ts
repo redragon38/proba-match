@@ -2,6 +2,7 @@ import { db } from '@/database/client';
 import { cronHandler } from '@/services/football/cron';
 import { observeResult, validResult } from '@/prediction-engine/availability';
 import type { Dataset, Match } from '@/types/football';
+import { databaseErrorFields } from '@/lib/logger';
 
 export const maxDuration = 300;
 
@@ -43,41 +44,45 @@ export const GET = cronHandler(async () => {
   data.updatedAt = observedAt;
   data.verifiedAt = { ...data.verifiedAt, results: observedAt };
 
-  await db.$transaction(
-    async (tx) => {
-      for (let offset = 0; offset < repaired.length; offset += 500) {
-        const batch = repaired.slice(offset, offset + 500).map((row) => ({
-          id: row.id,
-          payload: json(row.match),
-        }));
-        await tx.$executeRaw`
+  try {
+    await db.$transaction(
+      async (tx) => {
+        for (let offset = 0; offset < repaired.length; offset += 500) {
+          const batch = repaired.slice(offset, offset + 500).map((row) => ({
+            id: row.id,
+            payload: json(row.match),
+          }));
+          await tx.$executeRaw`
           UPDATE "Match" AS match
           SET "payload" = incoming."payload", "updatedAt" = NOW() AT TIME ZONE 'UTC'
           FROM jsonb_to_recordset(${JSON.stringify(batch)}::jsonb)
             AS incoming("id" text, "payload" jsonb)
           WHERE match."id" = incoming."id"
         `;
-      }
-      if (repaired.length)
-        await tx.resultObservation.createMany({
-          data: repaired.flatMap(({ id, match }) =>
-            (match.resultRevisions ?? []).map((revision, index) => ({
-              id: `${id}:${revision.observedAt}:${index}`,
-              matchId: id,
-              receivedAt: new Date(revision.observedAt),
-              source: revision.source,
-              payload: json(revision),
-            })),
-          ),
-          skipDuplicates: true,
+        }
+        if (repaired.length)
+          await tx.resultObservation.createMany({
+            data: repaired.flatMap(({ id, match }) =>
+              (match.resultRevisions ?? []).map((revision, index) => ({
+                id: `${id}:${revision.observedAt}:${index}`,
+                matchId: id,
+                receivedAt: new Date(revision.observedAt),
+                source: revision.source,
+                payload: json(revision),
+              })),
+            ),
+            skipDuplicates: true,
+          });
+        await tx.cacheEntry.update({
+          where: { key: 'football:dataset' },
+          data: { payload: json(data) },
         });
-      await tx.cacheEntry.update({
-        where: { key: 'football:dataset' },
-        data: { payload: json(data) },
-      });
-    },
-    { maxWait: 10_000, timeout: 300_000 },
-  );
+      },
+      { maxWait: 10_000, timeout: 300_000 },
+    );
+  } catch (error) {
+    return { status: 'failed', stage: 'publication', ...databaseErrorFields(error) };
+  }
 
   return { status: 'success', observed: repaired.length, synchronized, observedAt };
 });
