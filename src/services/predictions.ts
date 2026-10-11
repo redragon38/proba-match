@@ -29,24 +29,33 @@ export function computeDisplayPrediction(
   return prediction ? publicPrediction(prediction) : undefined;
 }
 
-function computedDisplayPredictions(data: Dataset, now = new Date()) {
+function computedDisplayPredictions(
+  data: Dataset,
+  now = new Date(),
+  targetIds?: ReadonlySet<string>,
+) {
   return Object.fromEntries(
     data.matches.flatMap((match) => {
+      if (targetIds && !targetIds.has(match.id)) return [];
       const prediction = computeDisplayPrediction(match, data, now);
       return prediction ? [[match.id, prediction]] : [];
     }),
   );
 }
 
-export async function getPredictions(data: Dataset): Promise<Record<string, Prediction>> {
+export async function getPredictions(
+  data: Dataset,
+  targetIds?: ReadonlySet<string>,
+): Promise<Record<string, Prediction>> {
   if (data.source === 'demo')
-    return computedDisplayPredictions({
-      ...data,
-      matches: data.matches.filter((m) => !m.id.startsWith('history')),
-    });
-  if (!process.env.DATABASE_URL) return computedDisplayPredictions(data);
+    return computedDisplayPredictions(
+      { ...data, matches: data.matches.filter((m) => !m.id.startsWith('history')) },
+      new Date(),
+      targetIds,
+    );
+  if (!process.env.DATABASE_URL) return computedDisplayPredictions(data, new Date(), targetIds);
   try {
-    const ids = new Set(data.matches.map((m) => m.id));
+    const ids = targetIds ?? new Set(data.matches.map((m) => m.id));
     if (!ids.size) return {};
     // Only the latest public forecast crosses the connection. Full input archives
     // remain stored unchanged for reproducibility and objective evaluation.
@@ -58,12 +67,14 @@ export async function getPredictions(data: Dataset): Promise<Record<string, Pred
         .filter((r) => ids.has(r.matchId))
         .map((r) => [r.matchId, publicPrediction(r.payload as unknown as Prediction)]),
     );
-    for (const [matchId, prediction] of Object.entries(computedDisplayPredictions(data))) {
+    for (const [matchId, prediction] of Object.entries(
+      computedDisplayPredictions(data, new Date(), ids),
+    )) {
       if (!predictions[matchId]) predictions[matchId] = prediction;
     }
     return predictions;
   } catch {
-    return computedDisplayPredictions(data);
+    return computedDisplayPredictions(data, new Date(), targetIds);
   }
 }
 export async function getPredictionHistory(

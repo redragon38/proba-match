@@ -48,10 +48,7 @@ export default async function Home({
   // querying and serializing forecasts for the entire future fixture archive.
   const insightMatches = upcomingSelection(data, undefined, 24);
   const visibleIds = new Set([...view.matches, ...insightMatches].map((match) => match.id));
-  const predictions = await getPredictions({
-    ...data,
-    matches: data.matches.filter((match) => visibleIds.has(match.id)),
-  });
+  const predictions = await getPredictions(data, visibleIds);
   const dashboardPredictions = Object.fromEntries(
     Object.entries(predictions).filter(([id]) => visibleIds.has(id)),
   );

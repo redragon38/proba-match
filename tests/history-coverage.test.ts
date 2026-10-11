@@ -10,7 +10,7 @@ vi.mock('@/database/client', () => ({
     $queryRaw: mocks.playerRows,
   },
 }));
-import { getPredictionHistory, getEvaluations } from '@/services/predictions';
+import { getPredictionHistory, getEvaluations, getPredictions } from '@/services/predictions';
 import { playerHistory } from '@/services/profile-history';
 
 const data = createDemoDataset(new Date('2026-09-11T12:00:00Z'));
@@ -22,6 +22,19 @@ describe('Large histories through services with an isolated query adapter', () =
   afterEach(() => {
     vi.unstubAllEnvs();
     vi.clearAllMocks();
+  });
+  it('limits returned predictions without removing the match history used by the model', async () => {
+    const complete = createDemoDataset(new Date('2026-10-11T12:00:00Z'));
+    const productionData = { ...complete, source: 'openfootball' as const };
+    const selected = productionData.matches.find((match) => match.id === 'demo-1-0')!;
+    const other = productionData.matches.find((match) => match.id === 'demo-1-1')!;
+    mocks.playerRows.mockResolvedValueOnce([]);
+
+    const result = await getPredictions(productionData, new Set([selected.id]));
+
+    expect(result[selected.id]).toBeDefined();
+    expect(result[other.id]).toBeUndefined();
+    expect(result[selected.id].sample).toBeGreaterThanOrEqual(5);
   });
   it('returns the most recent 100 of 140 snapshots in chronological order and strips private inputs', async () => {
     const descending = Array.from({ length: 140 }, (_, i) => ({
