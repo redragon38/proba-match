@@ -31,6 +31,15 @@ export class PredictionEngine {
     private modelVersion = MODEL_VERSION,
     private availabilityMode: AvailabilityMode = 'observed',
   ) {}
+  predictReconstructed(match: Match, allMatches: Match[], asOf = new Date().toISOString()) {
+    return new PredictionEngine(
+      this.homeAdvantage,
+      this.halfLifeDays,
+      this.goalStrength,
+      this.modelVersion,
+      'reconstructed',
+    ).predict(match, allMatches, asOf);
+  }
   predict(
     match: Match,
     allMatches: Match[],

@@ -25,7 +25,16 @@ describe('Large histories through services with an isolated query adapter', () =
   });
   it('limits returned predictions without removing the match history used by the model', async () => {
     const complete = createDemoDataset(new Date('2026-10-11T12:00:00Z'));
-    const productionData = { ...complete, source: 'openfootball' as const };
+    const productionData = {
+      ...complete,
+      source: 'openfootball' as const,
+      matches: complete.matches.map((match) => ({
+        ...match,
+        source: 'openfootball' as const,
+        resultObservedAt: undefined,
+        resultRevisions: [],
+      })),
+    };
     const selected = productionData.matches.find((match) => match.id === 'demo-1-0')!;
     const other = productionData.matches.find((match) => match.id === 'demo-1-1')!;
     mocks.playerRows.mockResolvedValueOnce([]);

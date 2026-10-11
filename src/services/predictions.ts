@@ -25,7 +25,12 @@ export function computeDisplayPrediction(
   const kickoff = new Date(match.kickoff).getTime();
   if (!Number.isFinite(kickoff) || kickoff <= now.getTime()) return undefined;
   const cutoff = new Date(Math.min(now.getTime(), kickoff - 1000)).toISOString();
-  const prediction = predictionEngine.predict(match, data.matches, cutoff);
+  // Current forecasts may use the conservative reconstructed availability rule
+  // when an imported historical result predates our reception journal. Finished
+  // matches still require an immutable archived forecast and are never backfilled.
+  const prediction =
+    predictionEngine.predict(match, data.matches, cutoff) ??
+    predictionEngine.predictReconstructed?.(match, data.matches, cutoff);
   return prediction ? publicPrediction(prediction) : undefined;
 }
 
