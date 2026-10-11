@@ -24,6 +24,10 @@ async function repairPredictionInputs() {
     if (!validResult(match) || match.resultObservedAt) return [];
     return [{ id: row.id, match: observeResult(match, match, observedAt) }];
   });
+  const valid = rows.filter((row) => validResult(row.payload as unknown as Match)).length;
+  const alreadyObserved = rows.filter((row) =>
+    Boolean((row.payload as unknown as Match).resultObservedAt),
+  ).length;
 
   const repairedById = new Map(repaired.map((row) => [row.id, row.match]));
   const replacements = new Map(
@@ -40,7 +44,15 @@ async function repairPredictionInputs() {
     synchronized++;
     return replacement;
   });
-  if (!repaired.length && !synchronized) return { status: 'success', observed: 0, synchronized: 0 };
+  if (!repaired.length && !synchronized)
+    return {
+      status: 'success',
+      rows: rows.length,
+      valid,
+      alreadyObserved,
+      observed: 0,
+      synchronized: 0,
+    };
   data.updatedAt = observedAt;
   data.verifiedAt = { ...data.verifiedAt, results: observedAt };
 
@@ -84,7 +96,15 @@ async function repairPredictionInputs() {
     return { status: 'failed', stage: 'publication', ...databaseErrorFields(error) };
   }
 
-  return { status: 'success', observed: repaired.length, synchronized, observedAt };
+  return {
+    status: 'success',
+    rows: rows.length,
+    valid,
+    alreadyObserved,
+    observed: repaired.length,
+    synchronized,
+    observedAt,
+  };
 }
 
 export const GET = cronHandler(async () => {
