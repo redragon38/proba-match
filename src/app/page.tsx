@@ -44,7 +44,9 @@ export default async function Home({
       : closestMatchDate(data, query.statut);
   const view = dashboardDataset(data, date);
   const upcomingMatches = upcomingSelection(data);
-  const insightMatches = upcomingSelection(data, undefined, data.matches.length);
+  // The page renders only three insight cards. A bounded candidate window avoids
+  // querying and serializing forecasts for the entire future fixture archive.
+  const insightMatches = upcomingSelection(data, undefined, 24);
   const visibleIds = new Set([...view.matches, ...insightMatches].map((match) => match.id));
   const predictions = await getPredictions({
     ...data,
