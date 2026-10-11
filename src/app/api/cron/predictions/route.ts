@@ -8,7 +8,7 @@ export const maxDuration = 300;
 
 const json = (value: unknown) => JSON.parse(JSON.stringify(value));
 
-export const GET = cronHandler(async () => {
+async function repairPredictionInputs() {
   const observedAt = new Date().toISOString();
   const [entry, rows] = await Promise.all([
     db.cacheEntry.findUnique({ where: { key: 'football:dataset' } }),
@@ -85,4 +85,12 @@ export const GET = cronHandler(async () => {
   }
 
   return { status: 'success', observed: repaired.length, synchronized, observedAt };
+}
+
+export const GET = cronHandler(async () => {
+  try {
+    return await repairPredictionInputs();
+  } catch (error) {
+    return { status: 'failed', stage: 'read', ...databaseErrorFields(error) };
+  }
 });
