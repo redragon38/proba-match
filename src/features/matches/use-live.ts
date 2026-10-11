@@ -32,6 +32,7 @@ export function useLive(initial: Match[], detail = false) {
     .sort()
     .join(',');
   useEffect(() => {
+    const liveInterval = 10_000;
     let stopped = false,
       busy = false,
       failures = 0;
@@ -42,7 +43,7 @@ export function useLive(initial: Match[], detail = false) {
     async function poll() {
       if (stopped || busy || !ids) return;
       if (document.visibilityState !== 'visible') {
-        timer = setTimeout(poll, 30000);
+        timer = setTimeout(poll, 30_000);
         return;
       }
       controller = new AbortController();
@@ -94,7 +95,7 @@ export function useLive(initial: Match[], detail = false) {
       } finally {
         busy = false;
         clearTimeout(timeout);
-        if (!stopped) timer = setTimeout(poll, Math.min(120000, 30000 * 2 ** failures));
+        if (!stopped) timer = setTimeout(poll, Math.min(120_000, liveInterval * 2 ** failures));
       }
     }
     const resume = () => {
@@ -104,7 +105,8 @@ export function useLive(initial: Match[], detail = false) {
         timer = setTimeout(poll, 500);
       }
     };
-    timer = setTimeout(poll, 30000);
+    // Quickly reconcile CDN HTML with the latest saved score after hydration.
+    timer = setTimeout(poll, 1_000);
     document.addEventListener('visibilitychange', resume);
     return () => {
       stopped = true;

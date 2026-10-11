@@ -40,7 +40,7 @@ async function get(request: Request) {
     {
       headers: {
         'Cache-Control': 'no-store',
-        'Vercel-CDN-Cache-Control': 'public, s-maxage=5, stale-while-revalidate=5',
+        'Vercel-CDN-Cache-Control': 'public, s-maxage=3, stale-while-revalidate=3',
       },
     },
   );

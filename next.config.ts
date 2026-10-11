@@ -28,10 +28,12 @@ const config: NextConfig = {
       },
     ];
     return [
-      { source: '/', headers: cdn(30, 120) },
-      { source: '/matchs', headers: cdn(15, 60) },
-      { source: '/match/:path*', headers: cdn(10, 30) },
-      { source: '/live', headers: cdn(5, 10) },
+      // HTML is stable enough to stay at the edge. Live score patches are fetched
+      // separately by the client, so a page cache hit never delays a goal update.
+      { source: '/', headers: cdn(300, 1800) },
+      { source: '/matchs', headers: cdn(300, 1800) },
+      { source: '/match/:path*', headers: cdn(300, 1800) },
+      { source: '/live', headers: cdn(300, 1800) },
       { source: '/joueurs', headers: cdn(300, 1800) },
       { source: '/joueur/:path*', headers: cdn(300, 1800) },
       { source: '/equipes', headers: cdn(300, 1800) },

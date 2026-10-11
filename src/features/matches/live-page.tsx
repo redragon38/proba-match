@@ -32,7 +32,7 @@ export function LivePage({ data }: { data: Dataset }) {
     <div className="page">
       <SourceBanner data={data} />
       <p className="data-note">
-        Cette page relit les données sauvegardées toutes les 30 secondes. La fréquence de réception
+        Cette page relit les données sauvegardées toutes les 10 secondes. La fréquence de réception
         des scores dépend du fournisseur et du service de synchronisation ; elle n’est pas garantie
         par ce rafraîchissement.
       </p>
@@ -50,7 +50,7 @@ export function LivePage({ data }: { data: Dataset }) {
           ? 'Connexion interrompue · derniers scores conservés'
           : live.degraded || data.degraded
             ? 'Données du fournisseur en retard · derniers scores conservés'
-            : `${matches.length} rencontre(s) en cours · actualisation toutes les 30 secondes`}
+            : `${matches.length} rencontre(s) en cours · actualisation toutes les 10 secondes`}
         {live.checkedAt && (
           <span>Vérifié à {new Date(live.checkedAt).toLocaleTimeString('fr-FR')}</span>
         )}
