@@ -44,10 +44,25 @@ export default async function Home({
       : closestMatchDate(data, query.statut);
   const view = dashboardDataset(data, date);
   const upcomingMatches = upcomingSelection(data);
-  // The page renders only three insight cards. A bounded candidate window avoids
-  // querying and serializing forecasts for the entire future fixture archive.
-  const insightMatches = upcomingSelection(data, undefined, 24);
-  const visibleIds = new Set([...view.matches, ...insightMatches].map((match) => match.id));
+  const now = Date.parse(data.updatedAt);
+  const completedByTeam = new Map<string, number>();
+  for (const match of data.matches) {
+    if (match.status !== 'finished' || Date.parse(match.kickoff) >= now) continue;
+    completedByTeam.set(match.homeId, (completedByTeam.get(match.homeId) ?? 0) + 1);
+    completedByTeam.set(match.awayId, (completedByTeam.get(match.awayId) ?? 0) + 1);
+  }
+  const hasModelHistory = (match: (typeof data.matches)[number]) =>
+    [match.homeId, match.awayId].every((teamId) => (completedByTeam.get(teamId) ?? 0) >= 5);
+  // Only one dashboard forecast and three insight cards are rendered. Select a
+  // small set that already meets the model's public minimum-history rule.
+  const dashboardMatches = view.matches
+    .filter(
+      (match) =>
+        match.status === 'scheduled' && Date.parse(match.kickoff) > now && hasModelHistory(match),
+    )
+    .slice(0, 3);
+  const insightMatches = upcomingSelection(data, now, 48).filter(hasModelHistory).slice(0, 6);
+  const visibleIds = new Set([...dashboardMatches, ...insightMatches].map((match) => match.id));
   const predictions = await getPredictions(data, visibleIds);
   const dashboardPredictions = Object.fromEntries(
     Object.entries(predictions).filter(([id]) => visibleIds.has(id)),

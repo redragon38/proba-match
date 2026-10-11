@@ -67,10 +67,11 @@ export async function getPredictions(
         .filter((r) => ids.has(r.matchId))
         .map((r) => [r.matchId, publicPrediction(r.payload as unknown as Prediction)]),
     );
+    const missingIds = new Set([...ids].filter((matchId) => !predictions[matchId]));
     for (const [matchId, prediction] of Object.entries(
-      computedDisplayPredictions(data, new Date(), ids),
+      computedDisplayPredictions(data, new Date(), missingIds),
     )) {
-      if (!predictions[matchId]) predictions[matchId] = prediction;
+      predictions[matchId] = prediction;
     }
     return predictions;
   } catch {
