@@ -23,11 +23,23 @@ export const GET = cronHandler(async () => {
     if (!validResult(match) || match.resultObservedAt) return [];
     return [{ id: row.id, match: observeResult(match, match, observedAt) }];
   });
-  if (!repaired.length) return { status: 'success', observed: 0 };
 
-  const replacements = new Map(repaired.map((row) => [row.id, row.match]));
+  const repairedById = new Map(repaired.map((row) => [row.id, row.match]));
+  const replacements = new Map(
+    rows.flatMap((row) => {
+      const match = repairedById.get(row.id) ?? (row.payload as unknown as Match);
+      return validResult(match) && match.resultObservedAt ? [[row.id, match] as const] : [];
+    }),
+  );
   const data = structuredClone(entry.payload as unknown as Dataset);
-  data.matches = data.matches.map((match) => replacements.get(match.id) ?? match);
+  let synchronized = 0;
+  data.matches = data.matches.map((match) => {
+    const replacement = replacements.get(match.id);
+    if (!replacement || replacement.resultObservedAt === match.resultObservedAt) return match;
+    synchronized++;
+    return replacement;
+  });
+  if (!repaired.length && !synchronized) return { status: 'success', observed: 0, synchronized: 0 };
   data.updatedAt = observedAt;
   data.verifiedAt = { ...data.verifiedAt, results: observedAt };
 
@@ -46,18 +58,19 @@ export const GET = cronHandler(async () => {
           WHERE match."id" = incoming."id"
         `;
       }
-      await tx.resultObservation.createMany({
-        data: repaired.flatMap(({ id, match }) =>
-          (match.resultRevisions ?? []).map((revision, index) => ({
-            id: `${id}:${revision.observedAt}:${index}`,
-            matchId: id,
-            receivedAt: new Date(revision.observedAt),
-            source: revision.source,
-            payload: json(revision),
-          })),
-        ),
-        skipDuplicates: true,
-      });
+      if (repaired.length)
+        await tx.resultObservation.createMany({
+          data: repaired.flatMap(({ id, match }) =>
+            (match.resultRevisions ?? []).map((revision, index) => ({
+              id: `${id}:${revision.observedAt}:${index}`,
+              matchId: id,
+              receivedAt: new Date(revision.observedAt),
+              source: revision.source,
+              payload: json(revision),
+            })),
+          ),
+          skipDuplicates: true,
+        });
       await tx.cacheEntry.update({
         where: { key: 'football:dataset' },
         data: { payload: json(data) },
@@ -66,5 +79,5 @@ export const GET = cronHandler(async () => {
     { maxWait: 10_000, timeout: 300_000 },
   );
 
-  return { status: 'success', observed: repaired.length, observedAt };
+  return { status: 'success', observed: repaired.length, synchronized, observedAt };
 });
