@@ -11,7 +11,12 @@ async function get(request: Request) {
       : matchSelection(data, q);
     return Response.json(
       { source: data.source, updatedAt: data.updatedAt, ...selection },
-      { headers: { 'Cache-Control': 'no-store' } },
+      {
+        headers: {
+          'Cache-Control': 'public, max-age=5, stale-while-revalidate=15',
+          'Vercel-CDN-Cache-Control': 'public, s-maxage=15, stale-while-revalidate=30',
+        },
+      },
     );
   } catch (error) {
     return Response.json(

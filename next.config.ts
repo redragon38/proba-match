@@ -24,6 +24,24 @@ const config: NextConfig = {
       !isPreviewDeployment() &&
       !!process.env.NEXT_PUBLIC_SITE_URL?.startsWith('https://');
     return [
+      {
+        source: '/',
+        headers: [
+          {
+            key: 'Vercel-CDN-Cache-Control',
+            value: 'public, s-maxage=10, stale-while-revalidate=30',
+          },
+        ],
+      },
+      {
+        source: '/:path((?!api(?:/|$)|admin(?:/|$)|live(?:/|$)).+)',
+        headers: [
+          {
+            key: 'Vercel-CDN-Cache-Control',
+            value: 'public, s-maxage=10, stale-while-revalidate=30',
+          },
+        ],
+      },
       { source: '/api/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
       {
         source: '/api/admin/:path*',

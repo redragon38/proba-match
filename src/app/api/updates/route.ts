@@ -8,7 +8,12 @@ export async function GET() {
     });
     return Response.json(
       { revision: row?.updatedAt.toISOString() ?? null },
-      { headers: { 'Cache-Control': 'no-store' } },
+      {
+        headers: {
+          'Cache-Control': 'no-store',
+          'Vercel-CDN-Cache-Control': 'public, s-maxage=10, stale-while-revalidate=10',
+        },
+      },
     );
   } catch {
     return Response.json({ error: 'Base indisponible' }, { status: 503 });

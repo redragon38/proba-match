@@ -8,6 +8,7 @@ async function get(request: Request) {
   const detail = url.searchParams.get('detail') === '1' && ids?.length === 1;
   const now = Date.now();
   const selection = selectLiveMatches(d.matches, url.searchParams, now);
+  const teams = new Map(d.teams.map((team) => [team.id, team.name]));
   return Response.json(
     {
       source: d.source,
@@ -21,7 +22,7 @@ async function get(request: Request) {
         homeId: m.homeId,
         awayId: m.awayId,
         competitionId: m.competitionId,
-        label: `${d.teams.find((t) => t.id === m.homeId)?.name} – ${d.teams.find((t) => t.id === m.awayId)?.name}`,
+        label: `${teams.get(m.homeId)} – ${teams.get(m.awayId)}`,
         homeScore: m.homeScore,
         awayScore: m.awayScore,
         status: m.status,
@@ -36,7 +37,12 @@ async function get(request: Request) {
         lineup: m.lineups.length === 2 && m.lineups.every((l) => l.confirmed),
       })),
     },
-    { headers: { 'Cache-Control': 'no-store' } },
+    {
+      headers: {
+        'Cache-Control': 'no-store',
+        'Vercel-CDN-Cache-Control': 'public, s-maxage=5, stale-while-revalidate=5',
+      },
+    },
   );
 }
 

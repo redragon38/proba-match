@@ -10,7 +10,10 @@ async function get(request: Request) {
   )
     return Response.json({ error: 'Date invalide' }, { status: 400 });
   return Response.json(await matchesOnDate(date), {
-    headers: { 'Cache-Control': 'public, s-maxage=15, stale-while-revalidate=60' },
+    headers: {
+      'Cache-Control': 'public, max-age=5, stale-while-revalidate=15',
+      'Vercel-CDN-Cache-Control': 'public, s-maxage=15, stale-while-revalidate=30',
+    },
   });
 }
 

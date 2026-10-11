@@ -4,5 +4,13 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
   if (!id || id.length > 200)
     return Response.json({ error: 'Identifiant invalide' }, { status: 400 });
   const row = await localEntity('competition', id);
-  return Response.json(row ?? { error: 'Compétition introuvable' }, { status: row ? 200 : 404 });
+  return Response.json(row ?? { error: 'Compétition introuvable' }, {
+    status: row ? 200 : 404,
+    headers: row
+      ? {
+          'Cache-Control': 'public, max-age=30, stale-while-revalidate=300',
+          'Vercel-CDN-Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+        }
+      : { 'Cache-Control': 'no-store' },
+  });
 }

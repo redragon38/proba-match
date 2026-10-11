@@ -19,11 +19,20 @@ export const getDataset = requestCache(async function getDataset(): Promise<Data
     );
   }
   try {
-    const marker = await timed('db:dataset_revision', () =>
-      db.cacheEntry.findUnique({
-        where: { key: 'football:dataset' },
-        select: { updatedAt: true, expiresAt: true },
-      }),
+    // A revision changes only when a sync publishes a new snapshot. Sharing this tiny
+    // lookup briefly prevents every page view and polling request from opening a new
+    // PostgreSQL round trip while keeping live data at most a few seconds behind.
+    const marker = await cache.get(
+      'football:dataset-revision',
+      () =>
+        timed('db:dataset_revision', () =>
+          db.cacheEntry.findUnique({
+            where: { key: 'football:dataset' },
+            select: { updatedAt: true, expiresAt: true },
+          }),
+        ),
+      10_000,
+      20_000,
     );
     return await datasets
       .get(
