@@ -31,19 +31,25 @@ export class PredictionEngine {
     private modelVersion = MODEL_VERSION,
     private availabilityMode: AvailabilityMode = 'observed',
   ) {}
-  predictReconstructed(match: Match, allMatches: Match[], asOf = new Date().toISOString()) {
+  predictReconstructed(
+    match: Match,
+    allMatches: Match[],
+    asOf = new Date().toISOString(),
+    includeArchive = true,
+  ) {
     return new PredictionEngine(
       this.homeAdvantage,
       this.halfLifeDays,
       this.goalStrength,
       this.modelVersion,
       'reconstructed',
-    ).predict(match, allMatches, asOf);
+    ).predict(match, allMatches, asOf, includeArchive);
   }
   predict(
     match: Match,
     allMatches: Match[],
     asOf: string = new Date().toISOString(),
+    includeArchive = true,
   ): Prediction | null {
     const predictionAt = Date.parse(asOf),
       kickoff = Date.parse(match.kickoff);
@@ -172,39 +178,61 @@ export class PredictionEngine {
       stability: 1 / (1 + variance / 4),
       coverage: (3 + Number(match.neutralVenue != null) + Number(lineupConfirmed)) / 7,
     });
-    const inputArchive: NonNullable<Prediction['inputArchive']> = {
-      schemaVersion: 1,
-      modelVersion: this.modelVersion,
-      parameters: {
-        ...MODEL_PARAMETERS,
-        homeAdvantage: this.homeAdvantage,
-        halfLifeDays: this.halfLifeDays,
-        goalStrength: this.goalStrength,
-      },
-      availabilityMode: this.availabilityMode,
-      cutoff,
-      resultPeriod: 'regulation',
-      target: {
-        ...match,
-        events: [],
-        statistics: [],
-        performances: [],
-        resultRevisions: [],
-        homeScore: null,
-        awayScore: null,
-        resultObservedAt: undefined,
-        scoreBreakdown: undefined,
-      },
-      matches: eligible.map((m) => ({
-        ...m,
-        events: [],
-        statistics: [],
-        lineups: [],
-        performances: [],
-        resultRevisions: m.resultRevisions?.filter((r) => Date.parse(r.observedAt) < predictionAt),
-      })),
+    const archiveParameters = {
+      ...MODEL_PARAMETERS,
+      homeAdvantage: this.homeAdvantage,
+      halfLifeDays: this.halfLifeDays,
+      goalStrength: this.goalStrength,
     };
-    const inputHash = createHash('sha256').update(JSON.stringify(inputArchive)).digest('hex');
+    const inputArchive: NonNullable<Prediction['inputArchive']> | undefined = includeArchive
+      ? {
+          schemaVersion: 1,
+          modelVersion: this.modelVersion,
+          parameters: archiveParameters,
+          availabilityMode: this.availabilityMode,
+          cutoff,
+          resultPeriod: 'regulation',
+          target: {
+            ...match,
+            events: [],
+            statistics: [],
+            performances: [],
+            resultRevisions: [],
+            homeScore: null,
+            awayScore: null,
+            resultObservedAt: undefined,
+            scoreBreakdown: undefined,
+          },
+          matches: eligible.map((m) => ({
+            ...m,
+            events: [],
+            statistics: [],
+            lineups: [],
+            performances: [],
+            resultRevisions: m.resultRevisions?.filter(
+              (r) => Date.parse(r.observedAt) < predictionAt,
+            ),
+          })),
+        }
+      : undefined;
+    const hashInput = includeArchive
+      ? inputArchive
+      : {
+          modelVersion: this.modelVersion,
+          parameters: archiveParameters,
+          availabilityMode: this.availabilityMode,
+          cutoff,
+          target: match.id,
+          matches: eligible.map((row) => [
+            row.id,
+            row.kickoff,
+            row.homeId,
+            row.awayId,
+            row.homeScore,
+            row.awayScore,
+          ]),
+        };
+    const inputHash = createHash('sha256').update(JSON.stringify(hashInput)).digest('hex');
     return {
       id: `${match.id}-${this.modelVersion}-${inputHash.slice(0, 12)}`,
       matchId: match.id,

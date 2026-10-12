@@ -29,8 +29,8 @@ export function computeDisplayPrediction(
   // when an imported historical result predates our reception journal. Finished
   // matches still require an immutable archived forecast and are never backfilled.
   const prediction =
-    predictionEngine.predict(match, data.matches, cutoff) ??
-    predictionEngine.predictReconstructed?.(match, data.matches, cutoff);
+    predictionEngine.predict(match, data.matches, cutoff, false) ??
+    predictionEngine.predictReconstructed?.(match, data.matches, cutoff, false);
   return prediction ? publicPrediction(prediction) : undefined;
 }
 
