@@ -10,7 +10,7 @@ export function DeferredAnalytics() {
 
   useEffect(() => {
     const enable = () => setEnabled(true);
-    const timer = window.setTimeout(enable, 15_000);
+    const timer = window.setTimeout(enable, 60_000);
     const events: (keyof WindowEventMap)[] = ['pointerdown', 'keydown', 'scroll'];
 
     for (const event of events) window.addEventListener(event, enable, { passive: true, once: true });

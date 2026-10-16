@@ -1,8 +1,10 @@
 proba-match.com {
 	encode zstd gzip
+	header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
 	reverse_proxy cache:8080
 }
 
 www.proba-match.com {
+	header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
 	redir https://proba-match.com{uri} permanent
 }

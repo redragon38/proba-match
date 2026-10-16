@@ -26,7 +26,9 @@ export function ProviderImage({
       sizes={`${size}px`}
       loading={eager ? 'eager' : 'lazy'}
       className="team-logo"
-      unoptimized={!src.startsWith('https://media.api-sports.io/')}
+      unoptimized={
+        !src.startsWith('/') && !src.startsWith('https://media.api-sports.io/')
+      }
       onError={() => setFailed(src)}
     />
   );

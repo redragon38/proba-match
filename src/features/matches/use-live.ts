@@ -1,18 +1,38 @@
 'use client';
 import { useEffect, useState } from 'react';
 import type { Match } from '@/types/football';
-import { z } from 'zod';
 
-const patchSchema = z.object({
-  id: z.string(),
-  status: z.enum(['scheduled', 'live', 'finished', 'postponed', 'cancelled', 'abandoned']),
-  homeScore: z.number().nullable(),
-  awayScore: z.number().nullable(),
-  minute: z.number().nullable(),
-  extra: z.number().nullable().optional(),
-  phase: z.enum(['halftime', 'playing']).optional(),
-  updatedAt: z.string(),
-});
+const matchStatuses = new Set<Match['status']>([
+  'scheduled',
+  'live',
+  'finished',
+  'postponed',
+  'cancelled',
+  'abandoned',
+]);
+type LivePatch = Pick<Match, 'id' | 'status' | 'homeScore' | 'awayScore' | 'minute' | 'updatedAt'> & {
+  extra?: number | null;
+  phase?: 'halftime' | 'playing';
+};
+function livePatch(value: unknown): LivePatch | undefined {
+  if (!value || typeof value !== 'object') return;
+  const row = value as Record<string, unknown>;
+  const nullableNumber = (field: unknown) =>
+    field === null || (typeof field === 'number' && Number.isFinite(field));
+  if (
+    typeof row.id !== 'string' ||
+    typeof row.status !== 'string' ||
+    !matchStatuses.has(row.status as Match['status']) ||
+    !nullableNumber(row.homeScore) ||
+    !nullableNumber(row.awayScore) ||
+    !nullableNumber(row.minute) ||
+    (row.extra !== undefined && !nullableNumber(row.extra)) ||
+    (row.phase !== undefined && row.phase !== 'halftime' && row.phase !== 'playing') ||
+    typeof row.updatedAt !== 'string'
+  )
+    return;
+  return row as LivePatch;
+}
 export function useLive(initial: Match[], detail = false) {
   const [updates, setUpdates] = useState<Record<string, Partial<Match>>>({});
   const [changed, setChanged] = useState<string[]>([]);
@@ -61,9 +81,8 @@ export function useLive(initial: Match[], detail = false) {
         const next: Record<string, Partial<Match>> = {},
           changedIds: string[] = [];
         for (const row of payload.matches) {
-          const parsed = patchSchema.safeParse(row);
-          if (!parsed.success) continue;
-          const m = parsed.data;
+          const m = livePatch(row);
+          if (!m) continue;
           const signature = `${m.status}:${m.homeScore}:${m.awayScore}`;
           if (previous.has(m.id) && previous.get(m.id) !== signature) changedIds.push(m.id);
           previous.set(m.id, signature);

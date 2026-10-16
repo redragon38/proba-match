@@ -124,7 +124,7 @@ export function Shell({
             alt="Proba Match"
             width={676}
             height={128}
-            unoptimized
+            sizes="(max-width: 600px) 1px, 236px"
             loading="eager"
           />
           <Image
@@ -133,8 +133,8 @@ export function Shell({
             alt="Proba Match"
             width={558}
             height={134}
-            unoptimized
-            loading="eager"
+            sizes="(max-width: 600px) 1px, 236px"
+            loading="lazy"
           />
           <Image
             className="brand-icon"
@@ -142,7 +142,7 @@ export function Shell({
             alt="Proba Match"
             width={48}
             height={48}
-            unoptimized
+            sizes="48px"
             loading="eager"
           />
         </Link>
