@@ -30,6 +30,13 @@
   margin-bottom: 15px;
   font-size: 12px;
 }
+.source-warning summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+.source-warning p {
+  margin: 8px 0 0;
+}
 .page-heading {
   display: flex;
   justify-content: space-between;

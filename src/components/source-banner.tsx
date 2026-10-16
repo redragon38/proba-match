@@ -32,9 +32,10 @@ export function SourceBanner({
         )}
       </div>
       {warning && (
-        <p className="warning" role="status">
-          {warning}
-        </p>
+        <details className="warning source-warning">
+          <summary>Informations sur la couverture des données</summary>
+          <p>{warning}</p>
+        </details>
       )}
     </>
   );

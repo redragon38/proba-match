@@ -250,6 +250,16 @@
     contain-intrinsic-size: auto 180px;
   }
 
+  /* These sections start below the first viewport. Let the browser postpone
+     their layout and paint while keeping their HTML available to crawlers. */
+  .upcoming-grid,
+  .popular-teams,
+  .right-rail,
+  .home-insights {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 520px;
+  }
+
   .source-banner a,
   .list-note a,
   .player-see-all,
