@@ -2,6 +2,7 @@ import type { NextConfig } from 'next';
 import { isPreviewDeployment } from './src/lib/deployment';
 import { contentSecurityPolicy } from './src/lib/security-policy';
 const config: NextConfig = {
+  output: 'standalone',
   poweredByHeader: false,
   images: {
     remotePatterns: [{ protocol: 'https', hostname: 'media.api-sports.io' }],
