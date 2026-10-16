@@ -1,4 +1,12 @@
-import { ArrowUpRight, Database, Lightbulb, Mail, MessageCircle, ShieldCheck } from 'lucide-react';
+import {
+  ArrowUpRight,
+  Database,
+  Handshake,
+  Lightbulb,
+  Mail,
+  MessageCircle,
+  ShieldCheck,
+} from 'lucide-react';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { legalConfig } from '@/lib/legal';
 import { seoMetadata } from '@/lib/seo';
@@ -36,6 +44,12 @@ export default function Page() {
       title: 'Poser une question',
       description: 'Une question générale sur le fonctionnement ou les données du site.',
       subject: 'Question à propos de Proba Match',
+    },
+    {
+      icon: Handshake,
+      title: 'Proposer une collaboration',
+      description: 'Partenariat, média, données, contenu ou projet commun avec Proba Match.',
+      subject: 'Proposition de collaboration avec Proba Match',
     },
   ];
 
