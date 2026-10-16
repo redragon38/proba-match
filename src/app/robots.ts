@@ -1,6 +1,11 @@
 import type { MetadataRoute } from 'next';
 import { absoluteUrl } from '@/lib/seo';
 import { isPreviewDeployment } from '@/lib/deployment';
+
+// The VPS injects its public origin at container runtime. Keep this metadata
+// route dynamic so Docker builds cannot freeze localhost into robots.txt.
+export const dynamic = 'force-dynamic';
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: { userAgent: '*', allow: '/', disallow: ['/api/'] },
