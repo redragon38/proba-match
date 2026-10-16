@@ -19,7 +19,7 @@ const config: NextConfig = {
   async headers() {
     const publicHttps =
       process.env.NODE_ENV === 'production' &&
-      process.env.VERCEL_ENV === 'production' &&
+      (process.env.VERCEL_ENV === 'production' || process.env.APP_ENV === 'production') &&
       !isPreviewDeployment() &&
       !!process.env.NEXT_PUBLIC_SITE_URL?.startsWith('https://');
     const cdn = (seconds: number, stale = seconds * 4) => [

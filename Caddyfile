@@ -1,4 +1,8 @@
-:80 {
-  encode zstd gzip
-  reverse_proxy app:3000
+proba-match.com {
+	encode zstd gzip
+	reverse_proxy app:3000
+}
+
+www.proba-match.com {
+	redir https://proba-match.com{uri} permanent
 }
