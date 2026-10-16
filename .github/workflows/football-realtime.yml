@@ -1,8 +1,6 @@
 name: Football temps réel
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 concurrency:
@@ -11,7 +9,6 @@ concurrency:
 
 jobs:
   scores:
-    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '*/5 * * * *'
     runs-on: ubuntu-latest
     timeout-minutes: 4
     permissions:
@@ -27,4 +24,4 @@ jobs:
           test -n "$oidc_token"
           curl --fail --silent --show-error --retry 2 --max-time 90 \
             -H "Authorization: Bearer $oidc_token" \
-            https://proba-match.vercel.app/api/cron/realtime
+            https://proba-match.com/api/cron/realtime

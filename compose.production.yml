@@ -38,6 +38,16 @@ services:
       - caddy-config:/config
     restart: unless-stopped
 
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile.scheduler
+    env_file: .env.vps
+    depends_on:
+      app:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   caddy-data:
   caddy-config:

@@ -1,0 +1,3 @@
+FROM alpine:3.22
+COPY ops/vps-crontab /etc/crontabs/root
+CMD ["crond", "-f", "-l", "2"]
