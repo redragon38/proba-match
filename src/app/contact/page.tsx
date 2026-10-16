@@ -11,10 +11,6 @@ export const metadata = seoMetadata(
   false,
 );
 
-function emailHref(email: string, subject: string) {
-  return `mailto:${email}?subject=${encodeURIComponent(subject)}`;
-}
-
 export default function Page() {
   const email = legalConfig().contact;
   if (!email) return null;
@@ -31,22 +27,16 @@ export default function Page() {
           <span className="eyebrow">NOUS CONTACTER</span>
           <h1>Parlons de Proba Match</h1>
           <p>
-            Une question, une correction ou une proposition de collaboration ? Remplissez le
-            formulaire ci-dessous pour préparer votre message.
+            Une question, une correction ou une proposition de collaboration ? Envoyez-nous votre
+            message directement depuis cette page.
           </p>
           <div className="contact-primary-actions">
-            <a className="button" href={emailHref(email, 'Contact depuis Proba Match')}>
-              <Mail size={17} />
-              Envoyer un e-mail
-            </a>
-            <a className="contact-address" href={`mailto:${email}`}>
-              {email}
-            </a>
+            <span className="contact-address">{email}</span>
           </div>
         </div>
       </header>
 
-      <ContactForm recipient={email} />
+      <ContactForm />
 
       <section className="contact-info-grid" aria-label="Informations pratiques">
         <article className="contact-info-card card">
@@ -67,8 +57,8 @@ export default function Page() {
           <div>
             <h2>Un contact simple et direct</h2>
             <p>
-              Le formulaire prépare le message dans votre application de messagerie. Aucun message
-              ni aucune donnée personnelle n’est enregistré par cette page.
+              Votre message est transmis depuis le site à notre adresse de contact. Il n’est pas
+              publié sur Proba Match.
             </p>
           </div>
         </article>

@@ -731,20 +731,21 @@
   line-height: 1.8;
 }
 .contact-page {
-  max-width: 1120px;
+  max-width: 1080px;
   padding: 32px 38px 48px;
 }
 .contact-hero {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 24px;
-  padding: 34px;
+  gap: 28px;
+  padding: 38px;
   margin-top: 18px;
+  border-color: color-mix(in srgb, var(--green) 24%, var(--line));
   background:
     radial-gradient(
-      circle at 100% 0,
-      color-mix(in srgb, var(--green) 16%, transparent),
-      transparent 42%
+      circle at 90% 5%,
+      color-mix(in srgb, var(--green) 19%, transparent),
+      transparent 52%
     ),
     var(--surface);
 }
@@ -758,8 +759,8 @@
   background: var(--green-light);
 }
 .contact-hero-copy h1 {
-  margin: 7px 0 12px;
-  font-size: clamp(28px, 5vw, 46px);
+  margin: 9px 0 14px;
+  font-size: clamp(30px, 5vw, 48px);
   letter-spacing: -0.04em;
 }
 .contact-hero-copy > p {
@@ -773,22 +774,17 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
-  margin-top: 24px;
+  margin-top: 22px;
 }
 .contact-address {
-  color: var(--text);
+  color: var(--green);
   font-size: 13px;
-  font-weight: 650;
-  text-decoration: underline;
-  text-decoration-color: var(--line);
-  text-underline-offset: 5px;
-}
-.contact-section {
-  margin-top: 40px;
+  font-weight: 750;
 }
 .contact-form {
   margin-top: 18px;
-  padding: 28px;
+  padding: 34px 38px;
+  box-shadow: 0 18px 45px -35px #0008;
 }
 .contact-form-heading {
   display: flex;
@@ -807,7 +803,8 @@
   background: var(--green-light);
 }
 .contact-form-heading h2 {
-  font-size: 20px;
+  margin-top: 4px;
+  font-size: 25px;
 }
 .contact-form-heading p,
 .contact-form-footer p {
@@ -819,7 +816,7 @@
 .contact-form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  gap: 20px;
 }
 .contact-form label {
   display: grid;
@@ -846,11 +843,11 @@
 }
 .contact-form input,
 .contact-form select {
-  min-height: 46px;
+  min-height: 50px;
   padding: 0 13px;
 }
 .contact-form textarea {
-  min-height: 150px;
+  min-height: 190px;
   padding: 13px;
   line-height: 1.6;
   resize: vertical;
@@ -876,57 +873,23 @@
   margin: 0;
 }
 .contact-form-status {
-  margin-top: 14px;
-  color: var(--green);
-  font-size: 12px;
-  font-weight: 700;
-}
-.contact-section-heading h2 {
-  margin-top: 6px;
-  font-size: 23px;
-}
-.contact-reason-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 18px;
-}
-.contact-reason {
-  min-height: 205px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  color: var(--text);
-  transition:
-    transform 160ms ease,
-    border-color 160ms ease;
-}
-.contact-reason:hover {
-  transform: translateY(-3px);
-  border-color: color-mix(in srgb, var(--green) 55%, var(--line));
-}
-.contact-reason > svg {
-  color: var(--green);
-  margin-bottom: 22px;
-}
-.contact-reason h3 {
-  font-size: 16px;
-  margin-bottom: 8px;
-}
-.contact-reason p {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.65;
-}
-.contact-reason span {
   display: flex;
   align-items: center;
-  gap: 5px;
-  margin-top: auto;
-  padding-top: 18px;
+  gap: 8px;
+  margin-top: 14px;
   color: var(--green);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
+}
+.contact-form-error {
+  color: #e86c6c;
+}
+.contact-honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 }
 .contact-info-grid {
   display: grid;
@@ -985,11 +948,6 @@
 .dashboard-main {
   min-width: 0;
 }
-@media (max-width: 900px) {
-  .contact-reason-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
 @media (max-width: 600px) {
   .contact-page {
     padding: 24px 14px 34px;
@@ -1002,16 +960,8 @@
     width: 52px;
     height: 52px;
   }
-  .contact-primary-actions {
-    align-items: stretch;
-    flex-direction: column;
-  }
-  .contact-primary-actions .button {
-    min-height: 46px;
-  }
   .contact-address {
-    text-align: center;
-    padding: 5px;
+    padding: 4px 0;
   }
   .contact-form {
     padding: 22px 18px;
@@ -1029,12 +979,8 @@
   .contact-form-footer .button {
     min-height: 46px;
   }
-  .contact-reason-grid,
   .contact-info-grid {
     grid-template-columns: 1fr;
-  }
-  .contact-reason {
-    min-height: 185px;
   }
   .prose {
     padding: 30px 18px;
