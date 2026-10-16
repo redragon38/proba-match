@@ -1,6 +1,6 @@
-*/5 * * * * wget -q -O /dev/null -T 90 --header "Authorization: Bearer $CRON_SECRET" http://app:3000/api/cron/realtime
-15 5 * * * wget -q -O /dev/null -T 900 --header "Authorization: Bearer $CRON_SECRET" http://app:3000/api/cron/openfootball
-45 6 * * * wget -q -O /dev/null -T 1800 --header "Authorization: Bearer $CRON_SECRET" http://app:3000/api/cron/match-window
-15 7 * * * wget -q -O /dev/null -T 900 --header "Authorization: Bearer $CRON_SECRET" http://app:3000/api/cron/live
-15 10 * * * wget -q -O /dev/null -T 1800 --header "Authorization: Bearer $CRON_SECRET" http://app:3000/api/cron/players
-30 10 * * * wget -q -O /dev/null -T 1800 --header "Authorization: Bearer $CRON_SECRET" http://app:3000/api/cron/predictions
+*/5 * * * * wget -q -O /dev/null -T 90 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/realtime
+15 5 * * * wget -q -O /dev/null -T 900 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/openfootball
+45 6 * * * wget -q -O /dev/null -T 1800 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/match-window
+15 7 * * * wget -q -O /dev/null -T 900 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/live
+15 10 * * * wget -q -O /dev/null -T 1800 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/players
+30 10 * * * wget -q -O /dev/null -T 1800 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/predictions

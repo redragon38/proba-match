@@ -1,6 +1,6 @@
 proba-match.com {
 	encode zstd gzip
-	reverse_proxy app:3000
+	reverse_proxy cache:8080
 }
 
 www.proba-match.com {
