@@ -30,7 +30,10 @@ export default async function Matches({ searchParams }: { searchParams: Promise<
       </div>
     );
   }
-  const view = { ...dashboardDataset(data, dateKey()), matches: selection.matches };
+  const view = {
+    ...dashboardDataset(data, dateKey(), selection.matches),
+    matches: selection.matches,
+  };
   return (
     <Dashboard
       key={JSON.stringify(q)}

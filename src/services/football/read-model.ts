@@ -1,4 +1,4 @@
-import type { Dataset } from '@/types/football';
+import type { Dataset, Match } from '@/types/football';
 import { validResult } from '@/prediction-engine/availability';
 import { playerWatch } from '@/prediction-engine/player';
 import { derivedStandings } from '@/services/derived-standings';
@@ -183,24 +183,36 @@ export function competitionDataset(data: Dataset, id: string): Dataset {
   };
 }
 /** Do not serialize the historical corpus or a complete roster into the match dashboard. */
-export function dashboardDataset(data: Dataset, date: string): Dataset {
+export function dashboardDataset(data: Dataset, date: string, relatedMatches: Match[] = []): Dataset {
   const start = new Date(`${date}T00:00:00Z`).getTime() - 86400_000;
+  const matches = data.matches
+    .filter((m) => {
+      const d = new Date(m.kickoff).getTime();
+      return d >= start && d < start + 5 * 86400_000;
+    })
+    .map((m) => ({
+      ...m,
+      performances: undefined,
+      lineups: [],
+      statistics: m.status === 'live' ? m.statistics : [],
+    }));
+  const players = [...data.players]
+    .sort((a, b) => (playerWatch(b) ?? -1) - (playerWatch(a) ?? -1))
+    .slice(0, 12);
+  const visibleMatches = [...matches, ...relatedMatches];
+  const teamIds = new Set([
+    ...visibleMatches.flatMap((match) => [match.homeId, match.awayId]),
+    ...players.map((player) => player.teamId),
+    // These six clubs are rendered by the dashboard's discovery section.
+    ...data.teams.slice(0, 6).map((team) => team.id),
+  ]);
+  const competitionIds = new Set(visibleMatches.map((match) => match.competitionId));
   return {
     ...data,
-    matches: data.matches
-      .filter((m) => {
-        const d = new Date(m.kickoff).getTime();
-        return d >= start && d < start + 5 * 86400_000;
-      })
-      .map((m) => ({
-        ...m,
-        performances: undefined,
-        lineups: [],
-        statistics: m.status === 'live' ? m.statistics : [],
-      })),
-    players: [...data.players]
-      .sort((a, b) => (playerWatch(b) ?? -1) - (playerWatch(a) ?? -1))
-      .slice(0, 12),
+    matches,
+    teams: data.teams.filter((team) => teamIds.has(team.id)),
+    competitions: data.competitions.filter((competition) => competitionIds.has(competition.id)),
+    players,
     standings: {},
     injuries: [],
   };

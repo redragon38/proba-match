@@ -44,8 +44,8 @@ export default async function Home({
     Number.isFinite(new Date(query.date).getTime())
       ? query.date
       : closestMatchDate(data, query.statut);
-  const view = dashboardDataset(data, date);
   const upcomingMatches = upcomingSelection(data);
+  const view = dashboardDataset(data, date, upcomingMatches);
   const now = Date.parse(data.updatedAt);
   const completedByTeam = new Map<string, number>();
   for (const match of data.matches) {
