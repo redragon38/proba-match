@@ -1,4 +1,4 @@
-/** Prisma v6's pool is per process, not shared across Vercel instances. */
+/** Prisma v6's pool is per process, not shared across runtime processes. */
 export function selectedDatabaseUrl(
   environment: Record<string, string | undefined> = process.env,
 ) {
@@ -6,12 +6,16 @@ export function selectedDatabaseUrl(
   return environment.DATABASE_URL;
 }
 
-export function runtimeDatabaseUrl(value: string | undefined, vercel: boolean) {
-  if (!value || !vercel) return value;
+export function runtimeDatabaseUrl(
+  value: string | undefined,
+  constrained: boolean,
+  connectionLimit = 1,
+) {
+  if (!value || !constrained) return value;
   try {
     const url = new URL(value);
     if (!['postgres:', 'postgresql:'].includes(url.protocol)) return value;
-    url.searchParams.set('connection_limit', '1');
+    url.searchParams.set('connection_limit', String(connectionLimit));
     if (!url.searchParams.has('pool_timeout')) url.searchParams.set('pool_timeout', '10');
     return url.toString();
   } catch {

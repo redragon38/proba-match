@@ -26,6 +26,11 @@ describe('Prisma runtime connection limits', () => {
     expect(runtimeDatabaseUrl('prisma://fixture', true)).toBe('prisma://fixture');
     expect(runtimeDatabaseUrl('test', true)).toBe('test');
   });
+  it('bounds a persistent production process without using a serverless-sized pool', () => {
+    const url = new URL(runtimeDatabaseUrl('postgresql://db.example/defaultdb', true, 3)!);
+    expect(url.searchParams.get('connection_limit')).toBe('3');
+    expect(url.searchParams.get('pool_timeout')).toBe('10');
+  });
 });
 
 describe('selectedDatabaseUrl', () => {
