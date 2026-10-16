@@ -32,12 +32,12 @@ describe('contact delivery', () => {
     expect((await POST(request({ ...valid, message: 'court' }))).status).toBe(400);
   });
 
-  it('reports a missing Formspree form without claiming success', async () => {
-    vi.stubEnv('FORMSPREE_FORM_ID', '');
+  it('rejects an invalid Formspree override without claiming success', async () => {
+    vi.stubEnv('FORMSPREE_FORM_ID', 'bad-id');
     expect((await POST(request(valid))).status).toBe(503);
   });
 
-  it('sends a valid message to Formspree', async () => {
+  it('sends a valid message to the configured Formspree form', async () => {
     vi.stubEnv('FORMSPREE_FORM_ID', 'abcdefgh');
     vi.stubEnv('DATABASE_URL', '');
     const send = vi.fn().mockResolvedValue(new Response('{}', { status: 200 }));
@@ -49,6 +49,24 @@ describe('contact delivery', () => {
       expect.objectContaining({ method: 'POST' }),
     );
     expect(Object.fromEntries(send.mock.calls[0][1].body)).toMatchObject(valid);
+  });
+
+  it('uses the Proba Match Formspree endpoint by default', async () => {
+    vi.stubEnv('FORMSPREE_FORM_ID', '');
+    vi.stubEnv('DATABASE_URL', '');
+    const send = vi.fn().mockResolvedValue(new Response('{}', { status: 200 }));
+    vi.stubGlobal('fetch', send);
+    expect((await POST(request({ ...valid, email: 'default@example.com' }))).status).toBe(200);
+    expect(send).toHaveBeenCalledWith(
+      'https://formspree.io/f/xaeqaazb',
+      expect.objectContaining({
+        method: 'POST',
+        headers: expect.objectContaining({
+          Origin: 'https://proba-match.com',
+          Referer: 'https://proba-match.com/contact',
+        }),
+      }),
+    );
   });
 
   it('does not claim delivery when Formspree rejects the message', async () => {

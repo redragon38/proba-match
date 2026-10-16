@@ -61,7 +61,7 @@ export async function POST(request: Request) {
   if (parsed.data.website)
     return Response.json({ ok: true }, { headers });
 
-  const formId = process.env.FORMSPREE_FORM_ID?.trim();
+  const formId = process.env.FORMSPREE_FORM_ID?.trim() || 'xaeqaazb';
   if (!formId || !/^[a-zA-Z0-9]{6,32}$/.test(formId))
     return Response.json({ error: 'Envoi temporairement indisponible.' }, { status: 503, headers });
 
@@ -75,7 +75,13 @@ export async function POST(request: Request) {
     const { name, email, reason, subject, message } = parsed.data;
     const delivery = await fetch(`https://formspree.io/f/${formId}`, {
       method: 'POST',
-      headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' },
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Origin: origin,
+        Referer: `${origin}/contact`,
+        'User-Agent': 'Mozilla/5.0',
+      },
       body: new URLSearchParams({ name, email, reason, subject, message, _subject: `[${reason}] ${subject}` }),
       signal: AbortSignal.timeout(12000),
     });
