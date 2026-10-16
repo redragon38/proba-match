@@ -36,7 +36,7 @@ export default async function Matches({ searchParams }: { searchParams: Promise<
       key={JSON.stringify(q)}
       full
       data={view}
-      predictions={await getPredictions(view)}
+      predictions={await getPredictions(view, undefined, false)}
       initialDate={q.date ?? dateKey()}
       initialStatus={selection.status}
       pagination={{ total: selection.total, page: selection.page, pages: selection.pages }}

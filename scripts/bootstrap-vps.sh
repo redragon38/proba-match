@@ -60,5 +60,5 @@ ufw allow 443/udp >/dev/null 2>&1 || true
 echo
 echo "Installation terminee. Test local :"
 curl --retry 12 --retry-delay 5 --retry-connrefused --fail --silent --show-error \
-  --output /dev/null http://127.0.0.1/
+  --output /dev/null 'http://127.0.0.1/api/matches?limit=1'
 echo "PROBA_MATCH_READY"

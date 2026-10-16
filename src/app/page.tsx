@@ -63,7 +63,7 @@ export default async function Home({
     .slice(0, 3);
   const insightMatches = upcomingSelection(data, now, 48).filter(hasModelHistory).slice(0, 6);
   const visibleIds = new Set([...dashboardMatches, ...insightMatches].map((match) => match.id));
-  const predictions = await getPredictions(data, visibleIds);
+  const predictions = await getPredictions(data, visibleIds, false);
   const dashboardPredictions = Object.fromEntries(
     Object.entries(predictions).filter(([id]) => visibleIds.has(id)),
   );

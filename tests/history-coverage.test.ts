@@ -18,8 +18,13 @@ const target = data.matches.find((m) => m.id === 'demo-0-2')!;
 const prediction = predictionEngine.predict(target, data.matches, '2026-09-11T12:00:00Z')!;
 
 describe('Large histories through services with an isolated query adapter', () => {
-  beforeEach(() => vi.stubEnv('DATABASE_URL', 'postgresql://fixture-only/unused'));
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-10-11T12:00:00Z'));
+    vi.stubEnv('DATABASE_URL', 'postgresql://fixture-only/unused');
+  });
   afterEach(() => {
+    vi.useRealTimers();
     vi.unstubAllEnvs();
     vi.clearAllMocks();
   });

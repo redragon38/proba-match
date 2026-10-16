@@ -51,6 +51,7 @@ function computedDisplayPredictions(
 export async function getPredictions(
   data: Dataset,
   targetIds?: ReadonlySet<string>,
+  computeMissing = true,
 ): Promise<Record<string, Prediction>> {
   if (data.source === 'demo')
     return computedDisplayPredictions(
@@ -72,11 +73,13 @@ export async function getPredictions(
         .filter((r) => ids.has(r.matchId))
         .map((r) => [r.matchId, publicPrediction(r.payload as unknown as Prediction)]),
     );
-    const missingIds = new Set([...ids].filter((matchId) => !predictions[matchId]));
-    for (const [matchId, prediction] of Object.entries(
-      computedDisplayPredictions(data, new Date(), missingIds),
-    )) {
-      predictions[matchId] = prediction;
+    if (computeMissing) {
+      const missingIds = new Set([...ids].filter((matchId) => !predictions[matchId]));
+      for (const [matchId, prediction] of Object.entries(
+        computedDisplayPredictions(data, new Date(), missingIds),
+      )) {
+        predictions[matchId] = prediction;
+      }
     }
     return predictions;
   } catch {
@@ -159,7 +162,9 @@ async function persistPredictionTransaction(
         if (lineup) continue;
       }
       const started = globalThis.performance.now();
-      const p = predictionEngine.predict(match, data.matches, now.toISOString());
+      const p =
+        predictionEngine.predict(match, data.matches, now.toISOString()) ??
+        predictionEngine.predictReconstructed(match, data.matches, now.toISOString());
       recordTiming('prediction:compute', globalThis.performance.now() - started);
       if (!p) continue;
       const kind = initial && p.lineupConfirmed ? 'lineup' : 'initial';
