@@ -31,7 +31,9 @@ export default async function Home({
             Lire le guide →
           </Link>
           <p>
-            <Link href="/sources-donnees">Sources et couverture des données</Link>
+            <Link className="text-link" href="/sources-donnees">
+              Sources et couverture des données
+            </Link>
           </p>
         </section>
       </main>

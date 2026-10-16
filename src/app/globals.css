@@ -152,6 +152,16 @@ input[type='search'] {
 .text-link:hover {
   color: var(--green);
 }
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.top-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
 .header-actions {
   display: flex;
   align-items: center;
@@ -497,6 +507,11 @@ footer {
 footer nav {
   display: flex;
   gap: 14px;
+}
+footer nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 footer p {
   width: 100%;

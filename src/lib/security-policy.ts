@@ -7,7 +7,7 @@ export function contentSecurityPolicy({ development = false, publicHttps = false
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https://www.googletagmanager.com https://media.api-sports.io https://a.espncdn.com https://www.thesportsdb.com https://r2.thesportsdb.com https://upload.wikimedia.org https://thumb.wikimedia.org",
     "font-src 'self' data:",
-    `connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.google-analytics.com${development ? ' ws: wss:' : ''}`,
+    `connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.google-analytics.com https://stats.g.doubleclick.net${development ? ' ws: wss:' : ''}`,
     "frame-src 'none'",
     "worker-src 'self' blob:",
     "object-src 'none'",

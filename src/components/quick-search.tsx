@@ -69,12 +69,12 @@ export function QuickSearch() {
     <>
       <button
         className="search-trigger"
-        aria-label="Rechercher une équipe ou un joueur"
+        aria-label="Rechercher une équipe, un joueur ou un match"
         onClick={open}
       >
         <Search size={17} />
-        <span>Équipe, joueur, match…</span>
-        <kbd>Ctrl K</kbd>
+        <span aria-hidden="true">Équipe, joueur, match…</span>
+        <kbd aria-hidden="true">Ctrl K</kbd>
       </button>
       <dialog
         onKeyDown={(e) => {

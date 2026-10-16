@@ -305,7 +305,7 @@ export function Shell({
           onClick={() => setMenu(!menu)}
           aria-expanded={menu}
           aria-controls="site-sidebar"
-          aria-label={menu ? 'Fermer le menu' : 'Ouvrir le menu'}
+          aria-label={menu ? 'Fermer le menu Plus' : 'Ouvrir le menu Plus'}
         >
           {menu ? <X size={20} /> : <Menu size={20} />}
           Plus

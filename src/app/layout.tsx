@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { Shell } from '@/components/shell';
 import { getShellData } from '@/services/football/shell';
 import { DataUpdates } from '@/components/data-updates';
@@ -7,6 +6,7 @@ import { siteOrigin, absoluteUrl, searchVerification } from '@/lib/seo';
 import { isPreviewDeployment } from '@/lib/deployment';
 import { JsonLd } from '@/components/json-ld';
 import { WebVitals } from '@/components/web-vitals';
+import { DeferredAnalytics } from '@/components/deferred-analytics';
 
 import './globals.css';
 import './dashboard.css';
@@ -57,21 +57,7 @@ export default async function RootLayout({
   return (
     <html lang="fr" data-theme="dark" suppressHydrationWarning>
       <body>
-        {/* Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-B3WSHE5NLH"
-          strategy="afterInteractive"
-        />
-
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'G-B3WSHE5NLH');
-          `}
-        </Script>
+        <DeferredAnalytics />
 
         {process.env.NEXT_PUBLIC_WEB_VITALS_ENABLED === 'true' && (
           <WebVitals />
