@@ -10,8 +10,8 @@ const valid = {
   message: 'Bonjour, je souhaite discuter d’un partenariat avec vous.',
 };
 
-function request(body: unknown, origin = 'https://proba-match.com') {
-  return new Request('https://proba-match.com/api/contact', {
+function request(body: unknown, origin = 'https://proba-match.com', url = 'https://proba-match.com/api/contact') {
+  return new Request(url, {
     method: 'POST',
     headers: { origin, 'content-type': 'application/json' },
     body: JSON.stringify(body),
@@ -26,6 +26,14 @@ afterEach(() => {
 describe('contact delivery', () => {
   it('rejects a cross-origin submission', async () => {
     expect((await POST(request(valid, 'https://example.com'))).status).toBe(403);
+  });
+
+  it('accepts the public origin behind the VPS reverse proxy', async () => {
+    vi.stubEnv('NEXT_PUBLIC_SITE_URL', 'https://proba-match.com');
+    vi.stubEnv('FORMSPREE_FORM_ID', 'abcdefgh');
+    vi.stubEnv('DATABASE_URL', '');
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('{}', { status: 200 })));
+    expect((await POST(request(valid, 'https://proba-match.com', 'http://app:3000/api/contact'))).status).toBe(200);
   });
 
   it('validates the message without sending', async () => {

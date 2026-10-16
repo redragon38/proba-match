@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { db } from '@/database/client';
 import { readJsonBody } from '@/lib/request-body';
 import { WindowLimiter } from '@/lib/rate-limit';
+import { siteOrigin } from '@/lib/seo';
 
 export const runtime = 'nodejs';
 
@@ -50,7 +51,7 @@ async function allowContact(email: string) {
 
 export async function POST(request: Request) {
   const origin = request.headers.get('origin');
-  if (!origin || origin !== new URL(request.url).origin)
+  if (!origin || (origin !== new URL(request.url).origin && origin !== siteOrigin()))
     return Response.json({ error: 'Origine invalide.' }, { status: 403, headers });
 
   const body = await readJsonBody(request, 8192);
