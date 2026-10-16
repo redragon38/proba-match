@@ -1,10 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-const sendMail = vi.fn();
-vi.mock('nodemailer', () => ({
-  default: { createTransport: () => ({ sendMail }) },
-}));
-
 import { POST } from '../src/app/api/contact/route';
 
 const valid = {
@@ -25,7 +20,7 @@ function request(body: unknown, origin = 'https://proba-match.com') {
 
 afterEach(() => {
   vi.unstubAllEnvs();
-  sendMail.mockReset();
+  vi.unstubAllGlobals();
 });
 
 describe('contact delivery', () => {
@@ -35,26 +30,31 @@ describe('contact delivery', () => {
 
   it('validates the message without sending', async () => {
     expect((await POST(request({ ...valid, message: 'court' }))).status).toBe(400);
-    expect(sendMail).not.toHaveBeenCalled();
   });
 
-  it('reports missing mail credentials without claiming success', async () => {
-    vi.stubEnv('SMTP_USER', '');
-    vi.stubEnv('SMTP_APP_PASSWORD', '');
+  it('reports a missing Formspree form without claiming success', async () => {
+    vi.stubEnv('FORMSPREE_FORM_ID', '');
     expect((await POST(request(valid))).status).toBe(503);
-    expect(sendMail).not.toHaveBeenCalled();
   });
 
-  it('sends a valid message to the fixed contact address', async () => {
-    vi.stubEnv('SMTP_USER', 'probamatch@gmail.com');
-    vi.stubEnv('SMTP_APP_PASSWORD', 'test-app-password');
+  it('sends a valid message to Formspree', async () => {
+    vi.stubEnv('FORMSPREE_FORM_ID', 'abcdefgh');
     vi.stubEnv('DATABASE_URL', '');
-    sendMail.mockResolvedValue({ messageId: 'test' });
+    const send = vi.fn().mockResolvedValue(new Response('{}', { status: 200 }));
+    vi.stubGlobal('fetch', send);
     const response = await POST(request(valid));
     expect(response.status).toBe(200);
-    expect(sendMail).toHaveBeenCalledWith(expect.objectContaining({
-      to: 'probamatch@gmail.com',
-      replyTo: { name: valid.name, address: valid.email },
-    }));
+    expect(send).toHaveBeenCalledWith(
+      'https://formspree.io/f/abcdefgh',
+      expect.objectContaining({ method: 'POST' }),
+    );
+    expect(Object.fromEntries(send.mock.calls[0][1].body)).toMatchObject(valid);
+  });
+
+  it('does not claim delivery when Formspree rejects the message', async () => {
+    vi.stubEnv('FORMSPREE_FORM_ID', 'abcdefgh');
+    vi.stubEnv('DATABASE_URL', '');
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('{}', { status: 422 })));
+    expect((await POST(request({ ...valid, email: 'alex2@example.com' }))).status).toBe(502);
   });
 });

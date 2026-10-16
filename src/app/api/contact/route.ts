@@ -1,10 +1,8 @@
 import { createHmac } from 'node:crypto';
-import nodemailer from 'nodemailer';
 import { z } from 'zod';
 import { db } from '@/database/client';
 import { readJsonBody } from '@/lib/request-body';
 import { WindowLimiter } from '@/lib/rate-limit';
-import { legalConfig } from '@/lib/legal';
 
 export const runtime = 'nodejs';
 
@@ -63,10 +61,8 @@ export async function POST(request: Request) {
   if (parsed.data.website)
     return Response.json({ ok: true }, { headers });
 
-  const user = process.env.SMTP_USER;
-  const password = process.env.SMTP_APP_PASSWORD;
-  const recipient = legalConfig().contact;
-  if (!user || !password || !recipient)
+  const formId = process.env.FORMSPREE_FORM_ID?.trim();
+  if (!formId || !/^[a-zA-Z0-9]{6,32}$/.test(formId))
     return Response.json({ error: 'Envoi temporairement indisponible.' }, { status: 503, headers });
 
   try {
@@ -76,23 +72,20 @@ export async function POST(request: Request) {
         { status: 429, headers: { ...headers, 'Retry-After': '3600' } },
       );
 
-    const transport = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: { user, pass: password },
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 15000,
-    });
     const { name, email, reason, subject, message } = parsed.data;
-    await transport.sendMail({
-      from: { name: 'Proba Match — Contact', address: user },
-      to: recipient,
-      replyTo: { name, address: email },
-      subject: `[${reason}] ${subject}`,
-      text: `Nom : ${name}\nE-mail : ${email}\nMotif : ${reason}\n\n${message}`,
+    const delivery = await fetch(`https://formspree.io/f/${formId}`, {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ name, email, reason, subject, message, _subject: `[${reason}] ${subject}` }),
+      signal: AbortSignal.timeout(12000),
     });
+    if (!delivery.ok) {
+      console.error('Contact delivery rejected', delivery.status);
+      return Response.json(
+        { error: 'Le message n’a pas pu être envoyé. Réessayez plus tard.' },
+        { status: 502, headers },
+      );
+    }
     return Response.json({ ok: true }, { headers });
   } catch (error) {
     console.error('Contact delivery failed', error instanceof Error ? error.name : 'unknown');
