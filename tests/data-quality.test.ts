@@ -57,6 +57,7 @@ describe('Data quality and publisher honesty', () => {
     );
   });
   it('does not invent a legal identity and rejects an invalid contact', () => {
+    expect(legalConfig({})).toMatchObject({ contact: 'probamatch@gmail.com' });
     expect(legalConfig({ CONTACT_EMAIL: 'javascript:alert(1)' })).toMatchObject({
       editor: null,
       contact: null,

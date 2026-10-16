@@ -12,6 +12,7 @@ import {
   CircleDot,
   Globe2,
   Menu,
+  Mail,
   Moon,
   Search,
   Star,
@@ -36,6 +37,7 @@ const navigation = [
   { href: '/joueurs', label: 'Joueurs', icon: Users },
   { href: '/comparateur/equipes', label: 'Comparateur', icon: ArrowLeftRight },
   { href: '/favoris', label: 'Mes favoris', icon: Star },
+  { href: '/contact', label: 'Contact', icon: Mail },
 ];
 export function Shell({
   children,

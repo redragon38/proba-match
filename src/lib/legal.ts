@@ -1,8 +1,15 @@
 /** Public publisher details only: never infer a person's identity or address. */
+const verifiedContactEmail = 'probamatch@gmail.com';
+
 export function legalConfig(env: Record<string, string | undefined> = process.env) {
   const text = (key: string) => env[key]?.trim() || null;
   const candidate = text('CONTACT_EMAIL');
-  const contact = candidate && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(candidate) ? candidate : null;
+  const contact =
+    candidate === null
+      ? verifiedContactEmail
+      : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(candidate)
+        ? candidate
+        : null;
   return {
     editor: text('LEGAL_EDITOR_NAME'),
     director: text('LEGAL_PUBLICATION_DIRECTOR'),
