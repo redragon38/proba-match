@@ -20,6 +20,7 @@ import { MatchOverview } from './match-overview';
 import { ProbabilitySummary } from './probability-summary';
 import { MatchStatistics } from './match-statistics';
 import { matchFactSummary } from '@/lib/match-facts';
+import { isAwaitingResult } from '@/services/football/match-selection';
 const tabs = [
   ['apercu', 'Aperçu'],
   ['prediction', 'Prédiction'],
@@ -120,6 +121,8 @@ export function MatchDetail({
                 ) : (
                   'Annulé'
                 )
+              ) : isAwaitingResult(match) ? (
+                'Résultat en attente de confirmation'
               ) : (
                 <LocalTime iso={match.kickoff} known={match.kickoffKnown} />
               )}

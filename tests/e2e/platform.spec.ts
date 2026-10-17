@@ -7,7 +7,9 @@ test.beforeEach(async ({ page }) => {
 });
 test('accueil, filtres et navigation calendrier', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('main h1')).toHaveText('Le football, aujourd’hui.');
+  await expect(page.locator('main h1')).toHaveText(
+    'Matchs de football : scores, calendrier et analyses',
+  );
   await page
     .getByRole('group', { name: 'Filtrer les matchs' })
     .getByRole('button', { name: 'Terminés' })

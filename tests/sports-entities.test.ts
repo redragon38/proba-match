@@ -68,8 +68,8 @@ describe('Factual sports identities and dates', () => {
     expect(matchStructuredData({ ...match, status: 'live' }, data)).not.toHaveProperty(
       'eventStatus',
     );
-    expect(matchStructuredData({ ...match, status: 'scheduled' }, data)?.eventStatus).toMatch(
-      /EventScheduled$/,
+    expect(matchStructuredData({ ...match, status: 'scheduled' }, data)).not.toHaveProperty(
+      'eventStatus',
     );
     expect(matchStructuredData({ ...match, status: 'postponed' }, data)?.eventStatus).toMatch(
       /EventPostponed$/,

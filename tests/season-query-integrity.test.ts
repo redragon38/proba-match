@@ -75,11 +75,11 @@ describe('Season and query integrity', () => {
           status: 'scheduled' as const,
           season: competition.season,
           kickoffKnown: false,
-          sourceDate: '2026-09-12',
+          sourceDate: '2027-09-12',
         },
       ],
     };
-    expect(competitionView(data, competition).matches[0].sourceDate).toBe('2026-09-12');
+    expect(competitionView(data, competition).matches[0].sourceDate).toBe('2027-09-12');
   });
   it('flags an unavailable season while retaining the existing current-season fallback', () => {
     expect(competitionView(original, competition, { saison: 'not-a-season' }).seasonFallback).toBe(

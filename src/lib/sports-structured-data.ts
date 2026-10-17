@@ -2,6 +2,7 @@ import { isoDate, isoDateTime, playerBirthDate } from './factual-dates';
 import type { Competition, Dataset, Match, Player, Team } from '@/types/football';
 import { absoluteUrl } from './seo';
 import { matchFactSummary } from './match-facts';
+import { isUpcoming } from '@/services/football/match-selection';
 
 export function structuredImage(value: string | undefined) {
   if (!value) return undefined;
@@ -86,7 +87,7 @@ export function matchStructuredData(match: Match, data: Pick<Dataset, 'teams' | 
       ? 'https://schema.org/EventCancelled'
       : match.status === 'postponed'
         ? 'https://schema.org/EventPostponed'
-        : match.status === 'scheduled'
+        : isUpcoming(match)
           ? 'https://schema.org/EventScheduled'
           : undefined;
   const entity = (team: Team) => ({

@@ -8,6 +8,7 @@ import { useLive } from './use-live';
 import { MatchCard } from './match-card';
 import Link from 'next/link';
 import { LocalTime } from '@/components/local-time';
+import { isUpcoming } from '@/services/football/match-selection';
 export function LivePage({ data }: { data: Dataset }) {
   const live = useLive(data.matches),
     { values } = useFavorites();
@@ -124,7 +125,7 @@ export function LivePage({ data }: { data: Dataset }) {
             )}
           </div>
           {data.matches
-            .filter((m) => m.status === 'scheduled')
+            .filter((m) => isUpcoming(m))
             .sort((a, b) => a.kickoff.localeCompare(b.kickoff))
             .slice(0, 1)
             .map((m) => (

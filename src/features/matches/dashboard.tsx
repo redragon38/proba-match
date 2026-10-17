@@ -15,7 +15,7 @@ import {
 import type { Dataset, Match, Prediction } from '@/types/football';
 import { dateKey } from '@/lib/format';
 import { formatProbability } from '@/lib/probability-format';
-import { AdSlot, Empty, ProbabilityBar, SectionTitle, TeamBadge } from '@/components/ui';
+import { Empty, ProbabilityBar, SectionTitle, TeamBadge } from '@/components/ui';
 import { SourceBanner } from '@/components/source-banner';
 import { MatchList } from './match-list';
 import { useFavorites } from '@/features/favorites';
@@ -23,6 +23,7 @@ import { playerWatch } from '@/prediction-engine/player';
 import { useLive } from './use-live';
 import { MatchCard } from './match-card';
 import { useTimeZone } from '@/components/local-time';
+import { isUpcoming } from '@/services/football/match-selection';
 
 export function Dashboard({
   data,
@@ -106,6 +107,13 @@ export function Dashboard({
       (country === 'all' ||
         data.competitions.find((c) => c.id === m.competitionId)?.country === country),
   );
+  const displayedMatches = full
+    ? selected
+    : [...selected].sort(
+        (a, b) =>
+          Number(Boolean(predictions[b.id])) - Number(Boolean(predictions[a.id])) ||
+          a.kickoff.localeCompare(b.kickoff),
+      );
   function setDate(value: string) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return;
     const next = new URLSearchParams(params.toString());
@@ -132,10 +140,7 @@ export function Dashboard({
   const upcoming =
     upcomingMatches ??
     data.matches
-      .filter(
-        (m) =>
-          m.status === 'scheduled' && new Date(m.kickoff) >= new Date(`${activeDate}T00:00:00Z`),
-      )
+      .filter((m) => isUpcoming(m))
       .sort((a, b) => a.kickoff.localeCompare(b.kickoff))
       .slice(0, 4);
   const tabs = [
@@ -151,7 +156,9 @@ export function Dashboard({
       <div className="page-heading">
         <div>
           <span className="eyebrow">LE FOOTBALL, ÉCLAIRÉ PAR LES DONNÉES</span>
-          <h1>{full ? 'Tous les matchs' : 'Le football, aujourd’hui.'}</h1>
+          <h1>
+            {full ? 'Tous les matchs' : 'Matchs de football : scores, calendrier et analyses'}
+          </h1>
           <p>Les matchs, les scores et les analyses. Tout simplement.</p>
         </div>
         <span className="date-heading">
@@ -359,9 +366,9 @@ export function Dashboard({
               </button>
             </div>
           )}
-          {selected.length ? (
+          {displayedMatches.length ? (
             <MatchList
-              matches={selected}
+              matches={displayedMatches}
               teams={data.teams}
               competitions={data.competitions}
               predictions={predictions}
@@ -424,6 +431,7 @@ export function Dashboard({
                 match={m}
                 teams={data.teams}
                 competition={data.competitions.find((c) => c.id === m.competitionId)}
+                prediction={predictions[m.id]}
                 compact
               />
             ))}
@@ -437,7 +445,7 @@ export function Dashboard({
             {data.teams.slice(0, 6).map((t) => (
               <Link className="card" key={t.id} href={`/equipe/${t.slug}`}>
                 <TeamBadge team={t} size={36} />
-                <strong>{t.short}</strong>
+                <strong>{t.name}</strong>
                 <small>{t.country}</small>
               </Link>
             ))}
@@ -496,50 +504,48 @@ export function Dashboard({
             )}
             <div className="rail-disclaimer">Une estimation statistique, jamais une garantie.</div>
           </section>
-          <section className="card players-card">
-            <div className="rail-heading">
-              <span className="icon-tile amber">
-                <Zap size={16} />
-              </span>
-              <h2>Joueurs à suivre</h2>
-            </div>
-            <p>Les profils qui ressortent des données.</p>
-            {!starPlayers.length && (
-              <Empty text="Les données des joueurs ne sont pas disponibles pour le moment." />
-            )}
-            {starPlayers.map((p, i) => {
-              const t = data.teams.find((t) => t.id === p.teamId)!;
-              return (
-                <Link key={p.id} href={`/joueur/${p.slug}`} className="player-ranking">
-                  <span className="rank-index">0{i + 1}</span>
-                  <span
-                    className="player-avatar"
-                    style={{ '--team-color': t.color } as React.CSSProperties}
-                  >
-                    {p.name
-                      .split(' ')
-                      .map((n) => n[0])
-                      .slice(0, 2)
-                      .join('')}
-                  </span>
-                  <span>
-                    <strong>{p.name}</strong>
-                    <small>
-                      {t.short} <span>·</span> {p.position}
-                    </small>
-                  </span>
-                  <b>
-                    {p.score}
-                    <small>/100</small>
-                  </b>
-                </Link>
-              );
-            })}
-            <Link className="text-link player-see-all" href="/joueurs">
-              Explorer les joueurs <ArrowRight size={13} />
-            </Link>
-          </section>
-          <AdSlot />
+          {starPlayers.length > 0 && (
+            <section className="card players-card">
+              <div className="rail-heading">
+                <span className="icon-tile amber">
+                  <Zap size={16} />
+                </span>
+                <h2>Joueurs à suivre</h2>
+              </div>
+              <p>Les profils qui ressortent des données.</p>
+              {starPlayers.map((p, i) => {
+                const t = data.teams.find((t) => t.id === p.teamId)!;
+                return (
+                  <Link key={p.id} href={`/joueur/${p.slug}`} className="player-ranking">
+                    <span className="rank-index">0{i + 1}</span>
+                    <span
+                      className="player-avatar"
+                      style={{ '--team-color': t.color } as React.CSSProperties}
+                    >
+                      {p.name
+                        .split(' ')
+                        .map((n) => n[0])
+                        .slice(0, 2)
+                        .join('')}
+                    </span>
+                    <span>
+                      <strong>{p.name}</strong>
+                      <small>
+                        {t.short} <span>·</span> {p.position}
+                      </small>
+                    </span>
+                    <b>
+                      {p.score}
+                      <small>/100</small>
+                    </b>
+                  </Link>
+                );
+              })}
+              <Link className="text-link player-see-all" href="/joueurs">
+                Explorer les joueurs <ArrowRight size={13} />
+              </Link>
+            </section>
+          )}
         </aside>
       </div>
     </div>

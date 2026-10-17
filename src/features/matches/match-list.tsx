@@ -7,6 +7,7 @@ import type { Competition, Match, Prediction, Team } from '@/types/football';
 import { TeamBadge, Empty, ProbabilityCompact } from '@/components/ui';
 import { FavoriteButton, useFavorites } from '@/features/favorites';
 import { LocalTime } from '@/components/local-time';
+import { isAwaitingResult } from '@/services/football/match-selection';
 export function MatchList({
   matches,
   teams,
@@ -113,6 +114,8 @@ export function MatchList({
                             ) : (
                               'Annulé'
                             )
+                          ) : isAwaitingResult(m) ? (
+                            'Résultat en attente'
                           ) : (
                             <LocalTime iso={m.kickoff} known={m.kickoffKnown} />
                           )}

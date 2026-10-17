@@ -2,6 +2,7 @@ import { validResult } from '@/prediction-engine/availability';
 import type { Competition, Dataset, Match } from '@/types/football';
 import { derivedStandings } from '@/services/derived-standings';
 import { searchSource } from '@/services/search-index';
+import { isUpcoming } from '@/services/football/match-selection';
 
 /** Aggregate the selected season on the server, including matches outside the visible list. */
 export function competitionView(
@@ -76,7 +77,9 @@ export function competitionView(
     passers: rank('assists', 5),
     scorers: rank('goals', 10),
     matches: matches
-      .filter((match) => match.status === mode)
+      .filter(
+        (match) => match.status === mode && (mode !== 'scheduled' || isUpcoming(match, Date.now())),
+      )
       .sort((a, b) =>
         mode === 'finished'
           ? b.kickoff.localeCompare(a.kickoff)

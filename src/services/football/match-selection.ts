@@ -96,6 +96,32 @@ export function isUpcoming(m: Match, now = Date.now(), today?: string) {
       : Date.parse(m.kickoff) >= now)
   );
 }
+/** A scheduled fixture whose expected playing window has passed without a confirmed result. */
+export function isAwaitingResult(m: Match, now = Date.now(), today?: string) {
+  if (m.status !== 'scheduled') return false;
+  if (m.kickoffKnown === false)
+    return Boolean(m.sourceDate && m.sourceDate < (today ?? dateKey(new Date(now))));
+  const kickoff = Date.parse(m.kickoff);
+  return Number.isFinite(kickoff) && kickoff + 3 * 60 * 60 * 1000 < now;
+}
+
+/** Future fixtures for one team, ordered without treating stale scheduled rows as upcoming. */
+export function upcomingTeamMatches(
+  data: Pick<Dataset, 'matches'>,
+  teamId: string,
+  now = Date.now(),
+  limit = 10,
+) {
+  const today = dateKey(new Date(now));
+  return data.matches
+    .filter(
+      (match) =>
+        (match.homeId === teamId || match.awayId === teamId) && isUpcoming(match, now, today),
+    )
+    .sort((a, b) => a.kickoff.localeCompare(b.kickoff) || a.id.localeCompare(b.id))
+    .slice(0, limit)
+    .map(matchSummary);
+}
 /** Use a real matchday when today's calendar has no fixture for the selected tab. */
 export function closestMatchDate(
   data: Pick<Dataset, 'matches'>,

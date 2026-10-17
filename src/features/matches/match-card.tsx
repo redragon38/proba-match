@@ -5,6 +5,7 @@ import type { Match, Team, Competition, Prediction } from '@/types/football';
 import { TeamBadge, ProbabilityCompact } from '@/components/ui';
 import { LocalTime } from '@/components/local-time';
 import { FavoriteButton } from '@/features/favorites';
+import { isAwaitingResult } from '@/services/football/match-selection';
 export function MatchCard({
   match: m,
   teams,
@@ -54,6 +55,8 @@ export function MatchCard({
             ) : (
               'Annulé'
             )
+          ) : isAwaitingResult(m) ? (
+            'Résultat en attente'
           ) : (
             <span>
               <LocalTime iso={m.kickoff} date known={m.kickoffKnown} sourceDate={m.sourceDate} /> ·{' '}
@@ -72,7 +75,7 @@ export function MatchCard({
           </div>
         ))}
       </Link>
-      {!compact && prediction && m.status === 'scheduled' && (
+      {!compact && prediction && m.status === 'scheduled' && !isAwaitingResult(m) && (
         <div className="sport-card-projection">
           <span>Estimation avant-match · chaque issue reste incertaine</span>
           <ProbabilityCompact {...prediction} homeName={home.name} awayName={away.name} />

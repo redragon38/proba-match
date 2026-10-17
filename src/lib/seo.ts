@@ -90,8 +90,8 @@ export function seoMetadata(
 }
 export const publicPages: Record<string, [string, string]> = {
   '/': [
-    'Proba Match — scores, calendrier et statistiques football',
-    'Retrouvez les matchs du jour, les résultats, les classements et les analyses football de Proba Match. Sources identifiées et projections expliquées.',
+    'Scores, calendrier et analyses football | Proba Match',
+    'Consultez les matchs de football, les résultats confirmés, les calendriers et les analyses disponibles. Sources et limites des données sont indiquées.',
   ],
   '/matchs': [
     'Matchs de football — scores et calendrier',

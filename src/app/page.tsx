@@ -20,7 +20,7 @@ export default async function Home({
     return (
       <main className="page">
         <SourceBanner data={data} />
-        <h1>Le football, aujourd’hui.</h1>
+        <h1>Matchs de football : scores, calendrier et analyses</h1>
         <section className="card padded">
           <h2>Les rencontres ne sont pas disponibles pour le moment</h2>
           <p>

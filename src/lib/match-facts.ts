@@ -1,6 +1,7 @@
 import { isoDate, isoDateTime } from './factual-dates';
 import type { Match } from '@/types/football';
 import { validResult } from '@/prediction-engine/availability';
+import { isAwaitingResult } from '@/services/football/match-selection';
 
 export function matchDateLabel(
   match: Pick<Match, 'kickoff' | 'kickoffKnown' | 'sourceDate'>,
@@ -33,8 +34,10 @@ export function matchFactSummary(match: Match, home: string, away: string, compe
             ? 'Match abandonné ; résultat définitif non confirmé.'
             : match.status === 'live'
               ? 'Rencontre en cours ; les données peuvent être retardées.'
-              : match.kickoffKnown === false
-                ? 'Heure du coup d’envoi non confirmée.'
-                : 'Rencontre programmée.';
+              : isAwaitingResult(match)
+                ? 'Résultat en attente de confirmation par la source.'
+                : match.kickoffKnown === false
+                  ? 'Heure du coup d’envoi non confirmée.'
+                  : 'Rencontre programmée.';
   return `${subject} ${status}`;
 }

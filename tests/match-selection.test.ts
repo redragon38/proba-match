@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { createDemoDataset } from '@/services/football/providers/mock';
-import { closestMatchDate, matchSelection, upcomingSelection } from '@/services/football/match-selection';
+import {
+  closestMatchDate,
+  isAwaitingResult,
+  matchSelection,
+  upcomingSelection,
+  upcomingTeamMatches,
+} from '@/services/football/match-selection';
 const now = Date.parse('2026-09-26T12:00:00Z');
 const data = () => {
   const d = createDemoDataset(new Date(now));
@@ -57,6 +63,31 @@ describe('match catalogue selection', () => {
   it('features genuine future fixtures beyond today without requiring predictions', () => {
     expect(upcomingSelection(data(), now).map((m) => m.id)).toEqual(['next', 'later']);
     expect(upcomingSelection({ ...data(), matches: [] }, now)).toEqual([]);
+  });
+  it('separates future fixtures from results awaiting source confirmation', () => {
+    const d = data();
+    expect(
+      isAwaitingResult(
+        d.matches.find((match) => match.id === 'late')!,
+        now,
+      ),
+    ).toBe(true);
+    expect(
+      isAwaitingResult(
+        d.matches.find((match) => match.id === 'next')!,
+        now,
+      ),
+    ).toBe(false);
+    expect(upcomingTeamMatches(d, d.matches[0].homeId, now).map((match) => match.id)).toEqual([
+      'next',
+      'later',
+    ]);
+    const kickoff = {
+      ...d.matches[0],
+      status: 'scheduled' as const,
+      kickoff: new Date(now - 60_000).toISOString(),
+    };
+    expect(isAwaitingResult(kickoff, now)).toBe(false);
   });
   it('selects an honest available matchday when the current day is empty', () => {
     const d = data();

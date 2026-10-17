@@ -11,6 +11,8 @@ import { Breadcrumbs } from '@/components/breadcrumbs';
 import { TrendChart } from '@/components/charts';
 import { number } from '@/lib/format';
 import { MatchCard } from '@/features/matches/match-card';
+import { upcomingTeamMatches } from '@/services/football/match-selection';
+import { competitionSeason } from '@/lib/competition-season';
 const documentedMatches = (sample: number) =>
   sample === 0
     ? 'Aucun match documenté'
@@ -33,9 +35,8 @@ export function TeamProfile({
   const metrics = ['Possession', 'Tirs', 'Tirs cadrés'].map((label) =>
     teamMetricSummary(data, team.id, label, venue),
   );
-  const nextMatch = data.matches
-    .filter((m) => m.status === 'scheduled' && (m.homeId === team.id || m.awayId === team.id))
-    .sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff))[0];
+  const upcoming = upcomingTeamMatches(data, team.id);
+  const nextMatch = upcoming[0];
   const lastMatch = teamSummary(data, team.id).matches[0];
   return (
     <div className="page">
@@ -161,6 +162,13 @@ export function TeamProfile({
               note={documentedMatches(metrics[2].sample)}
             />
           </div>
+          {comp && metrics.some((metric) => metric.sample > 0) && (
+            <p className="data-note">
+              Périmètre : {comp.name}, saison {competitionSeason(comp, comp.season)}. Chaque moyenne
+              indique son nombre réel de matchs documentés ; les valeurs absentes ne sont pas
+              remplacées par zéro.
+            </p>
+          )}
           <div id="resultats">
             <SectionTitle title="Derniers résultats" />
           </div>
@@ -188,12 +196,7 @@ export function TeamProfile({
           />
           <SectionTitle title="Prochaines rencontres" />
           <MatchList
-            matches={data.matches
-              .filter(
-                (m) => m.status === 'scheduled' && (m.homeId === team.id || m.awayId === team.id),
-              )
-              .sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff))
-              .slice(0, 10)}
+            matches={upcoming}
             teams={data.teams}
             competitions={data.competitions}
             predictions={{}}
