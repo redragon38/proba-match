@@ -32,7 +32,9 @@ services:
     restart: unless-stopped
     cpus: 0.65
     healthcheck:
-      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/healthz.txt',{signal:AbortSignal.timeout(4000)}).then(r=>{if(!r.ok)throw Error()}).catch(()=>{try{process.kill(1,'SIGTERM')}finally{process.exit(1)}})"]
+      # Imports can saturate the worker CPU for several minutes. The application
+      # container handles public traffic; only verify that the worker process is alive.
+      test: ["CMD", "node", "-e", "process.kill(1,0)"]
       interval: 15s
       timeout: 6s
       retries: 2
