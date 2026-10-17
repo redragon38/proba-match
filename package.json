@@ -23,6 +23,7 @@
     "test:visual": "node scripts/visual-check.mjs",
     "test:seo": "node scripts/verify-seo.mjs",
     "test:product": "node scripts/verify-product-ui.mjs",
+    "test:production-pages": "node scripts/verify-production-pages.mjs",
     "football:import": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts import",
     "football:expanded-import": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts expanded-import",
     "football:sync": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/football.ts sync",

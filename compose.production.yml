@@ -33,6 +33,9 @@ services:
     env_file: .env.vps
     restart: unless-stopped
     cpus: 0.35
+    # Background imports can monopolize their own CPU allocation; they must not
+    # supervise or replace the public application process.
+    command: ["node", "server.js"]
     healthcheck:
       # Imports can saturate the worker CPU for several minutes. The application
       # container handles public traffic; only verify that the worker process is alive.
