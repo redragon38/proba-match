@@ -5,6 +5,7 @@ import { SourceBanner } from '@/components/source-banner';
 import { Empty } from '@/components/ui';
 import { StandingTable } from './standing-table';
 import type { standingsView } from '@/services/football/read-model';
+import { countryLabel } from '@/lib/format';
 export function Standings({ data, seasons, tables }: ReturnType<typeof standingsView>) {
   const [scope, setScope] = useState<'all' | 'home' | 'away' | 'last5'>('all');
   const [country, setCountry] = useState('all'),
@@ -34,7 +35,9 @@ export function Standings({ data, seasons, tables }: ReturnType<typeof standings
           >
             <option value="all">Tous les pays</option>
             {[...new Set(data.competitions.map((c) => c.country))].map((c) => (
-              <option key={c}>{c}</option>
+              <option key={c} value={c}>
+                {countryLabel(c)}
+              </option>
             ))}
           </select>
         </label>

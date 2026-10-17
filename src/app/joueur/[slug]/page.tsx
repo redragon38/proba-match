@@ -126,6 +126,8 @@ export default async function Page({
   ];
   if (p.position === 'Gardien')
     rows.unshift(['Arrêts', p.stats.saves], ['Buts encaissés', p.stats.conceded]);
+  const availableRows = rows.filter(([, value]) => value != null && Number.isFinite(value));
+  const unavailableCount = rows.length - availableRows.length;
   return (
     <div className="page">
       {data.source !== 'demo' && p.source !== 'thesportsdb' && (
@@ -336,7 +338,7 @@ export default async function Page({
                     </tr>
                   </thead>
                   <tbody>
-                    {rows.map(([label, v]) => (
+                    {availableRows.map(([label, v]) => (
                       <tr key={label}>
                         <th>{label}</th>
                         <td>{number(v, 2)}</td>
@@ -345,6 +347,13 @@ export default async function Page({
                   </tbody>
                 </table>
               </div>
+              {unavailableCount > 0 && (
+                <p className="data-note">
+                  {unavailableCount} indicateur{unavailableCount > 1 ? 's' : ''} non transmis par la
+                  source {unavailableCount > 1 ? 'sont regroupés' : 'est regroupé'} ici plutôt que
+                  remplacé{unavailableCount > 1 ? 's' : ''} par zéro.
+                </p>
+              )}
               <SectionTitle title="Historique saison par saison" />
               {history.length > 0 && (
                 <div

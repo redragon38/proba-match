@@ -13,7 +13,7 @@ import {
   Zap,
 } from 'lucide-react';
 import type { Dataset, Match, Prediction } from '@/types/football';
-import { dateKey } from '@/lib/format';
+import { countryLabel, dateKey } from '@/lib/format';
 import { formatProbability } from '@/lib/probability-format';
 import { Empty, ProbabilityBar, SectionTitle, TeamBadge } from '@/components/ui';
 import { SourceBanner } from '@/components/source-banner';
@@ -284,7 +284,7 @@ export function Dashboard({
           )}
         </section>
       )}
-      <div className="dashboard-grid">
+      <div className="dashboard-grid" id={full ? undefined : 'analyses'}>
         <div className="dashboard-main" aria-busy={pending}>
           {pending && <p role="status">Chargement des matchs…</p>}
           <div className="match-filters" role="group" aria-label="Filtrer les matchs">
@@ -324,7 +324,9 @@ export function Dashboard({
                 >
                   <option value="all">Tous les pays</option>
                   {[...new Set(data.competitions.map((c) => c.country))].map((c) => (
-                    <option key={c}>{c}</option>
+                    <option key={c} value={c}>
+                      {countryLabel(c)}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -355,7 +357,7 @@ export function Dashboard({
           )}
           {!filters && (country !== 'all' || competition !== 'all') && (
             <div className="filter-summary" aria-label="Filtres actifs">
-              {country !== 'all' && <span>{country}</span>}
+              {country !== 'all' && <span>{countryLabel(country)}</span>}
               {competition !== 'all' && (
                 <span>
                   {data.competitions.find((c) => c.id === competition)?.name ?? competition}
@@ -446,7 +448,7 @@ export function Dashboard({
               <Link className="card" key={t.id} href={`/equipe/${t.slug}`}>
                 <TeamBadge team={t} size={36} />
                 <strong>{t.name}</strong>
-                <small>{t.country}</small>
+                <small>{countryLabel(t.country)}</small>
               </Link>
             ))}
           </div>
@@ -470,12 +472,12 @@ export function Dashboard({
                 <div className="insight-teams">
                   <span>
                     <TeamBadge team={home} size={20} />
-                    {home.short}
+                    {home.name}
                   </span>
                   <span className="muted">vs</span>
                   <span>
                     <TeamBadge team={away} size={20} />
-                    {away.short}
+                    {away.name}
                   </span>
                 </div>
                 <div className="insight-main">

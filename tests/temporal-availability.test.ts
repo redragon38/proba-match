@@ -178,6 +178,24 @@ describe('Statistical reporting and searchable facts', () => {
     for (const m of data.matches) expect(matchIndexable(m, ids)).toBe(matchIndexable(m, data));
     expect(indexablePaths({ ...data, teams: [], matches: [] })).toEqual(editorialPaths);
   });
+  it('keeps useful match pages indexable across scheduled, live and finished statuses', () => {
+    const histories = [target.homeId, target.awayId].flatMap((teamId, side) =>
+      Array.from({ length: 5 }, (_, index) => ({
+        ...real.find((match) => match.status === 'finished')!,
+        id: `history-${side}-${index}`,
+        kickoff: new Date(Date.parse(target.kickoff) - (index + 1) * 86400_000).toISOString(),
+        homeId: teamId,
+        awayId: `opponent-${side}-${index}`,
+        status: 'finished' as const,
+        homeScore: 1,
+        awayScore: 0,
+      })),
+    );
+    const data = { ...demo, matches: [...histories, target] };
+    for (const status of ['scheduled', 'live', 'finished'] as const)
+      expect(matchIndexable({ ...target, status }, data)).toBe(true);
+    expect(documentedResultIds(data)).toContain(target.id);
+  });
   it('describes postponements and unknown times without inventing a score', () => {
     expect(matchFactSummary({ ...target, status: 'postponed' }, 'A', 'B', 'Ligue')).toContain(
       'reporté',

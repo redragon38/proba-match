@@ -9,6 +9,7 @@ import { MatchCard } from './match-card';
 import Link from 'next/link';
 import { LocalTime } from '@/components/local-time';
 import { isUpcoming } from '@/services/football/match-selection';
+import { countryLabel } from '@/lib/format';
 export function LivePage({ data }: { data: Dataset }) {
   const live = useLive(data.matches),
     { values } = useFavorites();
@@ -62,7 +63,9 @@ export function LivePage({ data }: { data: Dataset }) {
           <select value={country} onChange={(e) => setCountry(e.target.value)}>
             <option value="all">Tous les pays</option>
             {[...new Set(data.competitions.map((c) => c.country))].map((c) => (
-              <option key={c}>{c}</option>
+              <option key={c} value={c}>
+                {countryLabel(c)}
+              </option>
             ))}
           </select>
         </label>

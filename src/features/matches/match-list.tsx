@@ -8,6 +8,7 @@ import { TeamBadge, Empty, ProbabilityCompact } from '@/components/ui';
 import { FavoriteButton, useFavorites } from '@/features/favorites';
 import { LocalTime } from '@/components/local-time';
 import { isAwaitingResult } from '@/services/football/match-selection';
+import { countryLabel, roundLabel } from '@/lib/format';
 export function MatchList({
   matches,
   teams,
@@ -50,7 +51,8 @@ export function MatchList({
                 <Link href={`/competition/${comp.slug}`}>
                   <strong>{comp.name}</strong>
                   <span>
-                    {comp.country} <span className="divider-dot">·</span> {rows[0].round}
+                    {countryLabel(comp.country)} <span className="divider-dot">·</span>{' '}
+                    {roundLabel(rows[0].round)}
                   </span>
                 </Link>
                 <FavoriteButton id={`competition:${comp.id}`} label={comp.name} />

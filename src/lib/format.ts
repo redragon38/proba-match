@@ -23,6 +23,22 @@ export const number = (n: number | null | undefined, digits = 0) =>
   n == null || !Number.isFinite(n)
     ? 'Non disponible'
     : n.toLocaleString('fr-FR', { maximumFractionDigits: digits });
+export const countryLabel = (country: string) =>
+  ({
+    England: 'Angleterre',
+    Germany: 'Allemagne',
+    Spain: 'Espagne',
+    Italy: 'Italie',
+    France: 'France',
+    Brazil: 'Brésil',
+    Portugal: 'Portugal',
+    USA: 'États-Unis',
+  })[country] ?? country;
+export const roundLabel = (round: string | undefined) => {
+  if (!round) return 'Journée non précisée';
+  const matchday = /^Matchday\s+(\d+)$/i.exec(round);
+  return matchday ? `Journée ${matchday[1]}` : round;
+};
 export const slugify = (s: string) =>
   s
     .normalize('NFD')

@@ -149,7 +149,7 @@ export function Shell({
         <nav className="top-nav" aria-label="Navigation principale">
           <Link href="/matchs">Matchs</Link>
           <Link href="/competitions">Compétitions</Link>
-          <Link href="/methodologie">Analyses & prédictions</Link>
+          <Link href="/#analyses">Analyses & prédictions</Link>
         </nav>
         <div className="header-actions">
           <QuickSearch />

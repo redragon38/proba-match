@@ -10,10 +10,21 @@ const matchStatuses = new Set<Match['status']>([
   'cancelled',
   'abandoned',
 ]);
-type LivePatch = Pick<Match, 'id' | 'status' | 'homeScore' | 'awayScore' | 'minute' | 'updatedAt'> & {
+type LivePatch = Pick<
+  Match,
+  'id' | 'status' | 'homeScore' | 'awayScore' | 'minute' | 'updatedAt'
+> & {
   extra?: number | null;
   phase?: 'halftime' | 'playing';
 };
+export function mergeLiveMatches(initial: Match[], updates: Record<string, Partial<Match>>) {
+  return initial.map((match) => {
+    const update = updates[match.id];
+    return update && Date.parse(update.updatedAt ?? '') >= Date.parse(match.updatedAt)
+      ? { ...match, ...update }
+      : match;
+  });
+}
 function livePatch(value: unknown): LivePatch | undefined {
   if (!value || typeof value !== 'object') return;
   const row = value as Record<string, unknown>;
@@ -137,11 +148,7 @@ export function useLive(initial: Match[], detail = false) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ids, detail]);
   return {
-    matches: initial.map((m) =>
-      updates[m.id] && Date.parse(updates[m.id].updatedAt!) >= Date.parse(m.updatedAt)
-        ? { ...m, ...updates[m.id] }
-        : m,
-    ),
+    matches: mergeLiveMatches(initial, updates),
     changed,
     error,
     degraded,

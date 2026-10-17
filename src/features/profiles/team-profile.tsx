@@ -9,7 +9,7 @@ import { MatchList } from '@/features/matches/match-list';
 import { teamSummary, teamMetricSummary } from '@/services/statistics';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { TrendChart } from '@/components/charts';
-import { number } from '@/lib/format';
+import { countryLabel, number } from '@/lib/format';
 import { MatchCard } from '@/features/matches/match-card';
 import { upcomingTeamMatches } from '@/services/football/match-selection';
 import { competitionSeason } from '@/lib/competition-season';
@@ -52,7 +52,7 @@ export function TeamProfile({
         <TeamBadge team={team} size={86} />
         <div>
           <span className="eyebrow">
-            {team.country} · {comp?.name}
+            {countryLabel(team.country)} · {comp?.name}
           </span>
           <h1>{team.name}</h1>
           <p>
@@ -134,7 +134,7 @@ export function TeamProfile({
               values={[...stats.lastTen]
                 .reverse()
                 .map((m, i) => ({ label: `M${i + 1}`, value: m.gf }))}
-              label="Buts marqués · 10 dernières rencontres disponibles"
+              label={`Buts marqués · ${stats.lastTen.length} dernière${stats.lastTen.length > 1 ? 's' : ''} rencontre${stats.lastTen.length > 1 ? 's' : ''} disponible${stats.lastTen.length > 1 ? 's' : ''}`}
             />
             <p className="data-note">
               Les agrégats portent sur le catalogue disponible, pas nécessairement sur une saison

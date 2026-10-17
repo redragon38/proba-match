@@ -10,6 +10,7 @@ import { Metric, SectionTitle, TeamBadge } from '@/components/ui';
 import { StandingTable } from './standing-table';
 import { MatchList } from '@/features/matches/match-list';
 import { Breadcrumbs } from '@/components/breadcrumbs';
+import { countryLabel } from '@/lib/format';
 
 export function CompetitionProfile({ view }: { view: CompetitionView }) {
   const router = useRouter(),
@@ -53,7 +54,7 @@ export function CompetitionProfile({ view }: { view: CompetitionView }) {
         <CompetitionBadge competition={c} size={64} />
         <div>
           <span className="eyebrow">
-            {c.country} · SAISON {competitionSeason(c, c.season)}
+            {countryLabel(c.country)} · SAISON {competitionSeason(c, c.season)}
           </span>
           <h1>{c.name}</h1>
           <p>Le classement, les rencontres et ceux qui font la différence.</p>

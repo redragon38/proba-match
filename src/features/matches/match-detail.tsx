@@ -6,7 +6,7 @@ import type { Dataset, Match, Prediction } from '@/types/football';
 import { Empty, Form, Metric, ProbabilityBar, SectionTitle, TeamBadge } from '@/components/ui';
 import { SourceBanner } from '@/components/source-banner';
 import { FavoriteButton } from '@/features/favorites';
-import { dayLabel, number, time } from '@/lib/format';
+import { dayLabel, number, roundLabel, time } from '@/lib/format';
 import { playerWatch } from '@/prediction-engine/player';
 import { MatchList } from './match-list';
 import { PlayerPerformances } from './player-performances';
@@ -96,7 +96,7 @@ export function MatchDetail({
           <Link href={`/competition/${comp.slug}`}>
             <CompetitionBadge competition={comp} size={20} /> {comp.name}
           </Link>{' '}
-          · {match.round} · {dayLabel(match.kickoff)}
+          · {roundLabel(match.round)} · {dayLabel(match.kickoff)}
         </div>
         <div className="match-headline">
           <Link href={`/equipe/${home.slug}`}>

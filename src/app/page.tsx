@@ -55,14 +55,11 @@ export default async function Home({
   }
   const hasModelHistory = (match: (typeof data.matches)[number]) =>
     [match.homeId, match.awayId].every((teamId) => (completedByTeam.get(teamId) ?? 0) >= 5);
-  // Only one dashboard forecast and three insight cards are rendered. Select a
-  // small set that already meets the model's public minimum-history rule.
-  const dashboardMatches = view.matches
-    .filter(
-      (match) =>
-        match.status === 'scheduled' && Date.parse(match.kickoff) > now && hasModelHistory(match),
-    )
-    .slice(0, 3);
+  // Request every archived forecast shown by the dashboard so a match has the
+  // same public prediction here and in the complete calendar.
+  const dashboardMatches = view.matches.filter(
+    (match) => match.status === 'scheduled' && Date.parse(match.kickoff) > now,
+  );
   const insightMatches = upcomingSelection(data, now, 48).filter(hasModelHistory).slice(0, 6);
   const visibleIds = new Set([...dashboardMatches, ...insightMatches].map((match) => match.id));
   const predictions = await getPredictions(data, visibleIds, false);

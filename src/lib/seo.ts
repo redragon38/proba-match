@@ -185,8 +185,7 @@ export function matchIndexable(match: Match, data?: Dataset | ReadonlySet<string
     match.events.length > 0 ||
     match.lineups.length > 0 ||
     (match.status !== 'scheduled' && sanitizeMatchStatistics(match.statistics).length > 0) ||
-    (validResult(match) &&
-      !!data &&
+    (!!data &&
       ('matches' in data
         ? [match.homeId, match.awayId].every(
             (id) =>
@@ -205,9 +204,9 @@ export function matchIndexable(match: Match, data?: Dataset | ReadonlySet<string
 export function documentedResultIds(data: Dataset): Set<string> {
   const counts = new Map<string, number>();
   const ids = new Set<string>();
-  const sorted = data.matches
-    .filter(validResult)
-    .sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff) || a.id.localeCompare(b.id));
+  const sorted = [...data.matches].sort(
+    (a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff) || a.id.localeCompare(b.id),
+  );
   for (let start = 0; start < sorted.length;) {
     let end = start + 1;
     while (
@@ -220,8 +219,9 @@ export function documentedResultIds(data: Dataset): Set<string> {
       if ((counts.get(m.homeId) ?? 0) >= 5 && (counts.get(m.awayId) ?? 0) >= 5) ids.add(m.id);
     }
     for (let i = start; i < end; i++)
-      for (const id of [sorted[i].homeId, sorted[i].awayId])
-        counts.set(id, (counts.get(id) ?? 0) + 1);
+      if (validResult(sorted[i]))
+        for (const id of [sorted[i].homeId, sorted[i].awayId])
+          counts.set(id, (counts.get(id) ?? 0) + 1);
     start = end;
   }
   return ids;
