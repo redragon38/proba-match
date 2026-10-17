@@ -16,12 +16,14 @@ services:
       migrate:
         condition: service_completed_successfully
     restart: unless-stopped
-    cpus: 1.25
+    # Keep enough CPU reserved for public SSR while background imports are active.
+    cpus: 1.50
     healthcheck:
-      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/healthz.txt',{signal:AbortSignal.timeout(4000)}).then(r=>{if(!r.ok)throw Error()}).catch(()=>{try{process.kill(1,'SIGTERM')}finally{process.exit(1)}})"]
-      interval: 15s
-      timeout: 6s
-      retries: 2
+      # Report transient saturation without killing PID 1 and creating a restart loop.
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/healthz.txt',{signal:AbortSignal.timeout(8000)}).then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 4
       start_period: 30s
 
   worker:
@@ -30,7 +32,7 @@ services:
       target: runner
     env_file: .env.vps
     restart: unless-stopped
-    cpus: 0.65
+    cpus: 0.35
     healthcheck:
       # Imports can saturate the worker CPU for several minutes. The application
       # container handles public traffic; only verify that the worker process is alive.
