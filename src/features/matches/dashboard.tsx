@@ -288,7 +288,7 @@ export function Dashboard({
                 className={status === t.id ? 'selected' : ''}
                 onClick={() => setStatus(t.id)}
               >
-                {t.id === 'live' && <span className="live-dot" />}
+                {t.id === 'live' && <span className="live-dot" aria-hidden="true" />}
                 {t.id === 'favorites' && <Star size={12} />} {t.label}
                 {t.id === 'live' && (
                   <span className="count-pill">

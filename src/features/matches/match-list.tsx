@@ -93,7 +93,7 @@ export function MatchList({
                           )}
                           {m.status === 'live' ? (
                             <>
-                              <span className="live-dot" />
+                              <span className="live-dot" aria-hidden="true" />
                               {m.phase === 'halftime'
                                 ? 'Mi-temps'
                                 : `${m.minute ?? 'Live'}′${m.extra ? `+${m.extra}` : ''}`}
@@ -122,14 +122,14 @@ export function MatchList({
                             <TeamBadge team={home} size={23} />
                             {home.name}
                             {m.events.some((e) => e.teamId === home.id && e.type === 'red') && (
-                              <i className="red-card" />
+                              <i className="red-card" role="img" aria-label="Carton rouge" />
                             )}
                           </span>
                           <span>
                             <TeamBadge team={away} size={23} />
                             {away.name}
                             {m.events.some((e) => e.teamId === away.id && e.type === 'red') && (
-                              <i className="red-card" />
+                              <i className="red-card" role="img" aria-label="Carton rouge" />
                             )}
                           </span>
                         </Link>

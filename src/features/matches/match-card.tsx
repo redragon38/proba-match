@@ -66,7 +66,7 @@ export function MatchCard({
             <TeamBadge team={t} size={30} />
             <strong>{t.name}</strong>
             {m.events.some((e) => e.teamId === t.id && e.type === 'red') && (
-              <span className="red-card" aria-label="Carton rouge" />
+              <span className="red-card" role="img" aria-label="Carton rouge" />
             )}
             <b>{(i === 0 ? m.homeScore : m.awayScore) ?? '–'}</b>
           </div>

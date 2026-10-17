@@ -33,7 +33,7 @@ export function CompetitionBadge({
       {logo ? (
         <ProviderImage
           src={logo}
-          alt={`Logo de ${competition.name}`}
+          alt=""
           size={size}
           eager={size >= 64}
           fallback={fallback}
@@ -80,7 +80,7 @@ export function TeamBadge({
   return logo ? (
     <ProviderImage
       src={logo}
-      alt={`Logo de ${team.name}`}
+      alt=""
       size={size}
       eager={size >= 64}
       fallback={fallback}
@@ -123,7 +123,7 @@ export function Empty({
 }) {
   return (
     <div className="empty">
-      <Trophy size={28} />
+      <Trophy size={28} aria-hidden="true" />
       <h2>{title}</h2>
       <p>{text}</p>
     </div>
