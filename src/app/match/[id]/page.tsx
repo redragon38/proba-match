@@ -65,7 +65,11 @@ export default async function Page({
   ]);
   const archivedPrediction = history.at(-1);
   const storedPrediction = archivedPrediction ?? latest[m.id];
-  const prediction = storedPrediction ?? computeDisplayPrediction(m, data);
+  // Production forecasts are prepared by the isolated prediction job. Computing
+  // one synchronously scans the historical corpus and can block all public SSR
+  // requests when several uncached match pages arrive together.
+  const prediction =
+    storedPrediction ?? (data.source === 'demo' ? computeDisplayPrediction(m, data) : undefined);
   return (
     <>
       {structured && <JsonLd value={structured} />}
