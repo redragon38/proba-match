@@ -2,6 +2,7 @@ import { isoDate, isoDateTime } from './factual-dates';
 import type { Match } from '@/types/football';
 import { validResult } from '@/prediction-engine/availability';
 import { isAwaitingResult } from '@/services/football/match-selection';
+import type { Dataset } from '@/types/football';
 
 export function matchDateLabel(
   match: Pick<Match, 'kickoff' | 'kickoffKnown' | 'sourceDate'>,
@@ -40,4 +41,41 @@ export function matchFactSummary(match: Match, home: string, away: string, compe
                   ? 'Heure du coup d’envoi non confirmée.'
                   : 'Rencontre programmée.';
   return `${subject} ${status}`;
+}
+
+export function matchSeoCopy(match: Match, data: Dataset, hasPrediction = false) {
+  const home = data.teams.find((team) => team.id === match.homeId)?.name ?? 'Domicile';
+  const away = data.teams.find((team) => team.id === match.awayId)?.name ?? 'Extérieur';
+  const competition =
+    data.competitions.find((item) => item.id === match.competitionId)?.name ?? 'Football';
+  const fixture = `${home}–${away}`;
+  const date = matchDateLabel(match) ?? 'date à confirmer';
+  const summary = matchFactSummary(match, home, away, competition);
+
+  if (validResult(match))
+    return {
+      title: `${fixture} : résultat ${match.homeScore}–${match.awayScore}, ${competition}, ${date}`,
+      description: summary,
+    };
+  if (match.status === 'live')
+    return {
+      title: `${fixture} en direct — ${competition}`,
+      description: `${summary} Score et événements affichés selon les dernières données reçues.`,
+    };
+  if (match.status === 'scheduled')
+    return {
+      title: hasPrediction
+        ? `${fixture} : analyse et probabilités du ${date}`
+        : `${fixture} : match du ${date}`,
+      description: hasPrediction
+        ? `${summary} Consultez l’analyse et les probabilités archivées avant le coup d’envoi.`
+        : `${summary} Consultez l’horaire, la forme disponible et les informations confirmées.`,
+    };
+  const state =
+    match.status === 'postponed'
+      ? 'match reporté'
+      : match.status === 'cancelled'
+        ? 'match annulé'
+        : 'match abandonné';
+  return { title: `${fixture} : ${state} — ${competition}`, description: summary };
 }
