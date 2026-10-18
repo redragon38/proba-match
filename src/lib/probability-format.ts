@@ -14,6 +14,13 @@ export function probabilityPercentages(home: number, draw: number, away: number)
   return roundedPercentages([home, draw, away]);
 }
 
+/** Coordinate the five displayed scores and their complement to exactly 100%. */
+export function scoreScenarioPercentages(probabilities: number[]): number[] {
+  const shown = probabilities.slice(0, 5);
+  const remainder = Math.max(0, 1 - shown.reduce((sum, value) => sum + value, 0));
+  return roundedPercentages([...shown, remainder]);
+}
+
 export function formatProbability(value: number | null | undefined): string {
   return value == null || !Number.isFinite(value) || value < 0 || value > 1
     ? 'Non disponible'

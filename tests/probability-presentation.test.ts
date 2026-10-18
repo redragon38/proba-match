@@ -3,6 +3,7 @@ import {
   formatProbability,
   probabilityPercentages,
   probabilityReading,
+  scoreScenarioPercentages,
 } from '@/lib/probability-format';
 
 describe('lecture des probabilités sans modifier le modèle', () => {
@@ -34,5 +35,11 @@ describe('lecture des probabilités sans modifier le modèle', () => {
     expect(formatProbability(1.2)).toBe('Non disponible');
     expect(probabilityReading(1.2, 0.1, 0.1)).toBeNull();
     expect(probabilityReading(NaN, 0.5, 0.5)).toBeNull();
+  });
+  it('coordonne les cinq scores et tous les autres scénarios à 100 %', () => {
+    const values = scoreScenarioPercentages([0.123, 0.111, 0.099, 0.087, 0.076]);
+    expect(values).toHaveLength(6);
+    expect(values.reduce((sum, value) => sum + value, 0)).toBe(100);
+    expect(values[5]).toBeGreaterThan(values[0]);
   });
 });

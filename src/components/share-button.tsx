@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Share2 } from 'lucide-react';
+import { emitAnalytics } from '@/lib/analytics';
 export function ShareButton({ path, title }: { path: string; title: string }) {
   const [status, setStatus] = useState('');
   async function share() {
@@ -11,6 +12,7 @@ export function ShareButton({ path, title }: { path: string; title: string }) {
         await navigator.clipboard.writeText(url);
         setStatus('Lien copié');
       }
+      emitAnalytics('shared');
     } catch (e) {
       if (e instanceof Error && e.name === 'AbortError') return;
       setStatus('Copiez l’adresse de cette page depuis votre navigateur.');

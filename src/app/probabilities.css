@@ -179,6 +179,18 @@
   line-height: 1.55;
   max-width: 75ch;
 }
+.prediction-why h5 {
+  margin: 10px 0;
+  font-size: 16px;
+}
+.prediction-why > strong {
+  display: block;
+  margin-top: 12px;
+}
+.prediction-why ul {
+  margin: 7px 0 0;
+  padding-left: 20px;
+}
 .prediction-more {
   margin-top: 20px;
   border-top: 1px solid var(--line);

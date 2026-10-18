@@ -3,6 +3,8 @@ import { cronHandler } from '@/services/football/cron';
 import { observeResult, validResult } from '@/prediction-engine/availability';
 import type { Dataset, Match } from '@/types/football';
 import { databaseErrorFields } from '@/lib/logger';
+import { readLocalDataset } from '@/services/football/local-store';
+import { persistPredictions } from '@/services/predictions';
 
 export const maxDuration = 300;
 
@@ -109,7 +111,13 @@ async function repairPredictionInputs() {
 
 export const GET = cronHandler(async () => {
   try {
-    return await repairPredictionInputs();
+    const repair = await repairPredictionInputs();
+    if (repair.status !== 'success') return repair;
+    // This endpoint is the dedicated prediction schedule. Input repair alone
+    // left publication dependent on unrelated provider imports and produced
+    // avoidable gaps between two synchronizations.
+    await persistPredictions(await readLocalDataset());
+    return { ...repair, predictions: 'published' };
   } catch (error) {
     return { status: 'failed', stage: 'read', ...databaseErrorFields(error) };
   }

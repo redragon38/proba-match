@@ -690,6 +690,22 @@
   line-height: 1.7;
   margin: 10px 0 20px;
 }
+
+.analysis-catalogue {
+  display: grid;
+  gap: 16px;
+}
+.analysis-card h2 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 16px;
+  font-size: clamp(18px, 2.4vw, 26px);
+}
+.analysis-card .button {
+  margin-top: 8px;
+}
 .prose {
   max-width: 1000px;
   padding: 45px 45px 20px;

@@ -8,6 +8,7 @@ import { getPredictions } from '@/services/predictions';
 import { dashboardDataset } from '@/services/football/read-model';
 import { closestMatchDate, upcomingSelection } from '@/services/football/match-selection';
 import { HomeInsights } from '@/features/matches/home-insights';
+import { publicPredictionIds } from '@/services/prediction-visibility';
 export const dynamic = 'force-dynamic';
 export default async function Home({
   searchParams,
@@ -57,11 +58,12 @@ export default async function Home({
     [match.homeId, match.awayId].every((teamId) => (completedByTeam.get(teamId) ?? 0) >= 5);
   // Request every archived forecast shown by the dashboard so a match has the
   // same public prediction here and in the complete calendar.
-  const dashboardMatches = view.matches.filter(
-    (match) => match.status === 'scheduled' && Date.parse(match.kickoff) > now,
-  );
+  // Keep archived forecasts visible while a delayed provider still reports the
+  // fixture as scheduled. Other pages select predictions by match identity too;
+  // filtering here by the wall clock caused the same match to disagree by page.
+  const dashboardIds = publicPredictionIds(view.matches);
   const insightMatches = upcomingSelection(data, now, 48).filter(hasModelHistory).slice(0, 6);
-  const visibleIds = new Set([...dashboardMatches, ...insightMatches].map((match) => match.id));
+  const visibleIds = new Set([...dashboardIds, ...insightMatches.map((match) => match.id)]);
   const predictions = await getPredictions(data, visibleIds, false);
   const dashboardPredictions = Object.fromEntries(
     Object.entries(predictions).filter(([id]) => visibleIds.has(id)),

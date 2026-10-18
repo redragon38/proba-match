@@ -21,6 +21,7 @@ import { ProbabilitySummary } from './probability-summary';
 import { MatchStatistics } from './match-statistics';
 import { matchFactSummary } from '@/lib/match-facts';
 import { isAwaitingResult } from '@/services/football/match-selection';
+import { compareEventTime } from '@/lib/event-time';
 const tabs = [
   ['apercu', 'Aperçu'],
   ['prediction', 'Prédiction'],
@@ -162,6 +163,9 @@ export function MatchDetail({
         </nav>
       </section>
       <ShareButton path={`/match/${match.slug}`} title={`${home.name} – ${away.name}`} />
+      <Link className="button secondary" href={`/match/${match.slug}/calendrier`} download>
+        Ajouter au calendrier (.ics)
+      </Link>
       <p className="match-fact-summary">
         {matchFactSummary(match, home.name, away.name, comp.name)}{' '}
         {prediction
@@ -282,7 +286,7 @@ export function MatchDetail({
         <MatchOverview data={data} match={match} />
       )}
       {tab === 'prediction' && (
-        <details className="card advanced-panel prediction-history">
+        <details id="prediction-archive" className="card advanced-panel prediction-history">
           <summary>Historique des probabilités</summary>
           <p className="data-note">
             Affichage des 100 snapshots les plus récents au maximum ; les plus anciens peuvent ne
@@ -414,7 +418,7 @@ export function MatchDetail({
           <SectionTitle title="Le fil de la rencontre" />
           {match.events.length ? (
             <section className="card timeline">
-              {[...match.events].reverse().map((e, i) => (
+              {[...match.events].sort(compareEventTime).map((e, i) => (
                 <div key={i} className="timeline-event">
                   <strong>
                     {e.minute}

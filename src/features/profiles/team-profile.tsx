@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
-import type { Dataset, Team } from '@/types/football';
+import type { Dataset, Prediction, Team } from '@/types/football';
 import { SourceBanner } from '@/components/source-banner';
 import { Empty, Form, Metric, SectionTitle, TeamBadge } from '@/components/ui';
 import { FavoriteButton } from '@/features/favorites';
@@ -21,10 +21,12 @@ export function TeamProfile({
   data,
   team,
   summary,
+  predictions = {},
 }: {
   data: Dataset;
   team: Team;
   summary?: string;
+  predictions?: Record<string, Prediction>;
 }) {
   const [count, setCount] = useState(5);
   const [venue, setVenue] = useState<'all' | 'home' | 'away'>('all');
@@ -61,6 +63,9 @@ export function TeamProfile({
           <Form values={stats.form} />
         </div>
         <FavoriteButton id={`team:${team.id}`} label={team.name} />
+        <Link className="button secondary" href={`/equipe/${team.slug}/calendrier`} download>
+          Calendrier futur (.ics)
+        </Link>
       </div>
       {summary && <p className="match-fact-summary">{summary}</p>}
       <nav className="profile-tabs" aria-label="Rubriques de l’équipe">
@@ -187,6 +192,13 @@ export function TeamProfile({
             >
               10 matchs
             </button>
+            <button
+              aria-pressed={count === 20}
+              className={count === 20 ? 'active' : ''}
+              onClick={() => setCount(20)}
+            >
+              20 matchs
+            </button>
           </div>
           <MatchList
             matches={stats.matches.slice(0, count)}
@@ -199,7 +211,7 @@ export function TeamProfile({
             matches={upcoming}
             teams={data.teams}
             competitions={data.competitions}
-            predictions={{}}
+            predictions={predictions}
           />
         </div>
         <aside>
@@ -208,18 +220,24 @@ export function TeamProfile({
           </div>
           <section className="card padded">
             {players.length ? (
-              players.map((p) => (
+              <>
+              {players.map((p) => (
                 <Link className="squad-row" href={`/joueur/${p.slug}`} key={p.id}>
                   <span>{p.number ?? '–'}</span>
                   <div>
                     <b>{p.name}</b>
                     <small>{p.position}</small>
                   </div>
-                  <span>
-                    {p.stats.goals ?? '–'} <small>but(s)</small>
-                  </span>
+                  {p.stats.goals != null && <span>{p.stats.goals} <small>but(s)</small></span>}
                 </Link>
-              ))
+              ))}
+              {players.some((player) => player.stats.goals == null) && (
+                <p className="data-note">
+                  Buts : donnée non documentée pour{' '}
+                  {players.filter((player) => player.stats.goals == null).length} joueur(s).
+                </p>
+              )}
+              </>
             ) : (
               <Empty />
             )}

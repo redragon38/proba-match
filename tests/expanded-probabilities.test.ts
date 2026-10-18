@@ -94,7 +94,7 @@ describe('Expanded coherent score statistics', () => {
       }),
     );
     for (const text of [
-      'Trois scores les plus probables',
+      'Cinq scores précis les plus probables',
       'Un éventail de buts possibles',
       'Explorer les scénarios de score',
       'Au moins 3 buts au total',

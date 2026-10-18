@@ -14,8 +14,30 @@ export const normalizeSearch = (s: string) =>
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
+    .replace(/[’'`´-]+/g, ' ')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
     .trim();
-type IndexedRow = { row: SearchResult; normalized: string };
+
+/** Curated aliases tied to verified club names; never applied as global text replacements. */
+export const verifiedTeamAliases: Record<string, string[]> = {
+  ol: ['olympique lyonnais'],
+  om: ['olympique de marseille'],
+  psg: ['paris saint germain'],
+  barca: ['fc barcelona'],
+  barcelona: ['fc barcelona'],
+  inter: ['fc internazionale milano', 'inter milan'],
+  bayern: ['fc bayern munchen', 'bayern munich'],
+};
+
+function aliasesForTeam(name: string) {
+  const normalized = normalizeSearch(name);
+  return Object.entries(verifiedTeamAliases)
+    .filter(([, targets]) => targets.includes(normalized))
+    .map(([alias]) => alias);
+}
+
+type IndexedRow = { row: SearchResult; normalized: string; searchable: string };
 /** One insertion/deletion/substitution/transposition on a whole word, linear time. */
 export function oneEditApart(a: string, b: string) {
   if (Math.abs(a.length - b.length) > 1) return false;
@@ -99,7 +121,16 @@ function searchEntries(data: Dataset): IndexedRow[] {
         href: `/match/${m.slug}`,
         detail: m.kickoff.slice(0, 10),
       })),
-  ].map((row) => ({ row, normalized: normalizeSearch(row.name) }));
+  ].map((row) => {
+    const normalized = normalizeSearch(row.name);
+    const searchable =
+      row.kind === 'Équipe'
+        ? `${normalized} ${aliasesForTeam(row.name).join(' ')}`
+        : row.kind === 'Match'
+          ? `${normalized} ${row.name.split(' – ').flatMap(aliasesForTeam).join(' ')}`
+          : normalized;
+    return { row, normalized, searchable };
+  });
   if (data.source !== 'demo')
     indexes.set(data.matches, {
       teams: data.teams,
@@ -112,13 +143,21 @@ function searchEntries(data: Dataset): IndexedRow[] {
 export function searchIndex(data: Dataset): SearchResult[] {
   return searchEntries(data).map(({ row }) => row);
 }
+
+function matchesSearch(searchable: string, query: string) {
+  if (!query || searchable.includes(query)) return true;
+  const words = searchable.split(' ');
+  return query
+    .split(' ')
+    .every((term) => words.some((word) => word === term || word.startsWith(term)));
+}
 /** Prefix matches first, retaining catalogue order and stopping at ten results. */
 export function searchAutocomplete(data: Dataset, query: string): SearchResult[] {
   const prefix: SearchResult[] = [];
   const others: SearchResult[] = [];
-  for (const { row, normalized } of searchEntries(data)) {
-    if (!normalized.includes(query)) continue;
-    if (normalized.startsWith(query)) prefix.push(row);
+  for (const { row, normalized, searchable } of searchEntries(data)) {
+    if (!matchesSearch(searchable, query)) continue;
+    if (normalized.startsWith(query) || searchable.split(' ').includes(query)) prefix.push(row);
     else if (others.length < 10) others.push(row);
   }
   const exact = prefix.slice(0, 10).concat(others.slice(0, Math.max(0, 10 - prefix.length)));
@@ -147,10 +186,10 @@ export function searchResults(
   const query = normalizeSearch(q.slice(0, 100));
   const selected = ids ? new Set(ids) : undefined;
   const results = searchEntries(data).filter(
-    ({ row, normalized }) =>
+    ({ row, normalized, searchable }) =>
       (!selected || selected.has(row.id)) &&
       (category === 'all' || row.kind === category) &&
-      (normalized.includes(query) ||
+      (matchesSearch(searchable, query) ||
         (row.kind !== 'Match' && tolerantNameMatch(normalized, query))),
   );
   const start = Number.isSafeInteger(offset) && offset >= 0 ? offset : 0;

@@ -5,6 +5,7 @@ import { seoMetadata } from '@/lib/seo';
 import { competitionView } from '@/services/competition-view';
 import { getDataset } from '@/services/football';
 import { CompetitionProfile } from '@/features/profiles/competition-profile';
+import { getPredictions } from '@/services/predictions';
 const aliases: Record<string, string> = {
   'ligue-1': '61',
   'premier-league': '39',
@@ -52,5 +53,11 @@ export default async function Page({
   if (!c) notFound();
   const query = competitionQuery(await searchParams);
   if (slug !== c.slug) permanentRedirect(competitionAliasTarget(c.slug, query));
-  return <CompetitionProfile view={competitionView(data, c, query)} />;
+  const view = competitionView(data, c, query);
+  return (
+    <CompetitionProfile
+      view={view}
+      predictions={await getPredictions(data, new Set(view.matches.map((match) => match.id)), false)}
+    />
+  );
 }

@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import type { Dataset, EvaluatedPrediction } from '@/types/football';
 import { metrics } from '@/prediction-engine/evaluation';
@@ -11,10 +12,12 @@ export function Performance({
   data,
   rows,
   demo,
+  publicReport = false,
 }: {
   data: Dataset;
   rows: EvaluatedPrediction[];
   demo: boolean;
+  publicReport?: boolean;
 }) {
   const [comp, setComp] = useState('all'),
     [month, setMonth] = useState('all'),
@@ -43,6 +46,16 @@ export function Performance({
     [rows, comp, month, confidence, period, version, reference],
   );
   const stats = metrics(filtered);
+  const referenceStats = metrics(
+    filtered.map((row) => ({
+      ...row,
+      prediction: { ...row.prediction, home: 1 / 3, draw: 1 / 3, away: 1 / 3 },
+    })),
+  );
+  const evaluatedIds = new Set(rows.map((row) => row.prediction.matchId));
+  const nonEvaluable = data.matches.filter(
+    (match) => match.status === 'finished' && !evaluatedIds.has(match.id),
+  ).length;
   const calibration = stats
     ? calibrationOutcome === 'all'
       ? stats.calibration
@@ -56,6 +69,32 @@ export function Performance({
       <p className="intro-text">
         Les bonnes lectures. Les erreurs. Et tout ce qu’on apprend entre les deux.
       </p>
+      {publicReport && (
+        <div className="detail-columns">
+          <section className="card padded">
+            <h2>Prédictions réellement publiées</h2>
+            <p>
+              {demo
+                ? 'Aucune mesure réelle dans cet environnement de démonstration.'
+                : `${rows.length} prédictions initiales enregistrées avant le coup d’envoi et reliées à un résultat confirmé.`}
+            </p>
+          </section>
+          <section className="card padded">
+            <h2>Évaluations exploratoires</h2>
+            <p>
+              {demo
+                ? `${rows.length} reconstructions temporelles de démonstration, séparées des publications réelles.`
+                : 'Aucune reconstruction n’est mélangée aux résultats affichés ci-dessous.'}
+            </p>
+          </section>
+          <section className="card padded">
+            <h2>Matchs non évaluables</h2>
+            <p>
+              {nonEvaluable} rencontre(s) terminée(s) sans prédiction initiale archivée exploitable.
+            </p>
+          </section>
+        </div>
+      )}
       {demo && (
         <p className="warning">
           Simulation pédagogique sur des rencontres fictives. Ces résultats ne mesurent aucune
@@ -67,6 +106,23 @@ export function Performance({
         {new Set(filtered.map((r) => r.prediction.matchId)).size} matchs distincts. Plusieurs
         versions peuvent porter sur le même match.
       </p>
+      {publicReport && filtered.length > 0 && (
+        <p className={filtered.length < 30 ? 'warning' : 'data-note'}>
+          Période évaluée : du{' '}
+          {new Date(Math.min(...filtered.map((row) => Date.parse(row.kickoff)))).toLocaleDateString(
+            'fr-FR',
+          )}{' '}
+          au{' '}
+          {new Date(Math.max(...filtered.map((row) => Date.parse(row.kickoff)))).toLocaleDateString(
+            'fr-FR',
+          )}
+          . Mise à jour des données : {new Date(data.updatedAt).toLocaleString('fr-FR')}.{' '}
+          {filtered.length < 30
+            ? 'Échantillon inférieur à 30 rencontres : aucune conclusion générale ne doit être tirée.'
+            : 'L’échantillon permet une lecture descriptive, sans garantir les résultats futurs.'}{' '}
+          <Link href="/methodologie">Lire la méthodologie</Link>.
+        </p>
+      )}
       <div className="filter-panel">
         <label>
           Période
@@ -165,6 +221,18 @@ export function Performance({
               note="Plus faible = meilleur"
             />
           </div>
+          {publicReport && referenceStats && (
+            <section className="card padded">
+              <h2>Comparaison avec une référence simple</h2>
+              <p>
+                Sur exactement les mêmes rencontres, la référence attribue 33,3 % à chacune des
+                trois issues. Son Brier Score est {number(referenceStats.brier, 3)} et sa Log Loss{' '}
+                {number(referenceStats.logLoss, 3)}, contre {number(stats.brier, 3)} et{' '}
+                {number(stats.logLoss, 3)} pour les prédictions sélectionnées. Cette référence ne
+                fournit pas de projection de buts.
+              </p>
+            </section>
+          )}
           <div className="metrics">
             <Metric
               label="MAE buts domicile"
@@ -365,8 +433,14 @@ export function Performance({
                     <tr key={r.prediction.id}>
                       <td>{new Date(r.kickoff).toLocaleDateString('fr-FR')}</td>
                       <th>
-                        {data.teams.find((t) => t.id === m?.homeId)?.short ?? 'Domicile'} –{' '}
-                        {data.teams.find((t) => t.id === m?.awayId)?.short ?? 'Extérieur'}
+                        {m ? (
+                          <Link href={`/match/${m.slug}?onglet=prediction#prediction-archive`}>
+                            {data.teams.find((t) => t.id === m.homeId)?.short ?? 'Domicile'} –{' '}
+                            {data.teams.find((t) => t.id === m.awayId)?.short ?? 'Extérieur'}
+                          </Link>
+                        ) : (
+                          'Rencontre archivée'
+                        )}
                       </th>
                       <td>
                         {probabilityPercentages(

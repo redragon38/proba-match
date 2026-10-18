@@ -71,7 +71,7 @@ export function predictionInsights(prediction: Prediction) {
     scoreGrid,
     winningMargins,
     totalRange: goalRange(exactTotal),
-    totalAtLeast: [2, 3, 4].map((goals) => ({
+    totalAtLeast: [1, 2, 3, 4].map((goals) => ({
       goals,
       probability: exactTotal.slice(goals).reduce((sum, p) => sum + p, 0),
     })),

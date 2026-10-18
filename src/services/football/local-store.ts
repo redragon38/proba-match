@@ -3,6 +3,7 @@ import type { Dataset, Match } from '@/types/football';
 import { teamLogo } from '@/lib/team-logo';
 import { withSnapshotExpiry } from './freshness';
 import { reportedStatistics } from './reported-statistics';
+import { identifiableTeamShort } from '@/lib/team-short';
 export function emptyDataset(warning?: string): Dataset {
   return {
     source: 'openfootball',
@@ -32,7 +33,11 @@ export async function readLocalDataset(): Promise<Dataset> {
           ? { ...match, statistics: reportedStatistics(match.statistics) }
           : match,
       ),
-      teams: data.teams.map((team) => ({ ...team, logo: teamLogo(team) })),
+      teams: data.teams.map((team) => ({
+        ...team,
+        logo: teamLogo(team),
+        short: identifiableTeamShort(team.name, team.short),
+      })),
       revision: entry.updatedAt.toISOString(),
     },
     entry.expiresAt.getTime(),

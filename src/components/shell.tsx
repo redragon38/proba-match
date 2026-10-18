@@ -30,6 +30,7 @@ import { usePreference } from '@/lib/preferences';
 const navigation = [
   { href: '/', label: 'Accueil', icon: Globe2 },
   { href: '/matchs', label: 'Tous les matchs', icon: CircleDot },
+  { href: '/analyses', label: 'Analyses & prédictions', icon: Zap },
   { href: '/live', label: 'En direct', icon: Activity },
   { href: '/competitions', label: 'Compétitions', icon: Trophy },
   { href: '/classements', label: 'Classements', icon: Trophy },
@@ -61,6 +62,8 @@ export function Shell({
     if (pathname.startsWith('/match/')) emitAnalytics('match_opened');
     else if (pathname.startsWith('/equipe/')) emitAnalytics('team_opened');
     else if (pathname.startsWith('/joueur/')) emitAnalytics('player_opened');
+    else if (pathname === '/analyses') emitAnalytics('analysis_opened');
+    else if (pathname === '/bilan-predictions') emitAnalytics('prediction_report_viewed');
   }, [pathname]);
   useEffect(() => {
     const media = window.matchMedia('(prefers-color-scheme: dark)');
@@ -149,7 +152,7 @@ export function Shell({
         <nav className="top-nav" aria-label="Navigation principale">
           <Link href="/matchs">Matchs</Link>
           <Link href="/competitions">Compétitions</Link>
-          <Link href="/#analyses">Analyses & prédictions</Link>
+          <Link href="/analyses">Analyses & prédictions</Link>
         </nav>
         <div className="header-actions">
           <QuickSearch />
@@ -253,6 +256,8 @@ export function Shell({
             <nav>
               <Link href="/a-propos">À propos</Link>
               <Link href="/methodologie">Méthodologie</Link>
+              <Link href="/analyses">Analyses</Link>
+              <Link href="/bilan-predictions">Bilan des prédictions</Link>
               <Link href="/comprendre-probabilites">Comprendre les probabilités</Link>
               <Link href="/lexique-football">Lexique football</Link>
               <Link href="/sources-donnees">Sources des données</Link>

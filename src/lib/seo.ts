@@ -117,6 +117,14 @@ export const publicPages: Record<string, [string, string]> = {
     'Classements de football par compétition et saison',
     'Comparez points, buts et forme des équipes. Consultez les classements par saison, à domicile, à l’extérieur et sur les cinq derniers matchs.',
   ],
+  '/analyses': [
+    'Analyses et prédictions de matchs de football',
+    'Retrouvez les rencontres disposant d’une estimation avant-match archivée : probabilités 1N2, score précis le plus probable et qualité des informations.',
+  ],
+  '/bilan-predictions': [
+    'Bilan public des prédictions football',
+    'Consultez l’évaluation transparente des prédictions publiées avant les matchs : Brier Score, Log Loss, calibration, précision et limites statistiques.',
+  ],
   '/a-propos': [
     'À propos de Proba Match',
     'Découvrez Proba Match, une plateforme gratuite de statistiques football : origine des données, transparence des analyses et limites des projections.',

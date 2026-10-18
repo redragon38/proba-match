@@ -2,12 +2,13 @@ import type { Prediction, Team } from '@/types/football';
 import type { informationQuality, predictionInsights } from '@/prediction-engine/insights';
 import { ProbabilityBar, TeamBadge } from '@/components/ui';
 import { number, time } from '@/lib/format';
-import { plainFactor } from '@/lib/prediction-explanations';
+import { predictionInfluences } from '@/lib/prediction-explanations';
 import {
   formatProbability,
   probabilityPercentages,
   probabilityReading,
   roundedPercentages,
+  scoreScenarioPercentages,
 } from '@/lib/probability-format';
 
 type Analysis = ReturnType<typeof predictionInsights>;
@@ -76,19 +77,10 @@ export function ProbabilitySummary({
   const names = [home.name, 'Match nul', away.name];
   const sides = [home, null, away];
   const topScore = prediction.scores[0];
-  const relevantFactors = prediction.factors.filter((factor) =>
-    reading.leader === 1
-      ? factor.side === 'neutral' || !factor.side
-      : factor.side === (reading.leader === 0 ? 'home' : 'away'),
-  );
-  const plainReasons = relevantFactors.slice(0, 3).flatMap((factor) => {
-    const explanation = plainFactor(factor, home.name, away.name);
-    return explanation ? [explanation] : [];
-  });
-  const reason = relevantFactors
-    .slice(0, 2)
-    .map((factor) => factor.label.toLowerCase())
-    .join(' et ');
+  const influences = predictionInfluences(prediction, home.name, away.name);
+  const scenarioPercentages = analysis
+    ? scoreScenarioPercentages(analysis.topScores.map((score) => score.probability))
+    : [];
   const outcomeSummary =
     reading.label === 'Très équilibré'
       ? 'Match très équilibré selon le modèle.'
@@ -191,29 +183,56 @@ export function ProbabilitySummary({
           )}
         </div>
       </div>
-      {prediction.scores.length >= 3 && (
+      {analysis && analysis.topScores.length === 5 && (
         <section className="prediction-top-three">
-          <h4>Trois scores les plus probables</h4>
+          <h4>Cinq scores précis les plus probables</h4>
           <div className="alternative-scores">
-            {prediction.scores.slice(0, 3).map((score) => (
+            {analysis.topScores.map((score, index) => (
               <div key={`${score.home}-${score.away}`}>
                 <strong>
                   {score.home}–{score.away}
                 </strong>
-                <span>{formatProbability(score.probability)}</span>
+                <span>{scenarioPercentages[index]} %</span>
               </div>
             ))}
+            <div>
+              <strong>Autres scores</strong>
+              <span>{scenarioPercentages[5]} %</span>
+            </div>
           </div>
           <p className="data-note">
-            Chaque pourcentage concerne un score précis. D’autres scores restent possibles.
+            Ces six parts proviennent de la même matrice et totalisent 100 % après arrondi
+            coordonné. Le score individuel le plus probable reste généralement peu probable : ce
+            n’est ni un résultat attendu, ni une certitude.
           </p>
         </section>
       )}
       <div className="prediction-why">
-        <h4>Pourquoi cette estimation ?</h4>
-        {plainReasons.length > 0 && (
+        <h4>Ce qui influence cette estimation</h4>
+        <h5>{influences.title}</h5>
+        {influences.favorable.length > 0 && (
+          <>
+            <strong>Facteurs favorables</strong>
+            <ul>
+              {influences.favorable.map((text) => (
+                <li key={text}>{text}</li>
+              ))}
+            </ul>
+          </>
+        )}
+        {influences.unfavorable.length > 0 && (
+          <>
+            <strong>Facteurs qui tempèrent cette lecture</strong>
+            <ul>
+              {influences.unfavorable.map((text) => (
+                <li key={text}>{text}</li>
+              ))}
+            </ul>
+          </>
+        )}
+        {influences.neutral.length > 0 && (
           <ul>
-            {plainReasons.map((text) => (
+            {influences.neutral.map((text) => (
               <li key={text}>{text}</li>
             ))}
           </ul>
@@ -223,12 +242,13 @@ export function ProbabilitySummary({
           score. On ne peut pas attribuer un nombre exact de points de probabilité à chacun de ces
           facteurs.
         </p>
-        <p>
-          {outcomeSummary}{' '}
-          {reason
-            ? `Facteurs observés : ${reason}.`
-            : 'Les facteurs détaillés ne sont pas disponibles pour cette estimation.'}
-        </p>
+        <p>{outcomeSummary}</p>
+        <strong>Principales limites</strong>
+        <ul>
+          {influences.limits.map((text) => (
+            <li key={text}>{text}</li>
+          ))}
+        </ul>
       </div>
       <details className="prediction-more">
         <summary>Voir l’analyse détaillée</summary>
@@ -282,7 +302,9 @@ export function ProbabilitySummary({
                 </p>
                 {analysis.totalAtLeast.map((event) => (
                   <div key={event.goals}>
-                    <span>Au moins {event.goals} buts au total</span>
+                    <span>
+                      Au moins {event.goals} but{event.goals > 1 ? 's' : ''} au total
+                    </span>
                     <strong>{formatProbability(event.probability)}</strong>
                   </div>
                 ))}
@@ -365,6 +387,10 @@ export function ProbabilitySummary({
                 <div>
                   <span>Les deux équipes marquent</span>
                   <strong>{formatProbability(analysis.bothScore)}</strong>
+                </div>
+                <div>
+                  <span>Au moins une équipe ne marque pas</span>
+                  <strong>{formatProbability(1 - analysis.bothScore)}</strong>
                 </div>
                 <div>
                   <span>Match sans but</span>

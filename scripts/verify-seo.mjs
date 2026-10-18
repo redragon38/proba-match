@@ -83,6 +83,8 @@ try {
       '/joueurs',
       '/competitions',
       '/classements',
+      '/analyses',
+      '/bilan-predictions',
       '/a-propos',
       '/methodologie',
       '/comprendre-probabilites',
@@ -110,7 +112,10 @@ try {
   const links = new Set();
   for (const path of paths) {
     // Parse actual server HTML without retaining thousands of browser navigations/assets.
-    const network = await fetch(`${base}${path}`, { signal: AbortSignal.timeout(30000) });
+    const network = await fetch(`${base}${path}`, {
+      signal: AbortSignal.timeout(30000),
+      headers: { 'User-Agent': 'Googlebot' },
+    });
     const response = {
       status: () => network.status,
       headers: () => Object.fromEntries(network.headers),

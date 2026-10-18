@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { createElement } from 'react';
 import type { Prediction, Team } from '@/types/football';
-import { informationQuality } from '@/prediction-engine/insights';
+import { informationQuality, predictionInsights } from '@/prediction-engine/insights';
 import { ProbabilitySummary } from '@/features/matches/probability-summary';
 
 vi.mock('next/link', () => ({ default: 'a' }));
@@ -54,6 +54,7 @@ const render = (prediction: Prediction) =>
       home,
       away,
       quality: informationQuality(prediction),
+      analysis: predictionInsights(prediction),
       demo: false,
     }),
   );
@@ -71,10 +72,16 @@ describe('résumé des probabilités publiées', () => {
       '2–1',
       '12 % pour ce score précis',
       'Production offensive récente',
+      'Cinq scores précis les plus probables',
+      'Autres scores',
+      'Ce qui influence cette estimation',
+      'Principales limites',
     ])
       expect(html).toContain(text);
     expect(html).toContain('Voir l’analyse détaillée');
     expect(html).not.toContain('VA GAGNER');
+    expect(html).toContain('Au moins 1 but au total');
+    expect(html).toContain('Au moins une équipe ne marque pas');
   });
 
   it('n’invente ni score ni pourcentage en cas de données partielles', () => {

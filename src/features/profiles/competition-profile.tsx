@@ -4,6 +4,7 @@ import { competitionSeason } from '@/lib/competition-season';
 import { CompetitionBadge } from '@/components/ui';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { CompetitionView } from '@/services/competition-view';
+import type { Prediction } from '@/types/football';
 import { SourceBanner } from '@/components/source-banner';
 import { FavoriteButton } from '@/features/favorites';
 import { Metric, SectionTitle, TeamBadge } from '@/components/ui';
@@ -12,7 +13,13 @@ import { MatchList } from '@/features/matches/match-list';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { countryLabel } from '@/lib/format';
 
-export function CompetitionProfile({ view }: { view: CompetitionView }) {
+export function CompetitionProfile({
+  view,
+  predictions = {},
+}: {
+  view: CompetitionView;
+  predictions?: Record<string, Prediction>;
+}) {
   const router = useRouter(),
     params = useSearchParams();
   const {
@@ -166,7 +173,7 @@ export function CompetitionProfile({ view }: { view: CompetitionView }) {
               En direct
             </button>
           </div>
-          <MatchList matches={matches} teams={teams} competitions={[c]} predictions={{}} />
+          <MatchList matches={matches} teams={teams} competitions={[c]} predictions={predictions} />
           <div id="equipes">
             <SectionTitle title="Équipes" />
           </div>
