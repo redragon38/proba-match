@@ -7,7 +7,7 @@ import { regulationResult } from '@/prediction-engine/result-period';
 import { metrics } from '@/prediction-engine/evaluation';
 import { recordTiming } from '@/services/telemetry';
 import { assertJobActive, fencePublication } from '@/services/football/lease-context';
-import { latestPublicPredictionsSql } from './prediction-read-sql';
+import { latestPublicPredictionsSql, publicPredictionHistorySql } from './prediction-read-sql';
 /** Full input packages stay in the immutable DB payload, not in client page props. */
 export function publicPrediction(p: Prediction): Prediction {
   const result = { ...p };
@@ -83,7 +83,7 @@ export async function getPredictions(
     }
     return predictions;
   } catch {
-    return computedDisplayPredictions(data, new Date(), targetIds);
+    return computeMissing ? computedDisplayPredictions(data, new Date(), targetIds) : {};
   }
 }
 export async function getPredictionHistory(
@@ -92,13 +92,7 @@ export async function getPredictionHistory(
 ): Promise<Prediction[]> {
   if (source === 'demo' || !process.env.DATABASE_URL) return [];
   try {
-    return (
-      await db.prediction.findMany({
-        where: { matchId },
-        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
-        take: 100,
-      })
-    )
+    return (await db.$queryRaw<{ payload: unknown }[]>(publicPredictionHistorySql(matchId)))
       .reverse()
       .map((r) => publicPrediction(r.payload as unknown as Prediction));
   } catch {

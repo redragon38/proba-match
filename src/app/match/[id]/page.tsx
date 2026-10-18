@@ -46,11 +46,6 @@ export default async function Page({
       `/match/${m.slug}${q.onglet ? `?onglet=${encodeURIComponent(q.onglet)}` : ''}`,
     );
   const structured = data.source !== 'demo' ? matchStructuredData(m, data) : null;
-  const history = await getPredictionHistory(m.id, data.source);
-  const archivedPrediction = history.at(-1);
-  const computedPrediction =
-    data.source === 'demo' ? (await getPredictions(data))[m.id] : computeDisplayPrediction(m, data);
-  const prediction = archivedPrediction ?? computedPrediction;
   const allowed = [
     'apercu',
     'prediction',
@@ -60,6 +55,17 @@ export default async function Page({
     'h2h',
     'joueurs',
   ];
+  const tab = q.onglet && allowed.includes(q.onglet) ? q.onglet : 'apercu';
+  // Most match tabs only need the latest forecast. Loading an entire prediction
+  // history (whose DB records contain immutable model inputs) made unrelated tabs
+  // compete for CPU and memory during concurrent SSR requests.
+  const [latest, history] = await Promise.all([
+    getPredictions(data, new Set([m.id]), false),
+    tab === 'prediction' ? getPredictionHistory(m.id, data.source) : Promise.resolve([]),
+  ]);
+  const archivedPrediction = history.at(-1);
+  const storedPrediction = archivedPrediction ?? latest[m.id];
+  const prediction = storedPrediction ?? computeDisplayPrediction(m, data);
   return (
     <>
       {structured && <JsonLd value={structured} />}
@@ -68,10 +74,10 @@ export default async function Page({
         match={m}
         history={history}
         prediction={prediction}
-        predictionArchived={Boolean(archivedPrediction)}
+        predictionArchived={Boolean(storedPrediction)}
         analysis={prediction ? predictionInsights(prediction) : undefined}
         quality={prediction ? informationQuality(prediction, data.degraded) : undefined}
-        tab={q.onglet && allowed.includes(q.onglet) ? q.onglet : 'apercu'}
+        tab={tab}
       />
     </>
   );

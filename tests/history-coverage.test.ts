@@ -54,17 +54,12 @@ describe('Large histories through services with an isolated query adapter', () =
     const descending = Array.from({ length: 140 }, (_, i) => ({
       payload: { ...prediction, id: `snapshot-${139 - i}` },
     }));
-    mocks.forecasts.mockImplementation(async (query: { take?: number }) =>
-      descending.slice(0, query.take),
-    );
+    mocks.playerRows.mockResolvedValueOnce(descending.slice(0, 100));
     const rows = await getPredictionHistory(target.id, 'api-football');
     expect(rows).toHaveLength(100);
     expect(rows[0].id).toBe('snapshot-40');
     expect(rows.at(-1)?.id).toBe('snapshot-139');
-    expect(mocks.forecasts.mock.calls[0][0].orderBy).toEqual([
-      { createdAt: 'desc' },
-      { id: 'desc' },
-    ]);
+    expect(mocks.playerRows).toHaveBeenCalledOnce();
     expect(prediction.inputArchive).toBeDefined();
     expect(rows.every((p) => p.inputArchive === undefined)).toBe(true);
   });

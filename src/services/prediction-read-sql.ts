@@ -9,3 +9,14 @@ export function latestPublicPredictionsSql(ids: string[]) {
     ORDER BY "matchId", "createdAt" DESC, "id" DESC
   `;
 }
+
+/** Read a public history without transferring the immutable training archives. */
+export function publicPredictionHistorySql(matchId: string) {
+  return Prisma.sql`
+    SELECT "payload" - 'inputArchive' AS "payload"
+    FROM "Prediction"
+    WHERE "matchId" = ${matchId}
+    ORDER BY "createdAt" DESC, "id" DESC
+    LIMIT 100
+  `;
+}
