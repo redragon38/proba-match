@@ -11,23 +11,18 @@ import {
 import { MatchDetail } from '@/features/matches/match-detail';
 import { informationQuality, predictionInsights } from '@/prediction-engine/insights';
 import { JsonLd } from '@/components/json-ld';
-import { matchFactSummary, matchDateLabel } from '@/lib/match-facts';
+import { matchSeoCopy } from '@/lib/match-facts';
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const data = await getDataset();
   const m = data.matches.find((m) => m.slug === id || m.id === id);
   if (!m) notFound();
-  const title = `${data.teams.find((t) => t.id === m.homeId)?.name} – ${data.teams.find((t) => t.id === m.awayId)?.name}`;
-  const date = matchDateLabel(m, false) ?? 'date à confirmer';
+  const prediction = (await getPredictions(data, new Set([m.id]), false))[m.id];
+  const copy = matchSeoCopy(m, data, Boolean(prediction));
   return seoMetadata(
     `/match/${m.slug}`,
-    `${title} — ${date}`,
-    matchFactSummary(
-      m,
-      data.teams.find((t) => t.id === m.homeId)?.name ?? 'Domicile',
-      data.teams.find((t) => t.id === m.awayId)?.name ?? 'Extérieur',
-      data.competitions.find((c) => c.id === m.competitionId)?.name ?? 'Football',
-    ),
+    copy.title,
+    copy.description,
     data.source !== 'demo' && matchIndexable(m, data),
   );
 }

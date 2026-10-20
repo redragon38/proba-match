@@ -62,12 +62,21 @@ describe('Factual sports identities and dates', () => {
     expect(matchStructuredData({ ...match, status: 'abandoned' }, data)).not.toHaveProperty(
       'eventStatus',
     );
-    expect(matchStructuredData({ ...match, status: 'finished' }, data)).not.toHaveProperty(
-      'eventStatus',
+    expect(
+      matchStructuredData(
+        { ...match, status: 'finished', homeScore: null, awayScore: null },
+        data,
+      ),
+    ).not.toHaveProperty('eventStatus');
+    expect(matchStructuredData({ ...match, status: 'live' }, data)?.eventStatus).toMatch(
+      /EventInProgress$/,
     );
-    expect(matchStructuredData({ ...match, status: 'live' }, data)).not.toHaveProperty(
-      'eventStatus',
-    );
+    expect(
+      matchStructuredData(
+        { ...match, status: 'finished', homeScore: 1, awayScore: 0 },
+        data,
+      )?.eventStatus,
+    ).toMatch(/EventCompleted$/);
     expect(matchStructuredData({ ...match, status: 'scheduled' }, data)).not.toHaveProperty(
       'eventStatus',
     );

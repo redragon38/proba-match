@@ -3,6 +3,7 @@ import type { Competition, Dataset, Match, Player, Team } from '@/types/football
 import { absoluteUrl } from './seo';
 import { matchFactSummary } from './match-facts';
 import { isUpcoming } from '@/services/football/match-selection';
+import { validResult } from '@/prediction-engine/availability';
 
 export function structuredImage(value: string | undefined) {
   if (!value) return undefined;
@@ -87,6 +88,10 @@ export function matchStructuredData(match: Match, data: Pick<Dataset, 'teams' | 
       ? 'https://schema.org/EventCancelled'
       : match.status === 'postponed'
         ? 'https://schema.org/EventPostponed'
+        : match.status === 'live'
+          ? 'https://schema.org/EventInProgress'
+          : validResult(match)
+            ? 'https://schema.org/EventCompleted'
         : isUpcoming(match)
           ? 'https://schema.org/EventScheduled'
           : undefined;
