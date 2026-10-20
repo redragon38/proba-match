@@ -8,6 +8,7 @@ test -s .env.vps
 revision=${1:?Pass the fetched fix commit SHA}
 git rev-parse --verify "${revision}^{commit}" >/dev/null
 files=(
+  compose.production.yml
   .dockerignore
   ops/vps-crontab
   src/app/api/cron/predictions/route.ts
@@ -21,7 +22,14 @@ files=(
   src/services/football/jobs.ts
 )
 patch=$(mktemp)
-trap 'rm -f "$patch"' EXIT
+background_stopped=0
+cleanup() {
+  rm -f "$patch"
+  if [[ "$background_stopped" == 1 ]]; then
+    docker compose -f compose.production.yml start worker scheduler || true
+  fi
+}
+trap cleanup EXIT
 
 matches_revision() {
   local candidate=$1 file expected actual
@@ -38,7 +46,7 @@ if matches_revision "$revision"; then
   echo "Correctif deja applique."
 else
   base=""
-  for candidate in c20da88582f8c9ff7a15a56732f1a7cb57444d16 b938676af3507b3bc72e31e5fe9c681146b2291f fc9214fde865e2ff3c5de82bf39c3956d988ac6f; do
+  for candidate in 39ad074bc07b1dd8f8159853fb1cb9e841c34999 c20da88582f8c9ff7a15a56732f1a7cb57444d16 b938676af3507b3bc72e31e5fe9c681146b2291f fc9214fde865e2ff3c5de82bf39c3956d988ac6f; do
     if matches_revision "$candidate"; then base=$candidate; break; fi
   done
   if [[ -z "$base" ]]; then
@@ -57,8 +65,12 @@ else
   git apply "$patch"
 fi
 
+# Free background CPU before compilation; keep the public application running.
+background_stopped=1
+docker compose -f compose.production.yml stop worker scheduler
 docker compose -f compose.production.yml build app worker scheduler
 docker compose -f compose.production.yml up -d --no-deps app worker scheduler
+background_stopped=0
 
 echo "Import de l historique manquant et publication : cela peut prendre plusieurs minutes."
 if docker compose -f compose.production.yml exec -T worker node --input-type=module <<'NODE'
