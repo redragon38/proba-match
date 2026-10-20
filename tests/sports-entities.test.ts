@@ -24,7 +24,8 @@ describe('Factual sports identities and dates', () => {
     expect(athlete.memberOf?.['@id']).toBe(entity['@id']);
     expect(event.homeTeam.url).toBe(entity.url);
     expect(event.mainEntityOfPage).toBe(event.url);
-    expect(entity.memberOf?.['@id']).toBe(event.isPartOf?.['@id']);
+    expect(entity.memberOf?.['@id']).toBe(event.about?.['@id']);
+    expect(event).not.toHaveProperty('isPartOf');
     expect(athlete.jobTitle).toBe(player.position);
   });
   it('does not fabricate a time from the internal placeholder for an unknown kickoff', () => {
@@ -63,20 +64,14 @@ describe('Factual sports identities and dates', () => {
       'eventStatus',
     );
     expect(
-      matchStructuredData(
-        { ...match, status: 'finished', homeScore: null, awayScore: null },
-        data,
-      ),
+      matchStructuredData({ ...match, status: 'finished', homeScore: null, awayScore: null }, data),
     ).not.toHaveProperty('eventStatus');
-    expect(matchStructuredData({ ...match, status: 'live' }, data)?.eventStatus).toMatch(
-      /EventInProgress$/,
+    expect(matchStructuredData({ ...match, status: 'live' }, data)).not.toHaveProperty(
+      'eventStatus',
     );
     expect(
-      matchStructuredData(
-        { ...match, status: 'finished', homeScore: 1, awayScore: 0 },
-        data,
-      )?.eventStatus,
-    ).toMatch(/EventCompleted$/);
+      matchStructuredData({ ...match, status: 'finished', homeScore: 1, awayScore: 0 }, data),
+    ).not.toHaveProperty('eventStatus');
     expect(matchStructuredData({ ...match, status: 'scheduled' }, data)).not.toHaveProperty(
       'eventStatus',
     );

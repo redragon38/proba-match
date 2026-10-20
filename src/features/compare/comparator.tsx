@@ -250,29 +250,31 @@ export function Comparator({
           placeholder="Nom d’une équipe ou d’un joueur"
         />
       </label>
-      <div className="comparison-selectors card">
-        <label>
-          {kind === 'teams' ? 'Première équipe' : 'Premier joueur'}
-          <select value={a} onChange={(e) => choose(e.target.value, b)}>
-            {options(a).map((i) => (
-              <option value={i.id} key={i.id}>
-                {i.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <strong>VS</strong>
-        <label>
-          {kind === 'teams' ? 'Deuxième équipe' : 'Deuxième joueur'}
-          <select value={b} onChange={(e) => choose(a, e.target.value)}>
-            {options(b).map((i) => (
-              <option value={i.id} key={i.id}>
-                {i.name}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
+      {items.length > 0 && (
+        <div className="comparison-selectors card">
+          <label>
+            {kind === 'teams' ? 'Première équipe' : 'Premier joueur'}
+            <select value={a} onChange={(e) => choose(e.target.value, b)}>
+              {options(a).map((i) => (
+                <option value={i.id} key={i.id}>
+                  {i.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <strong>VS</strong>
+          <label>
+            {kind === 'teams' ? 'Deuxième équipe' : 'Deuxième joueur'}
+            <select value={b} onChange={(e) => choose(a, e.target.value)}>
+              {options(b).map((i) => (
+                <option value={i.id} key={i.id}>
+                  {i.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+      )}
       {A && B ? (
         a === b ? (
           <Empty title="Choisissez deux profils différents" />

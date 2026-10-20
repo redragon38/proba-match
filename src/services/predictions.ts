@@ -1,4 +1,5 @@
 import 'server-only';
+import { log } from '@/lib/logger';
 import type { Prisma } from '@prisma/client';
 import { db } from '@/database/client';
 import { predictionEngine, MODEL_VERSION, MODEL_PARAMETERS } from '@/prediction-engine';
@@ -8,6 +9,7 @@ import { metrics } from '@/prediction-engine/evaluation';
 import { recordTiming } from '@/services/telemetry';
 import { assertJobActive, fencePublication } from '@/services/football/lease-context';
 import { latestPublicPredictionsSql, publicPredictionHistorySql } from './prediction-read-sql';
+import type { PreparedForecast } from '@/prediction-engine';
 /** Full input packages stay in the immutable DB payload, not in client page props. */
 export function publicPrediction(p: Prediction): Prediction {
   const result = { ...p };
@@ -99,24 +101,23 @@ export async function getPredictionHistory(
     return [];
   }
 }
-async function persistPredictionTransaction(
-  db: Prisma.TransactionClient,
-  data: Dataset,
-  now: Date,
-) {
+async function updatePublicationMarker(db: Prisma.TransactionClient) {
+  const marker = await db.cacheEntry.findUnique({
+    where: { key: 'football:dataset' },
+    select: { updatedAt: true },
+  });
+  if (marker)
+    await db.cacheEntry.update({
+      where: { key: 'football:dataset' },
+      data: { updatedAt: new Date(Math.max(Date.now(), marker.updatedAt.getTime() + 1)) },
+      select: { key: true },
+    });
+}
+
+async function persistEvaluationTransaction(db: Prisma.TransactionClient, data: Dataset) {
   assertJobActive();
   if (data.source === 'demo') return;
   let contentChanged = false;
-  await db.predictionVersion.upsert({
-    where: { id: MODEL_VERSION },
-    create: {
-      id: MODEL_VERSION,
-      description:
-        'Elo–Poisson 1.4 : révisions point-in-time, score réglementaire, terrain neutre confirmé, quantité effective et archive reproductible ; coefficients sportifs conservés',
-      parameters: MODEL_PARAMETERS,
-    },
-    update: {},
-  });
   const finishedIds = data.matches.filter((m) => regulationResult(m) !== null).map((m) => m.id);
   // One indexed read replaces a query for every historical result on every sync.
   const pending = finishedIds.length
@@ -133,57 +134,6 @@ async function persistPredictionTransaction(
   }
   for (const match of data.matches) {
     assertJobActive();
-    if (
-      match.status === 'scheduled' &&
-      match.kickoffKnown !== false &&
-      new Date(match.kickoff) > now &&
-      new Date(match.kickoff).getTime() < now.getTime() + 21 * 86400_000
-    ) {
-      const initial = await db.prediction.findUnique({
-        where: {
-          matchId_versionId_kind: { matchId: match.id, versionId: MODEL_VERSION, kind: 'initial' },
-        },
-      });
-      // Existing snapshots are immutable. Avoid recalculating a published kind.
-      if (initial) {
-        if (match.lineups.length !== 2 || !match.lineups.every((lineup) => lineup.confirmed))
-          continue;
-        const lineup = await db.prediction.findUnique({
-          where: {
-            matchId_versionId_kind: { matchId: match.id, versionId: MODEL_VERSION, kind: 'lineup' },
-          },
-        });
-        if (lineup) continue;
-      }
-      const started = globalThis.performance.now();
-      const p =
-        predictionEngine.predict(match, data.matches, now.toISOString()) ??
-        predictionEngine.predictReconstructed(match, data.matches, now.toISOString());
-      recordTiming('prediction:compute', globalThis.performance.now() - started);
-      if (!p) continue;
-      const kind = initial && p.lineupConfirmed ? 'lineup' : 'initial';
-      if (initial && kind === 'initial') continue;
-      // Immutable insert. ON CONFLICT performs no mutation. DB trigger also rejects late writes.
-      await db.prediction.upsert({
-        where: { matchId_versionId_kind: { matchId: match.id, versionId: MODEL_VERSION, kind } },
-        update: {},
-        create: {
-          id: p.id,
-          matchId: match.id,
-          versionId: MODEL_VERSION,
-          kind,
-          createdAt: now,
-          cutoff: new Date(p.cutoff),
-          home: p.home,
-          draw: p.draw,
-          away: p.away,
-          confidence: p.confidence,
-          inputHash: p.inputHash,
-          payload: JSON.parse(JSON.stringify(p)),
-        },
-      });
-      contentChanged = true;
-    }
     const final = regulationResult(match);
     if (final) {
       const predictions = pendingByMatch.get(match.id) ?? [];
@@ -212,19 +162,7 @@ async function persistPredictionTransaction(
       }
     }
   }
-  if (contentChanged) {
-    // The browser watches this marker every 30 s. Snapshot-only writes must
-    // invalidate it too, even when the football dataset payload is unchanged.
-    const marker = await db.cacheEntry.findUnique({
-      where: { key: 'football:dataset' },
-      select: { updatedAt: true },
-    });
-    if (marker)
-      await db.cacheEntry.update({
-        where: { key: 'football:dataset' },
-        data: { updatedAt: new Date(Math.max(Date.now(), marker.updatedAt.getTime() + 1)) },
-      });
-  }
+  if (contentChanged) await updatePublicationMarker(db);
   const evaluations = await getEvaluations(db);
   const performance = metrics(evaluations.filter((r) => r.prediction.version === MODEL_VERSION));
   if (performance)
@@ -252,14 +190,107 @@ async function persistPredictionTransaction(
 export async function persistPredictions(data: Dataset, now = new Date()) {
   assertJobActive();
   if (data.source === 'demo') return;
+  const coverage = { eligible: 0, existing: 0, created: 0, unavailable: 0 };
+  let forecast: PreparedForecast | undefined;
+  let reconstructedForecast: PreparedForecast | undefined;
+  await db.predictionVersion.upsert({
+    where: { id: MODEL_VERSION },
+    create: {
+      id: MODEL_VERSION,
+      description:
+        'Elo–Poisson 1.4 : révisions point-in-time, score réglementaire, terrain neutre confirmé, quantité effective et archive reproductible ; coefficients sportifs conservés',
+      parameters: MODEL_PARAMETERS,
+    },
+    update: {},
+    select: { id: true },
+  });
+  // Publish the nearest fixtures first. Each successful commit is visible immediately,
+  // even if a later fixture fails. Expensive CPU work holds no database transaction.
+  const upcoming = data.matches
+    .filter(
+      (match) =>
+        match.status === 'scheduled' &&
+        match.kickoffKnown !== false &&
+        new Date(match.kickoff) > now &&
+        new Date(match.kickoff).getTime() < now.getTime() + 21 * 86400_000,
+    )
+    .sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff) || a.id.localeCompare(b.id));
+  coverage.eligible = upcoming.length;
+  for (const match of upcoming) {
+    assertJobActive();
+    const initial = await db.prediction.findUnique({
+      select: { id: true },
+      where: {
+        matchId_versionId_kind: { matchId: match.id, versionId: MODEL_VERSION, kind: 'initial' },
+      },
+    });
+    // Existing snapshots are immutable. Avoid recalculating a published kind.
+    if (initial) {
+      coverage.existing++;
+      if (match.lineups.length !== 2 || !match.lineups.every((lineup) => lineup.confirmed))
+        continue;
+      const lineup = await db.prediction.findUnique({
+        select: { id: true },
+        where: {
+          matchId_versionId_kind: { matchId: match.id, versionId: MODEL_VERSION, kind: 'lineup' },
+        },
+      });
+      if (lineup) continue;
+    }
+    const started = globalThis.performance.now();
+    forecast ??=
+      predictionEngine.prepare?.(data.matches, now.toISOString()) ??
+      ((target) => predictionEngine.predict(target, data.matches, now.toISOString()));
+    let p = forecast(match);
+    if (!p) {
+      reconstructedForecast ??=
+        predictionEngine.prepareReconstructed?.(data.matches, now.toISOString()) ??
+        ((target) =>
+          predictionEngine.predictReconstructed(target, data.matches, now.toISOString()));
+      p = reconstructedForecast(match);
+    }
+    recordTiming('prediction:compute', globalThis.performance.now() - started);
+    // Let lease-renewal timers run between CPU work and publication.
+    await new Promise<void>((resolve) => setImmediate(resolve));
+    assertJobActive();
+    if (!p) {
+      if (!initial) coverage.unavailable++;
+      continue;
+    }
+    const kind = initial && p.lineupConfirmed ? 'lineup' : 'initial';
+    if (initial && kind === 'initial') continue;
+    // Serialize the immutable archive once, outside the short publication transaction.
+    const payload = JSON.stringify(p);
+    const inserted = await db.$transaction(
+      async (tx) => {
+        assertJobActive();
+        const count = await tx.$executeRaw`
+        INSERT INTO "Prediction" ("id", "matchId", "versionId", "kind", "createdAt", "cutoff",
+          "home", "draw", "away", "confidence", "inputHash", "payload")
+        VALUES (${p.id}, ${match.id}, ${MODEL_VERSION}, ${kind},
+          ${now}, ${new Date(p.cutoff)}, ${p.home}, ${p.draw}, ${p.away},
+          ${p.confidence}, ${p.inputHash}, ${payload}::jsonb)
+        ON CONFLICT ("matchId", "versionId", "kind") DO NOTHING
+      `;
+        if (count) await updatePublicationMarker(tx);
+        await fencePublication(tx);
+        return count;
+      },
+      { maxWait: 10_000, timeout: 30_000 },
+    );
+    if (inserted) {
+      if (!initial) coverage.created++;
+      log('PREDICTION_PUBLISHED', { code: match.id, count: coverage.created });
+    }
+  }
   await db.$transaction(
     async (tx) => {
-      await persistPredictionTransaction(tx, data, now);
-      // Forecasts, evaluations and publication markers have the same lease fence.
+      await persistEvaluationTransaction(tx, data);
       await fencePublication(tx);
     },
-    { maxWait: 10_000, timeout: 30 * 60_000 },
+    { maxWait: 10_000, timeout: 30_000 },
   );
+  return coverage;
 }
 export async function getEvaluations(
   client: Pick<Prisma.TransactionClient, 'prediction'> = db,

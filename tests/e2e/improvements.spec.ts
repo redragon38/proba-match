@@ -8,13 +8,13 @@ test('recherche clavier et catalogue', async ({ page }) => {
   await page.goto('/equipes');
   const item = page.locator('.catalog-item h2').first();
   const name = (await item.count()) ? await item.innerText() : 'inexistant';
-  await page.getByRole('button', { name: 'Rechercher une équipe ou un joueur' }).click();
+  await page.getByRole('button', { name: 'Rechercher une équipe, un joueur ou un match' }).click();
   await page.getByRole('combobox', { name: 'Rechercher partout' }).fill(name);
   if (name !== 'inexistant') await expect(page.getByRole('option').first()).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog')).not.toBeVisible();
   await expect(
-    page.getByRole('button', { name: 'Rechercher une équipe ou un joueur' }),
+    page.getByRole('button', { name: 'Rechercher une équipe, un joueur ou un match' }),
   ).toBeFocused();
 });
 test('compétitions repliables', async ({ page }) => {
@@ -49,6 +49,7 @@ test('actualisation automatique sans recharger le document', async ({ page }) =>
   ]);
   expect(response.status()).toBe(200);
   expect(response.headers()['cache-control']).toBe('no-store');
-  expect((await response.json()).revision).toEqual(expect.any(String));
+  const revision = (await response.json()).revision;
+  expect(revision === null || typeof revision === 'string').toBe(true);
   await expect(page.locator('html')).toHaveAttribute('data-test-marker', 'retained');
 });

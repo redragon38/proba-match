@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { createDemoDataset } from '@/services/football/providers/mock';
-import { entityContentModifiedAt, matchContentModifiedAt } from '@/lib/sitemap-lastmod';
+import {
+  contentModificationIndex,
+  entityContentModifiedAt,
+  matchContentModifiedAt,
+} from '@/lib/sitemap-lastmod';
 
 describe('significant sitemap modification dates', () => {
   it('omits routine sync timestamps and keeps verified content receptions', () => {
@@ -27,5 +31,12 @@ describe('significant sitemap modification dates', () => {
     expect(entityContentModifiedAt(`/equipe/${data.teams[0].slug}`, changed)).toBe(
       '2026-10-18T11:05:00Z',
     );
+    const index = contentModificationIndex(changed);
+    for (const path of [
+      ...changed.matches.map((m) => `/match/${m.slug}`),
+      ...changed.teams.map((t) => `/equipe/${t.slug}`),
+      ...changed.competitions.map((c) => `/competition/${c.slug}`),
+    ])
+      expect(index.get(path)).toBe(entityContentModifiedAt(path, changed));
   });
 });

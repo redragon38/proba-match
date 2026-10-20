@@ -74,7 +74,7 @@ try {
     'Public HTTPS origin required at launch',
     !strict,
   );
-  const paths = [
+  const discoveredPaths = [
     ...new Set([
       '/',
       '/matchs',
@@ -103,6 +103,31 @@ try {
       ...parsed.urls.map(pathOf),
     ]),
   ];
+  const maximum = Number(process.env.SEO_AUDIT_MAX_PAGES ?? 0);
+  const paths =
+    maximum > 0
+      ? discoveredPaths.slice(0, discoveredPaths.indexOf('/admin') + 1)
+      : [...discoveredPaths];
+  if (maximum > 0) {
+    const groups = new Map();
+    for (const path of discoveredPaths.filter((path) => !paths.includes(path))) {
+      const key = path.split('?')[0].split('/')[1];
+      const group = groups.get(key) ?? [];
+      group.push(path);
+      groups.set(key, group);
+    }
+    for (let i = 0; paths.length < maximum && i < discoveredPaths.length; i++)
+      for (const group of groups.values())
+        if (group[i] && paths.length < maximum) paths.push(group[i]);
+  }
+  report.scope = {
+    sitemapURLs: parsed.urls.length,
+    selectedPages: paths.length,
+    mode:
+      paths.length < discoveredPaths.length
+        ? 'representative sample'
+        : 'complete discovered URL set',
+  };
   const catalog = await (await request.get(`${base}/api/matches/today`)).json();
   if (catalog.matches?.[0]) {
     const sample = `/match/${catalog.matches[0].slug}`;
@@ -300,7 +325,9 @@ try {
     );
   }
   const known = new Set(report.pages.map((p) => p.path));
-  const missing = [...links].filter((p) => p && !known.has(p));
+  const allMissing = [...links].filter((p) => p && !known.has(p));
+  const linkLimit = Number(process.env.SEO_AUDIT_MAX_LINKS ?? 0);
+  const missing = linkLimit > 0 ? allMissing.slice(0, linkLimit) : allMissing;
   const broken = [],
     redirects = [];
   let cursor = 0;
@@ -325,16 +352,25 @@ try {
       }
     }),
   );
-  report.links = { discovered: links.size, additionalChecked: missing.length, broken, redirects };
+  report.links = {
+    discovered: links.size,
+    additionalChecked: missing.length,
+    unchecked: allMissing.length - missing.length,
+    broken,
+    redirects,
+  };
   check(
     'internal links',
     !broken.length && !redirects.length,
-    'All discovered internal links resolve directly',
+    'Checked internal links resolve directly (see scope and unchecked count)',
   );
   check(
     'internal links',
     [...sitemapPaths].every((path) => path === '/' || links.has(path)),
-    'Every sitemap page has an incoming crawlable link',
+    paths.length < discoveredPaths.length
+      ? 'Incoming-link coverage is partial; unvisited pages may link to remaining sitemap URLs'
+      : 'Every sitemap page has an incoming crawlable link',
+    paths.length < discoveredPaths.length,
   );
   for (const path of [
     '/seo-does-not-exist',

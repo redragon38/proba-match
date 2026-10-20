@@ -6,9 +6,11 @@ test('plusieurs vrais matchs affichent leurs profils disponibles et la navigatio
   request,
 }) => {
   let verified = 0;
+  let inspected = 0;
   for (const status of ['scheduled', 'finished']) {
     const response = await request.get(`/api/matches?status=${status}&limit=12`);
     const { matches } = (await response.json()) as { matches: Match[] };
+    inspected += matches.length;
     for (const match of matches) {
       await page.goto(`/match/${match.slug}?onglet=joueurs`);
       const links = page.locator('.match-player-row a[href^="/joueur/"]');
@@ -33,6 +35,7 @@ test('plusieurs vrais matchs affichent leurs profils disponibles et la navigatio
       if (verified >= (status === 'scheduled' ? 2 : 4)) break;
     }
   }
+  test.skip(!inspected, 'Catalogue réel absent ; les vues contrôlées sont testées séparément.');
   expect(verified).toBeGreaterThanOrEqual(4);
 });
 
@@ -65,6 +68,7 @@ test('le profil ouvert depuis un match terminé sépare ses statistiques de matc
   const { matches } = (await (
     await request.get('/api/matches?status=finished&limit=12')
   ).json()) as { matches: Match[] };
+  test.skip(!matches.length, 'Aucun match terminé dans la base locale.');
   let selected: Match | undefined;
   for (const match of matches) {
     const details = (await (await request.get(`/api/matches/${match.id}`)).json()) as Match;

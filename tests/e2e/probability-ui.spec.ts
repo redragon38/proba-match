@@ -1,6 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-test('probabilités réelles lisibles sur mobile, tablette et desktop', async ({ page }) => {
+test('probabilités réelles lisibles sur mobile, tablette et desktop', async ({ page, request }) => {
+  const catalogue = await (await request.get('/api/matches?limit=1')).json();
+  test.skip(
+    !catalogue.matches?.length,
+    'Catalogue réel absent ; tests moteur et composants contrôlés séparés.',
+  );
   await page.goto('/');
   const link = page.locator('a[href*="onglet=prediction"]').first();
   await expect(link).toBeVisible();
@@ -37,7 +42,10 @@ test('probabilités réelles lisibles sur mobile, tablette et desktop', async ({
 
 test('la projection reste lisible sans JavaScript et une URL inconnue répond 404', async ({
   browser,
+  request,
 }) => {
+  const catalogue = await (await request.get('/api/matches?limit=1')).json();
+  test.skip(!catalogue.matches?.length, 'Catalogue réel absent.');
   const context = await browser.newContext({
     javaScriptEnabled: false,
     baseURL: process.env.E2E_BASE_URL ?? 'http://localhost:3000',

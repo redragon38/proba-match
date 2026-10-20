@@ -32,7 +32,7 @@ services:
       target: runner
     env_file: .env.vps
     restart: unless-stopped
-    cpus: 0.35
+    cpus: 1.00
     # Background imports can monopolize their own CPU allocation; they must not
     # supervise or replace the public application process.
     command: ["node", "server.js"]

@@ -29,11 +29,8 @@ describe('Dataset availability fallbacks', () => {
     vi.restoreAllMocks();
   });
 
-  it('serves a truthful empty dataset instead of throwing when the configured database is unreachable', async () => {
-    const data = await getDataset();
-
-    expect(data.matches).toEqual([]);
-    expect(data.teams).toEqual([]);
-    expect(data.warning).toContain('temporairement indisponibles');
+  it('signals a temporary outage instead of making existing entities appear nonexistent', async () => {
+    await expect(getDataset()).rejects.toThrow('FOOTBALL_TEMPORARILY_UNAVAILABLE');
+    expect(OpenFootballProvider.prototype.season).not.toHaveBeenCalled();
   });
 });
