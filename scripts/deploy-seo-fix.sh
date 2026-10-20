@@ -93,7 +93,8 @@ for(const path of ['/','/robots.txt','/sitemap.xml','/bilan-predictions']){
   if(!r.ok) throw new Error('SEO_PAGE_HTTP_FAILED');
   if(path==='/'){
     const canonical=html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]+)"/)?.[1];
-    if(canonical!=='https://proba-match.com/') throw new Error('SEO_CANONICAL_FAILED');
+    if(!canonical || new URL(canonical).href!=='https://proba-match.com/')
+      throw new Error('SEO_CANONICAL_FAILED');
   }
   if(path==='/robots.txt'&&!html.includes('Sitemap: https://proba-match.com/sitemap.xml'))
     throw new Error('SEO_ROBOTS_FAILED');
