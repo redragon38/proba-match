@@ -117,3 +117,7 @@ VERIFY_URL=http://localhost:3000 node scripts/verify-security.mjs
 Dans cette session Windows, les exécutables Node des dépendances ont été appelés
 directement lorsque npm n'était pas dans PATH. Les rapports synthétiques et les
 mesures sélectionnées sont conservés dans artifacts/SEO-MISSION-EVIDENCE.json.
+
+### Reprise du déploiement VPS
+
+Le premier build Docker a échoué avec TS2339 dans un ancien test sportif : le script omettait les tests que Next.js vérifie aussi. Il synchronise désormais les tests et fixtures ajoutés ou modifiés depuis sa version de référence. Une copie isolée simulant les sources déjà appliquées et les anciens tests confirme la reprise des 17 fichiers, une seconde exécution sans changement, la préservation de Caddyfile et le refus des modifications locales conflictuelles. TypeScript et les 8 tests sportifs passent localement. Le nouveau build Docker et les contrôles HTTP sur le VPS restent à exécuter.

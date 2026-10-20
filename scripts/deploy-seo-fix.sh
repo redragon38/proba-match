@@ -30,6 +30,11 @@ files=(
   src/services/football/home-predictions.ts
   src/services/football/index.ts
 )
+# Next.js also typechecks tests during the production build. Deploy their
+# matching sources, including new fixtures, even when resuming a partial patch.
+while IFS= read -r file; do
+  files+=("$file")
+done < <(git diff --name-only --diff-filter=ACM "$base" "$revision" -- tests)
 patch=$(mktemp)
 background_stopped=0
 cleanup() {
