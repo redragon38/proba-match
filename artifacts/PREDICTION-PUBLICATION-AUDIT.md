@@ -49,3 +49,25 @@ Une lecture publique avant déploiement répond HTTP 200 pour Brest–Nice mais
 ne contient toujours aucun élément de probabilité. Le script de déploiement
 exige un traitement réussi puis vérifie cette page contre l'application.
 Le succès local ne constitue donc pas une confirmation de résolution en production.
+
+## Complément : index absent dans la base VPS
+
+Le diagnostic EXPLAIN transmis par le VPS retourne P2010 / SQLSTATE 42P10 :
+l'inférence ON CONFLICT ne trouve aucun index unique utilisable sur matchId,
+versionId et kind. Le schéma versionné prévoyait déjà cet index. Les tests sur
+une base créée depuis toutes les migrations ne détectaient donc pas cette dérive.
+
+La réparation opérationnelle vérifie les index et les doublons, refuse toute
+suppression d'archive, puis construit un index unique CONCURRENTLY si nécessaire.
+Elle fonctionne dans le worker existant, sans rebuild. Une migration additive
+et son appel dans le déploiement complètent la prévention pour les installations
+suivantes. La commande de réparation relance ensuite la génération et vérifie
+l'affichage de Brest–Nice.
+
+PASS : trois tests supplémentaires, dont reproduction PostgreSQL de 42P10,
+réparation par migration et conservation de l'archive en cas de conflit ; contrôle
+des index via le catalogue PostgreSQL ; refus des doublons ; création concurrente.
+PASS : typecheck, lint ciblé, build, syntaxe des deux scripts Bash.
+SEO : aucun HTML ni chemin modifié ; audit précédent conservé comme référence.
+NON TESTÉ : réparation et génération sur le VPS tant que la commande n'a pas été
+exécutée et sa sortie contrôlée.

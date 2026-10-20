@@ -72,6 +72,10 @@ docker compose -f compose.production.yml build app worker scheduler
 docker compose -f compose.production.yml up -d --no-deps app worker scheduler
 background_stopped=0
 
+# Reconcile the required unique index on databases imported without all indexes.
+git show "${revision}:scripts/repair-prediction-index.mjs" |
+  docker compose -f compose.production.yml exec -T worker node --input-type=module
+
 echo "Import de l historique manquant et publication : cela peut prendre plusieurs minutes."
 if docker compose -f compose.production.yml exec -T worker node --input-type=module <<'NODE'
 const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
