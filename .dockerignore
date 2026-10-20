@@ -1,6 +1,7 @@
 .git
 .github
 .next
+.local
 node_modules
 .env*
 artifacts

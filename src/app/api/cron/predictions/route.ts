@@ -3,8 +3,11 @@ import { cronHandler } from '@/services/football/cron';
 import { observeResult, validResult } from '@/prediction-engine/availability';
 import type { Dataset, Match } from '@/types/football';
 import { databaseErrorFields } from '@/lib/logger';
-import { readLocalDataset } from '@/services/football/local-store';
+import { readLocalDataset, readLocalHistory } from '@/services/football/local-store';
 import { persistPredictions } from '@/services/predictions';
+import { ensurePredictionHistory } from '@/services/football/prediction-history';
+import { footballJob } from '@/services/football/jobs';
+import { fencePublication } from '@/services/football/lease-context';
 
 export const maxDuration = 300;
 
@@ -91,6 +94,7 @@ async function repairPredictionInputs() {
           where: { key: 'football:dataset' },
           data: { payload: json(data) },
         });
+        await fencePublication(tx);
       },
       { maxWait: 10_000, timeout: 300_000 },
     );
@@ -111,14 +115,19 @@ async function repairPredictionInputs() {
 
 export const GET = cronHandler(async () => {
   try {
-    const repair = await repairPredictionInputs();
-    if (repair.status !== 'success') return repair;
-    // This endpoint is the dedicated prediction schedule. Input repair alone
-    // left publication dependent on unrelated provider imports and produced
-    // avoidable gaps between two synchronizations.
-    await persistPredictions(await readLocalDataset());
-    return { ...repair, predictions: 'published' };
+    const history = await ensurePredictionHistory();
+    // Share the provider lease: input repair must not overwrite a concurrent
+    // import or race another prediction run.
+    return await footballJob('predictions', async () => {
+      const repair = await repairPredictionInputs();
+      if (repair.status !== 'success') return repair;
+      const [data, matches] = await Promise.all([readLocalDataset(), readLocalHistory()]);
+      const coverage = await persistPredictions({ ...data, matches });
+      return { ...repair, history, predictions: 'completed', coverage };
+    });
   } catch (error) {
+    if (error instanceof Error && error.message === 'SYNC_ALREADY_RUNNING')
+      return { status: 'busy', reason: 'SYNC_ALREADY_RUNNING' };
     return { status: 'failed', stage: 'read', ...databaseErrorFields(error) };
   }
 });

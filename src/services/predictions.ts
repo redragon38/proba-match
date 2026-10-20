@@ -107,6 +107,7 @@ async function persistPredictionTransaction(
   assertJobActive();
   if (data.source === 'demo') return;
   let contentChanged = false;
+  const coverage = { eligible: 0, existing: 0, created: 0, unavailable: 0 };
   await db.predictionVersion.upsert({
     where: { id: MODEL_VERSION },
     create: {
@@ -139,6 +140,7 @@ async function persistPredictionTransaction(
       new Date(match.kickoff) > now &&
       new Date(match.kickoff).getTime() < now.getTime() + 21 * 86400_000
     ) {
+      coverage.eligible++;
       const initial = await db.prediction.findUnique({
         where: {
           matchId_versionId_kind: { matchId: match.id, versionId: MODEL_VERSION, kind: 'initial' },
@@ -146,6 +148,7 @@ async function persistPredictionTransaction(
       });
       // Existing snapshots are immutable. Avoid recalculating a published kind.
       if (initial) {
+        coverage.existing++;
         if (match.lineups.length !== 2 || !match.lineups.every((lineup) => lineup.confirmed))
           continue;
         const lineup = await db.prediction.findUnique({
@@ -160,7 +163,10 @@ async function persistPredictionTransaction(
         predictionEngine.predict(match, data.matches, now.toISOString()) ??
         predictionEngine.predictReconstructed(match, data.matches, now.toISOString());
       recordTiming('prediction:compute', globalThis.performance.now() - started);
-      if (!p) continue;
+      if (!p) {
+        if (!initial) coverage.unavailable++;
+        continue;
+      }
       const kind = initial && p.lineupConfirmed ? 'lineup' : 'initial';
       if (initial && kind === 'initial') continue;
       // Immutable insert. ON CONFLICT performs no mutation. DB trigger also rejects late writes.
@@ -183,6 +189,7 @@ async function persistPredictionTransaction(
         },
       });
       contentChanged = true;
+      if (!initial) coverage.created++;
     }
     const final = regulationResult(match);
     if (final) {
@@ -248,15 +255,17 @@ async function persistPredictionTransaction(
         calibration: JSON.parse(JSON.stringify(performance.calibration)),
       },
     });
+  return coverage;
 }
 export async function persistPredictions(data: Dataset, now = new Date()) {
   assertJobActive();
   if (data.source === 'demo') return;
-  await db.$transaction(
+  return db.$transaction(
     async (tx) => {
-      await persistPredictionTransaction(tx, data, now);
+      const coverage = await persistPredictionTransaction(tx, data, now);
       // Forecasts, evaluations and publication markers have the same lease fence.
       await fencePublication(tx);
+      return coverage;
     },
     { maxWait: 10_000, timeout: 30 * 60_000 },
   );
