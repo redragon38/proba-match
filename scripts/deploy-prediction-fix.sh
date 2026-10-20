@@ -7,7 +7,6 @@ cd /opt/proba-match/app
 test -s .env.vps
 revision=${1:?Pass the fetched fix commit SHA}
 git rev-parse --verify "${revision}^{commit}" >/dev/null
-base=b938676af3507b3bc72e31e5fe9c681146b2291f
 files=(
   .dockerignore
   ops/vps-crontab
@@ -19,14 +18,35 @@ files=(
   src/prediction-engine/availability.ts
   src/prediction-engine/elo.ts
   src/prediction-engine/index.ts
+  src/services/football/jobs.ts
 )
 patch=$(mktemp)
 trap 'rm -f "$patch"' EXIT
-git diff --binary "$base" "$revision" -- "${files[@]}" > "$patch"
-test -s "$patch"
-if git apply --reverse --check "$patch" 2>/dev/null; then
+
+matches_revision() {
+  local candidate=$1 file expected actual
+  for file in "${files[@]}"; do
+    if ! expected=$(git rev-parse --verify "${candidate}:${file}" 2>/dev/null); then expected=""; fi
+    actual=""
+    if [[ -f "$file" ]]; then actual=$(git hash-object "$file"); fi
+    if [[ "$actual" != "$expected" ]]; then return 1; fi
+  done
+  return 0
+}
+
+if matches_revision "$revision"; then
   echo "Correctif deja applique."
 else
+  base=""
+  for candidate in c20da88582f8c9ff7a15a56732f1a7cb57444d16 b938676af3507b3bc72e31e5fe9c681146b2291f fc9214fde865e2ff3c5de82bf39c3956d988ac6f; do
+    if matches_revision "$candidate"; then base=$candidate; break; fi
+  done
+  if [[ -z "$base" ]]; then
+    echo "Les fichiers du VPS ne correspondent a aucune version connue. Aucun fichier modifie." >&2
+    exit 1
+  fi
+  git diff --binary "$base" "$revision" -- "${files[@]}" > "$patch"
+  test -s "$patch"
   git apply --check "$patch"
   install -d -m 0700 .local/prediction-backups
   existing=()
@@ -41,7 +61,7 @@ docker compose -f compose.production.yml build app worker scheduler
 docker compose -f compose.production.yml up -d --no-deps app worker scheduler
 
 echo "Import de l historique manquant et publication : cela peut prendre plusieurs minutes."
-docker compose -f compose.production.yml exec -T worker node --input-type=module <<'NODE'
+if docker compose -f compose.production.yml exec -T worker node --input-type=module <<'NODE'
 const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 let ready = false;
 for (let attempt = 0; attempt < 30; attempt++) {
@@ -81,5 +101,11 @@ if (!process.exitCode) {
   if (!visible) process.exitCode = 1;
 }
 NODE
-
-echo "Deploiement termine. Le cache des pages se renouvelle sous cinq minutes."
+then
+  echo "Deploiement termine. Le cache des pages se renouvelle sous cinq minutes."
+else
+  echo "Le traitement ou sa verification a echoue. Codes du worker :" >&2
+  docker compose -f compose.production.yml logs --no-log-prefix --tail 200 worker |
+    grep -E '"event":"FOOTBALL_(LEASE_RENEWAL_FAILED|LEASE_OWNERSHIP_LOST|JOB_FAILED)"' || true
+  exit 1
+fi
