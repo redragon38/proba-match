@@ -40,7 +40,8 @@
     "data:validate-stats": "npm run data:validate",
     "test:seed": "node --conditions=react-server --import tsx scripts/seed-e2e.ts",
     "test:load": "node --env-file-if-exists=.env scripts/load-local.mjs",
-    "models:validate": "node --import tsx scripts/validate-models.ts"
+    "models:validate": "node --import tsx scripts/validate-models.ts",
+    "seo:monitor": "node scripts/seo-monitor.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.19.0",

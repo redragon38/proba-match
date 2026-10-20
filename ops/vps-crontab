@@ -5,3 +5,4 @@
 15 7 * * * wget -q -O /dev/null -T 900 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/live
 15 10 * * * wget -q -O /dev/null -T 1800 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/players
 17,47 * * * * wget -q -O - -T 1800 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/predictions
+35 3 * * * wget -q -O - -T 300 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/seo

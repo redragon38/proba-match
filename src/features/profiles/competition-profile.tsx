@@ -92,6 +92,19 @@ export function CompetitionProfile({
           ))}
         </select>
       </label>
+      {seasons.length > 1 && (
+        <nav className="profile-tabs" aria-label="Archives des saisons">
+          {seasons.map((year) => (
+            <Link
+              key={year}
+              href={`/competition/${c.slug}${year === view.currentSeason ? '' : `?saison=${year}`}`}
+              aria-current={year === c.season ? 'page' : undefined}
+            >
+              Saison {competitionSeason(c, year)}
+            </Link>
+          ))}
+        </nav>
+      )}
       <nav className="profile-tabs" aria-label="Rubriques de la compétition">
         {[
           ['classement', 'Classement'],

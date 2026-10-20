@@ -33,12 +33,18 @@ describe('SEO contract', () => {
     expect(robots().sitemap).toContain('/sitemap.xml');
     expect(() => siteOrigin('http://localhost:3000')).toThrow();
     expect(() => siteOrigin('https://preview.vercel.app')).toThrow();
-    expect(siteOrigin('https://proba-match.vercel.app')).toBe('https://proba-match.vercel.app');
-    expect(siteOrigin('https://probamatch.com')).toBe('https://proba-match.vercel.app');
+    expect(siteOrigin('https://proba-match.vercel.app')).toBe('https://proba-match.com');
+    expect(siteOrigin('https://www.proba-match.com/')).toBe('https://proba-match.com');
+    expect(siteOrigin('https://probamatch.com')).toBe('https://proba-match.com');
+    expect(siteOrigin(undefined)).toBe('https://proba-match.com');
     vi.stubEnv('APP_ENV', 'staging');
     expect(isPreviewDeployment()).toBe(true);
   });
   it('normalizes one HTTPS origin and rejects credentials, paths and insecure public hosts', () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('APP_ENV', '');
+    vi.stubEnv('VERCEL_ENV', '');
+    expect(siteOrigin(undefined)).toBe('https://proba-match.com');
     expect(siteOrigin('https://football.example/')).toBe('https://football.example');
     expect(siteOrigin('http://localhost:3000')).toBe('http://localhost:3000');
     for (const url of [

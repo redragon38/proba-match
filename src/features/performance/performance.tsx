@@ -13,11 +13,13 @@ export function Performance({
   rows,
   demo,
   publicReport = false,
+  nonEvaluable: suppliedNonEvaluable,
 }: {
   data: Dataset;
   rows: EvaluatedPrediction[];
   demo: boolean;
   publicReport?: boolean;
+  nonEvaluable?: number;
 }) {
   const [comp, setComp] = useState('all'),
     [month, setMonth] = useState('all'),
@@ -53,9 +55,10 @@ export function Performance({
     })),
   );
   const evaluatedIds = new Set(rows.map((row) => row.prediction.matchId));
-  const nonEvaluable = data.matches.filter(
-    (match) => match.status === 'finished' && !evaluatedIds.has(match.id),
-  ).length;
+  const nonEvaluable =
+    suppliedNonEvaluable ??
+    data.matches.filter((match) => match.status === 'finished' && !evaluatedIds.has(match.id))
+      .length;
   const calibration = stats
     ? calibrationOutcome === 'all'
       ? stats.calibration
@@ -116,7 +119,8 @@ export function Performance({
           {new Date(Math.max(...filtered.map((row) => Date.parse(row.kickoff)))).toLocaleDateString(
             'fr-FR',
           )}
-          . Mise à jour des données : {new Date(data.updatedAt).toLocaleString('fr-FR')}.{' '}
+          . Mise à jour des données :{' '}
+          {new Date(data.updatedAt).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}.{' '}
           {filtered.length < 30
             ? 'Échantillon inférieur à 30 rencontres : aucune conclusion générale ne doit être tirée.'
             : 'L’échantillon permet une lecture descriptive, sans garantir les résultats futurs.'}{' '}

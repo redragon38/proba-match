@@ -5,6 +5,7 @@ import { walkForwardBacktest } from '@/prediction-engine/backtest';
 import { MODEL_VERSION } from '@/prediction-engine';
 import { Performance } from '@/features/performance/performance';
 import { publicMetadata } from '@/lib/seo';
+import { performanceView } from '@/services/performance-view';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,19 +27,12 @@ export default async function PredictionReportPage() {
         3_600_000,
       )
     : await getEvaluations();
-  const evaluated = new Set(rows.map((row) => row.prediction.matchId));
+  const view = performanceView(data, rows);
   return (
     <Performance
-      data={{
-        ...data,
-        players: [],
-        injuries: [],
-        standings: {},
-        matches: data.matches.filter(
-          (match) => match.status === 'finished' || evaluated.has(match.id),
-        ),
-      }}
-      rows={rows}
+      data={view.data}
+      rows={view.rows}
+      nonEvaluable={view.nonEvaluable}
       demo={demo}
       publicReport
     />

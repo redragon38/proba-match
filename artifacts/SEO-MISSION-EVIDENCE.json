@@ -1,0 +1,947 @@
+{
+  "generatedAt": "2026-10-20T21:30:24.650Z",
+  "beforePublic": {
+    "generatedAt": "2026-10-20T20:59:24.660Z",
+    "base": "https://proba-match.com",
+    "scope": {
+      "sitemapURLs": 4826,
+      "selectedPages": 40,
+      "mode": "representative sample"
+    },
+    "pages": 40,
+    "checks": 601,
+    "browserViews": 18,
+    "failures": [
+      {
+        "category": "internal links",
+        "status": "FAIL",
+        "detail": "Every sitemap page has an incoming crawlable link"
+      }
+    ],
+    "warnings": [
+      {
+        "category": "performance",
+        "status": "WARNING",
+        "detail": "/bilan-predictions: HTML 18669207 bytes (local payload budget)"
+      }
+    ],
+    "links": {
+      "discovered": 473,
+      "additionalChecked": 60,
+      "unchecked": 374,
+      "broken": [],
+      "redirects": []
+    },
+    "testedPages": [
+      {
+        "path": "/",
+        "status": 200,
+        "title": "Scores, calendrier et analyses football | Proba Match",
+        "canonical": "https://proba-match.com/",
+        "htmlBytes": 253943
+      },
+      {
+        "path": "/matchs",
+        "status": 200,
+        "title": "Matchs de football — scores et calendrier | Proba Match",
+        "canonical": "https://proba-match.com/matchs",
+        "htmlBytes": 304594
+      },
+      {
+        "path": "/live",
+        "status": 200,
+        "title": "Scores de football en direct | Proba Match",
+        "canonical": "https://proba-match.com/live",
+        "htmlBytes": 83438
+      },
+      {
+        "path": "/equipes",
+        "status": 200,
+        "title": "Équipes de football — résultats et statistiques | Proba Match",
+        "canonical": "https://proba-match.com/equipes",
+        "htmlBytes": 109749
+      },
+      {
+        "path": "/joueurs",
+        "status": 200,
+        "title": "Joueurs — profils et performances individuelles | Proba Match",
+        "canonical": "https://proba-match.com/joueurs",
+        "htmlBytes": 127416
+      },
+      {
+        "path": "/competitions",
+        "status": 200,
+        "title": "Compétitions de football — calendrier et classement | Proba Match",
+        "canonical": "https://proba-match.com/competitions",
+        "htmlBytes": 63118
+      },
+      {
+        "path": "/classements",
+        "status": 200,
+        "title": "Classements de football par compétition et saison | Proba Match",
+        "canonical": "https://proba-match.com/classements",
+        "htmlBytes": 375784
+      },
+      {
+        "path": "/analyses",
+        "status": 200,
+        "title": "Analyses et prédictions de matchs de football | Proba Match",
+        "canonical": "https://proba-match.com/analyses",
+        "htmlBytes": 476044
+      },
+      {
+        "path": "/bilan-predictions",
+        "status": 200,
+        "title": "Bilan public des prédictions football | Proba Match",
+        "canonical": "https://proba-match.com/bilan-predictions",
+        "htmlBytes": 18669207
+      },
+      {
+        "path": "/a-propos",
+        "status": 200,
+        "title": "À propos de Proba Match | Proba Match",
+        "canonical": "https://proba-match.com/a-propos",
+        "htmlBytes": 51717
+      },
+      {
+        "path": "/methodologie",
+        "status": 200,
+        "title": "Méthodologie — sources et modèle Elo–Poisson | Proba Match",
+        "canonical": "https://proba-match.com/methodologie",
+        "htmlBytes": 72632
+      },
+      {
+        "path": "/comprendre-probabilites",
+        "status": 200,
+        "title": "Comprendre les probabilités et statistiques football | Proba Match",
+        "canonical": "https://proba-match.com/comprendre-probabilites",
+        "htmlBytes": 76674
+      },
+      {
+        "path": "/lexique-football",
+        "status": 200,
+        "title": "Lexique football — probabilités, xG, Elo et statistiques | Proba Match",
+        "canonical": "https://proba-match.com/lexique-football",
+        "htmlBytes": 110038
+      },
+      {
+        "path": "/sources-donnees",
+        "status": 200,
+        "title": "Sources des données football et limites de couverture | Proba Match",
+        "canonical": "https://proba-match.com/sources-donnees",
+        "htmlBytes": 67115
+      },
+      {
+        "path": "/contact",
+        "status": 200,
+        "title": "Contact — Proba Match | Proba Match",
+        "canonical": "https://proba-match.com/contact",
+        "htmlBytes": 54800
+      },
+      {
+        "path": "/confidentialite",
+        "status": 200,
+        "title": "Confidentialité | Proba Match",
+        "canonical": "https://proba-match.com/confidentialite",
+        "htmlBytes": 50976
+      },
+      {
+        "path": "/cookies",
+        "status": 200,
+        "title": "Cookies et stockage local | Proba Match",
+        "canonical": "https://proba-match.com/cookies",
+        "htmlBytes": 48809
+      },
+      {
+        "path": "/mentions-legales",
+        "status": 200,
+        "title": "Mentions légales | Proba Match",
+        "canonical": "https://proba-match.com/mentions-legales",
+        "htmlBytes": 51767
+      },
+      {
+        "path": "/recherche",
+        "status": 200,
+        "title": "Recherche football | Proba Match",
+        "canonical": "https://proba-match.com/recherche",
+        "htmlBytes": 121486
+      },
+      {
+        "path": "/favoris",
+        "status": 200,
+        "title": "Mes favoris | Proba Match",
+        "canonical": "https://proba-match.com/favoris",
+        "htmlBytes": 49206
+      },
+      {
+        "path": "/parametres",
+        "status": 200,
+        "title": "Paramètres | Proba Match",
+        "canonical": "https://proba-match.com/parametres",
+        "htmlBytes": 52728
+      },
+      {
+        "path": "/comparateur/equipes",
+        "status": 200,
+        "title": "Comparateur d’équipes football | Proba Match",
+        "canonical": "https://proba-match.com/comparateur/equipes",
+        "htmlBytes": 273954
+      },
+      {
+        "path": "/comparateur/joueurs",
+        "status": 200,
+        "title": "Comparateur de joueurs football | Proba Match",
+        "canonical": "https://proba-match.com/comparateur/joueurs",
+        "htmlBytes": 187985
+      },
+      {
+        "path": "/admin",
+        "status": 200,
+        "title": "Administration | Proba Match",
+        "canonical": "",
+        "htmlBytes": 47505
+      },
+      {
+        "path": "/equipes?page=2",
+        "status": 200,
+        "title": "Équipes de football — résultats et statistiques — page 2 | Proba Match",
+        "canonical": "https://proba-match.com/equipes?page=2",
+        "htmlBytes": 110909
+      },
+      {
+        "path": "/joueurs?page=2",
+        "status": 200,
+        "title": "Joueurs — profils et performances individuelles — page 2 | Proba Match",
+        "canonical": "https://proba-match.com/joueurs?page=2",
+        "htmlBytes": 129892
+      },
+      {
+        "path": "/equipe/olympique-de-marseille-55d90959",
+        "status": 200,
+        "title": "OM : prochain match, résultats et statistiques | Proba Match",
+        "canonical": "https://proba-match.com/equipe/olympique-de-marseille-55d90959",
+        "htmlBytes": 395557
+      },
+      {
+        "path": "/joueur/abraham-marcus-60ae872b",
+        "status": 200,
+        "title": "Abraham Marcus — Estrela — profil et statistiques | Proba Match",
+        "canonical": "https://proba-match.com/joueur/abraham-marcus-60ae872b",
+        "htmlBytes": 68679
+      },
+      {
+        "path": "/competition/ligue-1",
+        "status": 200,
+        "title": "Ligue 1 — saison 2026/2027, classement et calendrier | Proba Match",
+        "canonical": "https://proba-match.com/competition/ligue-1",
+        "htmlBytes": 313327
+      },
+      {
+        "path": "/match/1ad0e317-5556-84e4-8222-e1197f8bd204",
+        "status": 200,
+        "title": "Sunderland AFC–Manchester City FC : match du 30 mai 2027 | Proba Match",
+        "canonical": "https://proba-match.com/match/1ad0e317-5556-84e4-8222-e1197f8bd204",
+        "htmlBytes": 487139
+      },
+      {
+        "path": "/equipes?page=3",
+        "status": 200,
+        "title": "Équipes de football — résultats et statistiques — page 3 | Proba Match",
+        "canonical": "https://proba-match.com/equipes?page=3",
+        "htmlBytes": 110715
+      },
+      {
+        "path": "/joueurs?page=3",
+        "status": 200,
+        "title": "Joueurs — profils et performances individuelles — page 3 | Proba Match",
+        "canonical": "https://proba-match.com/joueurs?page=3",
+        "htmlBytes": 128972
+      },
+      {
+        "path": "/equipe/rc-strasbourg-alsace-a4e53dcf",
+        "status": 200,
+        "title": "RC Strasbourg Alsace : prochain match, résultats et statistiques | Proba Match",
+        "canonical": "https://proba-match.com/equipe/rc-strasbourg-alsace-a4e53dcf",
+        "htmlBytes": 395205
+      },
+      {
+        "path": "/joueur/adrian-bajrami-83d2d905",
+        "status": 200,
+        "title": "Adrian Bajrami — Braga — profil et statistiques | Proba Match",
+        "canonical": "https://proba-match.com/joueur/adrian-bajrami-83d2d905",
+        "htmlBytes": 68699
+      },
+      {
+        "path": "/competition/premier-league",
+        "status": 200,
+        "title": "Premier League — saison 2026/2027, classement et calendrier | Proba Match",
+        "canonical": "https://proba-match.com/competition/premier-league",
+        "htmlBytes": 333392
+      },
+      {
+        "path": "/match/2899c0c7-bc1d-84c7-9c09-f8526e5370bb",
+        "status": 200,
+        "title": "Aston Villa FC–Tottenham Hotspur FC : match du 30 mai 2027 | Proba Match",
+        "canonical": "https://proba-match.com/match/2899c0c7-bc1d-84c7-9c09-f8526e5370bb",
+        "htmlBytes": 495591
+      },
+      {
+        "path": "/equipes?page=4",
+        "status": 200,
+        "title": "Équipes de football — résultats et statistiques — page 4 | Proba Match",
+        "canonical": "https://proba-match.com/equipes?page=4",
+        "htmlBytes": 108849
+      },
+      {
+        "path": "/joueurs?page=4",
+        "status": 200,
+        "title": "Joueurs — profils et performances individuelles — page 4 | Proba Match",
+        "canonical": "https://proba-match.com/joueurs?page=4",
+        "htmlBytes": 126433
+      },
+      {
+        "path": "/equipe/racing-club-de-lens-776b22d3",
+        "status": 200,
+        "title": "Racing Club de Lens : prochain match, résultats et statistiques | Proba Match",
+        "canonical": "https://proba-match.com/equipe/racing-club-de-lens-776b22d3",
+        "htmlBytes": 394823
+      },
+      {
+        "path": "/joueur/adrian-butzke-22ffb086",
+        "status": 200,
+        "title": "Adrián Butzke — Maritimo — profil et statistiques | Proba Match",
+        "canonical": "https://proba-match.com/joueur/adrian-butzke-22ffb086",
+        "htmlBytes": 68197
+      }
+    ],
+    "browser": [
+      {
+        "width": 390,
+        "path": "/",
+        "errors": [],
+        "lcp": 1016,
+        "cls": 0.0004915732826843938,
+        "overflow": false,
+        "resources": 46,
+        "jsBytes": 171285,
+        "violations": []
+      },
+      {
+        "width": 390,
+        "path": "/equipes",
+        "errors": [],
+        "lcp": 296,
+        "cls": 0,
+        "overflow": false,
+        "resources": 53,
+        "jsBytes": 165016,
+        "violations": []
+      },
+      {
+        "width": 390,
+        "path": "/classements",
+        "errors": [],
+        "lcp": 284,
+        "cls": 0,
+        "overflow": false,
+        "resources": 44,
+        "jsBytes": 164877,
+        "violations": []
+      },
+      {
+        "width": 390,
+        "path": "/parametres",
+        "errors": [],
+        "lcp": 256,
+        "cls": 0,
+        "overflow": false,
+        "resources": 28,
+        "jsBytes": 163994,
+        "violations": []
+      },
+      {
+        "width": 390,
+        "path": "/comprendre-probabilites",
+        "errors": [],
+        "lcp": 280,
+        "cls": 0,
+        "overflow": false,
+        "resources": 28,
+        "jsBytes": 161660,
+        "violations": []
+      },
+      {
+        "width": 390,
+        "path": "/lexique-football",
+        "errors": [],
+        "lcp": 256,
+        "cls": 0,
+        "overflow": false,
+        "resources": 28,
+        "jsBytes": 161660,
+        "violations": []
+      },
+      {
+        "width": 390,
+        "path": "/sources-donnees",
+        "errors": [],
+        "lcp": 256,
+        "cls": 0,
+        "overflow": false,
+        "resources": 26,
+        "jsBytes": 161660,
+        "violations": []
+      },
+      {
+        "width": 390,
+        "path": "/equipe/olympique-de-marseille-55d90959",
+        "errors": [],
+        "lcp": 392,
+        "cls": 0,
+        "overflow": false,
+        "resources": 36,
+        "jsBytes": 170743,
+        "violations": []
+      },
+      {
+        "width": 390,
+        "path": "/match/1ad0e317-5556-84e4-8222-e1197f8bd204",
+        "errors": [],
+        "lcp": 512,
+        "cls": 0.000322193287037037,
+        "overflow": false,
+        "resources": 41,
+        "jsBytes": 183824,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/",
+        "errors": [],
+        "lcp": 960,
+        "cls": 0.00021082865815757887,
+        "overflow": false,
+        "resources": 78,
+        "jsBytes": 171285,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/equipes",
+        "errors": [],
+        "lcp": 308,
+        "cls": 0.003123111041452332,
+        "overflow": false,
+        "resources": 98,
+        "jsBytes": 165016,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/classements",
+        "errors": [],
+        "lcp": 280,
+        "cls": 0,
+        "overflow": false,
+        "resources": 79,
+        "jsBytes": 164877,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/parametres",
+        "errors": [],
+        "lcp": 252,
+        "cls": 0,
+        "overflow": false,
+        "resources": 50,
+        "jsBytes": 163994,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/comprendre-probabilites",
+        "errors": [],
+        "lcp": 224,
+        "cls": 0,
+        "overflow": false,
+        "resources": 51,
+        "jsBytes": 161660,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/lexique-football",
+        "errors": [],
+        "lcp": 232,
+        "cls": 0,
+        "overflow": false,
+        "resources": 52,
+        "jsBytes": 161660,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/sources-donnees",
+        "errors": [],
+        "lcp": 236,
+        "cls": 0,
+        "overflow": false,
+        "resources": 50,
+        "jsBytes": 161660,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/equipe/olympique-de-marseille-55d90959",
+        "errors": [],
+        "lcp": 252,
+        "cls": 0.000001898871527777778,
+        "overflow": false,
+        "resources": 61,
+        "jsBytes": 170743,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/match/1ad0e317-5556-84e4-8222-e1197f8bd204",
+        "errors": [],
+        "lcp": 244,
+        "cls": 0.00020967585559735082,
+        "overflow": false,
+        "resources": 63,
+        "jsBytes": 183824,
+        "violations": []
+      }
+    ]
+  },
+  "afterLocal": {
+    "generatedAt": "2026-10-20T21:28:44.458Z",
+    "base": "http://127.0.0.1:3000",
+    "scope": {
+      "sitemapURLs": 5,
+      "selectedPages": 24,
+      "mode": "complete discovered URL set"
+    },
+    "pages": 24,
+    "checks": 299,
+    "browserViews": 14,
+    "failures": [],
+    "warnings": [],
+    "links": {
+      "discovered": 24,
+      "additionalChecked": 1,
+      "unchecked": 0,
+      "broken": [],
+      "redirects": []
+    },
+    "testedPages": [
+      {
+        "path": "/",
+        "status": 200,
+        "title": "Scores, calendrier et analyses football | Proba Match",
+        "canonical": "https://proba-match.com/",
+        "htmlBytes": 36731
+      },
+      {
+        "path": "/matchs",
+        "status": 200,
+        "title": "Matchs de football — scores et calendrier | Proba Match",
+        "canonical": "https://proba-match.com/matchs",
+        "htmlBytes": 43959
+      },
+      {
+        "path": "/live",
+        "status": 200,
+        "title": "Scores de football en direct | Proba Match",
+        "canonical": "https://proba-match.com/live",
+        "htmlBytes": 36952
+      },
+      {
+        "path": "/equipes",
+        "status": 200,
+        "title": "Équipes de football — résultats et statistiques | Proba Match",
+        "canonical": "https://proba-match.com/equipes",
+        "htmlBytes": 36326
+      },
+      {
+        "path": "/joueurs",
+        "status": 200,
+        "title": "Joueurs — profils et performances individuelles | Proba Match",
+        "canonical": "https://proba-match.com/joueurs",
+        "htmlBytes": 36646
+      },
+      {
+        "path": "/competitions",
+        "status": 200,
+        "title": "Compétitions de football — calendrier et classement | Proba Match",
+        "canonical": "https://proba-match.com/competitions",
+        "htmlBytes": 36248
+      },
+      {
+        "path": "/classements",
+        "status": 200,
+        "title": "Classements de football par compétition et saison | Proba Match",
+        "canonical": "https://proba-match.com/classements",
+        "htmlBytes": 37093
+      },
+      {
+        "path": "/analyses",
+        "status": 200,
+        "title": "Analyses et prédictions de matchs de football | Proba Match",
+        "canonical": "https://proba-match.com/analyses",
+        "htmlBytes": 38424
+      },
+      {
+        "path": "/bilan-predictions",
+        "status": 200,
+        "title": "Bilan public des prédictions football | Proba Match",
+        "canonical": "https://proba-match.com/bilan-predictions",
+        "htmlBytes": 37952
+      },
+      {
+        "path": "/a-propos",
+        "status": 200,
+        "title": "À propos de Proba Match | Proba Match",
+        "canonical": "https://proba-match.com/a-propos",
+        "htmlBytes": 40029
+      },
+      {
+        "path": "/methodologie",
+        "status": 200,
+        "title": "Méthodologie — sources et modèle Elo–Poisson | Proba Match",
+        "canonical": "https://proba-match.com/methodologie",
+        "htmlBytes": 60944
+      },
+      {
+        "path": "/comprendre-probabilites",
+        "status": 200,
+        "title": "Comprendre les probabilités et statistiques football | Proba Match",
+        "canonical": "https://proba-match.com/comprendre-probabilites",
+        "htmlBytes": 64986
+      },
+      {
+        "path": "/lexique-football",
+        "status": 200,
+        "title": "Lexique football — probabilités, xG, Elo et statistiques | Proba Match",
+        "canonical": "https://proba-match.com/lexique-football",
+        "htmlBytes": 98350
+      },
+      {
+        "path": "/sources-donnees",
+        "status": 200,
+        "title": "Sources des données football et limites de couverture | Proba Match",
+        "canonical": "https://proba-match.com/sources-donnees",
+        "htmlBytes": 55427
+      },
+      {
+        "path": "/contact",
+        "status": 200,
+        "title": "Contact — Proba Match | Proba Match",
+        "canonical": "https://proba-match.com/contact",
+        "htmlBytes": 43112
+      },
+      {
+        "path": "/confidentialite",
+        "status": 200,
+        "title": "Confidentialité | Proba Match",
+        "canonical": "https://proba-match.com/confidentialite",
+        "htmlBytes": 39288
+      },
+      {
+        "path": "/cookies",
+        "status": 200,
+        "title": "Cookies et stockage local | Proba Match",
+        "canonical": "https://proba-match.com/cookies",
+        "htmlBytes": 37121
+      },
+      {
+        "path": "/mentions-legales",
+        "status": 200,
+        "title": "Mentions légales | Proba Match",
+        "canonical": "https://proba-match.com/mentions-legales",
+        "htmlBytes": 40117
+      },
+      {
+        "path": "/recherche",
+        "status": 200,
+        "title": "Recherche football | Proba Match",
+        "canonical": "https://proba-match.com/recherche",
+        "htmlBytes": 36739
+      },
+      {
+        "path": "/favoris",
+        "status": 200,
+        "title": "Mes favoris | Proba Match",
+        "canonical": "https://proba-match.com/favoris",
+        "htmlBytes": 37250
+      },
+      {
+        "path": "/parametres",
+        "status": 200,
+        "title": "Paramètres | Proba Match",
+        "canonical": "https://proba-match.com/parametres",
+        "htmlBytes": 35551
+      },
+      {
+        "path": "/comparateur/equipes",
+        "status": 200,
+        "title": "Comparateur d’équipes football | Proba Match",
+        "canonical": "https://proba-match.com/comparateur/equipes",
+        "htmlBytes": 37200
+      },
+      {
+        "path": "/comparateur/joueurs",
+        "status": 200,
+        "title": "Comparateur de joueurs football | Proba Match",
+        "canonical": "https://proba-match.com/comparateur/joueurs",
+        "htmlBytes": 37139
+      },
+      {
+        "path": "/admin",
+        "status": 200,
+        "title": "Administration | Proba Match",
+        "canonical": "",
+        "htmlBytes": 35817
+      }
+    ],
+    "browser": [
+      {
+        "width": 390,
+        "path": "/",
+        "errors": [],
+        "lcp": 236,
+        "cls": 0,
+        "overflow": false,
+        "resources": 43,
+        "jsBytes": 171307,
+        "violations": []
+      },
+      {
+        "width": 390,
+        "path": "/equipes",
+        "errors": [],
+        "lcp": 120,
+        "cls": 0,
+        "overflow": false,
+        "resources": 44,
+        "jsBytes": 165037,
+        "violations": []
+      },
+      {
+        "width": 390,
+        "path": "/classements",
+        "errors": [],
+        "lcp": 88,
+        "cls": 0,
+        "overflow": false,
+        "resources": 22,
+        "jsBytes": 164896,
+        "violations": []
+      },
+      {
+        "width": 390,
+        "path": "/parametres",
+        "errors": [],
+        "lcp": 116,
+        "cls": 0,
+        "overflow": false,
+        "resources": 24,
+        "jsBytes": 163994,
+        "violations": []
+      },
+      {
+        "width": 390,
+        "path": "/comprendre-probabilites",
+        "errors": [],
+        "lcp": 132,
+        "cls": 0,
+        "overflow": false,
+        "resources": 24,
+        "jsBytes": 161660,
+        "violations": []
+      },
+      {
+        "width": 390,
+        "path": "/lexique-football",
+        "errors": [],
+        "lcp": 120,
+        "cls": 0,
+        "overflow": false,
+        "resources": 24,
+        "jsBytes": 161660,
+        "violations": []
+      },
+      {
+        "width": 390,
+        "path": "/sources-donnees",
+        "errors": [],
+        "lcp": 116,
+        "cls": 0,
+        "overflow": false,
+        "resources": 22,
+        "jsBytes": 161660,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/",
+        "errors": [],
+        "lcp": 292,
+        "cls": 0,
+        "overflow": false,
+        "resources": 55,
+        "jsBytes": 171307,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/equipes",
+        "errors": [],
+        "lcp": 108,
+        "cls": 0,
+        "overflow": false,
+        "resources": 55,
+        "jsBytes": 165037,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/classements",
+        "errors": [],
+        "lcp": 88,
+        "cls": 0,
+        "overflow": false,
+        "resources": 55,
+        "jsBytes": 164896,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/parametres",
+        "errors": [],
+        "lcp": 124,
+        "cls": 0,
+        "overflow": false,
+        "resources": 39,
+        "jsBytes": 163994,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/comprendre-probabilites",
+        "errors": [],
+        "lcp": 136,
+        "cls": 0,
+        "overflow": false,
+        "resources": 42,
+        "jsBytes": 161660,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/lexique-football",
+        "errors": [],
+        "lcp": 104,
+        "cls": 0,
+        "overflow": false,
+        "resources": 42,
+        "jsBytes": 161660,
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "path": "/sources-donnees",
+        "errors": [],
+        "lcp": 92,
+        "cls": 0,
+        "overflow": false,
+        "resources": 40,
+        "jsBytes": 161660,
+        "violations": []
+      }
+    ]
+  },
+  "unit": {
+    "files": 75,
+    "passed": 409
+  },
+  "browserSuite": {
+    "passed": 50,
+    "skipped": 22,
+    "failed": 0
+  },
+  "security": {
+    "checks": 19,
+    "failures": 0
+  },
+  "monitor": {
+    "pages": 23,
+    "sitemapCount": 5,
+    "errors": 0,
+    "warnings": 0
+  },
+  "benchmark": {
+    "scope": "controlled synthetic fixture, not production or field CWV",
+    "matches": 5288,
+    "originalPayloadBytes": 21922305,
+    "optimizedPayloadBytes": 2223,
+    "reductionPercent": 99.99,
+    "sitemapReferenceMs": 393.55,
+    "sitemapIndexedMs": 42.91,
+    "lastmodParity": true
+  },
+  "redirects": [
+    {
+      "url": "http://proba-match.com/",
+      "status": 301,
+      "location": "https://proba-match.com/"
+    },
+    {
+      "url": "http://www.proba-match.com/",
+      "status": 301,
+      "location": "https://proba-match.com/"
+    },
+    {
+      "url": "https://www.proba-match.com/",
+      "status": 301,
+      "location": "https://proba-match.com/"
+    },
+    {
+      "url": "https://proba-match.com/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://proba-match.com/match/seo-missing",
+      "status": 404,
+      "location": null
+    }
+  ],
+  "lighthouseDesktop": {
+    "version": "13.5.0",
+    "scope": "localhost empty catalogue, intentional noindex; not production",
+    "scores": {
+      "performance": 1,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 0.69
+    },
+    "metrics": {
+      "largest-contentful-paint": 532.5441249999999,
+      "cumulative-layout-shift": 0,
+      "total-blocking-time": 0
+    }
+  },
+  "lighthouseMobile": {
+    "status": "unavailable",
+    "reason": "NO_NAVSTART",
+    "attempts": 2
+  },
+  "limitations": [
+    "Public crawl sampled, not all 4826 URLs",
+    "Production deployment pending",
+    "Search Console and field CWV unavailable",
+    "HTTP outage server launch blocked by automatic authorization policy; isolated tests passed"
+  ]
+}

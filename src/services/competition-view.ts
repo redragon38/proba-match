@@ -61,6 +61,7 @@ export function competitionView(
   return {
     source: searchSource(data),
     competition: { ...competition, season },
+    currentSeason: competition.season,
     seasons,
     mode,
     seasonFallback: query.saison !== undefined && !seasons.includes(requestedSeason),

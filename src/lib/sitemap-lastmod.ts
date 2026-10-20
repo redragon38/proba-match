@@ -48,3 +48,28 @@ export function entityContentModifiedAt(path: string, data: Dataset) {
   }
   return undefined;
 }
+
+/** Build all entity dates in one pass; a large sitemap must not rescan the corpus per URL. */
+export function contentModificationIndex(data: Dataset): ReadonlyMap<string, string> {
+  const dates = new Map<string, string>();
+  const teams = new Map(data.teams.map((team) => [team.id, `/equipe/${team.slug}`]));
+  const competitions = new Map(data.competitions.map((c) => [c.id, c]));
+  for (const match of data.matches) {
+    const modified = matchContentModifiedAt(match);
+    if (!modified) continue;
+    const competition = competitions.get(match.competitionId);
+    const competitionPath = competition
+      ? `/competition/${competition.slug}${match.season != null && match.season !== competition.season ? `?saison=${match.season}` : ''}`
+      : undefined;
+    for (const path of [
+      `/match/${match.slug}`,
+      teams.get(match.homeId),
+      teams.get(match.awayId),
+      competitionPath,
+    ]) {
+      if (path && (!dates.has(path) || Date.parse(modified) > Date.parse(dates.get(path)!)))
+        dates.set(path, modified);
+    }
+  }
+  return dates;
+}
