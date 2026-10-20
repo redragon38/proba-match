@@ -156,11 +156,6 @@ export function CompetitionProfile({
           <div id="matchs">
             <SectionTitle title="Matchs" />
           </div>
-          <p>
-            <Link className="text-link" href={`/analyses?competition=${c.id}`}>
-              Analyses disponibles pour {c.name} →
-            </Link>
-          </p>
           <div className="segmented">
             <button
               className={mode === 'scheduled' ? 'active' : ''}

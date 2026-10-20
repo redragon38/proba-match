@@ -6,7 +6,6 @@ import { formatProbability, probabilityPercentages } from '@/lib/probability-for
 import { informationQuality } from '@/prediction-engine/insights';
 import { CompetitionBadge, Empty, TeamBadge } from '@/components/ui';
 import { LocalTime } from '@/components/local-time';
-import { validResult } from '@/prediction-engine/availability';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,22 +14,20 @@ export async function generateMetadata() {
   return publicMetadata('/analyses', Boolean(process.env.DATABASE_URL) && data.source !== 'demo');
 }
 
-type Query = { date?: string; competition?: string; equipe?: string };
+type Query = { date?: string; competition?: string };
 
 async function availableAnalyses(query: Query) {
   const data = await getDataset();
   const now = Date.parse(data.updatedAt) || Date.now();
-  const archiveStart = now - 7 * 86400_000;
   const horizon = now + 7 * 86400_000;
   const candidates = data.matches.filter((match) => {
     const kickoff = Date.parse(match.kickoff);
     return (
-      (match.status === 'scheduled' || validResult(match)) &&
-      kickoff >= archiveStart &&
+      match.status === 'scheduled' &&
+      kickoff >= now &&
       kickoff <= horizon &&
       (!query.date || match.kickoff.slice(0, 10) === query.date) &&
-      (!query.competition || match.competitionId === query.competition) &&
-      (!query.equipe || match.homeId === query.equipe || match.awayId === query.equipe)
+      (!query.competition || match.competitionId === query.competition)
     );
   });
   const predictions = await getPredictions(
@@ -50,9 +47,6 @@ async function availableAnalyses(query: Query) {
 export default async function AnalysesPage({ searchParams }: { searchParams: Promise<Query> }) {
   const query = await searchParams;
   const { data, matches, predictions } = await availableAnalyses(query);
-  const selectedTeam = query.equipe
-    ? data.teams.find((team) => team.id === query.equipe)
-    : undefined;
   return (
     <main className="page">
       <span className="eyebrow">ESTIMATIONS PUBLIÉES AVANT LE COUP D’ENVOI</span>
@@ -61,12 +55,6 @@ export default async function AnalysesPage({ searchParams }: { searchParams: Pro
         Seules les rencontres disposant d’un instantané avant-match exploitable figurent ici. Les
         probabilités expriment une incertitude et ne garantissent aucun résultat.
       </p>
-      {selectedTeam && (
-        <p className="data-note">
-          Analyses liées à <Link href={`/equipe/${selectedTeam.slug}`}>{selectedTeam.name}</Link>
-          .
-        </p>
-      )}
       <form className="filter-panel" method="get">
         <label>
           Date
@@ -114,20 +102,9 @@ export default async function AnalysesPage({ searchParams }: { searchParams: Pro
                   <LocalTime iso={match.kickoff} date />
                 </p>
                 <h2>
-                  <Link href={`/equipe/${home.slug}`}>
-                    <TeamBadge team={home} size={30} /> {home.name}
-                  </Link>{' '}
-                  <span>–</span>{' '}
-                  <Link href={`/equipe/${away.slug}`}>
-                    {away.name} <TeamBadge team={away} size={30} />
-                  </Link>
+                  <TeamBadge team={home} size={30} /> {home.name} <span>–</span> {away.name}{' '}
+                  <TeamBadge team={away} size={30} />
                 </h2>
-                {validResult(match) && (
-                  <p>
-                    Résultat confirmé : <strong>{match.homeScore}–{match.awayScore}</strong>. Les
-                    probabilités ci-dessous sont l’instantané archivé avant le coup d’envoi.
-                  </p>
-                )}
                 <div className="metrics three">
                   <div className="metric">
                     <span>{home.short}</span>
@@ -152,10 +129,7 @@ export default async function AnalysesPage({ searchParams }: { searchParams: Pro
                   · Qualité des informations : <strong>{quality}</strong>.
                 </p>
                 <Link className="button" href={`/match/${match.slug}?onglet=prediction`}>
-                  Analyse {home.short}–{away.short}
-                </Link>
-                <Link className="text-link" href={`/competition/${competition.slug}`}>
-                  Voir {competition.name}
+                  Voir l’analyse complète
                 </Link>
               </article>
             );

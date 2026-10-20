@@ -207,11 +207,6 @@ export function TeamProfile({
             predictions={{}}
           />
           <SectionTitle title="Prochaines rencontres" />
-          <p>
-            <Link className="text-link" href={`/analyses?equipe=${team.id}`}>
-              Analyses disponibles pour {team.name} →
-            </Link>
-          </p>
           <MatchList
             matches={upcoming}
             teams={data.teams}

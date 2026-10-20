@@ -83,8 +83,6 @@ export default function Page() {
           : leurs probabilités ne doivent pas totaliser 100 %.
         </p>
         <Link href="/matchs">Consulter les matchs et leurs estimations disponibles →</Link>
-        <br />
-        <Link href="/analyses">Voir uniquement les analyses avant-match archivées →</Link>
       </section>
       <section id="scores">
         <h2>Le score le plus probable reste incertain</h2>
@@ -160,10 +158,6 @@ export default function Page() {
         </p>
         <Link href="/methodologie">
           Voir les coefficients, les sources et les limites du moteur →
-        </Link>
-        <br />
-        <Link href="/bilan-predictions">
-          Consulter l’évaluation des prédictions réellement archivées →
         </Link>
       </section>
       <section id="sources">
