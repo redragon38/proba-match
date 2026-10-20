@@ -7,7 +7,7 @@ cd /opt/proba-match/app
 test -s .env.vps
 revision=${1:?Pass the fetched fix commit SHA}
 git rev-parse --verify "${revision}^{commit}" >/dev/null
-base=fc9214fde865e2ff3c5de82bf39c3956d988ac6f
+base=b938676af3507b3bc72e31e5fe9c681146b2291f
 files=(
   .dockerignore
   ops/vps-crontab
@@ -16,6 +16,9 @@ files=(
   src/services/football/openfootball-sync.ts
   src/services/football/prediction-history.ts
   src/services/predictions.ts
+  src/prediction-engine/availability.ts
+  src/prediction-engine/elo.ts
+  src/prediction-engine/index.ts
 )
 patch=$(mktemp)
 trap 'rm -f "$patch"' EXIT
@@ -66,6 +69,16 @@ for (let attempt = 0; attempt < 13; attempt++) {
   if (!response.ok || result.status !== 'success' || result.history?.status === 'partial')
     process.exitCode = 1;
   break;
+}
+if (!process.exitCode) {
+  // Verify the user's concrete example against the application, bypassing Nginx.
+  const response = await fetch('http://app:3000/match/fb6b97e3-7911-8ee9-986b-8ee3b91a66f3?onglet=prediction', {
+    signal: AbortSignal.timeout(60000),
+  });
+  const html = await response.text();
+  const visible = response.ok && /class="prediction-outcome(?:\s|\")/.test(html);
+  console.log(JSON.stringify({ check: 'Brest-Nice 23 octobre', httpStatus: response.status, predictionVisible: visible }));
+  if (!visible) process.exitCode = 1;
 }
 NODE
 

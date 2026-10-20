@@ -83,6 +83,23 @@ export function eloHistory(
       continue;
     }
     const result = regulationResult(m, mode === 'reconstructed');
+    const previous = known.get(m.id);
+    // Old jsonb imports accumulated identical observations. They remain in the
+    // immutable journal, but do not require folding the complete Elo history.
+    if (
+      result &&
+      previous &&
+      result.homeId === previous.homeId &&
+      result.awayId === previous.awayId &&
+      result.kickoff === previous.kickoff &&
+      result.homeScore === previous.homeScore &&
+      result.awayScore === previous.awayScore &&
+      (result.neutralVenue === true) === (previous.neutralVenue === true)
+    ) {
+      known.set(m.id, result);
+      continue;
+    }
+    if (!result && !previous) continue;
     const changed = known.has(m.id);
     if (result) known.set(m.id, result);
     else known.delete(m.id);

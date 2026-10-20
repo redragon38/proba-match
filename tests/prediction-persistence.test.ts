@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   create: vi.fn(),
   version: vi.fn(),
   predict: vi.fn(),
+  prepare: vi.fn(),
   findUnique: vi.fn(),
   upsert: vi.fn(),
   marker: vi.fn(),
@@ -33,11 +34,45 @@ vi.mock('@/database/client', () => {
   };
 });
 vi.mock('@/prediction-engine', () => ({
-  predictionEngine: { predict: mocks.predict },
+  predictionEngine: { predict: mocks.predict, prepare: mocks.prepare },
   MODEL_VERSION: 'test',
   MODEL_PARAMETERS: {},
 }));
 import { persistPredictions, getEvaluations } from '@/services/predictions';
+
+it('prepares the shared corpus once for multiple forecasts in one publication transaction', async () => {
+  const now = new Date('2026-10-20T12:00:00Z');
+  const data = createDemoDataset(now);
+  data.source = 'openfootball';
+  const template = data.matches[0];
+  data.matches = ['first', 'second'].map((id) => ({
+    ...template,
+    id,
+    status: 'scheduled',
+    kickoff: '2026-10-23T18:45:00Z',
+    kickoffKnown: true,
+    lineups: [],
+  }));
+  mocks.find.mockResolvedValue([]);
+  mocks.findUnique.mockResolvedValue(null);
+  const forecast = vi.fn((match) => ({
+    id: `p-${match.id}`,
+    matchId: match.id,
+    cutoff: now.toISOString(),
+    home: 0.4,
+    draw: 0.3,
+    away: 0.3,
+    confidence: 50,
+    inputHash: 'hash',
+    lineupConfirmed: false,
+  }));
+  mocks.prepare.mockReturnValue(forecast);
+  await persistPredictions(data, now);
+  expect(mocks.prepare).toHaveBeenCalledOnce();
+  expect(forecast).toHaveBeenCalledTimes(2);
+  expect(mocks.predict).not.toHaveBeenCalled();
+  expect(mocks.upsert).toHaveBeenCalledTimes(2);
+});
 afterEach(() => {
   vi.resetAllMocks();
   vi.unstubAllEnvs();

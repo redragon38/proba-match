@@ -23,6 +23,12 @@ export const MODEL_PARAMETERS = {
   minEffectiveMatches: 5,
 } as const;
 const clamp = (x: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, x));
+type PredictionContext = {
+  eligible: Match[];
+  ratings: Map<string, number>;
+  before: Map<string, number>;
+};
+export type PreparedForecast = (match: Match) => Prediction | null;
 export class PredictionEngine {
   constructor(
     private homeAdvantage = 60,
@@ -31,6 +37,61 @@ export class PredictionEngine {
     private modelVersion = MODEL_VERSION,
     private availabilityMode: AvailabilityMode = 'observed',
   ) {}
+  /** One immutable corpus/cutoff per job; no cross-request or global cache. */
+  prepare(
+    allMatches: Match[],
+    asOf = new Date().toISOString(),
+    includeArchive = true,
+  ): PreparedForecast {
+    let shared: PredictionContext | null | undefined;
+    return (match) =>
+      this.forecast(match, allMatches, asOf, includeArchive, (cutoff, excludedId) => {
+        if (shared === undefined) shared = this.prepareContext(allMatches, cutoff);
+        // A historical replay target can itself occur among finished inputs.
+        // Keep the same target-exclusion contract as an individual prediction.
+        if (!shared || shared.eligible.some((row) => row.id === excludedId))
+          return this.prepareContext(allMatches, cutoff, excludedId);
+        return shared;
+      });
+  }
+  prepareReconstructed(
+    allMatches: Match[],
+    asOf = new Date().toISOString(),
+    includeArchive = true,
+  ) {
+    return new PredictionEngine(
+      this.homeAdvantage,
+      this.halfLifeDays,
+      this.goalStrength,
+      this.modelVersion,
+      'reconstructed',
+    ).prepare(allMatches, asOf, includeArchive);
+  }
+  private prepareContext(
+    allMatches: Match[],
+    cutoff: string,
+    excludedId?: string,
+  ): PredictionContext | null {
+    const eligible = allMatches.flatMap((m) => {
+      if (m.id === excludedId || !resultAvailable(m, cutoff, this.availabilityMode)) return [];
+      const selected = resultAt(m, cutoff, this.availabilityMode);
+      const result =
+        selected && regulationResult(selected, this.availabilityMode === 'reconstructed');
+      return result ? [result] : [];
+    });
+    if (new Set(eligible.map((m) => m.id)).size !== eligible.length) return null;
+    const { ratings, history } = eloHistory(
+      eligible,
+      cutoff,
+      this.homeAdvantage,
+      this.availabilityMode,
+    );
+    return {
+      eligible,
+      ratings,
+      before: new Map(history.map((r) => [`${r.matchId}:${r.teamId}`, r.before])),
+    };
+  }
   predictReconstructed(
     match: Match,
     allMatches: Match[],
@@ -51,6 +112,15 @@ export class PredictionEngine {
     asOf: string = new Date().toISOString(),
     includeArchive = true,
   ): Prediction | null {
+    return this.forecast(match, allMatches, asOf, includeArchive);
+  }
+  private forecast(
+    match: Match,
+    allMatches: Match[],
+    asOf: string,
+    includeArchive: boolean,
+    contextFor?: (cutoff: string, excludedId: string) => PredictionContext | null,
+  ): Prediction | null {
     const predictionAt = Date.parse(asOf),
       kickoff = Date.parse(match.kickoff);
     if (
@@ -63,22 +133,12 @@ export class PredictionEngine {
     )
       return null;
     const cutoff = new Date(predictionAt).toISOString();
-    const eligible = allMatches.flatMap((m) => {
-      if (m.id === match.id || !resultAvailable(m, cutoff, this.availabilityMode)) return [];
-      const selected = resultAt(m, cutoff, this.availabilityMode);
-      const result =
-        selected && regulationResult(selected, this.availabilityMode === 'reconstructed');
-      return result ? [result] : [];
-    });
+    const context = contextFor
+      ? contextFor(cutoff, match.id)
+      : this.prepareContext(allMatches, cutoff, match.id);
+    if (!context) return null;
+    const { eligible, ratings, before } = context;
     const advantage = match.neutralVenue === true ? 0 : this.homeAdvantage;
-    if (new Set(eligible.map((m) => m.id)).size !== eligible.length) return null;
-    const { ratings, history } = eloHistory(
-      eligible,
-      cutoff,
-      this.homeAdvantage,
-      this.availabilityMode,
-    );
-    const before = new Map(history.map((r) => [`${r.matchId}:${r.teamId}`, r.before]));
     function sampleFor(id: string) {
       return eligible
         .filter((m) => m.homeId === id || m.awayId === id)

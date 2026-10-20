@@ -8,6 +8,7 @@ import { metrics } from '@/prediction-engine/evaluation';
 import { recordTiming } from '@/services/telemetry';
 import { assertJobActive, fencePublication } from '@/services/football/lease-context';
 import { latestPublicPredictionsSql, publicPredictionHistorySql } from './prediction-read-sql';
+import type { PreparedForecast } from '@/prediction-engine';
 /** Full input packages stay in the immutable DB payload, not in client page props. */
 export function publicPrediction(p: Prediction): Prediction {
   const result = { ...p };
@@ -108,6 +109,8 @@ async function persistPredictionTransaction(
   if (data.source === 'demo') return;
   let contentChanged = false;
   const coverage = { eligible: 0, existing: 0, created: 0, unavailable: 0 };
+  let forecast: PreparedForecast | undefined;
+  let reconstructedForecast: PreparedForecast | undefined;
   await db.predictionVersion.upsert({
     where: { id: MODEL_VERSION },
     create: {
@@ -159,10 +162,21 @@ async function persistPredictionTransaction(
         if (lineup) continue;
       }
       const started = globalThis.performance.now();
-      const p =
-        predictionEngine.predict(match, data.matches, now.toISOString()) ??
-        predictionEngine.predictReconstructed(match, data.matches, now.toISOString());
+      forecast ??=
+        predictionEngine.prepare?.(data.matches, now.toISOString()) ??
+        ((target) => predictionEngine.predict(target, data.matches, now.toISOString()));
+      let p = forecast(match);
+      if (!p) {
+        reconstructedForecast ??=
+          predictionEngine.prepareReconstructed?.(data.matches, now.toISOString()) ??
+          ((target) =>
+            predictionEngine.predictReconstructed(target, data.matches, now.toISOString()));
+        p = reconstructedForecast(match);
+      }
       recordTiming('prediction:compute', globalThis.performance.now() - started);
+      // Let lease-renewal timers run between CPU work and publication.
+      await new Promise<void>((resolve) => setImmediate(resolve));
+      assertJobActive();
       if (!p) {
         if (!initial) coverage.unavailable++;
         continue;

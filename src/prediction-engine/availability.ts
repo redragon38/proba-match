@@ -79,6 +79,12 @@ function revisionOf(match: Match, observedAt: string): ResultRevision {
     neutralVenue: match.neutralVenue,
   };
 }
+function scoreValues(scores: Match['scoreBreakdown']) {
+  return (['halftime', 'fulltime', 'extratime', 'penalty'] as const).map((period) => [
+    scores?.[period]?.home,
+    scores?.[period]?.away,
+  ]);
+}
 
 /** Timestamp the current score revision when this application ingests it. */
 export function observeResult(
@@ -92,7 +98,21 @@ export function observeResult(
     revisions.push(revisionOf(previous, previous.resultObservedAt));
   const latest = revisions.at(-1);
   const next = revisionOf(match, observedAt);
-  const comparable = (r: ResultRevision) => JSON.stringify({ ...r, observedAt: undefined });
+  // PostgreSQL jsonb reorders object keys. Compare values in a fixed order so
+  // reading an unchanged result from the DB does not manufacture a revision.
+  const comparable = (r: ResultRevision) =>
+    JSON.stringify([
+      r.source,
+      r.homeId,
+      r.awayId,
+      r.kickoff,
+      r.status,
+      r.homeScore,
+      r.awayScore,
+      r.resultPeriod,
+      r.neutralVenue,
+      ...scoreValues(r.scoreBreakdown),
+    ]);
   if ((!latest && validResult(match)) || (latest && comparable(latest) !== comparable(next)))
     revisions.push(next);
   if (!validResult(match))
@@ -106,7 +126,8 @@ export function observeResult(
     previous.awayId === match.awayId &&
     previous.kickoff === match.kickoff &&
     previous.resultPeriod === match.resultPeriod &&
-    JSON.stringify(previous.scoreBreakdown) === JSON.stringify(match.scoreBreakdown);
+    JSON.stringify(scoreValues(previous.scoreBreakdown)) ===
+      JSON.stringify(scoreValues(match.scoreBreakdown));
   return {
     ...match,
     resultObservedAt: same && previous.resultObservedAt ? previous.resultObservedAt : observedAt,
