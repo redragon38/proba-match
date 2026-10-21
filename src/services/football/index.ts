@@ -31,7 +31,10 @@ export const getDataset = requestCache(async function getDataset(): Promise<Data
           }),
         ),
       10_000,
-      20_000,
+      // A refresh triggered by /api/updates must not receive an expired revision.
+      // Returning stale here served the old page once and delayed new fixtures
+      // until another browser polling cycle, even after publication succeeded.
+      0,
     );
     return await datasets
       .get(
