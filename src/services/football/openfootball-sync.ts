@@ -34,7 +34,16 @@ export function mergeOpenMatch(previous: Match | undefined, incoming: Match): Ma
   if (!previous) return incoming;
   const confirmed =
     previous.status === 'live' ||
-    (previous.status === 'finished' && previous.source === 'api-football');
+    (previous.status === 'finished' &&
+      ['api-football', 'espn', 'fotmob'].includes(previous.source));
+  const confirmedRegulation =
+    previous.source === 'fotmob' &&
+    previous.resultPeriod === 'unknown' &&
+    incoming.status === 'finished' &&
+    incoming.resultPeriod === 'regulation' &&
+    [incoming.homeScore, incoming.awayScore].every(
+      (score) => Number.isSafeInteger(score) && score! >= 0,
+    );
   return {
     ...previous,
     ...incoming,
@@ -48,6 +57,13 @@ export function mergeOpenMatch(previous: Match | undefined, incoming: Match): Ma
           extra: previous.extra,
           homeScore: previous.homeScore,
           awayScore: previous.awayScore,
+          resultPeriod: previous.resultPeriod,
+          scoreBreakdown: confirmedRegulation
+            ? {
+                ...previous.scoreBreakdown,
+                fulltime: { home: incoming.homeScore, away: incoming.awayScore },
+              }
+            : previous.scoreBreakdown,
           source: previous.source,
         }
       : {}),
@@ -354,7 +370,7 @@ export async function syncOpenFootball(
     return {
       status: failures ? 'partial' : 'success',
       matches: imported,
-      requests,
+      requests: provider.requests,
       failures,
       added,
       changed,

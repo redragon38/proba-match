@@ -1,4 +1,5 @@
 import { timed } from '@/services/telemetry';
+import { requestFootballSource } from '../source-request';
 import { z } from 'zod';
 import { createHash } from 'node:crypto';
 import { slugify } from '@/lib/format';
@@ -107,6 +108,7 @@ export function parseOpenFootball(json: unknown, league: OpenLeague, season: num
   return { league, season, config, matches };
 }
 export class OpenFootballProvider implements HistoricalFootballProvider {
+  requests = 0;
   readonly name = 'openfootball';
   readonly capabilities = ['competitions', 'seasons', 'teams', 'fixtures', 'results'] as const;
   constructor(private transport: typeof fetch = fetch) {}
@@ -115,10 +117,18 @@ export class OpenFootballProvider implements HistoricalFootballProvider {
       throw new Error('INVALID_SCOPE');
     const url = `https://raw.githubusercontent.com/openfootball/football.json/master/${year}-${String(year + 1).slice(-2)}/${league}.json`;
     const response = await timed('provider:openfootball_transport', () =>
-      this.transport(url, {
-        headers: etag ? { 'If-None-Match': etag } : {},
-        signal: AbortSignal.timeout(30000),
-      }),
+      requestFootballSource(
+        this.transport,
+        url,
+        {
+          headers: etag ? { 'If-None-Match': etag } : {},
+        },
+        {
+          onAttempt: () => {
+            this.requests++;
+          },
+        },
+      ),
     );
     if (response.status === 304) return { unchanged: true as const, url };
     if (!response.ok) throw new Error(`OPENFOOTBALL_HTTP_${response.status}`);

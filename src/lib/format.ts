@@ -33,6 +33,23 @@ export const countryLabel = (country: string) =>
     Brazil: 'Brésil',
     Portugal: 'Portugal',
     USA: 'États-Unis',
+    'United States': 'États-Unis',
+    'Saudi Arabia': 'Arabie saoudite',
+    Argentina: 'Argentine',
+    Netherlands: 'Pays-Bas',
+    Belgium: 'Belgique',
+    Switzerland: 'Suisse',
+    Croatia: 'Croatie',
+    Serbia: 'Serbie',
+    Morocco: 'Maroc',
+    Algeria: 'Algérie',
+    Japan: 'Japon',
+    'South Korea': 'Corée du Sud',
+    Denmark: 'Danemark',
+    Sweden: 'Suède',
+    Norway: 'Norvège',
+    Scotland: 'Écosse',
+    Wales: 'Pays de Galles',
   })[country] ?? country;
 export const roundLabel = (round: string | undefined) => {
   if (!round) return 'Journée non précisée';

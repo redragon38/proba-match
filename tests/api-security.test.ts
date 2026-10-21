@@ -58,6 +58,23 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllEnvs());
 
 describe('Admin and cron boundary', () => {
+  it.each(['partial', 'failed'])(
+    'does not advertise a nested %s import as HTTP success',
+    async (status) => {
+      const route = cronHandler(async () => ({
+        openfootball: { status, matches: 2 },
+        expanded: { status: 'success' },
+      }));
+      const response = await route(
+        new Request('https://example.test/api/cron/openfootball', {
+          headers: { Authorization: `Bearer ${secret}` },
+        }),
+      );
+      expect(response.status).toBe(503);
+      expect(response.headers.get('cache-control')).toBe('no-store');
+      expect((await response.json()).openfootball.status).toBe(status);
+    },
+  );
   it('blocks cross-site login/logout before processing credentials', async () => {
     expect((await login(request({ secret }, 'https://attacker.example'))).status).toBe(403);
     expect((await logout(request({}, 'https://attacker.example'))).status).toBe(403);

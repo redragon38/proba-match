@@ -46,9 +46,9 @@ export async function verifyGithubActionsOidc(token: string) {
       claims.exp <= now ||
       claims.exp > now + 600 ||
       (claims.nbf != null && claims.nbf > now + 30) ||
-      claims.ref !== 'refs/heads/master' ||
+      !['refs/heads/main', 'refs/heads/master'].includes(claims.ref) ||
       !claims.workflow_ref.startsWith('redragon38/proba-match/.github/workflows/') ||
-      !claims.workflow_ref.endsWith('@refs/heads/master')
+      !claims.workflow_ref.endsWith(`@${claims.ref}`)
     )
       return false;
     const response = await fetch('https://token.actions.githubusercontent.com/.well-known/jwks', {

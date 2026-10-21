@@ -1,7 +1,11 @@
 import { chromium } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { mkdir, writeFile } from 'node:fs/promises';
-import { seoFetch } from './seo-http.mjs';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { dirname } from 'node:path';
+import { seoFetch, seoRequestTiming } from './seo-http.mjs';
+import { markdownReport } from './seo-report.mjs';
+import { structuredDataIssues } from './seo-structured-data.mjs';
+import { internalPath, resumePages } from './seo-resume.mjs';
 
 const base = process.env.VERIFY_URL || 'http://localhost:3000';
 const strict = process.env.SEO_REQUIRE_HTTPS === 'true';
@@ -9,14 +13,18 @@ const expectedOrigin = process.env.SEO_CANONICAL_ORIGIN
   ? new URL(process.env.SEO_CANONICAL_ORIGIN).origin
   : null;
 const output = process.env.SEO_REPORT || 'artifacts/seo-audit.json';
+await mkdir(dirname(output), { recursive: true });
 const maxPages = Math.max(1, Number(process.env.SEO_MAX_PAGES) || Infinity);
 const linkLimit = Math.max(1, Number(process.env.SEO_LINK_LIMIT) || Infinity);
 const delay = Math.max(0, Number(process.env.SEO_DELAY_MS ?? 300));
+const batchSize = Math.max(0, Number(process.env.SEO_BATCH_SIZE) || 0);
+let batchPending = false;
 const pacedFetch = (url, options) => seoFetch(url, options, { delay });
 const browser = await chromium.launch({
   channel: process.platform === 'win32' ? 'chrome' : 'chromium',
 });
 const report = {
+  completed: false,
   generatedAt: new Date().toISOString(),
   base,
   pages: [],
@@ -27,8 +35,28 @@ const report = {
   external:
     'NON VÉRIFIÉ EXTERNEMENT: Search Console, PageSpeed Insights, CrUX, Rich Results Test, public TLS and redirects',
 };
-const check = (category, pass, detail, warning = false) =>
-  report.checks.push({ category, status: pass ? 'PASS' : warning ? 'WARNING' : 'FAIL', detail });
+if (process.env.SEO_RESUME_REPORT) {
+  const previous = JSON.parse(await readFile(process.env.SEO_RESUME_REPORT, 'utf8'));
+  report.pages = resumePages(previous, base);
+  report.checks = previous.checks.filter(
+    (c) =>
+      !['browser', 'accessibility', 'internal links'].includes(c.category) &&
+      !c.detail.startsWith('Unique '),
+  );
+  report.generatedAt = previous.generatedAt;
+}
+report.scope.resumedPages = report.pages.length;
+report.scope.batchSize = batchSize || null;
+const indexes = new Map(report.checks.map((c, index) => [c.category + '\0' + c.detail, index]));
+const check = (category, pass, detail, warning = false) => {
+  const value = { category, status: pass ? 'PASS' : warning ? 'WARNING' : 'FAIL', detail };
+  const key = category + '\0' + detail;
+  if (indexes.has(key)) report.checks[indexes.get(key)] = value;
+  else {
+    indexes.set(key, report.checks.length);
+    report.checks.push(value);
+  }
+};
 const pathOf = (url) => {
   const u = new URL(url, base);
   return u.pathname + u.search;
@@ -152,12 +180,44 @@ try {
   const sitemapPaths = new Set(parsed.urls.map(pathOf));
   const links = new Set();
   const queuedPaths = new Set(paths);
+  const visited = new Set(report.pages.map((p) => p.path));
+  for (const saved of report.pages) {
+    for (const href of saved.links ?? []) {
+      const discovered = internalPath(href, saved.path, base);
+      if (!discovered) continue;
+      links.add(discovered);
+      if (
+        /^\/(?:match|equipe|joueur|competition)\/[^/?#.]+$/.test(discovered) &&
+        !queuedPaths.has(discovered)
+      ) {
+        queuedPaths.add(discovered);
+        paths.push(discovered);
+      }
+    }
+    const issues = structuredDataIssues(saved.jsonLd);
+    check(
+      'structured data',
+      !issues.length,
+      saved.path +
+        ': ' +
+        (issues.join('; ') || 'no incomplete Google Event or unsupported event status'),
+    );
+  }
+  let scanned = 0;
   for (const path of paths) {
+    if (visited.has(path)) continue;
+    if (batchSize && scanned >= batchSize) {
+      batchPending = true;
+      report.scope.truncated = true;
+      break;
+    }
+    scanned++;
     if (report.pages.length >= maxPages) {
       report.scope.truncated = true;
       break;
     }
     // Parse actual server HTML without retaining thousands of browser navigations/assets.
+    const requestStart = performance.now();
     const network = await pacedFetch(`${base}${path}`, {
       signal: AbortSignal.timeout(30000),
       headers: { 'User-Agent': 'Googlebot' },
@@ -166,7 +226,10 @@ try {
       status: () => network.status,
       headers: () => Object.fromEntries(network.headers),
     };
+    const timing = seoRequestTiming(network);
+    const ttfbMs = timing?.ttfbMs ?? null;
     const html = await network.text();
+    const responseMs = Math.round(performance.now() - (timing?.startedAt ?? requestStart));
     if (sitemapPaths.has(path))
       check('sitemap', !network.redirected, `${path}: sitemap URL does not redirect`);
     const data = await page.evaluate((html) => {
@@ -262,10 +325,18 @@ try {
       redirected: network.redirected,
       status: response.status(),
       htmlBytes: Buffer.byteLength(html),
+      ttfbMs,
+      responseMs,
       ...data,
     };
     report.pages.push(row);
     check('routes', response.status() === 200, `${path} HTTP 200`);
+    const structuredIssues = structuredDataIssues(data.jsonLd);
+    check(
+      'structured data',
+      !structuredIssues.length,
+      `${path}: ${structuredIssues.join('; ') || 'no incomplete Google Event or unsupported event status'}`,
+    );
     check(
       'semantic content',
       data.semanticIssues.length === 0,
@@ -334,13 +405,13 @@ try {
     );
     check(
       'performance',
-      row.htmlBytes < 1_000_000,
+      row.htmlBytes < (Number(process.env.SEO_MAX_HTML_BYTES) || 1_000_000),
       `${path}: HTML ${row.htmlBytes} bytes (local payload budget)`,
       true,
     );
     for (const href of data.links) {
-      if (!href.startsWith('/') || href.startsWith('//')) continue;
-      const discovered = href.split('#')[0];
+      const discovered = internalPath(href, path, base);
+      if (!discovered) continue;
       links.add(discovered);
       // Follow public HTML links missing from the sitemap, excluding filter loops/assets/API.
       if (
@@ -351,175 +422,206 @@ try {
         paths.push(discovered);
       }
     }
+    if (report.pages.length % 250 === 0) await writeFile(output, JSON.stringify(report, null, 2));
   }
-  for (const field of ['title', 'description']) {
-    const indexed = report.pages.filter((p) => !p.robots.includes('noindex'));
-    const repeated = indexed
-      .filter((p, i) => indexed.slice(0, i).some((prev) => prev[field] === p[field]))
-      .map((p) => p.path);
-    check(
-      'metadata',
-      !repeated.length,
-      `Unique ${field}: ${repeated.join(', ') || 'no duplicates'}`,
+  report.scope.batchPending = batchPending;
+  report.scope.queuedPaths = paths.length;
+  if (!batchPending) {
+    for (const field of ['title', 'description']) {
+      const indexed = report.pages.filter((p) => !p.robots.includes('noindex'));
+      const repeated = indexed
+        .filter((p, i) => indexed.slice(0, i).some((prev) => prev[field] === p[field]))
+        .map((p) => p.path);
+      check(
+        'metadata',
+        !repeated.length,
+        `Unique ${field}: ${repeated.join(', ') || 'no duplicates'}`,
+      );
+    }
+    const known = new Set(report.pages.map((p) => p.path));
+    const missing = [...links].filter((p) => p && !known.has(p)).slice(0, linkLimit);
+    report.scope.linkChecksTruncated =
+      [...links].filter((p) => p && !known.has(p)).length > missing.length;
+    const broken = [],
+      redirects = [];
+    let cursor = 0;
+    await Promise.all(
+      Array.from({ length: 1 }, async () => {
+        while (cursor < missing.length) {
+          const path = missing[cursor++];
+          const result = await pacedFetch(`${base}${path}`, {
+            method: 'HEAD',
+            redirect: 'manual',
+            signal: AbortSignal.timeout(30000),
+          });
+          const response = {
+            status: () => result.status,
+            headers: () => Object.fromEntries(result.headers),
+            dispose: async () => {},
+          };
+          if (response.status() >= 400) broken.push({ path, status: response.status() });
+          if (response.status() >= 300 && response.status() < 400)
+            redirects.push({
+              path,
+              status: response.status(),
+              target: response.headers().location,
+            });
+          await response.dispose();
+        }
+      }),
     );
-  }
-  const known = new Set(report.pages.map((p) => p.path));
-  const missing = [...links].filter((p) => p && !known.has(p)).slice(0, linkLimit);
-  report.scope.linkChecksTruncated =
-    [...links].filter((p) => p && !known.has(p)).length > missing.length;
-  const broken = [],
-    redirects = [];
-  let cursor = 0;
-  await Promise.all(
-    Array.from({ length: 1 }, async () => {
-      while (cursor < missing.length) {
-        const path = missing[cursor++];
-        const result = await pacedFetch(`${base}${path}`, {
-          method: 'HEAD',
-          redirect: 'manual',
-          signal: AbortSignal.timeout(30000),
-        });
-        const response = {
-          status: () => result.status,
-          headers: () => Object.fromEntries(result.headers),
-          dispose: async () => {},
-        };
-        if (response.status() >= 400) broken.push({ path, status: response.status() });
-        if (response.status() >= 300 && response.status() < 400)
-          redirects.push({ path, status: response.status(), target: response.headers().location });
-        await response.dispose();
-      }
-    }),
-  );
-  report.links = { discovered: links.size, additionalChecked: missing.length, broken, redirects };
-  check(
-    'internal links',
-    !broken.length && !redirects.length,
-    'All discovered internal links resolve directly',
-  );
-  check(
-    'internal links',
-    !report.scope.truncated && [...sitemapPaths].every((path) => path === '/' || links.has(path)),
-    'Every sitemap page has an incoming crawlable link',
-    report.scope.truncated,
-  );
-  for (const path of [
-    '/seo-does-not-exist',
-    '/match/seo-does-not-exist',
-    '/equipe/seo-does-not-exist',
-    '/joueur/seo-does-not-exist',
-    '/competition/seo-does-not-exist',
-    '/comparateur/unknown',
-    '/equipes?page=999999',
-  ]) {
-    const response = await request.get(`${base}${path}`);
-    check('404', response.status() === 404, `${path}: HTTP ${response.status()}`);
-  }
-  const slash = await request.get(`${base}/equipes/`, { maxRedirects: 0 });
-  check(
-    'redirects',
-    [301, 308].includes(slash.status()) && slash.headers().location?.endsWith('/equipes'),
-    'Trailing slash has a direct permanent redirect',
-  );
-  if (catalog.matches?.[0]) {
-    const m = catalog.matches[0];
-    const alias = await request.get(`${base}/match/${m.id}`, { maxRedirects: 0 });
+    report.links = { discovered: links.size, additionalChecked: missing.length, broken, redirects };
+    check(
+      'internal links',
+      !broken.length && !redirects.length,
+      'All discovered internal links resolve directly',
+    );
+    // Preserve pagination URLs as well as their canonical pathname.
+    const incomingPaths = new Set([...links].flatMap((href) => [href, href.split('?')[0]]));
+    report.links.orphanCandidates = [...sitemapPaths].filter(
+      (path) => path !== '/' && !incomingPaths.has(path),
+    );
+    check(
+      'internal links',
+      !report.scope.truncated && report.links.orphanCandidates.length === 0,
+      'Every sitemap page has an incoming crawlable link to its canonical path',
+      report.scope.truncated,
+    );
+    for (const path of [
+      '/seo-does-not-exist',
+      '/match/seo-does-not-exist',
+      '/equipe/seo-does-not-exist',
+      '/joueur/seo-does-not-exist',
+      '/competition/seo-does-not-exist',
+      '/comparateur/unknown',
+      '/equipes?page=999999',
+    ]) {
+      const response = await request.get(`${base}${path}`);
+      check('404', response.status() === 404, `${path}: HTTP ${response.status()}`);
+    }
+    const slash = await request.get(`${base}/equipes/`, { maxRedirects: 0 });
     check(
       'redirects',
-      m.id === m.slug ||
-        ([301, 308].includes(alias.status()) &&
-          alias.headers().location?.endsWith(`/match/${m.slug}`)),
-      'Technical fixture ID redirects to the canonical slug',
+      [301, 308].includes(slash.status()) && slash.headers().location?.endsWith('/equipes'),
+      'Trailing slash has a direct permanent redirect',
     );
-  }
-  for (const path of ['/?statut=finished', '/matchs?date=2024-01-01', '/equipes?page=1']) {
-    await page.goto(`${base}${path}`);
-    const canonical = await page.locator('link[rel=canonical]').getAttribute('href');
-    check(
-      'duplication',
-      pathOf(canonical) === new URL(path, base).pathname,
-      `${path}: filter/query canonical`,
-    );
-  }
-  const images = new Set(report.pages.map((p) => p.og.image).filter(Boolean));
-  for (const image of images)
-    check(
-      'Open Graph',
-      (await request.get(`${base}${pathOf(image)}`)).ok(),
-      'Social image responds',
-    );
-  await context.close();
-  const dynamic = report.pages.find((p) => p.path.startsWith('/equipe/'))?.path;
-  const matchPath = report.pages.find((p) => p.path.startsWith('/match/'))?.path;
-  for (const width of [390, 1440]) {
-    const context = await browser.newContext({ viewport: { width, height: 900 } });
-    const p = await context.newPage();
-    await p.addInitScript(() => {
-      window.__seoVitals = { lcp: null, cls: 0 };
-      new PerformanceObserver((list) => {
-        for (const e of list.getEntries()) window.__seoVitals.lcp = e.startTime;
-      }).observe({ type: 'largest-contentful-paint', buffered: true });
-      new PerformanceObserver((list) => {
-        for (const e of list.getEntries()) if (!e.hadRecentInput) window.__seoVitals.cls += e.value;
-      }).observe({ type: 'layout-shift', buffered: true });
-    });
-    let errors = [];
-    p.on('pageerror', (e) => errors.push(e.message));
-    p.on('console', (message) => {
-      if (
-        message.type() === 'error' &&
-        /Content Security Policy|Refused to|hydration/i.test(message.text())
-      )
-        errors.push(message.text());
-    });
-    for (const path of [
-      '/',
-      '/equipes',
-      '/classements',
-      '/parametres',
-      '/comprendre-probabilites',
-      '/lexique-football',
-      '/sources-donnees',
-      dynamic,
-      matchPath,
-    ].filter(Boolean)) {
-      errors = [];
-      await p.goto(`${base}${path}`, { waitUntil: 'networkidle' });
-      const metrics = await p.evaluate(() => ({
-        ...window.__seoVitals,
-        overflow: document.documentElement.scrollWidth > innerWidth,
-        resources: performance.getEntriesByType('resource').length,
-        jsBytes: performance
-          .getEntriesByType('resource')
-          .filter((e) => e.initiatorType === 'script')
-          .reduce((sum, e) => sum + e.encodedBodySize, 0),
-      }));
-      const axe = await new AxeBuilder({ page: p }).withTags(['wcag2a', 'wcag2aa']).analyze();
-      const violations = axe.violations.map((v) => ({
-        id: v.id,
-        impact: v.impact,
-        targets: v.nodes.map((n) => n.target),
-      }));
-      report.browser.push({ width, path, errors: [...errors], ...metrics, violations });
+    if (catalog.matches?.[0]) {
+      const m = catalog.matches[0];
+      const alias = await request.get(`${base}/match/${m.id}`, { maxRedirects: 0 });
       check(
-        'browser',
-        !errors.length && !metrics.overflow,
-        `${path} @${width}: no browser error or horizontal overflow`,
+        'redirects',
+        m.id === m.slug ||
+          ([301, 308].includes(alias.status()) &&
+            alias.headers().location?.endsWith(`/match/${m.slug}`)),
+        'Technical fixture ID redirects to the canonical slug',
       );
-      check('accessibility', !violations.length, `${path} @${width}: axe WCAG A/AA`);
     }
+    for (const path of ['/?statut=finished', '/matchs?date=2024-01-01', '/equipes?page=1']) {
+      await page.goto(`${base}${path}`);
+      const canonical = await page.locator('link[rel=canonical]').getAttribute('href');
+      check(
+        'duplication',
+        pathOf(canonical) === new URL(path, base).pathname,
+        `${path}: filter/query canonical`,
+      );
+    }
+    const images = new Set(report.pages.map((p) => p.og.image).filter(Boolean));
+    for (const image of images)
+      check(
+        'Open Graph',
+        (await request.get(`${base}${pathOf(image)}`)).ok(),
+        'Social image responds',
+      );
     await context.close();
+    const dynamic = report.pages.find((p) => p.path.startsWith('/equipe/'))?.path;
+    const matchPath = report.pages.find((p) => p.path.startsWith('/match/'))?.path;
+    for (const width of [390, 1440]) {
+      const context = await browser.newContext({ viewport: { width, height: 900 } });
+      const p = await context.newPage();
+      await p.addInitScript(() => {
+        window.__seoVitals = { lcp: null, cls: 0 };
+        new PerformanceObserver((list) => {
+          for (const e of list.getEntries()) window.__seoVitals.lcp = e.startTime;
+        }).observe({ type: 'largest-contentful-paint', buffered: true });
+        new PerformanceObserver((list) => {
+          for (const e of list.getEntries())
+            if (!e.hadRecentInput) window.__seoVitals.cls += e.value;
+        }).observe({ type: 'layout-shift', buffered: true });
+      });
+      let errors = [];
+      p.on('pageerror', (e) => errors.push(e.message));
+      p.on('console', (message) => {
+        if (
+          message.type() === 'error' &&
+          /Content Security Policy|Refused to|hydration/i.test(message.text())
+        )
+          errors.push(message.text());
+      });
+      for (const path of [
+        '/',
+        '/equipes',
+        '/classements',
+        '/parametres',
+        '/comprendre-probabilites',
+        '/lexique-football',
+        '/sources-donnees',
+        '/bilan-predictions',
+        dynamic,
+        matchPath,
+      ].filter(Boolean)) {
+        errors = [];
+        await p.goto(`${base}${path}`, { waitUntil: 'networkidle' });
+        const metrics = await p.evaluate(() => ({
+          ...window.__seoVitals,
+          ttfbMs: performance.getEntriesByType('navigation')[0]?.responseStart ?? null,
+          domInteractiveMs: performance.getEntriesByType('navigation')[0]?.domInteractive ?? null,
+          inp: null,
+          overflow: document.documentElement.scrollWidth > innerWidth,
+          resources: performance.getEntriesByType('resource').length,
+          jsBytes: performance
+            .getEntriesByType('resource')
+            .filter((e) => e.initiatorType === 'script')
+            .reduce((sum, e) => sum + e.encodedBodySize, 0),
+          jsTransferBytes: performance
+            .getEntriesByType('resource')
+            .filter((e) => e.initiatorType === 'script')
+            .reduce((sum, e) => sum + e.transferSize, 0),
+        }));
+        const axe = await new AxeBuilder({ page: p }).withTags(['wcag2a', 'wcag2aa']).analyze();
+        const violations = axe.violations.map((v) => ({
+          id: v.id,
+          impact: v.impact,
+          targets: v.nodes.map((n) => n.target),
+        }));
+        report.browser.push({ width, path, errors: [...errors], ...metrics, violations });
+        check(
+          'browser',
+          !errors.length && !metrics.overflow,
+          `${path} @${width}: no browser error or horizontal overflow`,
+        );
+        check('accessibility', !violations.length, `${path} @${width}: axe WCAG A/AA`);
+      }
+      await context.close();
+    }
+    report.completed = true;
   }
 } finally {
   await browser.close();
+  report.checkpointAt = new Date().toISOString();
   await mkdir('artifacts', { recursive: true });
   await writeFile(output, JSON.stringify(report, null, 2));
+  await writeFile(
+    output.replace(/\.json$/, '') + '.md',
+    markdownReport(report, process.env.SEO_PRIORITY),
+  );
 }
 const failures = report.checks.filter((c) => c.status === 'FAIL');
 const warnings = report.checks.filter((c) => c.status === 'WARNING');
 console.log(
   JSON.stringify(
     {
+      completed: report.completed,
+      batchPending,
       pages: report.pages.length,
       checks: report.checks.length,
       browserViews: report.browser.length,
@@ -532,4 +634,4 @@ console.log(
     2,
   ),
 );
-if (failures.length) process.exitCode = 1;
+if (failures.length && !batchPending) process.exitCode = 1;

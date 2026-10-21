@@ -1,4 +1,4 @@
-import { matchStructuredData } from '@/lib/sports-structured-data';
+import { matchPageStructuredData } from '@/lib/sports-structured-data';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { seoMetadata, matchIndexable } from '@/lib/seo';
 import { teamDataset } from '@/services/football/read-model';
@@ -40,7 +40,7 @@ export default async function Page({
     permanentRedirect(
       `/match/${m.slug}${q.onglet ? `?onglet=${encodeURIComponent(q.onglet)}` : ''}`,
     );
-  const structured = data.source !== 'demo' ? matchStructuredData(m, data) : null;
+  const structured = data.source !== 'demo' ? matchPageStructuredData(m, data) : null;
   const allowed = [
     'apercu',
     'prediction',

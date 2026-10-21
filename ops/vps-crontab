@@ -1,6 +1,7 @@
 */5 * * * * wget -q -O /dev/null -T 90 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/realtime
 */4 * * * * wget -q -O /dev/null -T 90 --header "Host: proba-match.com" http://cache:8080/ && wget -q -O /dev/null -T 90 --header "Host: proba-match.com" http://cache:8080/matchs && wget -q -O /dev/null -T 90 --header "Host: proba-match.com" http://cache:8080/live
-15 5 * * * wget -q -O /dev/null -T 900 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/openfootball
+# Source freshness is six hours: a daily import necessarily becomes stale between runs.
+15 */6 * * * wget -q -O /dev/null -T 900 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/openfootball
 45 6 * * * wget -q -O /dev/null -T 1800 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/match-window
 15 7 * * * wget -q -O /dev/null -T 900 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/live
 15 10 * * * wget -q -O /dev/null -T 1800 --header "Authorization: Bearer $CRON_SECRET" http://worker:3000/api/cron/players

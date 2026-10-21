@@ -1,5 +1,22 @@
 import { Prisma } from '@prisma/client';
 
+/** Evaluation needs only forecast metrics and the current regulation result, never training archives. */
+export function evaluatedPredictionsSql() {
+  return Prisma.sql`
+    SELECT p."payload" - 'inputArchive' - 'factors' AS "prediction",
+      m."kickoff", s."competitionId", s."year" AS "season",
+      jsonb_build_object('status', m."payload"->'status', 'source', m."payload"->'source',
+        'homeScore', m."payload"->'homeScore', 'awayScore', m."payload"->'awayScore',
+        'resultPeriod', m."payload"->'resultPeriod', 'scoreBreakdown', m."payload"->'scoreBreakdown') AS "match"
+    FROM "Prediction" p
+    JOIN "PredictionResult" r ON r."predictionId" = p."id"
+    JOIN "Match" m ON m."id" = p."matchId"
+    JOIN "Season" s ON s."id" = m."seasonId"
+    WHERE p."kind" = 'initial'
+    ORDER BY p."createdAt" DESC, p."id" DESC
+  `;
+}
+
 /** Strip immutable training archives in PostgreSQL, before any network transfer. */
 export function latestPublicPredictionsSql(ids: string[]) {
   return Prisma.sql`

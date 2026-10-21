@@ -1,5 +1,6 @@
 import { reportedStatistics } from '../reported-statistics';
 import { timed } from '@/services/telemetry';
+import { requestFootballSource } from '../source-request';
 import { z } from 'zod';
 import type {
   Lineup,
@@ -433,13 +434,20 @@ export class EspnProvider {
     const wait = Math.max(0, 500 - (Date.now() - this.lastRequest));
     if (wait) await new Promise((resolve) => setTimeout(resolve, wait));
     this.lastRequest = Date.now();
-    this.requests++;
     const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${path}`;
     const response = await timed('provider:espn_transport', () =>
-      this.transport(url, {
-        signal: AbortSignal.timeout(30000),
-        cache: 'no-store',
-      }),
+      requestFootballSource(
+        this.transport,
+        url,
+        {
+          cache: 'no-store',
+        },
+        {
+          onAttempt: () => {
+            this.requests++;
+          },
+        },
+      ),
     );
     if (!response.ok) throw new Error(`ESPN_HTTP_${response.status}`);
     const text = await response.text();

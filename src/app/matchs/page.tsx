@@ -40,7 +40,8 @@ export default async function Matches({ searchParams }: { searchParams: Promise<
       full
       data={view}
       predictions={await getPredictions(view, undefined, false)}
-      initialDate={q.date ?? dateKey()}
+      initialDate={q.date ?? dateKey(new Date(), q.timezone ?? 'Europe/Paris')}
+      serverToday={dateKey(new Date(), q.timezone ?? 'Europe/Paris')}
       initialStatus={selection.status}
       pagination={{ total: selection.total, page: selection.page, pages: selection.pages }}
       upcomingMatches={upcomingSelection(data)}

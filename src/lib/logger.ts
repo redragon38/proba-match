@@ -1,4 +1,9 @@
 type LogFields = {
+  provider?: string;
+  status?: string;
+  matches?: number;
+  players?: number;
+  resultsChanged?: number;
   code?: string;
   errorType?: string;
   operation?: string;

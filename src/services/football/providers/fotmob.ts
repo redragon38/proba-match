@@ -29,13 +29,24 @@ export function parseFotmobMatches(input: unknown): FotmobListedMatch[] {
   return root.leagues.flatMap((league) => league.matches);
 }
 
-const compactName = (value: string) =>
-  value
+const compactName = (value: string) => {
+  const key = value
     .normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/\b(fc|cf|sc|ac|afc|club|football|futebol|deportivo)\b/g, '')
     .replace(/[^a-z0-9]/g, '');
+  // Exact aliases verified against provider listings, never fuzzy name matching.
+  return (
+    (
+      {
+        rayovallecanodemadrid: 'rayovallecano',
+        parmacalcio1913: 'parma',
+        cagliaricalcio: 'cagliari',
+      } as Record<string, string>
+    )[key] ?? key
+  );
+};
 
 /** Scores, kickoff and both teams must agree; a name alone can never bind a match. */
 export function identifyFotmobMatch(

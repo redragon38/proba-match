@@ -1,49 +1,19 @@
 import { db } from '@/database/client';
-import { observeResult } from '@/prediction-engine/availability';
-import type { MatchStatus } from '@/types/football';
+import { setTimeout as pause } from 'node:timers/promises';
+import { applyFotmobListing, fotmobLiveSelection } from './fotmob-live-state';
 import { bindIdentity } from './identities';
 import { footballJob } from './jobs';
 import { readLocalDataset } from './local-store';
 import { persistMatchDetails } from './persistence';
+import { rebuildElo } from './rebuild-elo';
+import { persistPredictions } from '@/services/predictions';
 import { FotmobProvider, identifyFotmobFixture, type FotmobListedMatch } from './providers/fotmob';
 
-function state(row: FotmobListedMatch): MatchStatus {
-  if (row.status.cancelled) {
-    return /postpon/i.test(row.status.reason?.short ?? '') ? 'postponed' : 'cancelled';
-  }
-  if (row.status.finished) return 'finished';
-  if (row.status.ongoing || row.status.started) return 'live';
-  return 'scheduled';
-}
-
-function liveMinute(row: FotmobListedMatch) {
-  if (!(row.status.ongoing || row.status.started) || row.status.finished) return null;
-  const match = String(row.status.liveTime?.short ?? '').match(/\d{1,3}/);
-  return match ? Math.min(Number(match[0]), 130) : null;
-}
-
-function livePhase(row: FotmobListedMatch) {
-  return /^(HT|HALF)/i.test(String(row.status.liveTime?.short ?? ''))
-    ? ('halftime' as const)
-    : ('playing' as const);
-}
-
 /** Refresh only fixtures around the current match window: one listing request per UTC date. */
-export async function syncFotmobLive(now = new Date()) {
+export async function syncFotmobLive(now = new Date(), options: { catchUp?: boolean } = {}) {
   return footballJob('fotmob-live', async () => {
     const data = await readLocalDataset();
-    const from = now.getTime() - 8 * 3600_000;
-    const until = now.getTime() + 36 * 3600_000;
-    const selected = data.matches.filter((match) => {
-      const kickoff = Date.parse(match.kickoff);
-      return (
-        match.status === 'live' ||
-        (Number.isFinite(kickoff) &&
-          kickoff >= from &&
-          kickoff <= until &&
-          match.status === 'scheduled')
-      );
-    });
+    const selected = fotmobLiveSelection(data, now, options.catchUp);
     if (!selected.length)
       return { status: 'success', matches: 0, selected: 0, requests: 0, unmatched: 0 };
 
@@ -58,10 +28,14 @@ export async function syncFotmobLive(now = new Date()) {
     );
     const dates = new Set(selected.map((match) => match.kickoff.slice(0, 10).replaceAll('-', '')));
     const listings = new Map<string, FotmobListedMatch[]>();
-    for (const date of dates) listings.set(date, await provider.matches(date));
+    for (const date of dates) {
+      if (listings.size) await pause(500);
+      listings.set(date, await provider.matches(date));
+    }
 
     const changed = new Set<string>();
-    let unmatched = 0;
+    let unmatched = 0,
+      resultsChanged = 0;
     const observedAt = new Date().toISOString();
     for (const match of selected) {
       const rows = listings.get(match.kickoff.slice(0, 10).replaceAll('-', '')) ?? [];
@@ -90,23 +64,7 @@ export async function syncFotmobLive(now = new Date()) {
         await bindIdentity('fotmob', 'team', String(row.home.id), home.id, row.home.name);
         await bindIdentity('fotmob', 'team', String(row.away.id), away.id, row.away.name);
       }
-      const nextStatus = state(row);
-      // A delayed listing must never reopen a result already confirmed final.
-      if (match.status === 'finished' && nextStatus !== 'finished') continue;
-      const scored = nextStatus === 'live' || nextStatus === 'finished';
-      const next = observeResult(
-        {
-          ...match,
-          status: nextStatus,
-          homeScore: scored ? (row.home.score ?? null) : null,
-          awayScore: scored ? (row.away.score ?? null) : null,
-          minute: nextStatus === 'live' ? liveMinute(row) : null,
-          phase: nextStatus === 'live' ? livePhase(row) : undefined,
-          updatedAt: observedAt,
-        },
-        match,
-        observedAt,
-      );
+      const next = applyFotmobListing(match, row, observedAt);
       if (
         next.status !== match.status ||
         next.homeScore !== match.homeScore ||
@@ -116,18 +74,25 @@ export async function syncFotmobLive(now = new Date()) {
       ) {
         data.matches[data.matches.indexOf(match)] = next;
         changed.add(match.id);
+        if (match.status === 'finished' || next.status === 'finished') resultsChanged++;
       }
     }
     if (changed.size) {
       data.updatedAt = observedAt;
+      if (resultsChanged) data.verifiedAt = { ...data.verifiedAt, results: observedAt };
       await persistMatchDetails(data, changed, new Set());
+      if (resultsChanged) {
+        await rebuildElo();
+        await persistPredictions(data);
+      }
     }
     return {
-      status: 'success',
+      status: unmatched ? 'partial' : 'success',
       matches: changed.size,
       selected: selected.length,
       requests: provider.requests,
       unmatched,
+      resultsChanged,
     };
   });
 }

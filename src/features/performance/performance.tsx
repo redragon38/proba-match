@@ -1,5 +1,7 @@
 'use client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import type { ReportSummary } from './report-view';
 import { useMemo, useState } from 'react';
 import type { Dataset, EvaluatedPrediction } from '@/types/football';
 import { metrics } from '@/prediction-engine/evaluation';
@@ -13,49 +15,82 @@ export function Performance({
   rows,
   demo,
   publicReport = false,
+  summary,
 }: {
   data: Dataset;
   rows: EvaluatedPrediction[];
   demo: boolean;
   publicReport?: boolean;
+  summary?: ReportSummary;
 }) {
-  const [comp, setComp] = useState('all'),
-    [month, setMonth] = useState('all'),
-    [confidence, setConfidence] = useState('all');
-  const [page, setPage] = useState(1);
+  const router = useRouter();
+  const [localComp, setLocalComp] = useState('all'),
+    [localMonth, setLocalMonth] = useState('all'),
+    [localConfidence, setLocalConfidence] = useState('all');
+  const [localPage, setLocalPage] = useState(1);
   const [calibrationOutcome, setCalibrationOutcome] = useState('all');
-  const [period, setPeriod] = useState('all'),
-    [version, setVersion] = useState('all');
+  const [localPeriod, setLocalPeriod] = useState('all'),
+    [localVersion, setLocalVersion] = useState('all');
+  function navigate(key: string, value: string) {
+    const params = new URLSearchParams(window.location.search);
+    params.delete('page');
+    if (value === 'all') params.delete(key);
+    else params.set(key, value);
+    router.push(`/bilan-predictions?${params}`, { scroll: false });
+  }
+  const comp = summary?.filters.competition ?? localComp,
+    month = summary?.filters.month ?? localMonth,
+    confidence = summary?.filters.confidence ?? localConfidence;
+  const period = summary?.filters.period ?? localPeriod,
+    version = summary?.filters.version ?? localVersion,
+    page = summary?.page ?? localPage;
+  const setComp = (v: string) => (summary ? navigate('competition', v) : setLocalComp(v));
+  const setMonth = (v: string) => (summary ? navigate('month', v) : setLocalMonth(v));
+  const setConfidence = (v: string) =>
+    summary ? navigate('confidence', v) : setLocalConfidence(v);
+  const setPeriod = (v: string) => (summary ? navigate('period', v) : setLocalPeriod(v));
+  const setVersion = (v: string) => (summary ? navigate('version', v) : setLocalVersion(v));
+  const setPage = (v: number) => {
+    if (summary) {
+      navigate('page', String(v));
+    } else setLocalPage(v);
+  };
   const reference = Date.parse(data.updatedAt) || 0;
   const filtered = useMemo(
     () =>
-      rows.filter(
-        (r) =>
-          (version === 'all' || r.prediction.version === version) &&
-          (period === 'all' ||
-            (period === 'season'
-              ? r.kickoff >=
-                `${new Date(reference).getUTCFullYear() - (new Date(reference).getUTCMonth() < 6 ? 1 : 0)}-07-01`
-              : Date.parse(r.kickoff) >= reference - Number(period) * 86400000)) &&
-          (comp === 'all' || r.competitionId === comp) &&
-          (month === 'all' || r.kickoff.slice(0, 7) === month) &&
-          (confidence === 'all' ||
-            (confidence === 'high' && r.prediction.confidence >= 70) ||
-            (confidence === 'low' && r.prediction.confidence < 70)),
-      ),
-    [rows, comp, month, confidence, period, version, reference],
+      summary
+        ? rows
+        : rows.filter(
+            (r) =>
+              (version === 'all' || r.prediction.version === version) &&
+              (period === 'all' ||
+                (period === 'season'
+                  ? r.kickoff >=
+                    `${new Date(reference).getUTCFullYear() - (new Date(reference).getUTCMonth() < 6 ? 1 : 0)}-07-01`
+                  : Date.parse(r.kickoff) >= reference - Number(period) * 86400000)) &&
+              (comp === 'all' || r.competitionId === comp) &&
+              (month === 'all' || r.kickoff.slice(0, 7) === month) &&
+              (confidence === 'all' ||
+                (confidence === 'high' && r.prediction.confidence >= 70) ||
+                (confidence === 'low' && r.prediction.confidence < 70)),
+          ),
+    [rows, comp, month, confidence, period, version, reference, summary],
   );
-  const stats = metrics(filtered);
-  const referenceStats = metrics(
-    filtered.map((row) => ({
-      ...row,
-      prediction: { ...row.prediction, home: 1 / 3, draw: 1 / 3, away: 1 / 3 },
-    })),
-  );
+  const stats = summary ? summary.stats : metrics(filtered);
+  const referenceStats = summary
+    ? summary.referenceStats
+    : metrics(
+        filtered.map((row) => ({
+          ...row,
+          prediction: { ...row.prediction, home: 1 / 3, draw: 1 / 3, away: 1 / 3 },
+        })),
+      );
   const evaluatedIds = new Set(rows.map((row) => row.prediction.matchId));
-  const nonEvaluable = data.matches.filter(
-    (match) => match.status === 'finished' && !evaluatedIds.has(match.id),
-  ).length;
+  const nonEvaluable =
+    summary?.nonEvaluable ??
+    data.matches.filter((match) => match.status === 'finished' && !evaluatedIds.has(match.id))
+      .length;
+  const count = summary?.filteredCount ?? filtered.length;
   const calibration = stats
     ? calibrationOutcome === 'all'
       ? stats.calibration
@@ -76,14 +111,14 @@ export function Performance({
             <p>
               {demo
                 ? 'Aucune mesure réelle dans cet environnement de démonstration.'
-                : `${rows.length} prédictions initiales enregistrées avant le coup d’envoi et reliées à un résultat confirmé.`}
+                : `${summary?.total ?? rows.length} prédictions initiales enregistrées avant le coup d’envoi et reliées à un résultat confirmé.`}
             </p>
           </section>
           <section className="card padded">
             <h2>Évaluations exploratoires</h2>
             <p>
               {demo
-                ? `${rows.length} reconstructions temporelles de démonstration, séparées des publications réelles.`
+                ? `${summary?.total ?? rows.length} reconstructions temporelles de démonstration, séparées des publications réelles.`
                 : 'Aucune reconstruction n’est mélangée aux résultats affichés ci-dessous.'}
             </p>
           </section>
@@ -102,22 +137,23 @@ export function Performance({
         </p>
       )}
       <p className="data-note">
-        {filtered.length} prédictions initiales sur{' '}
-        {new Set(filtered.map((r) => r.prediction.matchId)).size} matchs distincts. Plusieurs
-        versions peuvent porter sur le même match.
+        {count} prédictions initiales sur{' '}
+        {summary?.distinct ?? new Set(filtered.map((r) => r.prediction.matchId)).size} matchs
+        distincts. Plusieurs versions peuvent porter sur le même match.
       </p>
-      {publicReport && filtered.length > 0 && (
-        <p className={filtered.length < 30 ? 'warning' : 'data-note'}>
+      {publicReport && count > 0 && (
+        <p className={count < 30 ? 'warning' : 'data-note'}>
           Période évaluée : du{' '}
-          {new Date(Math.min(...filtered.map((row) => Date.parse(row.kickoff)))).toLocaleDateString(
-            'fr-FR',
-          )}{' '}
+          {new Date(
+            summary?.first ?? Math.min(...filtered.map((row) => Date.parse(row.kickoff))),
+          ).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' })}{' '}
           au{' '}
-          {new Date(Math.max(...filtered.map((row) => Date.parse(row.kickoff)))).toLocaleDateString(
-            'fr-FR',
-          )}
-          . Mise à jour des données : {new Date(data.updatedAt).toLocaleString('fr-FR')}.{' '}
-          {filtered.length < 30
+          {new Date(
+            summary?.last ?? Math.max(...filtered.map((row) => Date.parse(row.kickoff))),
+          ).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' })}
+          . Mise à jour des données :{' '}
+          {new Date(data.updatedAt).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}.{' '}
+          {count < 30
             ? 'Échantillon inférieur à 30 rencontres : aucune conclusion générale ne doit être tirée.'
             : 'L’échantillon permet une lecture descriptive, sans garantir les résultats futurs.'}{' '}
           <Link href="/methodologie">Lire la méthodologie</Link>.
@@ -130,7 +166,7 @@ export function Performance({
             value={period}
             onChange={(e) => {
               setPeriod(e.target.value);
-              setPage(1);
+              if (!summary) setPage(1);
             }}
           >
             <option value="all">Tout l’historique</option>
@@ -146,11 +182,11 @@ export function Performance({
             value={version}
             onChange={(e) => {
               setVersion(e.target.value);
-              setPage(1);
+              if (!summary) setPage(1);
             }}
           >
             <option value="all">Toutes les versions</option>
-            {[...new Set(rows.map((r) => r.prediction.version))].map((v) => (
+            {(summary?.versions ?? [...new Set(rows.map((r) => r.prediction.version))]).map((v) => (
               <option key={v}>{v}</option>
             ))}
           </select>
@@ -161,7 +197,7 @@ export function Performance({
             value={comp}
             onChange={(e) => {
               setComp(e.target.value);
-              setPage(1);
+              if (!summary) setPage(1);
             }}
           >
             <option value="all">Toutes</option>
@@ -178,11 +214,11 @@ export function Performance({
             value={month}
             onChange={(e) => {
               setMonth(e.target.value);
-              setPage(1);
+              if (!summary) setPage(1);
             }}
           >
             <option value="all">Tous les mois</option>
-            {[...new Set(rows.map((r) => r.kickoff.slice(0, 7)))]
+            {(summary?.months ?? [...new Set(rows.map((r) => r.kickoff.slice(0, 7)))])
               .sort()
               .reverse()
               .map((m) => (
@@ -196,7 +232,7 @@ export function Performance({
             value={confidence}
             onChange={(e) => {
               setConfidence(e.target.value);
-              setPage(1);
+              if (!summary) setPage(1);
             }}
           >
             <option value="all">Tous les niveaux</option>
@@ -408,7 +444,7 @@ export function Performance({
             </section>
           </div>
           <SectionTitle title="Historique des prédictions de la sélection" />
-          <Breakdowns rows={filtered} data={data} />
+          <Breakdowns rows={filtered} data={data} summary={summary?.breakdowns} />
           <div
             className="card data-table"
             tabIndex={0}
@@ -427,11 +463,15 @@ export function Performance({
                 </tr>
               </thead>
               <tbody>
-                {filtered.slice((page - 1) * 20, page * 20).map((r) => {
+                {(summary ? filtered : filtered.slice((page - 1) * 20, page * 20)).map((r) => {
                   const m = data.matches.find((m) => m.id === r.prediction.matchId);
                   return (
                     <tr key={r.prediction.id}>
-                      <td>{new Date(r.kickoff).toLocaleDateString('fr-FR')}</td>
+                      <td>
+                        {new Date(r.kickoff).toLocaleDateString('fr-FR', {
+                          timeZone: 'Europe/Paris',
+                        })}
+                      </td>
                       <th>
                         {m ? (
                           <Link href={`/match/${m.slug}?onglet=prediction#prediction-archive`}>
@@ -471,11 +511,11 @@ export function Performance({
               Précédent
             </button>
             <span>
-              {page} / {Math.ceil(filtered.length / 20)}
+              {page} / {summary?.pageCount ?? Math.ceil(filtered.length / 20)}
             </span>
             <button
               className="button secondary"
-              disabled={page * 20 >= filtered.length}
+              disabled={page * 20 >= count}
               onClick={() => setPage(page + 1)}
             >
               Suivant

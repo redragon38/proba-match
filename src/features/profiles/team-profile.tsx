@@ -68,9 +68,13 @@ export function TeamProfile({
             {countryLabel(team.country)} · {comp?.name}
           </span>
           <h1>{team.name}</h1>
-          <p>
-            {team.venue ?? 'Stade non disponible'} · Coach : {team.coach ?? 'Non disponible'}
-          </p>
+          {(team.venue || team.coach) && (
+            <p>
+              {team.venue}
+              {team.venue && team.coach ? ' · ' : ''}
+              {team.coach ? `Coach : ${team.coach}` : ''}
+            </p>
+          )}
           <Form values={stats.form} />
         </div>
         <FavoriteButton id={`team:${team.id}`} label={team.name} />

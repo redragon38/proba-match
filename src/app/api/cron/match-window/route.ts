@@ -1,6 +1,7 @@
 import { cronHandler } from '@/services/football/cron';
 import { syncOpenFootball } from '@/services/football/openfootball-sync';
 import { syncSecondary } from '@/services/football/secondary';
+import { syncFotmobLive } from '@/services/football/fotmob-live-sync';
 
 export const maxDuration = 300;
 
@@ -18,6 +19,7 @@ function parisDate(offsetDays: number) {
 export const GET = cronHandler(async () => {
   const dates = Array.from({ length: 9 }, (_, index) => parisDate(index - 7));
   const openfootball = await syncOpenFootball({ force: true });
+  const catchup = await syncFotmobLive(new Date(), { catchUp: true });
   const secondary = [];
 
   for (const date of dates) {
@@ -27,11 +29,13 @@ export const GET = cronHandler(async () => {
   return {
     status:
       openfootball.status === 'success' &&
+      catchup.status === 'success' &&
       secondary.every((row) => ['success', 'disabled'].includes(row.result.status))
         ? 'success'
         : 'partial',
     window: { from: dates[0], to: dates[dates.length - 1], timezone: 'Europe/Paris' },
     openfootball,
+    catchup,
     secondary,
   };
 });

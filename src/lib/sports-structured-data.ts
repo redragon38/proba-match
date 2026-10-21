@@ -3,7 +3,6 @@ import type { Competition, Dataset, Match, Player, Team } from '@/types/football
 import { absoluteUrl } from './seo';
 import { matchFactSummary } from './match-facts';
 import { isUpcoming } from '@/services/football/match-selection';
-import { validResult } from '@/prediction-engine/availability';
 
 export function structuredImage(value: string | undefined) {
   if (!value) return undefined;
@@ -88,10 +87,6 @@ export function matchStructuredData(match: Match, data: Pick<Dataset, 'teams' | 
       ? 'https://schema.org/EventCancelled'
       : match.status === 'postponed'
         ? 'https://schema.org/EventPostponed'
-        : match.status === 'live'
-          ? 'https://schema.org/EventInProgress'
-          : validResult(match)
-            ? 'https://schema.org/EventCompleted'
         : isUpcoming(match)
           ? 'https://schema.org/EventScheduled'
           : undefined;
@@ -114,7 +109,7 @@ export function matchStructuredData(match: Match, data: Pick<Dataset, 'teams' | 
     ...(eventStatus ? { eventStatus } : {}),
     ...(competition
       ? {
-          isPartOf: {
+          about: {
             '@type': 'SportsOrganization',
             '@id': absoluteUrl(`/competition/${competition.slug}#competition`),
             name: competition.name,
@@ -125,5 +120,25 @@ export function matchStructuredData(match: Match, data: Pick<Dataset, 'teams' | 
     ...(match.venue ? { location: { '@type': 'Place', name: match.venue } } : {}),
     homeTeam: entity(home),
     awayTeam: entity(away),
+  };
+}
+
+/** Public statistics pages have no verified venue address for Google's Event requirements.
+ * Describe the page and its factual teams rather than publish an incomplete rich Event. */
+export function matchPageStructuredData(
+  match: Match,
+  data: Pick<Dataset, 'teams' | 'competitions'>,
+) {
+  const facts = matchStructuredData(match, data);
+  if (!facts) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': absoluteUrl(`/match/${match.slug}#webpage`),
+    url: facts.url,
+    name: facts.name,
+    description: facts.description,
+    inLanguage: 'fr',
+    about: [facts.homeTeam, facts.awayTeam, ...(facts.about ? [facts.about] : [])],
   };
 }

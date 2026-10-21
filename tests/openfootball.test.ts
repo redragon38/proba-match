@@ -141,6 +141,50 @@ describe('OpenFootball : normalisation, identité et priorités', () => {
   });
 });
 describe('Accès externe borné', () => {
+  it('can certify regulation later without replacing a final listing score', () => {
+    const merged = mergeOpenMatch(
+      {
+        ...match,
+        source: 'fotmob',
+        status: 'finished',
+        resultPeriod: 'unknown',
+        homeScore: 2,
+        awayScore: 1,
+      },
+      { ...match, status: 'finished', resultPeriod: 'regulation', homeScore: 1, awayScore: 1 },
+    );
+    expect(merged).toMatchObject({
+      source: 'fotmob',
+      homeScore: 2,
+      awayScore: 1,
+      scoreBreakdown: { fulltime: { home: 1, away: 1 } },
+    });
+  });
+  it.each(['espn', 'fotmob', 'api-football'] as const)(
+    'does not demote a confirmed %s result to an outdated schedule',
+    (source) => {
+      expect(
+        mergeOpenMatch({ ...match, source, status: 'finished', homeScore: 2, awayScore: 1 }, match),
+      ).toMatchObject({ source, status: 'finished', homeScore: 2, awayScore: 1 });
+      expect(
+        mergeOpenMatch(
+          {
+            ...match,
+            source,
+            status: 'finished',
+            resultPeriod: 'extra-time',
+            scoreBreakdown: { fulltime: { home: 1, away: 1 } },
+            homeScore: 2,
+            awayScore: 1,
+          },
+          { ...match, resultPeriod: 'regulation' },
+        ),
+      ).toMatchObject({
+        resultPeriod: 'extra-time',
+        scoreBreakdown: { fulltime: { home: 1, away: 1 } },
+      });
+    },
+  );
   it('ignore les minutes et buts live dans le recalcul historique', () => {
     const live: Match = { ...match, status: 'live', homeScore: 0, awayScore: 0 };
     const updated: Match = { ...live, minute: 60, homeScore: 1 };

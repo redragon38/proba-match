@@ -1,0 +1,155 @@
+{
+  "source": "https://www.fotmob.com/api/data/matches?date=20261019",
+  "observedAt": "2026-10-21T14:34:39.565Z",
+  "pending": [
+    {
+      "id": "86ab7308-f693-8414-9eb5-41294b67428d",
+      "kickoff": "2026-10-19T19:00:00.000Z",
+      "names": ["Getafe CF", "Rayo Vallecano de Madrid"],
+      "status": "scheduled"
+    },
+    {
+      "id": "17800367-d6b6-8ce6-918b-16159151bf62",
+      "kickoff": "2026-10-19T18:45:00.000Z",
+      "names": ["Parma Calcio 1913", "Torino FC"],
+      "status": "scheduled"
+    },
+    {
+      "id": "1b6eb14f-33d7-88f9-b5ac-480c87800d9f",
+      "kickoff": "2026-10-19T16:30:00.000Z",
+      "names": ["AC Monza", "Cagliari Calcio"],
+      "status": "scheduled"
+    }
+  ],
+  "listing": {
+    "leagues": [
+      {
+        "matches": [
+          {
+            "id": 5868095,
+            "leagueId": 87,
+            "time": "19.10.2026 21:00",
+            "home": {
+              "id": 8305,
+              "score": 1,
+              "name": "Getafe",
+              "redCards": 1,
+              "longName": "Getafe"
+            },
+            "away": {
+              "id": 8370,
+              "score": 1,
+              "name": "Rayo Vallecano",
+              "longName": "Rayo Vallecano"
+            },
+            "eliminatedTeamId": null,
+            "statusId": 6,
+            "tournamentStage": "9",
+            "status": {
+              "utcTime": "2026-10-19T19:00:00.000Z",
+              "numberOfHomeRedCards": 1,
+              "halfs": {
+                "firstHalfStarted": "19.10.2026 21:00:42",
+                "secondHalfStarted": "19.10.2026 22:05:28"
+              },
+              "periodLength": 45,
+              "finished": true,
+              "started": true,
+              "cancelled": false,
+              "awarded": false,
+              "scoreStr": "1 - 1",
+              "reason": {
+                "short": "FT",
+                "shortKey": "fulltime_short",
+                "long": "Full-Time",
+                "longKey": "finished"
+              }
+            },
+            "timeTS": 1792436400000
+          },
+          {
+            "id": 5749706,
+            "leagueId": 55,
+            "time": "19.10.2026 18:30",
+            "home": {
+              "id": 6504,
+              "score": 4,
+              "name": "Monza",
+              "longName": "Monza"
+            },
+            "away": {
+              "id": 8529,
+              "score": 0,
+              "name": "Cagliari",
+              "longName": "Cagliari"
+            },
+            "eliminatedTeamId": null,
+            "statusId": 6,
+            "tournamentStage": "7",
+            "status": {
+              "utcTime": "2026-10-19T16:30:00.000Z",
+              "halfs": {
+                "firstHalfStarted": "19.10.2026 18:31:55",
+                "secondHalfStarted": "19.10.2026 19:34:24"
+              },
+              "periodLength": 45,
+              "finished": true,
+              "started": true,
+              "cancelled": false,
+              "awarded": false,
+              "scoreStr": "4 - 0",
+              "reason": {
+                "short": "FT",
+                "shortKey": "fulltime_short",
+                "long": "Full-Time",
+                "longKey": "finished"
+              }
+            },
+            "timeTS": 1792427400000
+          },
+          {
+            "id": 5749707,
+            "leagueId": 55,
+            "time": "19.10.2026 20:45",
+            "home": {
+              "id": 10167,
+              "score": 0,
+              "name": "Parma",
+              "shortName": "Parma",
+              "longName": "Parma"
+            },
+            "away": {
+              "id": 9804,
+              "score": 3,
+              "name": "Torino",
+              "longName": "Torino"
+            },
+            "eliminatedTeamId": null,
+            "statusId": 6,
+            "tournamentStage": "7",
+            "status": {
+              "utcTime": "2026-10-19T18:45:00.000Z",
+              "halfs": {
+                "firstHalfStarted": "19.10.2026 20:45:37",
+                "secondHalfStarted": "19.10.2026 21:48:09"
+              },
+              "periodLength": 45,
+              "finished": true,
+              "started": true,
+              "cancelled": false,
+              "awarded": false,
+              "scoreStr": "0 - 3",
+              "reason": {
+                "short": "FT",
+                "shortKey": "fulltime_short",
+                "long": "Full-Time",
+                "longKey": "finished"
+              }
+            },
+            "timeTS": 1792435500000
+          }
+        ]
+      }
+    ]
+  }
+}

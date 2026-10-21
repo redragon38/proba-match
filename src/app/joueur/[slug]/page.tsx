@@ -8,7 +8,7 @@ import { getDataset } from '@/services/football';
 import { FavoriteButton } from '@/features/favorites';
 import { SourceBanner } from '@/components/source-banner';
 import { Metric, SectionTitle, TeamBadge } from '@/components/ui';
-import { number } from '@/lib/format';
+import { countryLabel, number } from '@/lib/format';
 import { playerPerformance } from '@/prediction-engine/player';
 import { playerHistory } from '@/services/profile-history';
 import { JsonLd } from '@/components/json-ld';
@@ -231,7 +231,7 @@ export default async function Page({
           <h1>{p.name}</h1>
           <p>
             {age !== undefined ? `${age} ans` : 'Âge non disponible'} ·{' '}
-            {p.nationality ?? 'Nationalité non disponible'}
+            {p.nationality ? countryLabel(p.nationality) : 'Nationalité non disponible'}
           </p>
           <Link className="table-team" href={`/equipe/${t.slug}`}>
             <TeamBadge team={t} size={23} />

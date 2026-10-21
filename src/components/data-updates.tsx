@@ -1,6 +1,8 @@
 'use client';
 import { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { dateKey } from '@/lib/format';
+import { calendarTimeZone } from '@/lib/calendar-date';
 /** Detect newly published datasets on every page, including initially empty lists.
  * router.refresh updates server props without a navigation or document reload. */
 export function DataUpdates({ revision }: { revision?: string }) {
@@ -27,6 +29,15 @@ export function DataUpdates({ revision }: { revision?: string }) {
     const interval = realtime || pathname === '/admin' ? 30_000 : 300_000;
     let stopped = false,
       busy = false;
+    const calendarDay = () =>
+      dateKey(
+        new Date(),
+        calendarTimeZone(
+          new URLSearchParams(window.location.search).get('timezone') ??
+            Intl.DateTimeFormat().resolvedOptions().timeZone,
+        ),
+      );
+    let day = calendarDay();
     let timer: ReturnType<typeof setTimeout>;
     let controller: AbortController | undefined;
     async function check() {
@@ -36,6 +47,11 @@ export function DataUpdates({ revision }: { revision?: string }) {
         return;
       }
       busy = true;
+      const currentDay = calendarDay();
+      if (realtime && day !== currentDay) {
+        day = currentDay;
+        router.refresh(); // Preserve explicit URL filters while refreshing a new calendar day.
+      }
       controller = new AbortController();
       const timeout = setTimeout(() => controller?.abort(), 10000);
       try {

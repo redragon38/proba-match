@@ -7,7 +7,11 @@ import { regulationResult } from '@/prediction-engine/result-period';
 import { metrics } from '@/prediction-engine/evaluation';
 import { recordTiming } from '@/services/telemetry';
 import { assertJobActive, fencePublication } from '@/services/football/lease-context';
-import { latestPublicPredictionsSql, publicPredictionHistorySql } from './prediction-read-sql';
+import {
+  evaluatedPredictionsSql,
+  latestPublicPredictionsSql,
+  publicPredictionHistorySql,
+} from './prediction-read-sql';
 /** Full input packages stay in the immutable DB payload, not in client page props. */
 export function publicPrediction(p: Prediction): Prediction {
   const result = { ...p };
@@ -282,6 +286,7 @@ export async function getEvaluations(
               homeScore: final.homeScore!,
               awayScore: final.awayScore!,
               competitionId: r.match.season.competitionId,
+              season: r.match.season.year,
               kickoff: r.match.kickoff.toISOString(),
             },
           ]
@@ -290,4 +295,34 @@ export async function getEvaluations(
   } catch {
     return [];
   }
+}
+
+/** Public reports use a DB projection; errors must not masquerade as an empty history. */
+export async function getPublicEvaluations(): Promise<EvaluatedPrediction[]> {
+  if (!process.env.DATABASE_URL) return [];
+  const rows =
+    await db.$queryRaw<
+      {
+        prediction: Prediction;
+        match: Match;
+        kickoff: Date;
+        competitionId: string;
+        season: number;
+      }[]
+    >(evaluatedPredictionsSql());
+  return rows.flatMap((row) => {
+    const result = regulationResult(row.match);
+    return result
+      ? [
+          {
+            prediction: row.prediction,
+            homeScore: result.homeScore!,
+            awayScore: result.awayScore!,
+            competitionId: row.competitionId,
+            season: row.season,
+            kickoff: row.kickoff.toISOString(),
+          },
+        ]
+      : [];
+  });
 }

@@ -23,6 +23,8 @@ import { playerWatch } from '@/prediction-engine/player';
 import { useLive } from './use-live';
 import { MatchCard } from './match-card';
 import { useTimeZone } from '@/components/local-time';
+import { useCalendarToday } from '@/components/calendar-today';
+import { calendarTimeZone } from '@/lib/calendar-date';
 import { isUpcoming } from '@/services/football/match-selection';
 
 export function Dashboard({
@@ -34,6 +36,7 @@ export function Dashboard({
   automaticDate = false,
   pagination,
   upcomingMatches,
+  serverToday = dateKey(),
 }: {
   data: Dataset;
   predictions: Record<string, Prediction>;
@@ -43,6 +46,7 @@ export function Dashboard({
   automaticDate?: boolean;
   pagination?: { total: number; page: number; pages: number };
   upcomingMatches?: Match[];
+  serverToday?: string;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -71,8 +75,9 @@ export function Dashboard({
   const setCompetition = (value: string) => changeFilters({ competition: value });
   const [filters, setFilters] = useState(false);
   const { values } = useFavorites();
-  const zone = useTimeZone();
-  const today = dateKey(new Date(), zone);
+  const localZone = useTimeZone();
+  const zone = calendarTimeZone(params.get('timezone') ?? localZone);
+  const today = useCalendarToday(zone, serverToday);
   const hasMatchesToday =
     automaticDate &&
     data.matches.some(
@@ -163,14 +168,23 @@ export function Dashboard({
         </div>
         <span className="date-heading">
           <CalendarDays size={15} />
-          {new Date(`${activeDate}T12:00:00Z`).toLocaleDateString('fr-FR', {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long',
-            timeZone: 'UTC',
-          })}
+          {full && !params.has('date')
+            ? 'Toutes les dates'
+            : new Date(`${activeDate}T12:00:00Z`).toLocaleDateString('fr-FR', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                timeZone: 'UTC',
+              })}
         </span>
       </div>
+      <p className="data-note" data-testid="calendar-context">
+        Aujourd’hui : {today} · Fuseau : {zone} ·{' '}
+        {localZone !== zone && `Horaires affichés : ${localZone} · `}
+        {full && !params.has('date')
+          ? 'Calendrier complet, toutes les dates.'
+          : `Journée sélectionnée : ${activeDate}.`}
+      </p>
       <div className="match-section-heading">
         <div>
           <h2>

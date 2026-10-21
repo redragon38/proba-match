@@ -8,24 +8,32 @@ import { footballLease, assertJobActive } from './lease-context';
 /** All writers share the same lease, so OpenFootball cannot overwrite an enrichment snapshot. */
 export async function footballJob<T>(provider: string, work: () => Promise<T>) {
   if (!process.env.DATABASE_URL) throw new Error('DATABASE_NOT_CONFIGURED');
-  // Long persistence transactions can occupy the single Vercel pool connection.
-  // Keep lease renewal independent so a successful import is not marked lost.
-  const heartbeatDb = process.env.VERCEL
-    ? new PrismaClient({
-        datasourceUrl: runtimeDatabaseUrl(selectedDatabaseUrl(), true),
-        log: [],
-      })
-    : db;
+  // VPS requests and long transactions can occupy the application pool too.
+  // Lease renewal must always have its own bounded connection, on every host.
+  const heartbeatDb = new PrismaClient({
+    datasourceUrl: runtimeDatabaseUrl(selectedDatabaseUrl(), true),
+    log: [],
+  });
   const token = randomUUID(),
     expiresAt = new Date(Date.now() + 2 * 60_000),
     obsoleteLease = new Date(Date.now() + 5 * 60_000);
   const acquired = await db.$queryRaw<
     { key: string }[]
-  >`INSERT INTO "SyncLock" ("key","token","expiresAt") VALUES ('football',${token},${expiresAt}::timestamptz AT TIME ZONE 'UTC') ON CONFLICT ("key") DO UPDATE SET "token"=${token},"expiresAt"=${expiresAt}::timestamptz AT TIME ZONE 'UTC' WHERE "SyncLock"."expiresAt"<(NOW() AT TIME ZONE 'UTC') OR "SyncLock"."expiresAt">${obsoleteLease}::timestamptz AT TIME ZONE 'UTC' RETURNING "key"`;
-  if (!acquired.length) throw new Error('SYNC_ALREADY_RUNNING');
+  >`INSERT INTO "SyncLock" ("key","token","expiresAt") VALUES ('football',${token},${expiresAt}::timestamptz AT TIME ZONE 'UTC') ON CONFLICT ("key") DO UPDATE SET "token"=${token},"expiresAt"=${expiresAt}::timestamptz AT TIME ZONE 'UTC' WHERE "SyncLock"."expiresAt"<(NOW() AT TIME ZONE 'UTC') OR "SyncLock"."expiresAt">${obsoleteLease}::timestamptz AT TIME ZONE 'UTC' RETURNING "key"`.catch(
+    async (error: unknown) => {
+      await heartbeatDb.$disconnect();
+      throw error;
+    },
+  );
+  if (!acquired.length) {
+    await heartbeatDb.$disconnect();
+    throw new Error('SYNC_ALREADY_RUNNING');
+  }
   const lease = { token, lost: false };
+  let renewing: Promise<void> | undefined;
   const heartbeat = setInterval(() => {
-    void heartbeatDb.syncLock
+    if (renewing) return;
+    renewing = heartbeatDb.syncLock
       .updateMany({
         where: { key: 'football', token },
         data: { expiresAt: new Date(Date.now() + 2 * 60_000) },
@@ -35,8 +43,12 @@ export async function footballJob<T>(provider: string, work: () => Promise<T>) {
       })
       .catch(() => {
         lease.lost = true;
+      })
+      .finally(() => {
+        renewing = undefined;
       });
   }, 30_000);
+  const startedAt = Date.now();
   let run: { id: string } | undefined;
   try {
     run = await db.syncRun.create({ data: { provider, status: 'running' } });
@@ -50,6 +62,7 @@ export async function footballJob<T>(provider: string, work: () => Promise<T>) {
       players?: number;
       requests?: number;
       status?: string;
+      resultsChanged?: number;
     };
     await db.syncRun.update({
       where: { id: run.id },
@@ -61,6 +74,14 @@ export async function footballJob<T>(provider: string, work: () => Promise<T>) {
       },
     });
     cache.clear();
+    log('FOOTBALL_JOB_FINISHED', {
+      provider,
+      status: summary.status ?? 'success',
+      matches: summary.matches ?? 0,
+      players: summary.players ?? 0,
+      resultsChanged: summary.resultsChanged ?? 0,
+      durationMs: Date.now() - startedAt,
+    });
     return result;
   } catch (error) {
     const knownCode =
@@ -84,7 +105,11 @@ export async function footballJob<T>(provider: string, work: () => Promise<T>) {
     throw new Error('SYNC_FAILED');
   } finally {
     clearInterval(heartbeat);
-    await db.syncLock.deleteMany({ where: { key: 'football', token } });
-    if (heartbeatDb !== db) await heartbeatDb.$disconnect();
+    await renewing;
+    try {
+      await db.syncLock.deleteMany({ where: { key: 'football', token } });
+    } finally {
+      await heartbeatDb.$disconnect();
+    }
   }
 }

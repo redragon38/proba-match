@@ -244,6 +244,7 @@ export interface Prediction {
   lineupConfirmed: boolean;
 }
 export interface EvaluatedPrediction {
+  season?: number;
   prediction: Prediction;
   homeScore: number;
   awayScore: number;

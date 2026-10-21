@@ -1,41 +1,25 @@
 import type { Dataset, EvaluatedPrediction } from '@/types/football';
-import { metrics } from '@/prediction-engine/evaluation';
+import { reportBreakdowns, type ReportSummary } from './report-view';
 import { TrendChart } from '@/components/charts';
 import { number, percent } from '@/lib/format';
-export function Breakdowns({ rows, data }: { rows: EvaluatedPrediction[]; data: Dataset }) {
-  const groups = [
-    {
-      title: 'Par compétition',
-      key: (r: EvaluatedPrediction) =>
-        data.competitions.find((c) => c.id === r.competitionId)?.name ?? r.competitionId,
-    },
-    { title: 'Par mois', key: (r: EvaluatedPrediction) => r.kickoff.slice(0, 7) },
-    {
-      title: 'Par saison',
-      key: (r: EvaluatedPrediction) => {
-        const year = Number(r.kickoff.slice(0, 4));
-        const start = Number(r.kickoff.slice(5, 7)) >= 7 ? year : year - 1;
-        return `${start}–${start + 1}`;
-      },
-    },
-    { title: 'Par version', key: (r: EvaluatedPrediction) => r.prediction.version },
-    {
-      title: 'Par qualité des informations',
-      key: (r: EvaluatedPrediction) =>
-        r.prediction.confidence >= 70 ? '70–100' : r.prediction.confidence >= 50 ? '50–69' : '0–49',
-    },
-  ];
-  const months = [...new Set(rows.map((r) => r.kickoff.slice(0, 7)))].sort();
+export function Breakdowns({
+  rows,
+  data,
+  summary,
+}: {
+  rows: EvaluatedPrediction[];
+  data: Dataset;
+  summary?: ReportSummary['breakdowns'];
+}) {
+  const groups = summary ?? reportBreakdowns(rows, data);
+  const monthly = groups.find((group) => group.title === 'Par mois')?.entries ?? [];
   return (
     <>
       <section className="card padded space-top">
         <h2>Exactitude mensuelle</h2>
         <TrendChart
           label="Part des issues correctement classées en premier (%)"
-          values={months.map((month) => ({
-            label: month,
-            value: 100 * (metrics(rows.filter((r) => r.kickoff.startsWith(month)))?.accuracy ?? 0),
-          }))}
+          values={monthly.map(({ key, stats }) => ({ label: key, value: 100 * stats.accuracy }))}
         />
         <p className="data-note">
           Chaque point couvre les prédictions de sa période. Les petits échantillons restent
@@ -58,8 +42,7 @@ export function Breakdowns({ rows, data }: { rows: EvaluatedPrediction[]; data: 
                   </tr>
                 </thead>
                 <tbody>
-                  {[...new Set(rows.map(group.key))].sort().map((key) => {
-                    const m = metrics(rows.filter((r) => group.key(r) === key))!;
+                  {group.entries.map(({ key, stats: m }) => {
                     return (
                       <tr key={key}>
                         <th>{key}</th>

@@ -5,6 +5,13 @@ const mocks = vi.hoisted(() => ({
   update: vi.fn(),
   release: vi.fn(),
   renew: vi.fn(),
+  disconnect: vi.fn(),
+}));
+vi.mock('@prisma/client', () => ({
+  PrismaClient: class {
+    syncLock = { updateMany: mocks.renew };
+    $disconnect = mocks.disconnect;
+  },
 }));
 vi.mock('@/database/client', () => ({
   db: {
@@ -22,12 +29,40 @@ beforeEach(() => {
   mocks.release.mockResolvedValue({ count: 1 });
   mocks.update.mockResolvedValue({});
   mocks.create.mockResolvedValue({ id: 'run' });
+  mocks.disconnect.mockResolvedValue(undefined);
+  mocks.renew.mockResolvedValue({ count: 1 });
 });
 afterEach(() => {
   vi.unstubAllEnvs();
   vi.useRealTimers();
 });
 describe('Nettoyage des synchronisations', () => {
+  it('aborts publication when renewal loses ownership and closes its connection', async () => {
+    mocks.renew.mockResolvedValue({ count: 0 });
+    await expect(
+      footballJob('test', async () => {
+        await vi.advanceTimersByTimeAsync(30001);
+        return { status: 'success' };
+      }),
+    ).rejects.toThrow('SYNC_FAILED');
+    expect(mocks.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ status: 'failed', errorCode: 'SYNC_LEASE_LOST' }),
+      }),
+    );
+    expect(mocks.disconnect).toHaveBeenCalledOnce();
+  });
+  it('renews through a dedicated connection and closes it even without a lease', async () => {
+    await footballJob('test', async () => {
+      await vi.advanceTimersByTimeAsync(30001);
+      expect(mocks.renew).toHaveBeenCalledOnce();
+      return { status: 'success' };
+    });
+    expect(mocks.disconnect).toHaveBeenCalledOnce();
+    mocks.acquire.mockResolvedValue([]);
+    await expect(footballJob('overlap', vi.fn())).rejects.toThrow('SYNC_ALREADY_RUNNING');
+    expect(mocks.disconnect).toHaveBeenCalledTimes(2);
+  });
   it('records imported players and a safe provider error code in the persisted job log', async () => {
     await footballJob('espn-players', async () => ({ players: 27, requests: 1 }));
     expect(mocks.update).toHaveBeenCalledWith(

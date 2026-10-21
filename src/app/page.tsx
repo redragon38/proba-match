@@ -9,11 +9,13 @@ import { dashboardDataset } from '@/services/football/read-model';
 import { closestMatchDate, upcomingSelection } from '@/services/football/match-selection';
 import { HomeInsights } from '@/features/matches/home-insights';
 import { publicPredictionIds } from '@/services/prediction-visibility';
+import { validCalendarDate, calendarTimeZone } from '@/lib/calendar-date';
+import { dateKey } from '@/lib/format';
 export const dynamic = 'force-dynamic';
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ date?: string; statut?: string }>;
+  searchParams: Promise<{ date?: string; statut?: string; timezone?: string }>;
 }) {
   const query = await searchParams;
   const data = await getDataset();
@@ -39,12 +41,11 @@ export default async function Home({
         </section>
       </main>
     );
-  const date =
-    query.date &&
-    /^\d{4}-\d{2}-\d{2}$/.test(query.date) &&
-    Number.isFinite(new Date(query.date).getTime())
-      ? query.date
-      : closestMatchDate(data, query.statut);
+  const zone = calendarTimeZone(query.timezone);
+  const requestTime = new Date();
+  const date = validCalendarDate(query.date)
+    ? query.date
+    : closestMatchDate(data, query.statut, requestTime.getTime(), zone);
   const upcomingMatches = upcomingSelection(data);
   const view = dashboardDataset(data, date, upcomingMatches);
   const now = Date.parse(data.updatedAt);
@@ -75,7 +76,8 @@ export default async function Home({
         data={view}
         predictions={dashboardPredictions}
         initialDate={date}
-        automaticDate={!query.date}
+        serverToday={dateKey(requestTime, zone)}
+        automaticDate={!validCalendarDate(query.date)}
         initialStatus={query.statut}
         upcomingMatches={upcomingMatches}
       />

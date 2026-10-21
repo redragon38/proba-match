@@ -67,6 +67,7 @@ export function walkForwardBacktest(
         homeScore: match.homeScore!,
         awayScore: match.awayScore!,
         competitionId: match.competitionId,
+        season: match.season,
         kickoff: match.kickoff,
       });
   }

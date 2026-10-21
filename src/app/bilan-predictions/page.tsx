@@ -1,6 +1,7 @@
 import { cache } from '@/services/cache';
 import { getDataset } from '@/services/football';
-import { getEvaluations } from '@/services/predictions';
+import { getPublicEvaluations } from '@/services/predictions';
+import { prepareReport } from '@/features/performance/report-view';
 import { walkForwardBacktest } from '@/prediction-engine/backtest';
 import { MODEL_VERSION } from '@/prediction-engine';
 import { Performance } from '@/features/performance/performance';
@@ -16,7 +17,11 @@ export async function generateMetadata() {
   );
 }
 
-export default async function PredictionReportPage() {
+export default async function PredictionReportPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const data = await getDataset();
   const demo = data.source === 'demo';
   const rows = demo
@@ -25,20 +30,13 @@ export default async function PredictionReportPage() {
         async () => walkForwardBacktest(data.matches),
         3_600_000,
       )
-    : await getEvaluations();
-  const evaluated = new Set(rows.map((row) => row.prediction.matchId));
+    : await getPublicEvaluations();
+  const report = prepareReport(rows, data, await searchParams);
   return (
     <Performance
-      data={{
-        ...data,
-        players: [],
-        injuries: [],
-        standings: {},
-        matches: data.matches.filter(
-          (match) => match.status === 'finished' || evaluated.has(match.id),
-        ),
-      }}
-      rows={rows}
+      data={report.data}
+      rows={report.rows}
+      summary={report.summary}
       demo={demo}
       publicReport
     />
