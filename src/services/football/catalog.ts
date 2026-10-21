@@ -1,13 +1,14 @@
 import { getDataset } from './index';
+import { matchDateKey } from '@/lib/match-date';
 export async function matchesOnDate(date: string) {
   const data = await getDataset();
   return {
     source: data.source,
     updatedAt: data.updatedAt,
     warning: data.warning,
-    matches: data.matches.filter(
-      (m) => (m.kickoffKnown === false ? m.sourceDate : m.kickoff.slice(0, 10)) === date,
-    ),
+    date,
+    timeZone: 'Europe/Paris',
+    matches: data.matches.filter((m) => matchDateKey(m) === date),
   };
 }
 export async function localEntity(kind: 'match' | 'team' | 'competition', id: string) {

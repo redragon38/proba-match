@@ -1,13 +1,12 @@
 import type { Prediction, Team } from '@/types/football';
 import type { informationQuality, predictionInsights } from '@/prediction-engine/insights';
 import { ProbabilityBar, TeamBadge } from '@/components/ui';
-import { number, time } from '@/lib/format';
+import { dayLabel, number, time } from '@/lib/format';
 import { predictionInfluences } from '@/lib/prediction-explanations';
 import {
   formatProbability,
   probabilityPercentages,
   probabilityReading,
-  roundedPercentages,
   scoreScenarioPercentages,
 } from '@/lib/probability-format';
 
@@ -32,7 +31,6 @@ function Distribution({
   labels: string[];
   values: number[];
 }) {
-  const rounded = roundedPercentages(values);
   return (
     <section className="prob-distribution">
       <h5>{title}</h5>
@@ -40,17 +38,14 @@ function Distribution({
         <div className="prob-distribution-row" key={label}>
           <span>{label}</span>
           <span className="prob-distribution-track" aria-hidden="true">
-            <span style={{ width: `${rounded[index]}%` }} />
+            <span style={{ width: `${values[index] * 100}%` }} />
           </span>
-          <strong>
-            {rounded[index] === 0 && values[index] > 0
-              ? '< 1 %'
-              : rounded[index] === 100 && values[index] < 1
-                ? '> 99 %'
-                : `${rounded[index]} %`}
-          </strong>
+          <strong>{formatProbability(values[index])}</strong>
         </div>
       ))}
+      <p className="data-note">
+        Pourcentages arrondis séparément ; leur somme peut différer de 100 %.
+      </p>
     </section>
   );
 }
@@ -187,12 +182,12 @@ export function ProbabilitySummary({
         <section className="prediction-top-three">
           <h4>Cinq scores précis les plus probables</h4>
           <div className="alternative-scores">
-            {analysis.topScores.map((score, index) => (
+            {analysis.topScores.map((score) => (
               <div key={`${score.home}-${score.away}`}>
                 <strong>
                   {score.home}–{score.away}
                 </strong>
-                <span>{scenarioPercentages[index]} %</span>
+                <span>{formatProbability(score.probability)}</span>
               </div>
             ))}
             <div>
@@ -201,9 +196,9 @@ export function ProbabilitySummary({
             </div>
           </div>
           <p className="data-note">
-            Ces six parts proviennent de la même matrice et totalisent 100 % après arrondi
-            coordonné. Le score individuel le plus probable reste généralement peu probable : ce
-            n’est ni un résultat attendu, ni une certitude.
+            Ces six parts proviennent de la même matrice. Les pourcentages sont arrondis séparément
+            et leur somme peut différer de 100 %. Le score individuel le plus probable reste
+            généralement peu probable : ce n’est ni un résultat attendu, ni une certitude.
           </p>
         </section>
       )}
@@ -464,7 +459,7 @@ export function ProbabilitySummary({
           <p className="data-note">
             {demo
               ? 'Calcul illustratif sur données fictives.'
-              : `Prédiction enregistrée le ${new Date(prediction.createdAt).toLocaleDateString('fr-FR')} à ${time(prediction.createdAt)}.`}{' '}
+              : `Prédiction enregistrée le ${dayLabel(prediction.createdAt)} à ${time(prediction.createdAt)} (Europe/Paris).`}{' '}
             Version {prediction.version}. Les chiffres avancés dérivent de la même matrice de scores
             ; ils ne prédisent ni la possession, ni les tirs, ni les cartons.
           </p>

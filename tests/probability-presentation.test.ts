@@ -36,10 +36,25 @@ describe('lecture des probabilités sans modifier le modèle', () => {
     expect(probabilityReading(1.2, 0.1, 0.1)).toBeNull();
     expect(probabilityReading(NaN, 0.5, 0.5)).toBeNull();
   });
-  it('coordonne les cinq scores et tous les autres scénarios à 100 %', () => {
+  it('arrondit chaque score comme la grille, sans déplacer de point entre scénarios', () => {
     const values = scoreScenarioPercentages([0.123, 0.111, 0.099, 0.087, 0.076]);
     expect(values).toHaveLength(6);
-    expect(values.reduce((sum, value) => sum + value, 0)).toBe(100);
+    expect(values).toEqual([12, 11, 10, 9, 8, 50]);
     expect(values[5]).toBeGreaterThan(values[0]);
+  });
+  it('ne renormalise pas une distribution incorrecte', () => {
+    for (const values of [
+      [0.2, 0.2, 0.2],
+      [20, 30, 50],
+      [1.1, 0, 0],
+    ])
+      expect(() => probabilityPercentages(values[0], values[1], values[2])).toThrow();
+    for (const values of [[0.8, 0.8], [NaN], [Infinity], [-0.1]])
+      expect(() => scoreScenarioPercentages(values)).toThrow();
+    const scores = [0.0751, 0.0749, 0.063, 0.052, 0.041];
+    expect(scoreScenarioPercentages(scores).slice(0, 5)).toEqual([8, 7, 6, 5, 4]);
+    scores.forEach((score, i) =>
+      expect(formatProbability(score)).toBe(`${scoreScenarioPercentages(scores)[i]} %`),
+    );
   });
 });

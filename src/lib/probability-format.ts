@@ -1,7 +1,7 @@
 /** Largest-remainder apportionment keeps the displayed total at exactly 100. */
 export function roundedPercentages(input: number[]): number[] {
   const sum = input.reduce((a, b) => a + b, 0);
-  if (input.some((v) => !Number.isFinite(v) || v < 0) || !Number.isFinite(sum) || sum <= 0)
+  if (input.some((v) => !Number.isFinite(v) || v < 0 || v > 1) || Math.abs(sum - 1) > 1e-8)
     throw new Error('INVALID_PROBABILITIES');
   const raw = input.map((v) => (v / sum) * 100),
     out = raw.map(Math.floor);
@@ -14,11 +14,13 @@ export function probabilityPercentages(home: number, draw: number, away: number)
   return roundedPercentages([home, draw, away]);
 }
 
-/** Coordinate the five displayed scores and their complement to exactly 100%. */
+/** Round each score independently, exactly as in the score grid and summary. */
 export function scoreScenarioPercentages(probabilities: number[]): number[] {
   const shown = probabilities.slice(0, 5);
-  const remainder = Math.max(0, 1 - shown.reduce((sum, value) => sum + value, 0));
-  return roundedPercentages([...shown, remainder]);
+  const sum = shown.reduce((total, value) => total + value, 0);
+  if (shown.some((v) => !Number.isFinite(v) || v < 0 || v > 1) || sum > 1 + 1e-8)
+    throw new Error('INVALID_PROBABILITIES');
+  return [...shown, Math.max(0, 1 - sum)].map((value) => Math.round(value * 100));
 }
 
 export function formatProbability(value: number | null | undefined): string {

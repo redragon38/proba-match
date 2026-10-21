@@ -26,5 +26,9 @@ describe('Team profile rendered statistics', () => {
     expect(html).toContain('Tirs cadrés moyens');
     expect(html).not.toContain('NaN');
     expect(html).not.toContain('Infinity');
+    expect(html).toContain('Saison des statistiques');
+    expect(html).toContain('Historique cumulé');
+    expect(html).toContain('Période : du');
+    expect(html).not.toContain('Périmètre :');
   });
 });

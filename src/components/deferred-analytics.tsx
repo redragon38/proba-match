@@ -13,7 +13,8 @@ export function DeferredAnalytics() {
     const timer = window.setTimeout(enable, 60_000);
     const events: (keyof WindowEventMap)[] = ['pointerdown', 'keydown', 'scroll'];
 
-    for (const event of events) window.addEventListener(event, enable, { passive: true, once: true });
+    for (const event of events)
+      window.addEventListener(event, enable, { passive: true, once: true });
     return () => {
       window.clearTimeout(timer);
       for (const event of events) window.removeEventListener(event, enable);
@@ -30,7 +31,10 @@ export function DeferredAnalytics() {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${analyticsId}');
+          gtag('config', '${analyticsId}', {
+            allow_google_signals: false,
+            allow_ad_personalization_signals: false
+          });
         `}
       </Script>
     </>

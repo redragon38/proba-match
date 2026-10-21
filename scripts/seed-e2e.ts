@@ -13,6 +13,10 @@ try {
   data.warning = 'Fixtures synthétiques de tests — base isolée';
   for (const m of data.matches) {
     m.source = 'api-football';
+    // Give synthetic fixtures an explicit scope so season filters can be tested.
+    m.season ??= data.competitions.find(
+      (competition) => competition.id === m.competitionId,
+    )?.season;
     m.kickoffKnown = true;
     // Synthetic fixture scores are explicitly regulation-time scores. Production
     // ingestion still requires actual provider confirmation of this period.

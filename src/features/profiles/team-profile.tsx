@@ -9,7 +9,7 @@ import { MatchList } from '@/features/matches/match-list';
 import { teamSummary, teamMetricSummary } from '@/services/statistics';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { TrendChart } from '@/components/charts';
-import { countryLabel, number } from '@/lib/format';
+import { countryLabel, dayLabel, number } from '@/lib/format';
 import { MatchCard } from '@/features/matches/match-card';
 import { upcomingTeamMatches } from '@/services/football/match-selection';
 import { competitionSeason } from '@/lib/competition-season';
@@ -30,12 +30,23 @@ export function TeamProfile({
 }) {
   const [count, setCount] = useState(5);
   const [venue, setVenue] = useState<'all' | 'home' | 'away'>('all');
-  const stats = teamSummary(data, team.id, undefined, venue),
+  const [season, setSeason] = useState('all');
+  const seasons = [
+    ...new Set(data.matches.map((m) => m.season).filter((s) => s !== undefined)),
+  ].sort((a, b) => b - a);
+  const scopedData =
+    season === 'all'
+      ? data
+      : {
+          ...data,
+          matches: data.matches.filter((m) => m.season === Number(season)),
+        };
+  const stats = teamSummary(scopedData, team.id, undefined, venue),
     players = data.players.filter((p) => p.teamId === team.id),
     comp = data.competitions.find((c) => c.id === team.competitionId);
   const standing = data.standings[team.competitionId]?.find((r) => r.teamId === team.id);
   const metrics = ['Possession', 'Tirs', 'Tirs cadrés'].map((label) =>
-    teamMetricSummary(data, team.id, label, venue),
+    teamMetricSummary(scopedData, team.id, label, venue),
   );
   const upcoming = upcomingTeamMatches(data, team.id);
   const nextMatch = upcoming[0];
@@ -113,6 +124,37 @@ export function TeamProfile({
           value={stats.played ? stats.cleanSheets : 'Non disponible'}
         />
       </div>
+      <label>
+        Saison des statistiques
+        <select
+          className="team-statistics-season"
+          aria-label="Saison des statistiques"
+          value={season}
+          onChange={(e) => setSeason(e.target.value)}
+        >
+          <option value="all">Historique cumulé — toutes les saisons disponibles</option>
+          {seasons.map((value) => (
+            <option key={value} value={value}>
+              {competitionSeason(comp, value)}
+            </option>
+          ))}
+        </select>
+      </label>
+      <p className="data-note">
+        {season === 'all'
+          ? 'Historique cumulé, plusieurs saisons possibles'
+          : `Saison ${competitionSeason(comp, Number(season))}`}{' '}
+        · Toutes les compétitions documentées · {stats.played} résultats terminés.
+        {stats.played > 0 && (
+          <>
+            {' '}
+            Période : du {dayLabel(stats.matches.at(-1)!.kickoff)} au{' '}
+            {dayLabel(stats.matches[0].kickoff)}.
+          </>
+        )}{' '}
+        La couverture peut être partielle. Les tableaux de statistiques et le graphique suivent le
+        même périmètre.
+      </p>
       <div className="detail-columns">
         <div>
           <div id="forme">
@@ -142,7 +184,7 @@ export function TeamProfile({
               label={`Buts marqués · ${stats.lastTen.length} dernière${stats.lastTen.length > 1 ? 's' : ''} rencontre${stats.lastTen.length > 1 ? 's' : ''} disponible${stats.lastTen.length > 1 ? 's' : ''}`}
             />
             <p className="data-note">
-              Les agrégats portent sur le catalogue disponible, pas nécessairement sur une saison
+              Les agrégats portent sur le périmètre sélectionné, pas nécessairement sur une saison
               complète. Moyenne : {number(stats.goalsPerGame, 2)} but(s) par match.
             </p>
           </div>
@@ -169,9 +211,8 @@ export function TeamProfile({
           </div>
           {comp && metrics.some((metric) => metric.sample > 0) && (
             <p className="data-note">
-              Périmètre : {comp.name}, saison {competitionSeason(comp, comp.season)}. Chaque moyenne
-              indique son nombre réel de matchs documentés ; les valeurs absentes ne sont pas
-              remplacées par zéro.
+              Périmètre statistique sélectionné ci-dessus. Chaque moyenne indique son nombre réel de
+              matchs documentés ; les valeurs absentes ne sont pas remplacées par zéro.
             </p>
           )}
           <div id="resultats">
@@ -226,22 +267,26 @@ export function TeamProfile({
           <section className="card padded">
             {players.length ? (
               <>
-              {players.map((p) => (
-                <Link className="squad-row" href={`/joueur/${p.slug}`} key={p.id}>
-                  <span>{p.number ?? '–'}</span>
-                  <div>
-                    <b>{p.name}</b>
-                    <small>{p.position}</small>
-                  </div>
-                  {p.stats.goals != null && <span>{p.stats.goals} <small>but(s)</small></span>}
-                </Link>
-              ))}
-              {players.some((player) => player.stats.goals == null) && (
-                <p className="data-note">
-                  Buts : donnée non documentée pour{' '}
-                  {players.filter((player) => player.stats.goals == null).length} joueur(s).
-                </p>
-              )}
+                {players.map((p) => (
+                  <Link className="squad-row" href={`/joueur/${p.slug}`} key={p.id}>
+                    <span>{p.number ?? '–'}</span>
+                    <div>
+                      <b>{p.name}</b>
+                      <small>{p.position}</small>
+                    </div>
+                    {p.stats.goals != null && (
+                      <span>
+                        {p.stats.goals} <small>but(s)</small>
+                      </span>
+                    )}
+                  </Link>
+                ))}
+                {players.some((player) => player.stats.goals == null) && (
+                  <p className="data-note">
+                    Buts : donnée non documentée pour{' '}
+                    {players.filter((player) => player.stats.goals == null).length} joueur(s).
+                  </p>
+                )}
               </>
             ) : (
               <Empty />

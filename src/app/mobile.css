@@ -1,5 +1,17 @@
 /* Mobile interaction and reading layer. Loaded last to resolve legacy responsive overrides. */
 @media (max-width: 850px) {
+  /* A bare 1fr track expands to the match list's minimum content width at 320px. */
+  .dashboard-grid {
+    max-width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .team-statistics-season {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
   html {
     scroll-padding-top: 76px;
     text-size-adjust: 100%;

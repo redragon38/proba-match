@@ -1,6 +1,7 @@
 import { chromium } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
+import { seoFetch } from './seo-http.mjs';
 
 const base = process.env.VERIFY_URL || 'http://localhost:3000';
 const strict = process.env.SEO_REQUIRE_HTTPS === 'true';
@@ -8,6 +9,10 @@ const expectedOrigin = process.env.SEO_CANONICAL_ORIGIN
   ? new URL(process.env.SEO_CANONICAL_ORIGIN).origin
   : null;
 const output = process.env.SEO_REPORT || 'artifacts/seo-audit.json';
+const maxPages = Math.max(1, Number(process.env.SEO_MAX_PAGES) || Infinity);
+const linkLimit = Math.max(1, Number(process.env.SEO_LINK_LIMIT) || Infinity);
+const delay = Math.max(0, Number(process.env.SEO_DELAY_MS ?? 300));
+const pacedFetch = (url, options) => seoFetch(url, options, { delay });
 const browser = await chromium.launch({
   channel: process.platform === 'win32' ? 'chrome' : 'chromium',
 });
@@ -18,6 +23,7 @@ const report = {
   checks: [],
   browser: [],
   links: {},
+  scope: { maxPages: Number.isFinite(maxPages) ? maxPages : null, delay, truncated: false },
   external:
     'NON VÉRIFIÉ EXTERNEMENT: Search Console, PageSpeed Insights, CrUX, Rich Results Test, public TLS and redirects',
 };
@@ -50,11 +56,23 @@ try {
     return {
       valid: !doc.querySelector('parsererror') && doc.documentElement.localName === 'urlset',
       urls: [...doc.querySelectorAll('loc')].map((n) => n.textContent),
+      lastmods: [...doc.querySelectorAll('lastmod')].map((n) => n.textContent),
     };
   }, xml);
   check('sitemap', sitemap.ok() && parsed.valid, 'Valid sitemap XML');
   check('sitemap', new Set(parsed.urls).size === parsed.urls.length, 'Unique sitemap URLs');
   check('sitemap', parsed.urls.length <= 50000, 'Sitemap remains below the URL limit');
+  report.scope.sitemapUrls = parsed.urls.length;
+  check(
+    'sitemap',
+    parsed.lastmods.every(
+      (value) =>
+        /^\d{4}-\d{2}-\d{2}(?:T.*)?$/.test(value) &&
+        Number.isFinite(Date.parse(value)) &&
+        Date.parse(value) <= Date.now() + 300000,
+    ),
+    'Sitemap lastmod dates are valid and not in the future',
+  );
   if (expectedOrigin) {
     check(
       'canonical',
@@ -100,19 +118,47 @@ try {
       '/comparateur/equipes',
       '/comparateur/joueurs',
       '/admin',
+      ...['match', 'equipe', 'joueur', 'competition'].flatMap((family) => {
+        const sample = parsed.urls.find((url) => new URL(url).pathname.startsWith(`/${family}/`));
+        return sample ? [pathOf(sample)] : [];
+      }),
       ...parsed.urls.map(pathOf),
     ]),
   ];
   const catalog = await (await request.get(`${base}/api/matches/today`)).json();
+  if (process.env.SEO_HEALTH_TOKEN) {
+    const healthResponse = await pacedFetch(`${base}/api/health`, {
+      headers: { Authorization: `Bearer ${process.env.SEO_HEALTH_TOKEN}` },
+    });
+    const health = await healthResponse.json();
+    check(
+      'synchronization',
+      healthResponse.ok() && health.status === 'pass',
+      `Authenticated freshness and synchronization readiness: HTTP ${healthResponse.status}; status ${health.status ?? 'unavailable'}`,
+      healthResponse.ok() && health.status === 'warning',
+    );
+  } else {
+    check(
+      'synchronization',
+      false,
+      'Authenticated data freshness not checked: SEO_HEALTH_TOKEN absent',
+      true,
+    );
+  }
   if (catalog.matches?.[0]) {
     const sample = `/match/${catalog.matches[0].slug}`;
     if (!paths.includes(sample)) paths.push(sample);
   }
   const sitemapPaths = new Set(parsed.urls.map(pathOf));
   const links = new Set();
+  const queuedPaths = new Set(paths);
   for (const path of paths) {
+    if (report.pages.length >= maxPages) {
+      report.scope.truncated = true;
+      break;
+    }
     // Parse actual server HTML without retaining thousands of browser navigations/assets.
-    const network = await fetch(`${base}${path}`, {
+    const network = await pacedFetch(`${base}${path}`, {
       signal: AbortSignal.timeout(30000),
       headers: { 'User-Agent': 'Googlebot' },
     });
@@ -210,7 +256,14 @@ try {
     if (report.pages.length % 250 === 0)
       console.info(`SEO: ${report.pages.length}/${paths.length} server-rendered pages`);
     const indexable = !data.robots.includes('noindex');
-    const row = { path, status: response.status(), htmlBytes: Buffer.byteLength(html), ...data };
+    const row = {
+      path,
+      finalUrl: network.url,
+      redirected: network.redirected,
+      status: response.status(),
+      htmlBytes: Buffer.byteLength(html),
+      ...data,
+    };
     report.pages.push(row);
     check('routes', response.status() === 200, `${path} HTTP 200`);
     check(
@@ -285,8 +338,19 @@ try {
       `${path}: HTML ${row.htmlBytes} bytes (local payload budget)`,
       true,
     );
-    for (const href of data.links)
-      if (href.startsWith('/') && !href.startsWith('//')) links.add(href.split('#')[0]);
+    for (const href of data.links) {
+      if (!href.startsWith('/') || href.startsWith('//')) continue;
+      const discovered = href.split('#')[0];
+      links.add(discovered);
+      // Follow public HTML links missing from the sitemap, excluding filter loops/assets/API.
+      if (
+        /^\/(?:match|equipe|joueur|competition)\/[^/?#.]+$/.test(discovered) &&
+        !queuedPaths.has(discovered)
+      ) {
+        queuedPaths.add(discovered);
+        paths.push(discovered);
+      }
+    }
   }
   for (const field of ['title', 'description']) {
     const indexed = report.pages.filter((p) => !p.robots.includes('noindex'));
@@ -300,15 +364,17 @@ try {
     );
   }
   const known = new Set(report.pages.map((p) => p.path));
-  const missing = [...links].filter((p) => p && !known.has(p));
+  const missing = [...links].filter((p) => p && !known.has(p)).slice(0, linkLimit);
+  report.scope.linkChecksTruncated =
+    [...links].filter((p) => p && !known.has(p)).length > missing.length;
   const broken = [],
     redirects = [];
   let cursor = 0;
   await Promise.all(
-    Array.from({ length: 4 }, async () => {
+    Array.from({ length: 1 }, async () => {
       while (cursor < missing.length) {
         const path = missing[cursor++];
-        const result = await fetch(`${base}${path}`, {
+        const result = await pacedFetch(`${base}${path}`, {
           method: 'HEAD',
           redirect: 'manual',
           signal: AbortSignal.timeout(30000),
@@ -333,8 +399,9 @@ try {
   );
   check(
     'internal links',
-    [...sitemapPaths].every((path) => path === '/' || links.has(path)),
+    !report.scope.truncated && [...sitemapPaths].every((path) => path === '/' || links.has(path)),
     'Every sitemap page has an incoming crawlable link',
+    report.scope.truncated,
   );
   for (const path of [
     '/seo-does-not-exist',
@@ -398,6 +465,13 @@ try {
     });
     let errors = [];
     p.on('pageerror', (e) => errors.push(e.message));
+    p.on('console', (message) => {
+      if (
+        message.type() === 'error' &&
+        /Content Security Policy|Refused to|hydration/i.test(message.text())
+      )
+        errors.push(message.text());
+    });
     for (const path of [
       '/',
       '/equipes',

@@ -1,0 +1,36 @@
+name: Surveillance SEO hebdomadaire
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 5 * * 1'
+permissions:
+  contents: read
+concurrency:
+  group: seo-monitor
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      VERIFY_URL: https://proba-match.com
+      SEO_CANONICAL_ORIGIN: https://proba-match.com
+      SEO_REQUIRE_HTTPS: 'true'
+      SEO_MAX_PAGES: '40'
+      SEO_LINK_LIMIT: '80'
+      SEO_DELAY_MS: '500'
+      SEO_HEALTH_TOKEN: ${{ secrets.CRON_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:seo
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seo-monitor
+          path: artifacts/seo-audit.json

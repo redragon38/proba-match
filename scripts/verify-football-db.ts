@@ -127,12 +127,12 @@ try {
     const lock = await db.syncLock.findUniqueOrThrow({ where: { key: 'football' } });
     const remaining = lock.expiresAt.getTime() - Date.now();
     assert.ok(
-      remaining > 29 * 60000 && remaining <= 30 * 60000,
+      remaining > 60000 && remaining <= 2 * 60000,
       'Lease expiry uses UTC regardless of PostgreSQL timezone',
     );
     await db.syncLock.update({
       where: { key: 'football' },
-      data: { expiresAt: new Date(Date.now() + 30 * 60000) },
+      data: { expiresAt: new Date(Date.now() + 2 * 60000) },
     });
     await assert.rejects(
       footballJob('overlap', async () => ({})),

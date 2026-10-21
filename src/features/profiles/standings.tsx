@@ -6,7 +6,12 @@ import { Empty } from '@/components/ui';
 import { StandingTable } from './standing-table';
 import type { standingsView } from '@/services/football/read-model';
 import { countryLabel } from '@/lib/format';
-export function Standings({ data, seasons, tables }: ReturnType<typeof standingsView>) {
+export function Standings({
+  data,
+  seasons,
+  tables,
+  matchCounts,
+}: ReturnType<typeof standingsView>) {
   const [scope, setScope] = useState<'all' | 'home' | 'away' | 'last5'>('all');
   const [country, setCountry] = useState('all'),
     [competition, setCompetition] = useState(data.competitions[0]?.id ?? ''),
@@ -85,6 +90,21 @@ export function Standings({ data, seasons, tables }: ReturnType<typeof standings
           </button>
         ))}
       </div>
+      {selected && (
+        <p className="data-note">
+          {selected.name} · Saison {competitionSeason(selected, Number(season))} ·{' '}
+          {matchCounts[`${selected.id}:${season}`] ?? 0} résultats terminés disponibles pour ce
+          classement.
+          {scope === 'last5' && ' Le tableau retient au maximum cinq résultats par équipe.'} Source
+          : {data.source}. Dernière vérification des résultats :{' '}
+          {data.verifiedAt?.results
+            ? new Date(data.verifiedAt.results).toLocaleString('fr-FR', {
+                timeZone: 'Europe/Paris',
+              }) + ' (Europe/Paris)'
+            : 'non disponible'}
+          .
+        </p>
+      )}
       {
         <p className="data-note">
           {data.source === 'api-football' && scope === 'all' && Number(season) === selected?.season

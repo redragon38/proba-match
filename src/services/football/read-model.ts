@@ -99,9 +99,11 @@ export function standingsView(data: Dataset) {
       data: { ...catalogDataset(data), players: [] },
       seasons: cached.seasons,
       tables: cached.tables,
+      matchCounts: cached.matchCounts,
     };
   const seasons: Record<string, number[]> = {};
   const tables: Record<string, Standing[]> = {};
+  const matchCounts: Record<string, number> = {};
   for (const competition of data.competitions) {
     const matches = data.matches.filter((m) => m.competitionId === competition.id);
     seasons[competition.id] = [
@@ -109,6 +111,9 @@ export function standingsView(data: Dataset) {
     ].sort((a, b) => b - a);
     for (const season of seasons[competition.id]) {
       const year = matches.filter((m) => (m.season ?? competition.season) === season);
+      matchCounts[`${competition.id}:${season}`] = new Set(
+        year.filter((m) => m.countsForStandings !== false && validResult(m)).map((m) => m.id),
+      ).size;
       for (const scope of ['general', 'home', 'away', 'last5'] as const) {
         tables[`${competition.id}:${season}:${scope}`] =
           scope === 'general' && season === competition.season
@@ -123,8 +128,9 @@ export function standingsView(data: Dataset) {
       standings: data.standings,
       seasons,
       tables,
+      matchCounts,
     });
-  return { data: { ...catalogDataset(data), players: [] }, seasons, tables };
+  return { data: { ...catalogDataset(data), players: [] }, seasons, tables, matchCounts };
 }
 const standingsCache = new WeakMap<
   Dataset['matches'],
@@ -133,6 +139,7 @@ const standingsCache = new WeakMap<
     standings: Dataset['standings'];
     seasons: Record<string, number[]>;
     tables: Record<string, Standing[]>;
+    matchCounts: Record<string, number>;
   }
 >();
 /** Catalogues never use fixtures, injuries or standings. */
@@ -183,7 +190,11 @@ export function competitionDataset(data: Dataset, id: string): Dataset {
   };
 }
 /** Do not serialize the historical corpus or a complete roster into the match dashboard. */
-export function dashboardDataset(data: Dataset, date: string, relatedMatches: Match[] = []): Dataset {
+export function dashboardDataset(
+  data: Dataset,
+  date: string,
+  relatedMatches: Match[] = [],
+): Dataset {
   const start = new Date(`${date}T00:00:00Z`).getTime() - 86400_000;
   const matches = data.matches
     .filter((m) => {

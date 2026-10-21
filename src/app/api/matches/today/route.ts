@@ -1,8 +1,8 @@
 import { monitoredRoute } from '@/services/telemetry';
 import { matchesOnDate } from '@/services/football/catalog';
+import { dateKey } from '@/lib/format';
 async function get(request: Request) {
-  const date =
-    new URL(request.url).searchParams.get('date') ?? new Date().toISOString().slice(0, 10);
+  const date = new URL(request.url).searchParams.get('date') ?? dateKey();
   if (
     !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
     !Number.isFinite(Date.parse(date)) ||

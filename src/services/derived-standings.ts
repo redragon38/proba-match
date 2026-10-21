@@ -11,17 +11,29 @@ export type StandingMatch = Pick<
   | 'kickoff'
   | 'homeId'
   | 'awayId'
->;
+> & { id?: string };
 export function derivedStandings(
   matches: StandingMatch[],
   competitionId: string,
   mode: 'home' | 'away' | 'last5' | 'general',
+  season?: number,
 ): Standing[] {
   const rows = new Map<string, Standing>();
+  const seen = new Set<string>();
   const finished = matches
     .filter(
-      (m) => m.competitionId === competitionId && m.countsForStandings !== false && validResult(m),
+      (m) =>
+        m.competitionId === competitionId &&
+        (season === undefined || m.season === season) &&
+        m.countsForStandings !== false &&
+        validResult(m),
     )
+    .filter((m) => {
+      if (!m.id) return true;
+      if (seen.has(m.id)) return false;
+      seen.add(m.id);
+      return true;
+    })
     .sort((a, b) => Date.parse(b.kickoff) - Date.parse(a.kickoff));
   for (const m of finished)
     for (const [id, home] of [

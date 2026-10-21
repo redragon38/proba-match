@@ -30,6 +30,7 @@ describe('Security and canonical host configuration', () => {
       expect(csp).toContain(directive);
     expect(csp).toContain('https://www.googletagmanager.com');
     expect(csp).toContain('https://*.google-analytics.com');
+    expect(csp).toContain('https://*.analytics.google.com');
     expect(csp).toContain("img-src 'self' data: blob: https://www.googletagmanager.com");
     expect(csp).not.toContain('unsafe-eval');
     expect(headers).toContainEqual({ key: 'X-Content-Type-Options', value: 'nosniff' });

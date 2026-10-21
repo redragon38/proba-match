@@ -32,7 +32,9 @@ test('security policy, legal honesty, keyboard, empty search and zoom reflow', a
   await page.goto('/recherche?q=zzzzzz-no-such-person');
   await expect(page.locator('.search-result')).toHaveCount(0);
   await page.goto('/');
-  const trigger = page.getByRole('button', { name: 'Rechercher une équipe ou un joueur' });
+  const trigger = page.getByRole('button', {
+    name: 'Rechercher une équipe, un joueur ou un match',
+  });
   await trigger.click();
   await expect(page.getByRole('combobox', { name: 'Rechercher partout' })).toBeFocused();
   await page.keyboard.press('Escape');
