@@ -497,10 +497,15 @@ try {
   assert.equal(await db.match.count(), 2);
   if (page) {
     await waitForPublishedSnapshot();
+    const automaticRevision = page.waitForResponse(
+      (response) => new URL(response.url()).pathname === '/api/updates',
+      { timeout: 15000 },
+    );
     await page.clock.fastForward(31000);
+    assert.equal((await automaticRevision).status(), 200, 'Browser automatically polls the publication revision');
     await expect(
       page.locator('.match-row').filter({ hasText: 'Integration New Opponent' }),
-    ).toBeVisible();
+    ).toBeVisible({ timeout: 15000 });
     await page.screenshot({ path: 'artifacts/automatic-sync.png' });
   }
   const added = (await readLocalDataset()).matches.find((m) => m.id !== id)!;
