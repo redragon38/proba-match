@@ -28,14 +28,14 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllEnvs());
 
-it('awaits an expired revision and coalesces concurrent page refreshes instead of returning stale content', async () => {
+it('awaits the current revision even immediately after publication and coalesces concurrent refreshes', async () => {
   const first = new Date('2026-10-21T12:00:00Z');
   const second = new Date('2026-10-21T12:01:00Z');
   const expiresAt = new Date('2099-01-01');
   state.marker.mockResolvedValue({ updatedAt: first, expiresAt });
   state.load.mockResolvedValue(dataset('first'));
   expect((await getDataset()).revision).toBe('first');
-  state.now = 11000;
+  state.now = 1;
   let release!: (value: { updatedAt: Date; expiresAt: Date }) => void;
   state.marker.mockImplementation(() => new Promise((resolve) => { release = resolve; }));
   state.load.mockResolvedValue(dataset('second'));
@@ -55,7 +55,7 @@ it('keeps the last snapshot explicitly degraded when the fresh revision lookup f
   state.marker.mockResolvedValue({ updatedAt: new Date('2026-10-21T12:00:00Z'), expiresAt: new Date('2099-01-01') });
   state.load.mockResolvedValue(dataset('preserved'));
   await getDataset();
-  state.now = 11000;
+  state.now = 1;
   state.marker.mockRejectedValue(new Error('database offline'));
   const result = await getDataset();
   expect(result.revision).toBe('preserved');

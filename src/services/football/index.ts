@@ -18,9 +18,9 @@ export const getDataset = requestCache(async function getDataset(): Promise<Data
     );
   }
   try {
-    // A revision changes only when a sync publishes a new snapshot. Sharing this tiny
-    // lookup briefly prevents every page view and polling request from opening a new
-    // PostgreSQL round trip while keeping live data at most a few seconds behind.
+    // Only read the tiny indexed revision row here; the full corpus remains cached
+    // by revision below. Coalesce in-flight lookups, but do not retain the marker:
+    // /api/updates may already have announced an import newer than a cached marker.
     const marker = await cache.get(
       'football:dataset-revision',
       () =>
@@ -30,10 +30,7 @@ export const getDataset = requestCache(async function getDataset(): Promise<Data
             select: { updatedAt: true, expiresAt: true },
           }),
         ),
-      10_000,
-      // A refresh triggered by /api/updates must not receive an expired revision.
-      // Returning stale here served the old page once and delayed new fixtures
-      // until another browser polling cycle, even after publication succeeded.
+      0,
       0,
     );
     return await datasets
