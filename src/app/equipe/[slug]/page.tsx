@@ -5,7 +5,7 @@ import { JsonLd } from '@/components/json-ld';
 import { teamStructuredData } from '@/lib/sports-structured-data';
 import { teamFactSummary, teamSeoTitle } from '@/lib/team-facts';
 import { seoMetadata } from '@/lib/seo';
-import { teamDataset } from '@/services/football/read-model';
+import { profileDataset } from '@/services/football/read-model';
 import { getPredictions } from '@/services/predictions';
 import { upcomingTeamMatches } from '@/services/football/match-selection';
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -32,7 +32,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     <>
       {data.source !== 'demo' && <JsonLd value={teamStructuredData(team, competition)} />}
       <TeamProfile
-        data={teamDataset(data, [team.id])}
+        data={profileDataset(data, [team.id])}
         team={team}
         summary={data.source !== 'demo' ? teamFactSummary(team, data) : undefined}
         predictions={await getPredictions(data, upcomingIds, false)}

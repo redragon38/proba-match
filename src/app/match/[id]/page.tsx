@@ -1,7 +1,7 @@
 import { matchPageStructuredData } from '@/lib/sports-structured-data';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { seoMetadata, matchIndexable } from '@/lib/seo';
-import { teamDataset } from '@/services/football/read-model';
+import { profileDataset } from '@/services/football/read-model';
 import { getDataset } from '@/services/football';
 import {
   computeDisplayPrediction,
@@ -69,7 +69,7 @@ export default async function Page({
     <>
       {structured && <JsonLd value={structured} />}
       <MatchDetail
-        data={teamDataset(data, [m.homeId, m.awayId])}
+        data={profileDataset(data, [m.homeId, m.awayId], m.id)}
         match={m}
         history={history}
         prediction={prediction}

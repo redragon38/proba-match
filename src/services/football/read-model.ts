@@ -178,6 +178,34 @@ export function teamDataset(data: Dataset, ids: string[]): Dataset {
     injuries: data.injuries.filter((i) => ids.includes(i.teamId)),
   };
 }
+/** Profiles render historical scores/statistics, but open full details on the match's own page. */
+export function profileDataset(data: Dataset, ids: string[], focusedMatch?: string): Dataset {
+  const selected = new Set(ids);
+  const scoped = teamDataset(data, ids);
+  const teamIds = new Set([
+    ...ids,
+    ...scoped.matches.flatMap((match) => [match.homeId, match.awayId]),
+  ]);
+  const competitionIds = new Set([
+    ...scoped.matches.map((match) => match.competitionId),
+    ...data.teams.filter((team) => selected.has(team.id)).map((team) => team.competitionId),
+  ]);
+  return {
+    ...scoped,
+    teams: scoped.teams.filter((team) => teamIds.has(team.id)),
+    competitions: scoped.competitions.filter((competition) => competitionIds.has(competition.id)),
+    standings: Object.fromEntries(
+      Object.entries(scoped.standings)
+        .filter(([id]) => competitionIds.has(id))
+        .map(([id, rows]) => [id, rows.filter((row) => selected.has(row.teamId))]),
+    ),
+    matches: scoped.matches.map((match) =>
+      match.id === focusedMatch
+        ? match
+        : { ...match, lineups: [], performances: undefined },
+    ),
+  };
+}
 export function competitionDataset(data: Dataset, id: string): Dataset {
   const matches = data.matches.filter((m) => m.competitionId === id);
   const teams = new Set(matches.flatMap((m) => [m.homeId, m.awayId]));

@@ -37,6 +37,10 @@ jobs:
       - run: node scripts/verify-empty-states.mjs
       - name: Audit SEO du build de production
         shell: bash
+        env:
+          # The entire fixture corpus is crawled. Pace public sites, not localhost.
+          SEO_DELAY_MS: '0'
+          SEO_LINK_LIMIT: '500'
         run: |
           npm run start > /tmp/matchscore-seo.log 2>&1 &
           server_pid=$!

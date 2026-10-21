@@ -326,7 +326,9 @@ try {
     assert.equal((await originalFetch('http://localhost:3001/api/cron/live')).status, 401);
     assert.equal(
       (
-        await originalFetch('http://localhost:3001/api/cron/live', {
+        // Exercise successful authorization without asking public providers to identify
+        // the deliberately synthetic integration fixture. Partial imports now return 503.
+        await originalFetch('http://localhost:3001/api/cron/predictions', {
           headers: { Authorization: `Bearer ${process.env.CRON_SECRET}` },
         })
       ).status,
