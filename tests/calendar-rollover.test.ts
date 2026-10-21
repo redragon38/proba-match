@@ -1,8 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { calendarTimeZone, validCalendarDate } from '@/lib/calendar-date';
+import { calendarDateOffset, calendarTimeZone, validCalendarDate } from '@/lib/calendar-date';
 import { dateKey } from '@/lib/format';
 
 describe('calendar input and day rollover', () => {
+  it.each([
+    ['2026-10-26T22:30:00Z', -7, '2026-10-19'],
+    ['2026-03-23T22:30:00Z', 7, '2026-03-30'],
+  ])('keeps the catch-up calendar date across DST from %s', (iso, offset, expected) => {
+    expect(calendarDateOffset(new Date(iso), Number(offset))).toBe(expected);
+  });
   it('rejects impossible dates without rejecting a real day in another timezone', () => {
     expect(validCalendarDate('2026-02-30')).toBe(false);
     expect(validCalendarDate('2028-02-29')).toBe(true);

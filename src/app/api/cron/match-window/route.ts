@@ -2,24 +2,15 @@ import { cronHandler } from '@/services/football/cron';
 import { syncOpenFootball } from '@/services/football/openfootball-sync';
 import { syncSecondary } from '@/services/football/secondary';
 import { syncFotmobLive } from '@/services/football/fotmob-live-sync';
+import { calendarDateOffset } from '@/lib/calendar-date';
 
 export const maxDuration = 300;
 
-function parisDate(offsetDays: number) {
-  const base = new Date();
-  base.setUTCDate(base.getUTCDate() + offsetDays);
-  return new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'Europe/Paris',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).format(base);
-}
-
 export const GET = cronHandler(async () => {
-  const dates = Array.from({ length: 9 }, (_, index) => parisDate(index - 7));
+  const now = new Date();
+  const dates = Array.from({ length: 9 }, (_, index) => calendarDateOffset(now, index - 7));
   const openfootball = await syncOpenFootball({ force: true });
-  const catchup = await syncFotmobLive(new Date(), { catchUp: true });
+  const catchup = await syncFotmobLive(now, { catchUp: true });
   const secondary = [];
 
   for (const date of dates) {

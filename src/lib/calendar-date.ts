@@ -1,3 +1,12 @@
+import { dateKey } from '@/lib/format';
+
+/** Move calendar days in the chosen zone, not 24-hour instants across a DST change. */
+export function calendarDateOffset(now: Date, offset: number, zone = 'Europe/Paris') {
+  const day = new Date(`${dateKey(now, zone)}T12:00:00.000Z`);
+  day.setUTCDate(day.getUTCDate() + offset);
+  return day.toISOString().slice(0, 10);
+}
+
 export function validCalendarDate(value: unknown): value is string {
   return (
     typeof value === 'string' &&
