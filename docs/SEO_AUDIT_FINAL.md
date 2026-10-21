@@ -215,6 +215,24 @@ Le dépôt avait `master` comme branche par défaut et aucune branche `main` ; p
 sur `main` ne prouve pas que l'hébergeur suit cette branche ni que le planning GitHub
 s'exécute sur cette branche. Vérifier ce rattachement avant de conclure à une mise en ligne.
 
+## Publication GitHub et contrôle après envoi
+
+Correctifs publiés sur `main` : commit `5ad57d5ac195ef322cca536d1f17199578265c33`.
+L'arbre publié correspond exactement à l'index Git local validé
+(`bcfb880bf2105cc3cc62edf0edce66b710c4c79d`). La copie locale suit `origin/main`
+et ne contient aucun changement non publié. Aucun force-push.
+L'envoi a utilisé la connexion du plugin GitHub ; Git Credential Manager local ne
+disposait pas d'une authentification utilisable.
+
+Contrôle GitHub du commit après publication : contexte **Vercel = failure**,
+avec pour destination la page officielle
+[Deployment blocked](https://vercel.com/knowledge/why-is-my-account-deployment-blocked).
+Ce statut externe ne fournit pas la cause précise du blocage du compte. Aucun
+déploiement de ce correctif n'est confirmé et aucune modification de facturation
+ou dépense n'a été effectuée. Vérifier le compte/projet Vercel et la branche de
+production ; le site public accessible pendant l'audit reste une preuve distincte
+des validations locales. Cette intervention extérieure reste ouverte.
+
 ## Fichiers modifiés
 
 `src/lib/probability-format.ts`, `src/lib/match-date.ts`,
