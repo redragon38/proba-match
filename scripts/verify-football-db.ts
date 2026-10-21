@@ -12,6 +12,7 @@ testUrl.pathname = `/${name}`;
 const originalFetch = globalThis.fetch;
 let client: PrismaClient | undefined;
 let server: ChildProcess | undefined, browser: Browser | undefined, page: Page | undefined;
+const browserResponses: { path: string; status: number }[] = [];
 try {
   await admin.$executeRawUnsafe(`CREATE DATABASE "${name}"`);
   process.env.DATABASE_URL = testUrl.toString();
@@ -324,6 +325,11 @@ try {
       channel: process.platform === 'win32' ? 'chrome' : 'chromium',
     });
     page = await browser.newPage();
+    page.on('response', (response) => {
+      const url = new URL(response.url());
+      if (url.pathname === '/api/updates' || url.searchParams.has('_rsc'))
+        browserResponses.push({ path: url.pathname + url.search, status: response.status() });
+    });
     await page.clock.install();
     await page.goto(`http://localhost:3001/match/${id}?onglet=evenements`);
     await expect(page.locator('.score-block > strong')).toHaveText('0 : 0');
@@ -648,6 +654,17 @@ try {
     'PostgreSQL integration PASS: failed lease recovery, two automatic scheduler imports (accelerated clock), imports, idempotence, reschedule, new fixtures, no key, live score/minute/events/statistics/lineups, injuries/recovery, final score/standings, quota fallback, source outage' +
       (page ? ', production cache and automatic UI refresh, cron authentication.' : '.'),
   );
+} catch (error) {
+  if (page) {
+    const freshPage = await originalFetch(page.url()).then((response) => response.text()).catch(() => '');
+    console.error('DB_UI_FAILURE_STATE', JSON.stringify({
+      url: page.url(),
+      responses: browserResponses,
+      browserText: await page.locator('body').innerText().catch(() => ''),
+      serverHasNewOpponent: freshPage.includes('Integration New Opponent'),
+    }));
+  }
+  throw error;
 } finally {
   await browser?.close();
   if (server) {
