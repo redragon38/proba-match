@@ -17,6 +17,7 @@ try {
   await admin.$executeRawUnsafe(`CREATE DATABASE "${name}"`);
   process.env.DATABASE_URL = testUrl.toString();
   process.env.FOOTBALL_API_KEY = '';
+  process.env.NEXT_PUBLIC_SITE_URL ??= 'http://localhost:3001';
   // This process and its child serve only the disposable integration database.
   process.env.CRON_SECRET = 'integration-only-cron-secret-32-chars';
   process.env.ADMIN_SECRET = 'integration-only-admin-secret-32-chars';
@@ -633,7 +634,7 @@ try {
       },
     });
     const login = await page.request.post('http://localhost:3001/api/admin/session', {
-      headers: { Origin: 'http://localhost:3001' },
+      headers: { Origin: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3001').origin },
       data: { secret: process.env.ADMIN_SECRET },
     });
     assert.equal(login.status(), 200);
