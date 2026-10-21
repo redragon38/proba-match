@@ -119,6 +119,16 @@ try {
   const { syncSecondary } = await import('../src/services/football/secondary');
   const { syncSportsDbPlayers } = await import('../src/services/football/sportsdb-sync');
   const { readLocalDataset } = await import('../src/services/football/local-store');
+  async function waitForPublishedSnapshot() {
+    const expected = (await readLocalDataset()).updatedAt;
+    // Advancing the browser clock does not advance the server's revision cache.
+    await expect
+      .poll(async () => (await (await originalFetch('http://localhost:3001/api/live')).json()).updatedAt, {
+        timeout: 35000,
+        intervals: [500, 1000, 2000],
+      })
+      .toBe(expected);
+  }
   const { bindIdentity } = await import('../src/services/football/identities');
   const { persistDataset } = await import('../src/services/football/persistence');
   const { footballJob } = await import('../src/services/football/jobs');
@@ -425,6 +435,7 @@ try {
   assert.equal(data.matches[0].statistics.find((s) => s.label === 'Possession')?.home, 60);
   assert.equal(data.matches[0].lineups.length, 2);
   if (page) {
+    await waitForPublishedSnapshot();
     const live = await (await originalFetch('http://localhost:3001/api/live')).json();
     assert.equal(
       live.matches.find((m: { id: string }) => m.id === id)?.homeScore,
@@ -454,6 +465,7 @@ try {
   );
   assert.equal((await db.standing.findFirstOrThrow({ where: { teamId: match.homeId } })).points, 3);
   if (page) {
+    await waitForPublishedSnapshot();
     await page.clock.fastForward(31000);
     await expect(page.locator('.score-block > strong')).toHaveText('2 : 0');
   }
@@ -484,6 +496,7 @@ try {
   await run();
   assert.equal(await db.match.count(), 2);
   if (page) {
+    await waitForPublishedSnapshot();
     await page.clock.fastForward(31000);
     await expect(
       page.locator('.match-row').filter({ hasText: 'Integration New Opponent' }),
@@ -500,6 +513,7 @@ try {
   assert.equal(Date.parse(rescheduled.kickoff) - Date.parse(added.kickoff), 3600000);
   assert.equal(await db.match.count(), 2);
   if (page) {
+    await waitForPublishedSnapshot();
     await page.clock.fastForward(31000);
     await expect(page.locator('.score-block time')).toHaveAttribute(
       'datetime',
