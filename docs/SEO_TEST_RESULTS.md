@@ -1,5 +1,7 @@
 # Vérifications finales — publication du 22 octobre 2026
 
+Suite VPS : la nouvelle fusion est validée avec 440 unités, 76 E2E (deux ignorés), PostgreSQL/UI, 611 pages SEO et 19 contrôles HTTP de sécurité. Voir [la livraison VPS](VPS_DEPLOYMENT_2026-10-22.md). Le tableau ci-dessous conserve le périmètre du candidat précédent.
+
 Code testé : 43850598cf0162fe7606f4d4483ad877a615d9af. [CI finale](https://github.com/redragon38/proba-match/actions/runs/39669708252) : quality et database-ui réussis. Les captures publiques sont du 21 octobre ; elles précèdent le déploiement du candidat.
 
 | Vérification | Résultat | Preuve / limites |

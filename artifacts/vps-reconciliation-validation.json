@@ -27,13 +27,45 @@
       "reason": "Old mock expected Prisma upsert instead of immutable SQL insert"
     },
     "repair": "SQL insertion mock and conflict/idempotence assertions updated; all six targeted tests pass",
-    "fullCandidate": "Await GitHub CI"
+    "fullCandidate": {
+      "passed": 440,
+      "files": 85,
+      "source": "GitHub CI final candidate"
+    }
   },
   "productionBuild": {
-    "local": "PASS",
-    "ci": "PASS"
+    "localPriorReconciledCode": "PASS",
+    "finalCandidateCi": "PASS"
   },
-  "githubCi": "Final candidate run pending",
+  "githubCi": {
+    "run": 39699839419,
+    "url": "https://github.com/redragon38/proba-match/actions/runs/39699839419",
+    "quality": "success",
+    "databaseUi": "success",
+    "unitTests": 440,
+    "unitFiles": 85,
+    "e2ePassed": 76,
+    "e2eSkipped": 2,
+    "skipReason": "Empty matchday conditional scenario does not apply to fixtures with matches today; desktop/mobile",
+    "seo": {
+      "pages": 611,
+      "checks": 9775,
+      "browserViews": 20,
+      "failures": 0,
+      "warnings": [
+        "SEO_HEALTH_TOKEN absent"
+      ],
+      "additionalLinksChecked": 500,
+      "brokenLinks": 0,
+      "redirectedLinks": 0,
+      "orphanCandidates": 0
+    },
+    "securityHttp": {
+      "checks": 19,
+      "failures": 0
+    },
+    "postgresUi": "PASS: leases, automatic imports, idempotence, new fixtures/reschedule refresh, live/final score, lineups/statistics/injuries, quota/outage and authentication"
+  },
   "productionDeployment": "NOT VERIFIED; no SSH session or production writes performed",
   "targetedTests": {
     "passed": 6,
@@ -54,6 +86,18 @@
         "failures": 2,
         "reason": "Two fixtures share teams/date/score and differ in documented kickoff time. Metadata omitted the time."
       }
+    },
+    {
+      "sha": "0be57c527355b98d42b3a4e15d926cac128a43a9",
+      "run": 39699839419,
+      "quality": "PASS",
+      "databaseUi": "PASS",
+      "unitTests": 440,
+      "e2ePassed": 76,
+      "e2eSkipped": 2,
+      "seoFailures": 0,
+      "securityFailures": 0,
+      "final": true
     }
   ],
   "metadataRepair": {
@@ -62,6 +106,7 @@
       "passed": 13,
       "files": 2
     },
-    "ci": "Pending next candidate"
-  }
+    "ci": "PASS: no duplicate title or description in final full isolated crawl"
+  },
+  "finalCandidate": "0be57c527355b98d42b3a4e15d926cac128a43a9"
 }
