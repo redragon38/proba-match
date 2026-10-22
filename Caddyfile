@@ -1,3 +1,9 @@
+# Send both HTTP hosts straight to the canonical HTTPS origin, preserving the URI.
+# Caddy's automatic HTTPS redirect otherwise adds a hop through HTTPS www.
+http://proba-match.com, http://www.proba-match.com {
+	redir https://proba-match.com{uri} permanent
+}
+
 proba-match.com {
 	encode zstd gzip
 	header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"

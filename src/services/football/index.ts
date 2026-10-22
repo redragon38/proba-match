@@ -54,20 +54,17 @@ export const getDataset = requestCache(async function getDataset(): Promise<Data
         );
       });
   } catch {
-    const unavailableWarning =
-      'Les données football sont temporairement indisponibles. Les guides et explications restent accessibles.';
-    return lastDataset
-      ? withSourceFreshness({
-          ...lastDataset,
-          degraded: true,
-          warning: [
-            lastDataset.warning,
-            'Dernières données sauvegardées. La base est temporairement indisponible.',
-          ]
-            .filter(Boolean)
-            .join(' '),
-        })
-      : emptyDataset(unavailableWarning);
+    if (!lastDataset) throw new Error('FOOTBALL_TEMPORARILY_UNAVAILABLE');
+    return withSourceFreshness({
+      ...lastDataset,
+      degraded: true,
+      warning: [
+        lastDataset.warning,
+        'Dernières données sauvegardées. La base est temporairement indisponible.',
+      ]
+        .filter(Boolean)
+        .join(' '),
+    });
   }
 });
 let lastDataset: Dataset | undefined;

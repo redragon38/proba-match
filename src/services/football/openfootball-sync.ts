@@ -80,6 +80,7 @@ export async function syncOpenFootball(
     history?: boolean;
     scopes?: { league: OpenLeague; season: number }[];
     force?: boolean;
+    predictions?: boolean;
   } = {},
 ) {
   return footballJob('openfootball', async () => {
@@ -364,7 +365,7 @@ export async function syncOpenFootball(
       data.matches.sort((a, b) => b.kickoff.localeCompare(a.kickoff));
       await persistDataset(data, new Set(), { profiles: false });
       if (imported) await rebuildElo(data.matches);
-      await persistPredictions(data);
+      if (options.predictions !== false) await persistPredictions(data);
     }
     log('OPENFOOTBALL_IMPORT_FINISHED', { count: imported });
     return {

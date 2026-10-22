@@ -34,10 +34,13 @@ export async function generateMetadata({
       : c.season;
   const label = competitionSeason(c, season);
   return seoMetadata(
-    `/competition/${c.slug}`,
+    `/competition/${c.slug}${season !== c.season ? `?saison=${season}` : ''}`,
     `${c.name} — saison ${label}, classement et calendrier`,
     `Saison ${label} de ${c.name} : classement, résultats et calendrier selon les données disponibles. La couverture du catalogue Proba Match peut être partielle.`,
-    d.source !== 'demo' && !query.saison && d.matches.some((m) => m.competitionId === c.id),
+    d.source !== 'demo' &&
+      !query.statut &&
+      (!query.saison || Number(query.saison) === season) &&
+      d.matches.some((m) => m.competitionId === c.id && (m.season ?? c.season) === season),
   );
 }
 export default async function Page({
@@ -57,7 +60,11 @@ export default async function Page({
   return (
     <CompetitionProfile
       view={view}
-      predictions={await getPredictions(data, new Set(view.matches.map((match) => match.id)), false)}
+      predictions={await getPredictions(
+        data,
+        new Set(view.matches.map((match) => match.id)),
+        false,
+      )}
     />
   );
 }

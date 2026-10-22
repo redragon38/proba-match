@@ -8,6 +8,7 @@ const mocks = vi.hoisted(() => ({
   predict: vi.fn(),
   findUnique: vi.fn(),
   upsert: vi.fn(),
+  insert: vi.fn(),
   marker: vi.fn(),
   updateMarker: vi.fn(),
   fence: vi.fn(),
@@ -21,6 +22,7 @@ vi.mock('@/database/client', () => {
     predictionVersion: { upsert: mocks.version },
     cacheEntry: { findUnique: mocks.marker, update: mocks.updateMarker },
     $queryRaw: mocks.fence,
+    $executeRaw: mocks.insert,
   };
   return {
     db: {
@@ -136,25 +138,30 @@ it('archives a real pre-match projection 15 days ahead during background sync', 
     lineupConfirmed: false,
   });
   mocks.marker.mockResolvedValue({ updatedAt: now });
+  mocks.insert.mockResolvedValue(1);
   await persistPredictions(data, now);
   expect(mocks.predict).toHaveBeenCalledOnce();
-  expect(mocks.upsert).toHaveBeenCalledOnce();
-  expect(mocks.upsert.mock.calls[0][0].create).toMatchObject({
-    matchId: 'upcoming',
-    kind: 'initial',
-  });
+  expect(mocks.insert).toHaveBeenCalledOnce();
+  const [sql, ...values] = mocks.insert.mock.calls[0];
+  expect(sql.join('?')).toContain('ON CONFLICT ("matchId", "versionId", "kind") DO NOTHING');
+  expect(values).toContain('upcoming');
+  expect(values).toContain('initial');
+  expect(JSON.parse(values.at(-1))).toMatchObject({ matchId: 'upcoming' });
+  expect(mocks.upsert).not.toHaveBeenCalled();
   expect(mocks.updateMarker).toHaveBeenCalledOnce();
   expect(mocks.updateMarker.mock.calls[0][0].data.updatedAt.getTime()).toBeGreaterThan(
     now.getTime(),
   );
   mocks.predict.mockClear();
   mocks.upsert.mockClear();
+  mocks.insert.mockClear();
   mocks.updateMarker.mockClear();
   mocks.findUnique.mockResolvedValue({ id: 'projection' });
   await persistPredictions(data, now);
   expect(mocks.predict).not.toHaveBeenCalled();
   expect(mocks.upsert).not.toHaveBeenCalled();
   expect(mocks.updateMarker).not.toHaveBeenCalled();
+  expect(mocks.insert).not.toHaveBeenCalled();
 });
 
 it.each([

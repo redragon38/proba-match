@@ -25,6 +25,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: bash -n scripts/deploy-reviewed-vps.sh
       - run: npm run db:generate
       - run: npm run typecheck
       - run: npm run lint

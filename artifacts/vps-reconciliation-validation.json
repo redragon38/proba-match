@@ -1,0 +1,40 @@
+{
+  "reviewDate": "2026-10-22",
+  "vpsBase": "46210153a407293789f0b1f43c3b8cf9f78ebb91",
+  "githubBeforeMerge": "9d7353c8fa7c770558304dc81c6210c8290273ca",
+  "reviewedTrackedFiles": 37,
+  "reviewedNewFiles": 13,
+  "manifest": "ops/vps-reconciliation-2026-10-22.sha256",
+  "shellSyntax": "PASS",
+  "deploymentRehearsal": {
+    "result": "PASS",
+    "changedFileRejected": true,
+    "sourceFiles": 50,
+    "targetMatched": true,
+    "snapshotPreserved": true,
+    "docker": "stubbed; no production or Docker action executed"
+  },
+  "typecheck": "PASS",
+  "lint": {
+    "errors": 0,
+    "warnings": 2,
+    "notes": "Pre-existing Open Graph img warnings"
+  },
+  "unitTests": {
+    "initialAttempt": {
+      "passed": 437,
+      "failed": 1,
+      "reason": "Old mock expected Prisma upsert instead of immutable SQL insert"
+    },
+    "repair": "SQL insertion mock and conflict/idempotence assertions updated; all six targeted tests pass",
+    "fullCandidate": "Await GitHub CI"
+  },
+  "productionBuild": "pending",
+  "githubCi": "Will run on this code publication; do not reuse previous candidate results",
+  "productionDeployment": "NOT VERIFIED; no SSH session or production writes performed",
+  "targetedTests": {
+    "passed": 6,
+    "files": 2,
+    "coverage": "Immutable SQL insertion/idempotence/lease fencing and full prepared forecast equivalence"
+  }
+}

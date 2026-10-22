@@ -11,6 +11,7 @@ import { walkForwardBacktest } from '@/prediction-engine/backtest';
 import { Performance } from '@/features/performance/performance';
 import { cache } from '@/services/cache';
 import { MODEL_VERSION } from '@/prediction-engine';
+import { performanceView } from '@/services/performance-view';
 export default async function Page() {
   if (!verifyAdminSession((await cookies()).get('ms-admin')?.value)) redirect('/admin');
   const data = await getDataset();
@@ -22,18 +23,8 @@ export default async function Page() {
         3_600_000,
       )
     : await getEvaluations();
-  const evaluated = new Set(rows.map((row) => row.prediction.matchId));
+  const view = performanceView(data, rows);
   return (
-    <Performance
-      data={{
-        ...data,
-        players: [],
-        injuries: [],
-        standings: {},
-        matches: data.matches.filter((m) => evaluated.has(m.id)),
-      }}
-      rows={rows}
-      demo={demo}
-    />
+    <Performance data={view.data} rows={view.rows} nonEvaluable={view.nonEvaluable} demo={demo} />
   );
 }

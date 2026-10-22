@@ -1,5 +1,7 @@
 # Audit SEO et fiabilité — Proba Match, 21 octobre 2026, cycle 2
 
+Suite du 22 octobre : les adaptations du VPS sont maintenant reçues et réconciliées. Ce rapport conserve les mesures de son candidat d’origine ; voir [la livraison VPS](VPS_DEPLOYMENT_2026-10-22.md) et artifacts/vps-reconciliation-validation.json pour la nouvelle fusion.
+
 Rapport finalisé le 22 octobre 2026 ; captures publiques du 21 octobre.
 
 État : code livré sur main, SHA 43850598cf0162fe7606f4d4483ad877a615d9af. Validation locale et GitHub Actions réussie. Déploiement VPS non confirmé.

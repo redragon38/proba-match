@@ -307,6 +307,16 @@ try {
   await bindIdentity('api-football', 'team', '2', match.awayId);
   await bindIdentity('api-football', 'match', '123', id);
   if (process.env.FOOTBALL_VERIFY_UI === 'true') {
+    // The child cron must remain isolated: no public history provider is queried.
+    // History availability itself is covered with controlled provider mocks.
+    for (const league of (process.env.OPENFOOTBALL_LEAGUES ?? 'fr.1,en.1,de.1,es.1,it.1').split(',')) {
+      const historyId = `openfootball:${league}:${currentSeason() - 1}`;
+      await db.dataSource.upsert({
+        where: { id: historyId },
+        create: { id: historyId, url: 'https://fixture.invalid/history', license: 'isolated-test', lastSyncedAt: new Date() },
+        update: { lastSyncedAt: new Date() },
+      });
+    }
     server = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'start', '-p', '3001'], {
       env: { ...process.env, FOOTBALL_API_KEY: '' },
       stdio: 'ignore',

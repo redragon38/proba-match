@@ -7,13 +7,20 @@ import { validResult } from '@/prediction-engine/availability';
 /** One origin for metadata, JSON-LD, robots and sitemap; never trust a request Host. */
 export function siteOrigin(value = process.env.NEXT_PUBLIC_SITE_URL): string {
   // Existing Vercel projects may still carry the former public-origin variable.
-  const configured = ['https://probamatch.com', 'https://www.probamatch.com'].includes(value ?? '')
-    ? 'https://proba-match.vercel.app'
+  const configured = [
+    'https://probamatch.com',
+    'https://www.probamatch.com',
+    'https://www.proba-match.com',
+    'https://proba-match.vercel.app',
+  ].includes((value ?? '').replace(/\/$/, ''))
+    ? 'https://proba-match.com'
     : value;
   const url = new URL(
     configured ||
-      (process.env.VERCEL_ENV === 'production'
-        ? 'https://proba-match.vercel.app'
+      (process.env.NODE_ENV === 'production' ||
+      process.env.VERCEL_ENV === 'production' ||
+      process.env.APP_ENV === 'production'
+        ? 'https://proba-match.com'
         : 'http://localhost:3000'),
   );
   const local = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
@@ -249,6 +256,7 @@ export function indexablePaths(data: Dataset): string[] {
     (path) => path !== '/joueurs' || data.players.length > 0,
   );
   for (const [path, count] of [
+    ['/matchs', data.matches.length],
     ['/equipes', data.teams.length],
     ['/joueurs', data.players.length],
     ['/competitions', data.competitions.length],
@@ -265,9 +273,19 @@ export function indexablePaths(data: Dataset): string[] {
     ...data.players
       .filter((p) => playerIndexable(p.stats.appearances) && teamIds.has(p.teamId))
       .map((p) => `/joueur/${p.slug}`),
-    ...data.competitions
-      .filter((c) => data.matches.some((m) => m.competitionId === c.id))
-      .map((c) => `/competition/${c.slug}`),
+    ...data.competitions.flatMap((c) => {
+      const seasons = new Set(
+        data.matches.filter((m) => m.competitionId === c.id).map((m) => m.season ?? c.season),
+      );
+      if (!seasons.size) return [];
+      return [
+        ...(seasons.has(c.season) ? [`/competition/${c.slug}`] : []),
+        ...[...seasons]
+          .filter((year) => year !== c.season)
+          .sort((a, b) => b - a)
+          .map((year) => `/competition/${c.slug}?saison=${year}`),
+      ];
+    }),
     ...data.matches.filter((m) => matchIndexable(m, documented)).map((m) => `/match/${m.slug}`),
   );
   return [...new Set(paths)];

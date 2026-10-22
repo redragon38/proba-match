@@ -3,7 +3,7 @@ import { getDataset } from '@/services/football';
 import { absoluteUrl, indexablePaths, editorialPaths } from '@/lib/seo';
 import { editorialReviewDate } from '@/lib/editorial';
 import { isPreviewDeployment } from '@/lib/deployment';
-import { entityContentModifiedAt } from '@/lib/sitemap-lastmod';
+import { contentModificationIndex } from '@/lib/sitemap-lastmod';
 export const dynamic = 'force-dynamic';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (isPreviewDeployment()) return [];
@@ -13,12 +13,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: editorialReviewDate(path),
     }));
   const data = await getDataset();
+  const modifications = contentModificationIndex(data);
   // Match updatedAt can be refreshed by a sync without any significant content change.
   // Omit that date until a dedicated content-change timestamp exists.
   return indexablePaths(data).map((path) => {
     const modified = editorialPaths.includes(path)
       ? editorialReviewDate(path)
-      : entityContentModifiedAt(path, data);
+      : modifications.get(path);
     return { url: absoluteUrl(path), ...(modified ? { lastModified: modified } : {}) };
   });
 }

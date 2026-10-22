@@ -16,12 +16,14 @@ export function Performance({
   demo,
   publicReport = false,
   summary,
+  nonEvaluable: suppliedNonEvaluable,
 }: {
   data: Dataset;
   rows: EvaluatedPrediction[];
   demo: boolean;
   publicReport?: boolean;
   summary?: ReportSummary;
+  nonEvaluable?: number;
 }) {
   const router = useRouter();
   const [localComp, setLocalComp] = useState('all'),
@@ -88,6 +90,7 @@ export function Performance({
   const evaluatedIds = new Set(rows.map((row) => row.prediction.matchId));
   const nonEvaluable =
     summary?.nonEvaluable ??
+    suppliedNonEvaluable ??
     data.matches.filter((match) => match.status === 'finished' && !evaluatedIds.has(match.id))
       .length;
   const count = summary?.filteredCount ?? filtered.length;

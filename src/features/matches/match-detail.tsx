@@ -222,11 +222,12 @@ export function MatchDetail({
             ) : (
               <div className="card">
                 <Empty
+                  title="Prédiction non disponible"
                   text={
                     homeSummary.played < 5 || awaySummary.played < 5
                       ? 'Une projection exige au moins cinq résultats antérieurs pour chaque équipe.'
                       : match.status === 'scheduled'
-                        ? 'Aucune projection pré-match archivée pour cette rencontre. Les calculs sont publiés automatiquement dans les 21 jours avant le match.'
+                        ? 'Aucune projection pré-match archivée pour cette rencontre. La publication intervient dans les 21 jours avant le match, si l’heure du coup d’envoi est connue et si l’historique pondéré des deux équipes est suffisant. Cinq résultats bruts ne suffisent pas toujours.'
                         : 'Aucune projection enregistrée avant cette rencontre.'
                   }
                 />

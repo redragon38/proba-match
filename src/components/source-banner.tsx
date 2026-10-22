@@ -24,9 +24,17 @@ export function SourceBanner({
             <CircleCheck size={14} />
             <strong>Données football</strong>
             <span>
-              {data.updatedAt
-                ? `Catalogue publié le ${new Date(data.updatedAt).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })} ; chaque donnée peut avoir une date de vérification différente.`
-                : 'En attente de synchronisation'}
+              {data.updatedAt ? (
+                <>
+                  Catalogue publié le{' '}
+                  <time dateTime={data.updatedAt} data-football-updated-at={data.updatedAt}>
+                    {new Date(data.updatedAt).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}
+                  </time>{' '}
+                  ; chaque donnée peut avoir une date de vérification différente.
+                </>
+              ) : (
+                'En attente de synchronisation'
+              )}
             </span>
           </>
         )}
