@@ -51,11 +51,14 @@ jobs:
             sleep 1
           done
           npm run test:seo
+          node scripts/verify-security.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: seo-audit
-          path: artifacts/seo-audit.json
+          path: |
+            artifacts/seo-audit.json
+            artifacts/security-http.json
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

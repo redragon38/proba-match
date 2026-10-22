@@ -32,4 +32,17 @@ describe('status-aware match metadata', () => {
       ).title,
     ).not.toContain('en direct');
   });
+
+  it('distinguishes two documented kickoff times on the same day without inventing unknown times', () => {
+    const first = { ...base, kickoffKnown: true, kickoff: '2026-09-11T12:00:00Z', status: 'finished' as const, homeScore: 1, awayScore: 0 };
+    const second = { ...first, id: 'second-fixture', kickoff: '2026-09-11T18:00:00Z' };
+    const a = matchSeoCopy(first, data), b = matchSeoCopy(second, data);
+    expect(a.title).not.toBe(b.title);
+    expect(a.description).not.toBe(b.description);
+    expect(a.title).toContain('14:00');
+    expect(b.description).toContain('20:00');
+    const unknown = matchSeoCopy({ ...first, kickoffKnown: false, sourceDate: '2026-09-11' }, data);
+    expect(unknown.title).not.toContain('14:00');
+    expect(unknown.description).not.toContain('14:00');
+  });
 });

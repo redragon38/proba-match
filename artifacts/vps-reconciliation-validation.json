@@ -29,12 +29,39 @@
     "repair": "SQL insertion mock and conflict/idempotence assertions updated; all six targeted tests pass",
     "fullCandidate": "Await GitHub CI"
   },
-  "productionBuild": "pending",
-  "githubCi": "Will run on this code publication; do not reuse previous candidate results",
+  "productionBuild": {
+    "local": "PASS",
+    "ci": "PASS"
+  },
+  "githubCi": "Final candidate run pending",
   "productionDeployment": "NOT VERIFIED; no SSH session or production writes performed",
   "targetedTests": {
     "passed": 6,
     "files": 2,
     "coverage": "Immutable SQL insertion/idempotence/lease fencing and full prepared forecast equivalence"
+  },
+  "ciAttempts": [
+    {
+      "sha": "a15f7a1485457b421c3f1c458fd525da4c544b58",
+      "run": 39699201657,
+      "databaseUi": "PASS",
+      "unitTests": 439,
+      "e2ePassed": 76,
+      "e2eSkipped": 2,
+      "seo": {
+        "pages": 611,
+        "checks": 9775,
+        "failures": 2,
+        "reason": "Two fixtures share teams/date/score and differ in documented kickoff time. Metadata omitted the time."
+      }
+    }
+  ],
+  "metadataRepair": {
+    "change": "Include verified Paris kickoff time in factual summary and metadata; include dates for live/postponed/cancelled titles. Unknown kickoff times remain absent.",
+    "tests": {
+      "passed": 13,
+      "files": 2
+    },
+    "ci": "Pending next candidate"
   }
 }

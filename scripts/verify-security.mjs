@@ -41,7 +41,7 @@ await check('/admin', 200, {}, (response, body, errors) => {
       if (!csp.includes(directive)) errors.push(`CSP absente : ${directive}`);
   }
 });
-for (const path of ['sync', 'live', 'fixtures', 'openfootball', 'standings'])
+for (const path of ['sync', 'live', 'fixtures', 'openfootball', 'standings', 'seo'])
   await check(`/api/cron/${path}`, 401);
 if (!baseline) await check('/api/health', 401);
 for (const path of ['sync', 'mapping'])

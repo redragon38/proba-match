@@ -21,7 +21,8 @@ export function matchDateLabel(
 }
 export function matchFactSummary(match: Match, home: string, away: string, competition: string) {
   const date = matchDateLabel(match);
-  const subject = `${home} – ${away}, ${competition}${date ? `, le ${date}` : ', date à confirmer'}.`;
+  const time = matchTimeLabel(match);
+  const subject = `${home} – ${away}, ${competition}${date ? `, le ${date}${time ? ` à ${time}` : ''}` : ', date à confirmer'}.`;
   if (validResult(match))
     return `${subject} Score enregistré : ${match.homeScore}–${match.awayScore}. Match terminé.`;
   const status =
@@ -43,13 +44,21 @@ export function matchFactSummary(match: Match, home: string, away: string, compe
   return `${subject} ${status}`;
 }
 
+function matchTimeLabel(match: Match) {
+  if (match.kickoffKnown === false || !isoDateTime(match.kickoff)) return null;
+  return new Date(match.kickoff).toLocaleTimeString('fr-FR', {
+    timeZone: 'Europe/Paris', hour: '2-digit', minute: '2-digit',
+  });
+}
+
 export function matchSeoCopy(match: Match, data: Dataset, hasPrediction = false) {
   const home = data.teams.find((team) => team.id === match.homeId)?.name ?? 'Domicile';
   const away = data.teams.find((team) => team.id === match.awayId)?.name ?? 'Extérieur';
   const competition =
     data.competitions.find((item) => item.id === match.competitionId)?.name ?? 'Football';
   const fixture = `${home}–${away}`;
-  const date = matchDateLabel(match) ?? 'date à confirmer';
+  const time = matchTimeLabel(match);
+  const date = `${matchDateLabel(match) ?? 'date à confirmer'}${time ? ` à ${time}` : ''}`;
   const summary = matchFactSummary(match, home, away, competition);
 
   if (validResult(match))
@@ -59,7 +68,7 @@ export function matchSeoCopy(match: Match, data: Dataset, hasPrediction = false)
     };
   if (match.status === 'live')
     return {
-      title: `${fixture} en direct — ${competition}`,
+      title: `${fixture} en direct — ${competition}, ${date}`,
       description: `${summary} Score et événements affichés selon les dernières données reçues.`,
     };
   if (match.status === 'scheduled')
@@ -77,5 +86,5 @@ export function matchSeoCopy(match: Match, data: Dataset, hasPrediction = false)
       : match.status === 'cancelled'
         ? 'match annulé'
         : 'match abandonné';
-  return { title: `${fixture} : ${state} — ${competition}`, description: summary };
+  return { title: `${fixture} : ${state} — ${competition}, ${date}`, description: summary };
 }
