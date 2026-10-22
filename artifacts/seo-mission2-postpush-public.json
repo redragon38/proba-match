@@ -1,0 +1,51 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "bytes": 254449,
+    "containsSportsEvent": false,
+    "observedAt": "2026-10-21T20:30:10.3771213Z"
+  },
+  {
+    "path": "/matchs",
+    "status": 200,
+    "bytes": 309376,
+    "containsSportsEvent": false,
+    "observedAt": "2026-10-21T20:30:11.8688226Z"
+  },
+  {
+    "path": "/bilan-predictions",
+    "status": 200,
+    "bytes": 52011,
+    "containsSportsEvent": false,
+    "observedAt": "2026-10-21T20:30:13.1383911Z"
+  },
+  {
+    "path": "/competitions",
+    "status": 200,
+    "bytes": 63449,
+    "containsSportsEvent": false,
+    "observedAt": "2026-10-21T20:30:14.0602166Z"
+  },
+  {
+    "path": "/equipes",
+    "status": 200,
+    "bytes": 110080,
+    "containsSportsEvent": false,
+    "observedAt": "2026-10-21T20:30:15.0938839Z"
+  },
+  {
+    "path": "/joueurs",
+    "status": 200,
+    "bytes": 127367,
+    "containsSportsEvent": false,
+    "observedAt": "2026-10-21T20:30:16.1320505Z"
+  },
+  {
+    "path": "/match/f851aa7b-6ca9-8a6f-882d-2c70049afe79",
+    "status": 200,
+    "bytes": 476783,
+    "containsSportsEvent": true,
+    "observedAt": "2026-10-21T20:30:17.3348808Z"
+  }
+]

@@ -1,0 +1,33 @@
+{
+  "sha": "27f8874bb17a099eb90f9b591e84173dec5fe5ed",
+  "jobUrl": "https://github.com/redragon38/proba-match/actions/runs/39663895481/job/119443727117",
+  "scope": "Disposable PostgreSQL, synthetic provider fixtures, production Next server",
+  "importCompletedAt": "2026-10-21T19:43:37.479Z",
+  "browserCatalogAt": "2026-10-21T19:43:22Z",
+  "targetRefresh": [
+    {
+      "path": "/matchs?date=2026-10-21&_rsc=x2pYoApOM4cHMnQV",
+      "status": 200
+    }
+  ],
+  "browserText": "Aller au contenu\nMatchs\nCompétitions\nAnalyses & prédictions\nÉquipe, joueur, match…\nCtrl K\nLE TERRAIN DE JEU\nAccueil\nTous les matchs\nAnalyses & prédictions\nEn direct\nCompétitions\nClassements\nÉquipes\nJoueurs\nComparateur\nMes favoris\nContact\nÀ EXPLORER\n+\nLigue 1\nLE LABORATOIRE\nNotre méthodologie\nParamètres\nGratuit. Indépendant. Transparent.\nDonnées football\nCatalogue publié le 21/10/2026 21:43:22 ; chaque donnée peut avoir une date de vérification différente.\nInformations sur la couverture des données\nLE FOOTBALL, ÉCLAIRÉ PAR LES DONNÉES\nTous les matchs\n\nLes matchs, les scores et les analyses. Tout simplement.\n\nMercredi 21 Octobre\n\nAujourd’hui : 2026-10-21 · Fuseau : UTC · Journée sélectionnée : 2026-10-21.\n\nLes matchs du jour\n1 rencontres · 1 compétitions\nToutes les dates\nHier\nAujourd’hui\nDemain\nTous les matchs\nEn direct\n0\nÀ venir\nTerminés\nFavoris\nLigue 1\nFrance · 1\nRENCONTRE\nPRÉDICTION AVANT-MATCH · 1 N 2\n21/10/26\nTER.\n19:13\nINT\nIntegration Home\nINT\nIntegration Away\n2\n0\nDonnées insuffisantes\n\n↻\nActualisation toutes les 30 secondes · Selon la dernière synchronisation.\nComment lire les probabilités ?\n\nPROCHAINEMENT\nÀ ne pas manquer\nTout voir\nDonnées insuffisantes\n\nAucun prochain match disponible pour le moment.\n\nLes équipes à explorer\nComparer\nINT\nIntegration Home\nFrance\nINT\nIntegration Away\nFrance\nLe regard du modèle\nV1\n\nLa lecture statistique du jour,\nen toute transparence.\n\nDonnées insuffisantes\n\nLes projections apparaîtront après collecte de l’historique.\n\nUne estimation statistique, jamais une garantie.\n© 2026 Proba Match · Le football, éclairé par les données.\nÀ propos\nMéthodologie\nAnalyses\nBilan des prédictions\nComprendre les probabilités\nLexique football\nSources des données\nConfidentialité\nCookies\nMentions légales\nContact\n\nLes projections présentées sont des estimations statistiques et ne garantissent aucun résultat sportif.",
+  "serverHasNewOpponent": true,
+  "oldRevisionCache": {
+    "ttlMs": 10000,
+    "staleMs": 20000
+  },
+  "candidateRevisionCache": {
+    "ttlMs": 0,
+    "staleMs": 0
+  },
+  "candidateNotYetValidatedInCi": false,
+  "intermediateFix": {
+    "ttlMs": 10000,
+    "staleMs": 0,
+    "ciRun": 39665381992,
+    "result": "New match still hidden when publication occurs inside the ten-second TTL."
+  },
+  "validatedCodeSha": "43850598cf0162fe7606f4d4483ad877a615d9af",
+  "verification": "https://github.com/redragon38/proba-match/actions/runs/39669708252",
+  "result": "PostgreSQL/UI PASS, including automatic new fixture and rescheduled kickoff refresh"
+}

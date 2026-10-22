@@ -1,0 +1,80 @@
+{
+  "checkedAt": "2026-10-21T14:30:24.238Z",
+  "pending": [
+    {
+      "id": "86ab7308-f693-8414-9eb5-41294b67428d",
+      "kickoff": "2026-10-19T19:00:00.000Z",
+      "names": [
+        "Getafe CF",
+        "Rayo Vallecano de Madrid"
+      ],
+      "status": "scheduled"
+    },
+    {
+      "id": "17800367-d6b6-8ce6-918b-16159151bf62",
+      "kickoff": "2026-10-19T18:45:00.000Z",
+      "names": [
+        "Parma Calcio 1913",
+        "Torino FC"
+      ],
+      "status": "scheduled"
+    },
+    {
+      "id": "1b6eb14f-33d7-88f9-b5ac-480c87800d9f",
+      "kickoff": "2026-10-19T16:30:00.000Z",
+      "names": [
+        "AC Monza",
+        "Cagliari Calcio"
+      ],
+      "status": "scheduled"
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/openfootball/football.json/master/2026-27/en.1.json",
+      "status": 200,
+      "matches": [
+        {
+          "round": "Matchday 7",
+          "date": "2026-10-19",
+          "time": "20:00",
+          "team1": "Tottenham Hotspur FC",
+          "team2": "Coventry City FC"
+        }
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openfootball/football.json/master/2026-27/es.1.json",
+      "status": 200,
+      "matches": [
+        {
+          "round": "Matchday 9",
+          "date": "2026-10-19",
+          "time": "21:00",
+          "team1": "Getafe CF",
+          "team2": "Rayo Vallecano de Madrid"
+        }
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openfootball/football.json/master/2026-27/it.1.json",
+      "status": 200,
+      "matches": [
+        {
+          "round": "Matchday 7",
+          "date": "2026-10-19",
+          "time": "18:30",
+          "team1": "AC Monza",
+          "team2": "Cagliari Calcio"
+        },
+        {
+          "round": "Matchday 7",
+          "date": "2026-10-19",
+          "time": "20:45",
+          "team1": "Parma Calcio 1913",
+          "team2": "Torino FC"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "before": {
+    "url": "https://search.google.com/test/rich-results/result?id=NqRsPv6SR8hm1qWus6DEUw",
+    "mode": "live URL",
+    "testedPage": "https://proba-match.com/match/f851aa7b-6ca9-8a6f-882d-2c70049afe79",
+    "exploredAtUi": "21 oct. 2026, 17:07:19",
+    "validItems": 1,
+    "invalidItems": 1,
+    "critical": "Missing location on SportsEvent",
+    "optional": [
+      "image",
+      "endDate",
+      "organizer",
+      "performer",
+      "offers"
+    ]
+  },
+  "after": {
+    "url": "https://search.google.com/test/rich-results/result?id=x9kA_TByTWf8tzxCVx1-qw",
+    "mode": "CODE, prospective markup from the corrected function using real public API data",
+    "validItems": 1,
+    "invalidItems": 0,
+    "detected": "BreadcrumbList",
+    "liveDeploymentVerified": false
+  }
+}

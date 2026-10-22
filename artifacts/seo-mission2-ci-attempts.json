@@ -1,0 +1,80 @@
+[
+  {
+    "sha": "9b72a2e825445109758d1fd4c7a4cf1e39ce7376",
+    "run": 39658445726,
+    "databaseUi": "failure",
+    "assertion": "503 !== 200",
+    "location": "scripts/verify-football-db.ts:327",
+    "repair": "Successful authorization tested on deterministic internal prediction cron; partial import 503 contract preserved."
+  },
+  {
+    "sha": "f355e9fafb051903007f80bf0ef9014617637c72",
+    "run": 39660923116,
+    "quality": "success",
+    "databaseUi": "failure",
+    "assertion": "Internal live API receives updated score: 0 !== 1",
+    "location": "scripts/verify-football-db.ts:429",
+    "repair": "Wait up to 35 seconds for the published server snapshot; retain exact score assertion."
+  },
+  {
+    "sha": "5db6d6a10bc69e83290c138e3acb34406002f407",
+    "run": 39662047620,
+    "databaseUi": "failure",
+    "assertion": "New Opponent row not visible within default 5000ms",
+    "location": "scripts/verify-football-db.ts:503",
+    "repair": "Observe automatic /api/updates response and allow the same 15-second rendering bound as browser suite. No manual reload."
+  },
+  {
+    "sha": "0d300a0e12b2de668469d47abdbe938011e4e6fd",
+    "run": 39663048471,
+    "state": "completed",
+    "databaseUi": "failure",
+    "assertion": "New Opponent row still absent after automatic revision HTTP200 and 15000ms; longer wait did not resolve it."
+  },
+  {
+    "sha": "27f8874bb17a099eb90f9b591e84173dec5fe5ed",
+    "run": 39663895481,
+    "state": "completed",
+    "diagnostic": "Fresh server HTML contains the new fixture while browser RSC remains stale; confirmed application cache defect.",
+    "databaseUi": "failure"
+  },
+  {
+    "sha": "3ce77e75c3e355134d797a9c8ddc5a311d2d6891",
+    "run": 39665381992,
+    "databaseUi": "failure",
+    "assertion": "New fixture hidden inside the retained ten-second marker TTL after removing only stale serving."
+  },
+  {
+    "sha": "e9e080fdd37f360279136cafe5565960e6470e76",
+    "run": 39667398142,
+    "databaseUi": "failure",
+    "passedBeforeFailure": [
+      "live and final scores",
+      "automatic new fixture UI refresh",
+      "rescheduled kickoff UI refresh",
+      "player profiles at 320/390/1440px"
+    ],
+    "assertion": "Admin session 403 instead of 200: isolated production server had no configured public origin.",
+    "repair": "Set isolated job origin to localhost:3001; preserve production same-origin enforcement."
+  },
+  {
+    "sha": "18ec44f001499a6c99b4ee74628f1414b1d660a0",
+    "run": 39668796613,
+    "quality": "success",
+    "databaseUi": "success",
+    "unitTests": 425,
+    "repair": "Current revision marker and isolated public origin verified end to end."
+  },
+  {
+    "sha": "43850598cf0162fe7606f4d4483ad877a615d9af",
+    "run": 39669708252,
+    "quality": "success",
+    "databaseUi": "success",
+    "unitTests": 427,
+    "unitFiles": 79,
+    "e2ePassed": 74,
+    "e2eSkipped": 2,
+    "final": true,
+    "repair": "Civil calendar offset DST regressions added; all prior defects resolved in final candidate."
+  }
+]

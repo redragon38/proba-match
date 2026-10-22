@@ -1,0 +1,136 @@
+
+> match-score@1.0.0 check
+> npm run typecheck && npm run lint && npm test && npm run build
+
+
+> match-score@1.0.0 typecheck
+> tsc --noEmit
+
+
+> match-score@1.0.0 lint
+> eslint .
+
+
+C:\Users\lboni\OneDrive\Documents\ChatGPT\proba-match 3\src\app\match\[id]\opengraph-image.tsx
+  43:9  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\lboni\OneDrive\Documents\ChatGPT\proba-match 3\src\app\opengraph-image.tsx
+  23:7  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+✖ 2 problems (0 errors, 2 warnings)
+
+
+> match-score@1.0.0 test
+> vitest run
+
+
+ RUN  v4.1.11 C:/Users/lboni/OneDrive/Documents/ChatGPT/proba-match 3
+
+
+ Test Files  78 passed (78)
+      Tests  423 passed (423)
+   Start at  21:13:50
+   Duration  134.24s (transform 5.50s, setup 0ms, import 27.42s, tests 54.52s, environment 20ms)
+
+
+> match-score@1.0.0 build
+> prisma generate && next build
+
+Prisma schema loaded from prisma\schema.prisma
+
+✔ Generated Prisma Client (v6.19.3) to .\node_modules\@prisma\client in 1.06s
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+
+▲ Next.js 16.3.8 (Turbopack)
+✓ Running next.config.ts took 2.1s
+⚠ Warning: Next.js ignored package-lock.json in C:\Users\lboni because it is outside the current Git repository (C:\Users\lboni\OneDrive\Documents\ChatGPT\proba-match 3).
+ To use this directory, set `turbopack.root` in your Next.js config.
+
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 41s
+  Running TypeScript ...
+  Finished TypeScript in 34.3s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/31) ...
+  Generating static pages using 11 workers (7/31)
+  Generating static pages using 11 workers (15/31)
+  Generating static pages using 11 workers (23/31)
+✓ Generating static pages using 11 workers (31/31) in 4.6s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[legal]
+├ ƒ /a-propos
+├ ƒ /admin
+├ ƒ /admin/performance-modele
+├ ƒ /analyses
+├ ƒ /api/admin/mapping
+├ ƒ /api/admin/reconstruct-aiven
+├ ƒ /api/admin/reconstruct-aiven-direct
+├ ƒ /api/admin/session
+├ ƒ /api/admin/sync
+├ ƒ /api/competitions/[id]
+├ ƒ /api/contact
+├ ƒ /api/cron/api-football
+├ ƒ /api/cron/espn
+├ ƒ /api/cron/espn-details
+├ ƒ /api/cron/espn-players
+├ ƒ /api/cron/fixtures
+├ ƒ /api/cron/fotmob
+├ ƒ /api/cron/live
+├ ƒ /api/cron/match-window
+├ ƒ /api/cron/openfootball
+├ ƒ /api/cron/players
+├ ƒ /api/cron/predictions
+├ ƒ /api/cron/realtime
+├ ƒ /api/cron/standings
+├ ƒ /api/cron/statsbomb
+├ ƒ /api/cron/sync
+├ ƒ /api/health
+├ ƒ /api/live
+├ ƒ /api/matches
+├ ƒ /api/matches/[id]
+├ ƒ /api/matches/today
+├ ƒ /api/search
+├ ƒ /api/teams/[id]
+├ ƒ /api/updates
+├ ƒ /api/vitals
+├ ○ /apple-icon.png
+├ ƒ /bilan-predictions
+├ ƒ /classements
+├ ƒ /comparateur/[kind]
+├ ƒ /competition/[slug]
+├ ƒ /competitions
+├ ƒ /comprendre-probabilites
+├ ƒ /contact
+├ ƒ /equipe/[slug]
+├ ƒ /equipe/[slug]/calendrier
+├ ƒ /equipes
+├ ƒ /favoris
+├ ○ /icon.png
+├ ƒ /joueur/[slug]
+├ ƒ /joueurs
+├ ƒ /lexique-football
+├ ƒ /live
+├ ○ /manifest.webmanifest
+├ ƒ /match/[id]
+├ ƒ /match/[id]/calendrier
+├ ƒ /match/[id]/opengraph-image
+├ ƒ /matchs
+├ ƒ /methodologie
+├ ○ /opengraph-image
+├ ƒ /parametres
+├ ƒ /recherche
+├ ƒ /robots.txt
+├ ƒ /sitemap.xml
+└ ƒ /sources-donnees
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand

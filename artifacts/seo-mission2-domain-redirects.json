@@ -1,0 +1,62 @@
+[
+  {
+    "start": "http://proba-match.com/",
+    "chain": [
+      {
+        "url": "http://proba-match.com/",
+        "status": 301,
+        "location": "https://proba-match.com/"
+      },
+      {
+        "url": "https://proba-match.com/",
+        "status": 200,
+        "location": null
+      }
+    ]
+  },
+  {
+    "start": "https://www.proba-match.com/",
+    "chain": [
+      {
+        "url": "https://www.proba-match.com/",
+        "status": 301,
+        "location": "https://proba-match.com/"
+      },
+      {
+        "url": "https://proba-match.com/",
+        "status": 200,
+        "location": null
+      }
+    ]
+  },
+  {
+    "start": "http://www.proba-match.com/",
+    "chain": [
+      {
+        "url": "http://www.proba-match.com/",
+        "status": 301,
+        "location": "https://proba-match.com/"
+      },
+      {
+        "url": "https://proba-match.com/",
+        "status": 200,
+        "location": null
+      }
+    ]
+  },
+  {
+    "start": "https://proba-match.com/matchs/",
+    "chain": [
+      {
+        "url": "https://proba-match.com/matchs/",
+        "status": 308,
+        "location": "/matchs"
+      },
+      {
+        "url": "https://proba-match.com/matchs",
+        "status": 200,
+        "location": null
+      }
+    ]
+  }
+]

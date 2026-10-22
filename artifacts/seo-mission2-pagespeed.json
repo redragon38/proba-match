@@ -1,0 +1,32 @@
+{
+  "url": "https://pagespeed.web.dev/analysis/https-proba-match-com/ufl6ifmz63",
+  "target": "https://proba-match.com/",
+  "observedAt": "2026-10-21T21:01:25+02:00",
+  "source": "Google PageSpeed Insights UI",
+  "lighthouse": "13.5.0",
+  "mobile": {
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 100,
+    "fcpMs": 1051,
+    "lcpMs": 1426,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 2732
+  },
+  "desktop": {
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 100,
+    "fcpMs": 327,
+    "lcpMs": 421,
+    "tbtMs": 64,
+    "cls": 0,
+    "speedIndexMs": 810
+  },
+  "fieldData": "Aucune donnée",
+  "inp": null,
+  "scope": "Published homepage, before deployment of candidate code. Lab results, not field CWV."
+}

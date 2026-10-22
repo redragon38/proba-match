@@ -1,0 +1,266 @@
+{
+  "base": "46210153a407293789f0b1f43c3b8cf9f78ebb91",
+  "codeHead": "43850598cf0162fe7606f4d4483ad877a615d9af",
+  "files": [
+    {
+      "status": "M",
+      "path": ".github/workflows/ci.yml"
+    },
+    {
+      "status": "M",
+      "path": ".github/workflows/seo-monitor.yml"
+    },
+    {
+      "status": "M",
+      "path": "ops/vps-crontab"
+    },
+    {
+      "status": "M",
+      "path": "scripts/seo-http.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/seo-monitor-state.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/seo-report.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/seo-resume.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/seo-structured-data.mjs"
+    },
+    {
+      "status": "M",
+      "path": "scripts/verify-football-db.ts"
+    },
+    {
+      "status": "M",
+      "path": "scripts/verify-seo.mjs"
+    },
+    {
+      "status": "M",
+      "path": "src/app/api/cron/match-window/route.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/app/bilan-predictions/page.tsx"
+    },
+    {
+      "status": "M",
+      "path": "src/app/equipe/[slug]/page.tsx"
+    },
+    {
+      "status": "M",
+      "path": "src/app/joueur/[slug]/page.tsx"
+    },
+    {
+      "status": "M",
+      "path": "src/app/match/[id]/page.tsx"
+    },
+    {
+      "status": "M",
+      "path": "src/app/matchs/page.tsx"
+    },
+    {
+      "status": "M",
+      "path": "src/app/page.tsx"
+    },
+    {
+      "status": "A",
+      "path": "src/components/calendar-today.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/components/data-updates.tsx"
+    },
+    {
+      "status": "M",
+      "path": "src/features/matches/dashboard.tsx"
+    },
+    {
+      "status": "M",
+      "path": "src/features/performance/breakdowns.tsx"
+    },
+    {
+      "status": "M",
+      "path": "src/features/performance/performance.tsx"
+    },
+    {
+      "status": "A",
+      "path": "src/features/performance/report-view.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/features/profiles/team-profile.tsx"
+    },
+    {
+      "status": "A",
+      "path": "src/lib/calendar-date.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/lib/format.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/lib/logger.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/lib/sports-structured-data.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/prediction-engine/backtest.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/services/football/cron.ts"
+    },
+    {
+      "status": "A",
+      "path": "src/services/football/fotmob-live-state.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/services/football/fotmob-live-sync.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/services/football/index.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/services/football/jobs.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/services/football/openfootball-sync.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/services/football/providers/espn.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/services/football/providers/fotmob.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/services/football/providers/openfootball.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/services/football/read-model.ts"
+    },
+    {
+      "status": "A",
+      "path": "src/services/football/source-request.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/services/github-oidc.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/services/prediction-read-sql.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/services/predictions.ts"
+    },
+    {
+      "status": "M",
+      "path": "src/types/football.ts"
+    },
+    {
+      "status": "M",
+      "path": "tests/api-security.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "tests/calendar-rollover.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "tests/dataset-revision.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "tests/e2e/calendar-rollover.spec.ts"
+    },
+    {
+      "status": "A",
+      "path": "tests/fixtures/fotmob-confirmed-2026-10-19.json"
+    },
+    {
+      "status": "M",
+      "path": "tests/football-jobs.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "tests/fotmob-confirmed-results.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "tests/fotmob-recovery.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "tests/github-oidc-branches.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "tests/levante-athletic-regression.test.ts"
+    },
+    {
+      "status": "M",
+      "path": "tests/openfootball.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "tests/performance-render.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "tests/performance-report.test.ts"
+    },
+    {
+      "status": "M",
+      "path": "tests/prediction-read-sql.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "tests/seo-report.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "tests/seo-resume.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "tests/seo-structured-data.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "tests/source-request.test.ts"
+    },
+    {
+      "status": "M",
+      "path": "tests/sports-entities.test.ts"
+    },
+    {
+      "status": "M",
+      "path": "tests/team-profile-statistics.test.ts"
+    },
+    {
+      "status": "M",
+      "path": "vitest.config.ts"
+    }
+  ]
+}

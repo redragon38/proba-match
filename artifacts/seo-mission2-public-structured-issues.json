@@ -1,0 +1,12 @@
+{
+  "scope": "Recheck of stored public JSON-LD with the newly strengthened validator; existing deployed code, not candidate build",
+  "pages": 40,
+  "issues": [
+    {
+      "path": "/match/1ad0e317-5556-84e4-8222-e1197f8bd204",
+      "issues": [
+        "Google Event requires a verified name, startDate and venue with address"
+      ]
+    }
+  ]
+}

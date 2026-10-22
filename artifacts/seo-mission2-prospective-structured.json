@@ -1,0 +1,81 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://proba-match.com/#website",
+        "name": "Proba Match",
+        "url": "https://proba-match.com",
+        "inLanguage": "fr",
+        "publisher": {
+          "@id": "https://proba-match.com/#organization"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://proba-match.com/#organization",
+        "name": "Proba Match",
+        "url": "https://proba-match.com",
+        "description": "Plateforme de statistiques et de probabilités football.",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://proba-match.com/icon.png"
+        }
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": "https://proba-match.com/match/f851aa7b-6ca9-8a6f-882d-2c70049afe79#webpage",
+    "url": "https://proba-match.com/match/f851aa7b-6ca9-8a6f-882d-2c70049afe79",
+    "name": "Levante UD – Athletic Club",
+    "description": "Levante UD – Athletic Club, La Liga, le 21 octobre 2026. Rencontre programmée.",
+    "inLanguage": "fr",
+    "about": [
+      {
+        "@type": "SportsTeam",
+        "@id": "https://proba-match.com/equipe/levante-ud-7f34b841#team",
+        "name": "Levante UD",
+        "url": "https://proba-match.com/equipe/levante-ud-7f34b841"
+      },
+      {
+        "@type": "SportsTeam",
+        "@id": "https://proba-match.com/equipe/athletic-club-06bad381#team",
+        "name": "Athletic Club",
+        "url": "https://proba-match.com/equipe/athletic-club-06bad381"
+      },
+      {
+        "@type": "SportsOrganization",
+        "@id": "https://proba-match.com/competition/la-liga#competition",
+        "name": "La Liga",
+        "url": "https://proba-match.com/competition/la-liga"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Accueil",
+        "item": "https://proba-match.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Matchs",
+        "item": "https://proba-match.com/matchs"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Levante UD – Athletic Club",
+        "item": "https://proba-match.com/match/f851aa7b-6ca9-8a6f-882d-2c70049afe79"
+      }
+    ]
+  }
+]

@@ -1,0 +1,402 @@
+[
+  {
+    "path": "/api/matches?date=2026-10-20&limit=100",
+    "status": 200,
+    "body": {
+      "source": "openfootball",
+      "updatedAt": "2026-10-21T07:56:16.330Z",
+      "matches": [],
+      "total": 0,
+      "page": 1,
+      "pages": 1,
+      "limit": 100,
+      "hasNextPage": false,
+      "status": "all"
+    }
+  },
+  {
+    "path": "/api/matches?date=2026-10-19&limit=100",
+    "status": 200,
+    "body": {
+      "source": "openfootball",
+      "updatedAt": "2026-10-21T07:56:16.330Z",
+      "matches": [
+        {
+          "id": "1272a3c2-234a-8898-94be-2de7f2a4e665",
+          "slug": "1272a3c2-234a-8898-94be-2de7f2a4e665",
+          "round": "2026-27-portuguese-primeira-liga",
+          "venue": "Estádio Municipal de Braga",
+          "awayId": "f3085c0f-f65b-8ee2-8587-cd26e52f09c8",
+          "events": [],
+          "homeId": "bf4f8d6b-ff58-89b2-821c-e5da303ab109",
+          "minute": null,
+          "season": 2026,
+          "source": "espn",
+          "status": "finished",
+          "kickoff": "2026-10-19T19:15:00.000Z",
+          "lineups": [],
+          "awayScore": 2,
+          "homeScore": 1,
+          "updatedAt": "2026-10-19T21:20:08.025Z",
+          "provenance": {
+            "details": "espn",
+            "schedule": "espn"
+          },
+          "statistics": [],
+          "detailSource": {
+            "lineups": "espn",
+            "statistics": "fotmob",
+            "performances": "espn"
+          },
+          "kickoffKnown": true,
+          "resultPeriod": "unknown",
+          "competitionId": "41bb94dd-7f1f-85e8-98bd-e83a800b3892",
+          "detailPresence": {
+            "lineups": true,
+            "statistics": true,
+            "performances": true
+          },
+          "resultRevisions": [
+            {
+              "awayId": "f3085c0f-f65b-8ee2-8587-cd26e52f09c8",
+              "homeId": "bf4f8d6b-ff58-89b2-821c-e5da303ab109",
+              "source": "espn",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:15:00.000Z",
+              "awayScore": 2,
+              "homeScore": 1,
+              "observedAt": "2026-10-19T21:20:08.025Z",
+              "resultPeriod": "unknown"
+            },
+            {
+              "awayId": "f3085c0f-f65b-8ee2-8587-cd26e52f09c8",
+              "homeId": "bf4f8d6b-ff58-89b2-821c-e5da303ab109",
+              "source": "espn",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:15:00.000Z",
+              "awayScore": 2,
+              "homeScore": 1,
+              "observedAt": "2026-10-20T05:51:29.599Z",
+              "resultPeriod": "unknown"
+            },
+            {
+              "awayId": "f3085c0f-f65b-8ee2-8587-cd26e52f09c8",
+              "homeId": "bf4f8d6b-ff58-89b2-821c-e5da303ab109",
+              "source": "espn",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:15:00.000Z",
+              "awayScore": 2,
+              "homeScore": 1,
+              "observedAt": "2026-10-20T06:45:10.721Z",
+              "resultPeriod": "unknown"
+            },
+            {
+              "awayId": "f3085c0f-f65b-8ee2-8587-cd26e52f09c8",
+              "homeId": "bf4f8d6b-ff58-89b2-821c-e5da303ab109",
+              "source": "espn",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:15:00.000Z",
+              "awayScore": 2,
+              "homeScore": 1,
+              "observedAt": "2026-10-20T07:09:32.875Z",
+              "resultPeriod": "unknown"
+            },
+            {
+              "awayId": "f3085c0f-f65b-8ee2-8587-cd26e52f09c8",
+              "homeId": "bf4f8d6b-ff58-89b2-821c-e5da303ab109",
+              "source": "espn",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:15:00.000Z",
+              "awayScore": 2,
+              "homeScore": 1,
+              "observedAt": "2026-10-20T16:15:00.423Z",
+              "resultPeriod": "unknown"
+            },
+            {
+              "awayId": "f3085c0f-f65b-8ee2-8587-cd26e52f09c8",
+              "homeId": "bf4f8d6b-ff58-89b2-821c-e5da303ab109",
+              "source": "espn",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:15:00.000Z",
+              "awayScore": 2,
+              "homeScore": 1,
+              "observedAt": "2026-10-20T16:20:58.515Z",
+              "resultPeriod": "unknown"
+            },
+            {
+              "awayId": "f3085c0f-f65b-8ee2-8587-cd26e52f09c8",
+              "homeId": "bf4f8d6b-ff58-89b2-821c-e5da303ab109",
+              "source": "espn",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:15:00.000Z",
+              "awayScore": 2,
+              "homeScore": 1,
+              "observedAt": "2026-10-20T16:27:28.513Z",
+              "resultPeriod": "unknown"
+            },
+            {
+              "awayId": "f3085c0f-f65b-8ee2-8587-cd26e52f09c8",
+              "homeId": "bf4f8d6b-ff58-89b2-821c-e5da303ab109",
+              "source": "espn",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:15:00.000Z",
+              "awayScore": 2,
+              "homeScore": 1,
+              "observedAt": "2026-10-20T16:34:27.315Z",
+              "resultPeriod": "unknown"
+            },
+            {
+              "awayId": "f3085c0f-f65b-8ee2-8587-cd26e52f09c8",
+              "homeId": "bf4f8d6b-ff58-89b2-821c-e5da303ab109",
+              "source": "espn",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:15:00.000Z",
+              "awayScore": 2,
+              "homeScore": 1,
+              "observedAt": "2026-10-20T16:41:52.814Z",
+              "resultPeriod": "unknown"
+            },
+            {
+              "awayId": "f3085c0f-f65b-8ee2-8587-cd26e52f09c8",
+              "homeId": "bf4f8d6b-ff58-89b2-821c-e5da303ab109",
+              "source": "espn",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:15:00.000Z",
+              "awayScore": 2,
+              "homeScore": 1,
+              "observedAt": "2026-10-20T16:49:52.908Z",
+              "resultPeriod": "unknown"
+            }
+          ],
+          "detailObservedAt": {
+            "lineups": "2026-10-20T07:56:05.977Z",
+            "statistics": "2026-10-20T07:57:17.055Z",
+            "performances": "2026-10-20T07:56:05.977Z"
+          },
+          "detailsUpdatedAt": "2026-10-20T07:57:17.055Z",
+          "resultObservedAt": "2026-10-19T21:20:08.025Z",
+          "countsForStandings": true
+        },
+        {
+          "id": "86ab7308-f693-8414-9eb5-41294b67428d",
+          "slug": "86ab7308-f693-8414-9eb5-41294b67428d",
+          "round": "Matchday 9",
+          "awayId": "d3b05e1d-d1db-83b2-9da7-aa7ce528e33f",
+          "events": [],
+          "homeId": "12455f62-b83e-847b-b6f5-4d867024d5ae",
+          "season": 2026,
+          "source": "openfootball",
+          "status": "scheduled",
+          "kickoff": "2026-10-19T19:00:00.000Z",
+          "lineups": [],
+          "awayScore": null,
+          "homeScore": null,
+          "updatedAt": "2026-10-09T15:22:42.393Z",
+          "provenance": {
+            "schedule": "openfootball"
+          },
+          "sourceDate": "2026-10-19",
+          "statistics": [],
+          "kickoffKnown": true,
+          "resultPeriod": "regulation",
+          "competitionId": "4b1bf87a-fdb0-8a1f-b730-6509636800e0",
+          "resultRevisions": []
+        },
+        {
+          "id": "8e37db6e-7597-8d0a-9744-70a6631244a1",
+          "slug": "8e37db6e-7597-8d0a-9744-70a6631244a1",
+          "round": "Matchday 7",
+          "awayId": "c5d351a2-3800-8b3f-b332-0f1927864453",
+          "events": [],
+          "homeId": "2acba1fe-7fb5-8894-bd85-9812ab8098dc",
+          "minute": null,
+          "season": 2026,
+          "source": "openfootball",
+          "status": "finished",
+          "kickoff": "2026-10-19T19:00:00.000Z",
+          "lineups": [],
+          "awayScore": 1,
+          "homeScore": 3,
+          "updatedAt": "2026-10-19T21:00:05.479Z",
+          "provenance": {
+            "schedule": "openfootball"
+          },
+          "sourceDate": "2026-10-19",
+          "statistics": [],
+          "kickoffKnown": true,
+          "resultPeriod": "regulation",
+          "competitionId": "60a7d33f-f21a-8a8f-8bff-665d48466080",
+          "resultRevisions": [
+            {
+              "awayId": "c5d351a2-3800-8b3f-b332-0f1927864453",
+              "homeId": "2acba1fe-7fb5-8894-bd85-9812ab8098dc",
+              "source": "openfootball",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:00:00.000Z",
+              "awayScore": 1,
+              "homeScore": 3,
+              "observedAt": "2026-10-19T21:00:05.479Z",
+              "resultPeriod": "regulation"
+            },
+            {
+              "awayId": "c5d351a2-3800-8b3f-b332-0f1927864453",
+              "homeId": "2acba1fe-7fb5-8894-bd85-9812ab8098dc",
+              "source": "openfootball",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:00:00.000Z",
+              "awayScore": 1,
+              "homeScore": 3,
+              "observedAt": "2026-10-20T05:51:29.599Z",
+              "resultPeriod": "regulation"
+            },
+            {
+              "awayId": "c5d351a2-3800-8b3f-b332-0f1927864453",
+              "homeId": "2acba1fe-7fb5-8894-bd85-9812ab8098dc",
+              "source": "openfootball",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:00:00.000Z",
+              "awayScore": 1,
+              "homeScore": 3,
+              "observedAt": "2026-10-20T06:45:10.721Z",
+              "resultPeriod": "regulation"
+            },
+            {
+              "awayId": "c5d351a2-3800-8b3f-b332-0f1927864453",
+              "homeId": "2acba1fe-7fb5-8894-bd85-9812ab8098dc",
+              "source": "openfootball",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:00:00.000Z",
+              "awayScore": 1,
+              "homeScore": 3,
+              "observedAt": "2026-10-20T07:09:32.875Z",
+              "resultPeriod": "regulation"
+            },
+            {
+              "awayId": "c5d351a2-3800-8b3f-b332-0f1927864453",
+              "homeId": "2acba1fe-7fb5-8894-bd85-9812ab8098dc",
+              "source": "openfootball",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:00:00.000Z",
+              "awayScore": 1,
+              "homeScore": 3,
+              "observedAt": "2026-10-20T16:15:00.423Z",
+              "resultPeriod": "regulation"
+            },
+            {
+              "awayId": "c5d351a2-3800-8b3f-b332-0f1927864453",
+              "homeId": "2acba1fe-7fb5-8894-bd85-9812ab8098dc",
+              "source": "openfootball",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:00:00.000Z",
+              "awayScore": 1,
+              "homeScore": 3,
+              "observedAt": "2026-10-20T16:20:58.515Z",
+              "resultPeriod": "regulation"
+            },
+            {
+              "awayId": "c5d351a2-3800-8b3f-b332-0f1927864453",
+              "homeId": "2acba1fe-7fb5-8894-bd85-9812ab8098dc",
+              "source": "openfootball",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:00:00.000Z",
+              "awayScore": 1,
+              "homeScore": 3,
+              "observedAt": "2026-10-20T16:27:28.513Z",
+              "resultPeriod": "regulation"
+            },
+            {
+              "awayId": "c5d351a2-3800-8b3f-b332-0f1927864453",
+              "homeId": "2acba1fe-7fb5-8894-bd85-9812ab8098dc",
+              "source": "openfootball",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:00:00.000Z",
+              "awayScore": 1,
+              "homeScore": 3,
+              "observedAt": "2026-10-20T16:34:27.315Z",
+              "resultPeriod": "regulation"
+            },
+            {
+              "awayId": "c5d351a2-3800-8b3f-b332-0f1927864453",
+              "homeId": "2acba1fe-7fb5-8894-bd85-9812ab8098dc",
+              "source": "openfootball",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:00:00.000Z",
+              "awayScore": 1,
+              "homeScore": 3,
+              "observedAt": "2026-10-20T16:41:52.814Z",
+              "resultPeriod": "regulation"
+            },
+            {
+              "awayId": "c5d351a2-3800-8b3f-b332-0f1927864453",
+              "homeId": "2acba1fe-7fb5-8894-bd85-9812ab8098dc",
+              "source": "openfootball",
+              "status": "finished",
+              "kickoff": "2026-10-19T19:00:00.000Z",
+              "awayScore": 1,
+              "homeScore": 3,
+              "observedAt": "2026-10-20T16:49:52.908Z",
+              "resultPeriod": "regulation"
+            }
+          ],
+          "resultObservedAt": "2026-10-19T21:00:05.479Z"
+        },
+        {
+          "id": "17800367-d6b6-8ce6-918b-16159151bf62",
+          "slug": "17800367-d6b6-8ce6-918b-16159151bf62",
+          "round": "Matchday 7",
+          "awayId": "2d229806-f666-8426-9191-be961f54c16a",
+          "events": [],
+          "homeId": "886b802a-f82f-80a8-b72b-77352969373f",
+          "season": 2026,
+          "source": "openfootball",
+          "status": "scheduled",
+          "kickoff": "2026-10-19T18:45:00.000Z",
+          "lineups": [],
+          "awayScore": null,
+          "homeScore": null,
+          "updatedAt": "2026-10-09T15:26:00.611Z",
+          "provenance": {
+            "schedule": "openfootball"
+          },
+          "sourceDate": "2026-10-19",
+          "statistics": [],
+          "kickoffKnown": true,
+          "resultPeriod": "regulation",
+          "competitionId": "9344502d-f9c6-850d-a9ff-706323e87adf",
+          "resultRevisions": []
+        },
+        {
+          "id": "1b6eb14f-33d7-88f9-b5ac-480c87800d9f",
+          "slug": "1b6eb14f-33d7-88f9-b5ac-480c87800d9f",
+          "round": "Matchday 7",
+          "awayId": "d41a9bb6-b00e-89fe-8e3c-fd8dbe311243",
+          "events": [],
+          "homeId": "b73fc3b5-247b-8980-a0e0-9d19da99877c",
+          "season": 2026,
+          "source": "openfootball",
+          "status": "scheduled",
+          "kickoff": "2026-10-19T16:30:00.000Z",
+          "lineups": [],
+          "awayScore": null,
+          "homeScore": null,
+          "updatedAt": "2026-10-09T15:26:00.611Z",
+          "provenance": {
+            "schedule": "openfootball"
+          },
+          "sourceDate": "2026-10-19",
+          "statistics": [],
+          "kickoffKnown": true,
+          "resultPeriod": "regulation",
+          "competitionId": "9344502d-f9c6-850d-a9ff-706323e87adf",
+          "resultRevisions": []
+        }
+      ],
+      "total": 5,
+      "page": 1,
+      "pages": 1,
+      "limit": 100,
+      "hasNextPage": false,
+      "status": "all"
+    }
+  }
+]

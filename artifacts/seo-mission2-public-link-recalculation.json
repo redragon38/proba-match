@@ -1,0 +1,9 @@
+{
+  "method": "Offline recalculation from each captured page links using its own URL as base; exact queries and canonical pathname retained. No new HTTP result is inferred.",
+  "generatedAt": "2026-10-21T19:03:24.020Z",
+  "pages": 6635,
+  "previousFalsePositives": 270,
+  "orphanCandidates": [],
+  "additionalHeadChecks": 500,
+  "additionalChecksTruncated": true
+}

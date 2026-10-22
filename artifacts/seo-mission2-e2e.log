@@ -1,0 +1,33 @@
+
+> match-score@1.0.0 test:e2e
+> playwright test calendar-rollover.spec.ts reading-guide.spec.ts editorial-geo.spec.ts contact.spec.ts hardening.spec.ts --reporter=list
+
+
+Running 20 tests using 1 worker
+
+(node:22016) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [desktop] › tests\e2e\calendar-rollover.spec.ts:3:1 › midnight updates today while preserving an explicitly selected date (8.0s)
+  ok  2 [desktop] › tests\e2e\calendar-rollover.spec.ts:18:1 › unfiltered calendar explicitly represents all dates (3.8s)
+  ok  3 [desktop] › tests\e2e\contact.spec.ts:3:1 › the contact form sends from the page and shows delivery confirmation (6.3s)
+  ok  4 [desktop] › tests\e2e\contact.spec.ts:21:1 › the contact form keeps the message after a delivery error (5.1s)
+  ok  5 [desktop] › tests\e2e\editorial-geo.spec.ts:3:1 › discovers the glossary and verifies its definitions and source navigation (6.1s)
+  ok  6 [desktop] › tests\e2e\editorial-geo.spec.ts:36:1 › keeps FAQ text accessible and consistent with machine-readable answers without JavaScript (3.2s)
+  ok  7 [desktop] › tests\e2e\hardening.spec.ts:3:1 › security policy, legal honesty, keyboard, empty search and zoom reflow (36.2s)
+  ok  8 [desktop] › tests\e2e\hardening.spec.ts:48:1 › a failed search keeps the interface understandable and saved favourites intact (3.6s)
+  ok  9 [desktop] › tests\e2e\reading-guide.spec.ts:3:1 › explains probabilities and links to the actual methodology without client-only content (4.6s)
+  ok 10 [desktop] › tests\e2e\reading-guide.spec.ts:34:1 › makes the guide discoverable from the home page (3.7s)
+(node:28928) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 11 [mobile] › tests\e2e\calendar-rollover.spec.ts:3:1 › midnight updates today while preserving an explicitly selected date (3.8s)
+  ok 12 [mobile] › tests\e2e\calendar-rollover.spec.ts:18:1 › unfiltered calendar explicitly represents all dates (3.0s)
+  ok 13 [mobile] › tests\e2e\contact.spec.ts:3:1 › the contact form sends from the page and shows delivery confirmation (4.8s)
+  ok 14 [mobile] › tests\e2e\contact.spec.ts:21:1 › the contact form keeps the message after a delivery error (4.7s)
+  ok 15 [mobile] › tests\e2e\editorial-geo.spec.ts:3:1 › discovers the glossary and verifies its definitions and source navigation (3.5s)
+  ok 16 [mobile] › tests\e2e\editorial-geo.spec.ts:36:1 › keeps FAQ text accessible and consistent with machine-readable answers without JavaScript (2.9s)
+  ok 17 [mobile] › tests\e2e\hardening.spec.ts:3:1 › security policy, legal honesty, keyboard, empty search and zoom reflow (25.0s)
+  ok 18 [mobile] › tests\e2e\hardening.spec.ts:48:1 › a failed search keeps the interface understandable and saved favourites intact (2.0s)
+  ok 19 [mobile] › tests\e2e\reading-guide.spec.ts:3:1 › explains probabilities and links to the actual methodology without client-only content (2.8s)
+  ok 20 [mobile] › tests\e2e\reading-guide.spec.ts:34:1 › makes the guide discoverable from the home page (2.4s)
+
+  20 passed (2.6m)

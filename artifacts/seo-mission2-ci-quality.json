@@ -1,0 +1,51 @@
+{
+  "codeSha": "43850598cf0162fe7606f4d4483ad877a615d9af",
+  "workflow": "https://github.com/redragon38/proba-match/actions/runs/39669708252",
+  "quality": "success",
+  "databaseUi": "success",
+  "unitTests": 427,
+  "unitFiles": 79,
+  "e2ePassed": 74,
+  "e2eSkipped": 2,
+  "skippedReason": "Home empty-matchday scenario does not apply because CI fixtures contain matches today (desktop and mobile).",
+  "build": "success",
+  "typecheck": "success",
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 2
+  },
+  "databaseScope": "Isolated PostgreSQL, synthetic source fixtures, production Next server, automatic UI refresh and authenticated admin.",
+  "seo": {
+    "completed": true,
+    "batchPending": false,
+    "pages": 600,
+    "checks": 9599,
+    "browserViews": 20,
+    "links": {
+      "discovered": 3215,
+      "additionalChecked": 500,
+      "broken": [],
+      "redirects": [],
+      "orphanCandidates": []
+    },
+    "failures": [],
+    "warnings": [
+      {
+        "category": "synchronization",
+        "status": "WARNING",
+        "detail": "Authenticated data freshness not checked: SEO_HEALTH_TOKEN absent"
+      }
+    ],
+    "report": "artifacts/seo-audit.json"
+  },
+  "vercel": {
+    "statuses": [
+      {
+        "context": "Vercel",
+        "state": "failure",
+        "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+      }
+    ]
+  },
+  "productionDeploymentVerified": false
+}

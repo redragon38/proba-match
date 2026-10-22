@@ -1,0 +1,10 @@
+{
+  "scope": "Synthetic existing test fixtures only; serialization benchmark, not field CWV",
+  "sample": 217,
+  "matches": 288,
+  "beforeBytes": 799359,
+  "afterBytes": 37699,
+  "reductionPercent": 95.28384618175313,
+  "pageSize": 20,
+  "globalSample": 217
+}
