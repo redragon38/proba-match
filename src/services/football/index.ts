@@ -38,7 +38,13 @@ export const getDataset = requestCache(async function getDataset(): Promise<Data
         `dataset:${marker?.updatedAt.toISOString() ?? 'empty'}`,
         async () => {
           try {
-            return await timed('db:dataset_load', readLocalDataset);
+            const data = await timed('db:dataset_load', readLocalDataset);
+            // A missing/unpublished snapshot is not evidence that public entities
+            // were deleted. Never replace the last good catalogue with an empty
+            // one: that would turn existing profiles into 404s and emit noindex.
+            if (!data.matches.length && !data.teams.length)
+              throw new Error('DATASET_NOT_PUBLISHED');
+            return data;
           } catch {
             log('dataset_read_failed', { code: 'DATABASE_UNAVAILABLE' });
             throw new Error('DATABASE_UNAVAILABLE');
