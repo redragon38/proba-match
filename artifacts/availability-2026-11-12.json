@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-11-12T14:43:45.395Z",
+  "results": [
+    {
+      "url": "https://proba-match.com/",
+      "error": "ECONNREFUSED",
+      "elapsedMs": 2897
+    },
+    {
+      "url": "https://proba-match.com/robots.txt",
+      "error": "ECONNREFUSED",
+      "elapsedMs": 2817
+    },
+    {
+      "url": "https://proba-match.com/sitemap.xml",
+      "error": "ECONNREFUSED",
+      "elapsedMs": 2818
+    },
+    {
+      "url": "https://www.proba-match.com/",
+      "error": "ECONNREFUSED",
+      "elapsedMs": 2841
+    },
+    {
+      "url": "http://proba-match.com/",
+      "error": "ECONNREFUSED",
+      "elapsedMs": 2816
+    }
+  ]
+}

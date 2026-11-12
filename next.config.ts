@@ -9,7 +9,12 @@ const config: NextConfig = {
     formats: ['image/avif', 'image/webp'],
   },
   async redirects() {
-    return ['probamatch.com', 'www.probamatch.com'].map((host) => ({
+    return [
+      'probamatch.com',
+      'www.probamatch.com',
+      'www.proba-match.com',
+      'proba-match.vercel.app',
+    ].map((host) => ({
       source: '/:path*',
       has: [{ type: 'host' as const, value: host }],
       destination: 'https://proba-match.com/:path*',
