@@ -16,7 +16,7 @@ jobs:
       DATABASE_URL: postgresql://postgres:integration-only@localhost:5432/proba_match_ci_e2e
       CRON_SECRET: ci-test-cron-secret-not-a-production-secret
       ADMIN_SECRET: ci-test-admin-secret-not-a-production-secret
-      NEXT_PUBLIC_SITE_URL: https://proba-match.vercel.app
+      NEXT_PUBLIC_SITE_URL: https://proba-match.com
       APP_ENV: production
     steps:
       - uses: actions/checkout@v4

@@ -58,7 +58,12 @@ describe('Security and canonical host configuration', () => {
   });
   it('redirects former hostnames directly to the custom canonical domain', async () => {
     const redirects = await config.redirects!();
-    for (const host of ['probamatch.com', 'www.probamatch.com'])
+    for (const host of [
+      'probamatch.com',
+      'www.probamatch.com',
+      'www.proba-match.com',
+      'proba-match.vercel.app',
+    ])
       expect(redirects).toContainEqual({
         source: '/:path*',
         has: [{ type: 'host', value: host }],

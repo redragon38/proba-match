@@ -6,15 +6,22 @@ import { validResult } from '@/prediction-engine/availability';
 
 /** One origin for metadata, JSON-LD, robots and sitemap; never trust a request Host. */
 export function siteOrigin(value = process.env.NEXT_PUBLIC_SITE_URL): string {
-  // Existing Vercel projects may still carry the former public-origin variable.
-  const configured = ['https://probamatch.com', 'https://www.probamatch.com'].includes(value ?? '')
-    ? 'https://proba-match.vercel.app'
+  // Old deployments may retain a former origin. All public metadata must agree
+  // with the custom domain served by Caddy, including after a container restart.
+  const configured = [
+    'https://probamatch.com',
+    'https://www.probamatch.com',
+    'https://proba-match.vercel.app',
+    'https://www.proba-match.com',
+  ].includes(value?.replace(/\/$/, '') ?? '')
+    ? 'https://proba-match.com'
     : value;
+  const production =
+    process.env.NODE_ENV === 'production' ||
+    process.env.APP_ENV === 'production' ||
+    process.env.VERCEL_ENV === 'production';
   const url = new URL(
-    configured ||
-      (process.env.VERCEL_ENV === 'production'
-        ? 'https://proba-match.vercel.app'
-        : 'http://localhost:3000'),
+    configured || (production ? 'https://proba-match.com' : 'http://localhost:3000'),
   );
   const local = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
   if (
@@ -24,7 +31,7 @@ export function siteOrigin(value = process.env.NEXT_PUBLIC_SITE_URL): string {
     url.search ||
     url.hash ||
     (url.protocol !== 'https:' && !(local && url.protocol === 'http:')) ||
-    (process.env.VERCEL_ENV === 'production' &&
+    (production &&
       (local ||
         (url.hostname.endsWith('.vercel.app') && url.hostname !== 'proba-match.vercel.app')))
   ) {

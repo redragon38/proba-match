@@ -33,10 +33,26 @@ describe('SEO contract', () => {
     expect(robots().sitemap).toContain('/sitemap.xml');
     expect(() => siteOrigin('http://localhost:3000')).toThrow();
     expect(() => siteOrigin('https://preview.vercel.app')).toThrow();
-    expect(siteOrigin('https://proba-match.vercel.app')).toBe('https://proba-match.vercel.app');
-    expect(siteOrigin('https://probamatch.com')).toBe('https://proba-match.vercel.app');
+    expect(siteOrigin('https://proba-match.vercel.app')).toBe('https://proba-match.com');
+    expect(siteOrigin('https://probamatch.com')).toBe('https://proba-match.com');
     vi.stubEnv('APP_ENV', 'staging');
     expect(isPreviewDeployment()).toBe(true);
+  });
+  it('uses the custom domain on VPS production without Vercel environment variables', () => {
+    vi.stubEnv('VERCEL_ENV', '');
+    vi.stubEnv('APP_ENV', 'production');
+    vi.stubEnv('NEXT_PUBLIC_SITE_URL', '');
+    expect(siteOrigin()).toBe('https://proba-match.com');
+    expect(robots().sitemap).toBe('https://proba-match.com/sitemap.xml');
+    expect(publicMetadata('/a-propos').alternates?.canonical).toBe(
+      'https://proba-match.com/a-propos',
+    );
+    expect(() => siteOrigin('http://localhost:3000')).toThrow();
+    expect(() => siteOrigin('https://preview.vercel.app')).toThrow();
+    expect(siteOrigin('https://www.proba-match.com/')).toBe('https://proba-match.com');
+    vi.stubEnv('APP_ENV', '');
+    vi.stubEnv('NODE_ENV', 'production');
+    expect(siteOrigin()).toBe('https://proba-match.com');
   });
   it('normalizes one HTTPS origin and rejects credentials, paths and insecure public hosts', () => {
     expect(siteOrigin('https://football.example/')).toBe('https://football.example');
