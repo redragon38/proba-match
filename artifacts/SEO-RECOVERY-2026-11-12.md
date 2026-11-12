@@ -15,7 +15,7 @@ cet environnement : elles ne prouvent ni une panne permanente pour tous les
 visiteurs, ni la cause exacte de la baisse des impressions. Les journaux du
 VPS et Search Console restent nécessaires.
 
-## Corrections locales
+## Corrections publiées sur une branche
 
 - siteOrigin utilise désormais le domaine personnalisé en production Node,
   APP_ENV et Vercel, même sans NEXT_PUBLIC_SITE_URL. L'ancien comportement
@@ -38,7 +38,7 @@ Ces corrections ne réparent pas à elles seules une panne du serveur.
 
 | Contrôle | Statut | Preuve ou limite |
 | --- | --- | --- |
-| Tests unitaires | PASS | 65 fichiers, 376 tests, Vitest avec configLoader native et pool threads |
+| Tests unitaires | PASS | 65 fichiers, 377 tests, Vitest avec configLoader native et pool threads |
 | TypeScript | PASS | tsc --noEmit après génération du client Prisma |
 | Lint | WARNING | 0 erreur, 2 avertissements img préexistants dans les images Open Graph |
 | Build | NON TESTÉ intégralement | Compilation Next 16.3.8 réussie ; phase TypeScript du build bloquée par spawn EPERM ; contrôle TypeScript séparé réussi |
@@ -50,7 +50,8 @@ Ces corrections ne réparent pas à elles seules une panne du serveur.
 | Structured Data | NON TESTÉ sur HTML | Origine partagée corrigée ; rendu et Rich Results non vérifiés |
 | Erreurs techniques | FAIL dans les sondes publiques | 502 observée puis connexions refusées ; cause serveur non identifiée |
 | E2E / DB réelle | NON TESTÉ | Build complet et navigateur bloqués ; aucune base de production utilisée |
-| Push / Déploiement | NON EFFECTUÉ | Push de contrôle refusé faute d'authentification GitHub ; pas d'accès VPS |
+| Publication GitHub | PASS | Branche codex/seo-production-origin-recovery, PR https://github.com/redragon38/proba-match/pull/6 |
+| Déploiement | NON EFFECTUÉ | Pas d'accès VPS ; publication GitHub distincte du déploiement |
 
 git diff --check est passé. Les premières tentatives de Vitest en forks
 étaient bloquées par spawn EPERM ; la suite complète a ensuite réussi avec
@@ -61,7 +62,7 @@ de cette modification.
 
 ## Rétablissement restant
 
-1. Fournir un accès GitHub autorisé pour publier la branche préparée.
+1. Terminer les contrôles CI de la PR 6 et intégrer les corrections sur la branche déployée.
 2. Ouvrir le terminal du VPS et relever l'état avec
    `docker compose -f compose.production.yml ps -a`, puis examiner localement
    les journaux récents des services app, cache et caddy. Ne pas publier de

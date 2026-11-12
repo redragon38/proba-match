@@ -65,6 +65,14 @@ describe('SEO contract', () => {
     ])
       expect(() => siteOrigin(url)).toThrow();
   });
+  it('keeps production-mode preview builds usable and excluded from indexing', () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('VERCEL_ENV', 'preview');
+    vi.stubEnv('NEXT_PUBLIC_SITE_URL', 'https://preview.vercel.app');
+    expect(siteOrigin()).toBe('https://preview.vercel.app');
+    expect(publicMetadata('/', true).robots).toEqual({ index: false, follow: false });
+    expect(robots().sitemap).toBeUndefined();
+  });
   it('gives every public static page unique titles, descriptions and matching social URLs', () => {
     const metadata = Object.keys(publicPages).map((path) => publicMetadata(path));
     expect(new Set(metadata.map((m) => m.title)).size).toBe(metadata.length);

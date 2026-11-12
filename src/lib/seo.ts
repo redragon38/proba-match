@@ -32,6 +32,7 @@ export function siteOrigin(value = process.env.NEXT_PUBLIC_SITE_URL): string {
     url.hash ||
     (url.protocol !== 'https:' && !(local && url.protocol === 'http:')) ||
     (production &&
+      !isPreviewDeployment() &&
       (local ||
         (url.hostname.endsWith('.vercel.app') && url.hostname !== 'proba-match.vercel.app')))
   ) {
